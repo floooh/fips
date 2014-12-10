@@ -5,19 +5,23 @@
 '''
 import subprocess
 
+# required version
+major = 2
+minor = 8
+
 #------------------------------------------------------------------------------
-def check() :
+def check_exists() :
     '''
     Check if cmake is in the path and has the right version.
     '''
     try:
         out = subprocess.check_output(['cmake', '--version'])
         ver = out.split()[2].split('.')
-        if int(ver[0]) > 2 or int(ver[0]) == 2 and int(ver[2]) >= 8:
+        if int(ver[0]) > major or int(ver[0]) == major and int(ver[2]) >= minor:
             print 'cmake found'
             return True
         else :
-            print 'cmake must be at least version 2.8 (found: {}.{}.{})'.format(ver[0],ver[1],ver[2])
+            print 'cmake must be at least version {}.{} (found: {}.{}.{})'.format(major, minor, ver[0],ver[1],ver[2])
             return False
     except OSError:
         print 'cmake NOT FOUND' 
@@ -36,10 +40,7 @@ def run_gen(generator, build_type, defines, toolchain_path, build_dir, project_d
     project_dir     - path to where the root CMakeLists.txt file lives
     '''
     
-    cmdLine = ['cmake']
-    cmdLine.append('-G')
-    cmdLine.append(generator)
-    cmdLine.append('-DCMAKE_BUILD_TYPE={}'.format(build_type))
+    cmdLine = ['cmake', '-G', generator, '-DCMAKE_BUILD_TYPE={}'.format(build_type)]
     if toolchain_path is not None :
         cmdLine.append('-DDCMAKE_TOOLCHAIN_FILE={}'.format(toolchain))
     if defines is not None :
@@ -59,6 +60,15 @@ def run_build(build_type, build_dir) :
     build_dir       - path to the build directory
     '''
     cmdLine = ['cmake', '--build', '.', '--config', build_type]
+    res = subprocess.call(args=cmdLine, cwd=build_dir)
+    return res == 0
+
+#------------------------------------------------------------------------------
+def run_clean(build_dir) :
+    '''
+    Run cmake in clean mode.
+    '''
+    cmdLine = ['cmake', '--build', '.', '--target', 'clean']
     res = subprocess.call(args=cmdLine, cwd=build_dir)
     return res == 0
 

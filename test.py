@@ -2,9 +2,9 @@
 import unittest
 import shutil
 import os
+import platform
 
-from tools import cmake
-from tools import ccmake
+from tools import cmake,ccmake,cmake_gui,make,ninja,xcodebuild
 
 root_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -38,15 +38,19 @@ class cmake_testcase(unittest.TestCase) :
         return cmake.run_build(
             build_type = 'Release',
             build_dir = make_path('build/cmake_testcase'))
+    def clean(self) :
+        return cmake.run_clean(build_dir=make_path('build/cmake_testcase'))
 
     def test_check(self) :
-        self.assertTrue(cmake.check())
+        self.assertTrue(cmake.check_exists())
 
     def test_run_gen(self) :
         self.assertTrue(self.generate())
 
     def test_run_build(self) :
         self.assertTrue(self.generate())
+        self.assertTrue(self.build())
+        self.assertTrue(self.clean())
         self.assertTrue(self.build())
 
 #-------------------------------------------------------------------------------
@@ -56,20 +60,122 @@ class ccmake_testcase(unittest.TestCase) :
         ensure_dir('build/ccmake_testcase')
 
     def test_check(self) :
-        self.assertTrue(ccmake.check())
+        if platform.system() in ['Linux', 'Darwin'] :
+            self.assertTrue(ccmake.check_exists())
 
     def test_run(self) :
-        buildDir = make_path('build/ccmake_testcase')
-        self.assertTrue(cmake.run_gen(
-            generator = 'Unix Makefiles',
-            build_type = 'Release',
-            defines = None,
-            toolchain_path = None,
-            build_dir = buildDir,
-            project_dir = make_path('proj')))
-        self.assertTrue(ccmake.run(buildDir))
+        if platform.system() in ['Linux', 'Darwin'] :
+            buildDir = make_path('build/ccmake_testcase')
+            self.assertTrue(cmake.run_gen(
+                generator = 'Unix Makefiles',
+                build_type = 'Release',
+                defines = None,
+                toolchain_path = None,
+                build_dir = buildDir,
+                project_dir = make_path('proj')))
+            self.assertTrue(ccmake.run(buildDir))
 
+#-------------------------------------------------------------------------------
+class cmake_gui_testcase(unittest.TestCase) :
 
+    def setUp(self) :
+        ensure_dir('build/cmake_gui_testcase')
+
+    def test_check(self) :
+        if platform.system() == 'Windows' :
+            self.assertTrue(cmake_gui.check_exists())
+
+    def test_run(self) :
+        if platform.system() == 'Windows' :
+            buildDir = make_path('build/cmake_gui_testcase')
+            self.assertTrue(cmake.run_gen(
+                generator = 'Unix Makefiles',
+                build_type = 'Release',
+                defines = None,
+                toolchain_path = None,
+                build_dir = buildDir,
+                project_dir = make_path('proj')))
+            self.assertTrue(cmake_gui.run(buildDir))
+
+#-------------------------------------------------------------------------------
+class make_testcase(unittest.TestCase) :
+
+    def setUp(self) :
+        ensure_dir('build/make_testcase')
+
+    def test_check(self) :
+        if platform.system() in ['Linux', 'Darwin'] :
+            self.assertTrue(make.check_exists())
+
+    def test_run(self) :
+        if platform.system() in ['Linux', 'Darwin'] :
+            buildDir = make_path('build/make_testcase')
+            self.assertTrue(cmake.run_gen(
+                generator = 'Unix Makefiles',
+                build_type = 'Release',
+                defines = None,
+                toolchain_path = None,
+                build_dir = buildDir,
+                project_dir = make_path('proj')))
+            self.assertTrue(make.run_build(target=None, build_dir=buildDir))
+            self.assertTrue(make.run_clean(build_dir=buildDir))
+            self.assertTrue(make.run_build(target='hello', build_dir=buildDir, num_jobs=3))
+
+#-------------------------------------------------------------------------------
+class ninja_testcase(unittest.TestCase) :
+
+    def setUp(self) :
+        ensure_dir('build/ninja_testcase')
+
+    def test_check(self) :
+        if platform.system() in ['Linux', 'Darwin'] :
+            self.assertTrue(ninja.check_exists())
+
+    def test_run(self) :
+        if platform.system() in ['Linux', 'Darwin'] :
+            buildDir = make_path('build/ninja_testcase')
+            self.assertTrue(cmake.run_gen(
+                generator = 'Ninja',
+                build_type = 'Release',
+                defines = None,
+                toolchain_path = None,
+                build_dir = buildDir,
+                project_dir = make_path('proj')))
+            self.assertTrue(ninja.run_build(target=None, build_dir=buildDir))
+            self.assertTrue(ninja.run_clean(build_dir=buildDir))
+            self.assertTrue(ninja.run_build(target='hello', build_dir=buildDir, num_jobs=3))
+
+#-------------------------------------------------------------------------------
+class xcodebuild_testcase(unittest.TestCase) :
+
+    def setUp(self) :
+        ensure_dir('build/xcodebuild_testcase')
+
+    def test_check(self) :
+        if platform.system() == 'Darwin' :
+            self.assertTrue(xcodebuild.check_exists())
+
+    def test_run(self) :
+        if platform.system() == 'Darwin' :
+            buildDir = make_path('build/xcodebuild_testcase')
+            self.assertTrue(cmake.run_gen(
+                generator = 'Xcode',
+                build_type = 'Release',
+                defines = None,
+                toolchain_path = None,
+                build_dir = buildDir,
+                project_dir = make_path('proj')))
+            self.assertTrue(xcodebuild.run_build(
+                target = None, 
+                build_type = 'Release', 
+                build_dir = buildDir))
+            self.assertTrue(xcodebuild.run_clean(buildDir))
+            self.assertTrue(xcodebuild.run_build(
+                target = 'hello', 
+                build_type = 'Release', 
+                build_dir = buildDir, 
+                num_jobs = 3))
+                    
 unittest.main()
 
 

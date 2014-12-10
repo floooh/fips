@@ -1,30 +1,23 @@
 '''
-    ccmake.py
+    ccmake-gui.py
 
-    Wrap the ccmake command line tool.
+    Wrap the ccmake-gui tool.
 '''
 import subprocess
 
 #-------------------------------------------------------------------------------
 def check_exists() :
-    '''
-    Check if ccmake is in the path.
-    '''
     try:
-        out = subprocess.check_output(['ccmake', '--version'])
-        print 'ccmake found'
+        out = subprocess.check_output(['cmake-gui', '--version'])
+        print 'cmake-gui: found'
         return True
     except OSError:
-        print 'ccmake NOT FOUND'
-        return False
-
+        print 'cmake-gui: NOT FOUND'
+        return False;
+        
 #-------------------------------------------------------------------------------
 def run(build_dir) :
-    '''
-    Run ccmake to configure the cmake build.
-    '''
-    cmdLine = ['ccmake', '.']
+    cmdLine = ['ccmake-gui', '.']
     res = subprocess.call(args=cmdLine, cwd=build_dir)
     return res == 0
-
-
+    
