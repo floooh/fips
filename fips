@@ -3,7 +3,6 @@
 fips build system main script
 '''
 
-import imp
 import sys
 from util import log
 from verbs import diag
