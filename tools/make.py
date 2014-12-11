@@ -5,14 +5,15 @@
 '''
 import subprocess
 
+name = 'make'
+platforms = ['Linux', 'Darwin']
+
 #-------------------------------------------------------------------------------
 def check_exists() :
     try:
         out = subprocess.check_output(["make", "--version"])
-        print "make: found"
         return True
     except OSError:
-        print "make: NOT FOUND"
         return False;
 
 #-------------------------------------------------------------------------------

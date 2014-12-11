@@ -5,14 +5,15 @@
 '''
 import subprocess
 
+name = 'xcodebuild'
+platforms = ['Darwin']
+
 #------------------------------------------------------------------------------
 def check_exists() :
     try :
         subprocess.check_output(['xcodebuild', '-version'])
-        print 'xcodebuild: found'
         return True
     except OSError:
-        print 'xcodebuild NOT FOUND'
         return False
 
 #------------------------------------------------------------------------------

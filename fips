@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+'''
+fips build system main script
+'''
+
+import imp
+import sys
+from util import log
+from verbs import diag
+
+verbs = {
+    'diag': diag
+}
+
+if len(sys.argv) <= 1:
+    print 'FIXME: help'
+else :
+    verb = sys.argv[1]
+    if verb in verbs :
+        verbs[verb].run(sys.argv)
+    else :
+        log.error("unknown verb '{}'".format(verb))
+
+
+
+            
+
+
+
+
+
+

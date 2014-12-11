@@ -5,6 +5,9 @@
 '''
 import subprocess
 
+name = 'ccmake'
+platforms = ['Linux', 'Darwin']
+
 #-------------------------------------------------------------------------------
 def check_exists() :
     '''
@@ -12,10 +15,8 @@ def check_exists() :
     '''
     try:
         out = subprocess.check_output(['ccmake', '--version'])
-        print 'ccmake found'
         return True
     except OSError:
-        print 'ccmake NOT FOUND'
         return False
 
 #-------------------------------------------------------------------------------

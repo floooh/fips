@@ -1,18 +1,19 @@
 '''
-    ccmake-gui.py
+    ccmake_gui.py
 
     Wrap the ccmake-gui tool.
 '''
 import subprocess
 
+name = 'cmake-gui'
+platforms = ['Windows']
+
 #-------------------------------------------------------------------------------
 def check_exists() :
     try:
         out = subprocess.check_output(['cmake-gui', '--version'])
-        print 'cmake-gui: found'
         return True
     except OSError:
-        print 'cmake-gui: NOT FOUND'
         return False;
         
 #-------------------------------------------------------------------------------

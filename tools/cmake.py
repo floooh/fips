@@ -4,6 +4,10 @@
     Wrap the cmake command line tool.
 '''
 import subprocess
+from util import color
+
+name = 'cmake'
+platforms = ['Linux', 'Darwin', 'Windows']
 
 # required version
 major = 2
@@ -18,13 +22,12 @@ def check_exists() :
         out = subprocess.check_output(['cmake', '--version'])
         ver = out.split()[2].split('.')
         if int(ver[0]) > major or int(ver[0]) == major and int(ver[2]) >= minor:
-            print 'cmake found'
             return True
         else :
-            print 'cmake must be at least version {}.{} (found: {}.{}.{})'.format(major, minor, ver[0],ver[1],ver[2])
+            print '{}NOTE{}: cmake must be at least version {}.{} (found: {}.{}.{})'.format(
+                    color.RED, color.DEF, major, minor, ver[0],ver[1],ver[2])
             return False
     except OSError:
-        print 'cmake NOT FOUND' 
         return False
 
 #------------------------------------------------------------------------------

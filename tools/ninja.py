@@ -8,14 +8,15 @@
 '''
 import subprocess
 
+name = 'ninja'
+platforms = ['Linux', 'Darwin']
+
 #------------------------------------------------------------------------------
 def check_exists() :
     try:
         out = subprocess.check_output(['ninja', '--version'])
-        print 'ninja: found'
         return True
     except OSError:
-        print 'ninja: NOT FOUND'
         return False;
 
 #-------------------------------------------------------------------------------
