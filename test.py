@@ -4,7 +4,7 @@ import shutil
 import os
 import platform
 
-from tools import cmake,ccmake,cmake_gui,make,ninja,xcodebuild
+from tools import cmake,ccmake,cmake_gui,make,ninja,xcodebuild,git
 
 root_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -41,7 +41,7 @@ class cmake_testcase(unittest.TestCase) :
     def clean(self) :
         return cmake.run_clean(build_dir=make_path('build/cmake_testcase'))
 
-    def test_check(self) :
+    def test_exists(self) :
         self.assertTrue(cmake.check_exists())
 
     def test_run_gen(self) :
@@ -59,7 +59,7 @@ class ccmake_testcase(unittest.TestCase) :
     def setUp(self) :
         ensure_dir('build/ccmake_testcase')
 
-    def test_check(self) :
+    def test_exists(self) :
         if platform.system() in ['Linux', 'Darwin'] :
             self.assertTrue(ccmake.check_exists())
 
@@ -81,7 +81,7 @@ class cmake_gui_testcase(unittest.TestCase) :
     def setUp(self) :
         ensure_dir('build/cmake_gui_testcase')
 
-    def test_check(self) :
+    def test_exists(self) :
         if platform.system() == 'Windows' :
             self.assertTrue(cmake_gui.check_exists())
 
@@ -103,7 +103,7 @@ class make_testcase(unittest.TestCase) :
     def setUp(self) :
         ensure_dir('build/make_testcase')
 
-    def test_check(self) :
+    def test_exists(self) :
         if platform.system() in ['Linux', 'Darwin'] :
             self.assertTrue(make.check_exists())
 
@@ -127,7 +127,7 @@ class ninja_testcase(unittest.TestCase) :
     def setUp(self) :
         ensure_dir('build/ninja_testcase')
 
-    def test_check(self) :
+    def test_exists(self) :
         if platform.system() in ['Linux', 'Darwin'] :
             self.assertTrue(ninja.check_exists())
 
@@ -151,7 +151,7 @@ class xcodebuild_testcase(unittest.TestCase) :
     def setUp(self) :
         ensure_dir('build/xcodebuild_testcase')
 
-    def test_check(self) :
+    def test_exists(self) :
         if platform.system() == 'Darwin' :
             self.assertTrue(xcodebuild.check_exists())
 
@@ -176,6 +176,24 @@ class xcodebuild_testcase(unittest.TestCase) :
                 build_dir = buildDir, 
                 num_jobs = 3))
                     
+#-------------------------------------------------------------------------------
+class git_testcase(unittest.TestCase) :
+
+    def setUp(self) :
+        ensure_dir('build/git_testcase')
+
+    def test_exists(self) :
+        self.assertTrue(git.check_exists())
+
+    def test_clone(self) :
+        test_dir = make_path('build/git_testcase')
+        self.assertTrue(git.clone(
+            url = 'git@github.com:floooh/fips.git',
+            name = 'fips',
+            cwd = test_dir))
+        self.assertTrue(os.path.isfile(test_dir + '/fips/test.py'))
+
+#===============================================================================        
 unittest.main()
 
 
