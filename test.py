@@ -4,7 +4,7 @@ import shutil
 import os
 import platform
 
-from tools import cmake,ccmake,cmake_gui,make,ninja,xcodebuild,git
+from mod.tools import cmake,ccmake,cmake_gui,make,ninja,xcodebuild,git
 
 root_path = os.path.dirname(os.path.abspath(__file__))
 

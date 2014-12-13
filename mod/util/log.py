@@ -1,11 +1,12 @@
 '''
     logging functions
 '''
-from util import color
+import sys
+from mod.util import color
 
 def error(msg) :
     '''
-    Print error message and exit with error code 10.
+    Print error message and continue
     '''
     print('{}[ERROR]{} {}\n'.format(color.RED, color.DEF, msg))
-
+    sys.exit(10)

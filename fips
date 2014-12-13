@@ -4,8 +4,12 @@ fips build system main script
 '''
 
 import sys
-from util import log
-from verbs import diag
+from mod.util import log
+from mod.verbs import diag
+try :
+    import yaml 
+except ImportError:
+    log.error("could not import 'yaml', run 'pip --user install PyYAML' to install")
 
 verbs = {
     'diag': diag

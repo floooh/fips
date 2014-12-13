@@ -1,4 +1,4 @@
-# util __init__.py
+"""utility modules"""
 
 __all__ = ['color']
 

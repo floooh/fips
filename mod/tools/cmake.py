@@ -1,6 +1,6 @@
 """wrapper for cmake tool"""
 import subprocess
-from util import color
+from mod.util import color
 
 name = 'cmake'
 platforms = ['Linux', 'Darwin', 'Windows']

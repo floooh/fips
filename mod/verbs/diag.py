@@ -1,8 +1,8 @@
 """run diagnosis"""
 
 import platform
-from tools import git,cmake,ccmake,cmake_gui,make,ninja,xcodebuild
-from util import color, log
+from mod.tools import git,cmake,ccmake,cmake_gui,make,ninja,xcodebuild
+from mod.util import color, log
 
 #-------------------------------------------------------------------------------
 def print_found(tool) :
