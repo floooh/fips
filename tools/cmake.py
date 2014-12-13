@@ -13,13 +13,13 @@ minor = 8
 def check_exists() :
     """test if cmake is in the path and has the required version"""
     try:
-        out = subprocess.check_output(['cmake', '--version'])
+        out = subprocess.check_output(['cmake', '--version'], universal_newlines=True)
         ver = out.split()[2].split('.')
         if int(ver[0]) > major or int(ver[0]) == major and int(ver[2]) >= minor:
             return True
         else :
-            print '{}NOTE{}: cmake must be at least version {}.{} (found: {}.{}.{})'.format(
-                    color.RED, color.DEF, major, minor, ver[0],ver[1],ver[2])
+            print('{}NOTE{}: cmake must be at least version {}.{} (found: {}.{}.{})'.format(
+                    color.RED, color.DEF, major, minor, ver[0],ver[1],ver[2]))
             return False
     except OSError:
         return False

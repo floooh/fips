@@ -12,7 +12,7 @@ verbs = {
 }
 
 if len(sys.argv) <= 1:
-    print 'FIXME: help'
+    print('FIXME: help')
 else :
     verb = sys.argv[1]
     if verb in verbs :
