@@ -131,7 +131,7 @@ endmacro(fips_config_postfixes_for_exe)
 #
 function(fips_exe_output_directory target)
     if (NOT (FIPS_IOS OR FIPS_ANDROID))
-        set(dir ${FIPS_PROJECT_DIR}/bin/${FIPS_PLATFORM_NAME})
+        set(dir ${FIPS_DEPLOY_DIR}/${CMAKE_PROJECT_NAME}/bin/${FIPS_PLATFORM_NAME})
 
         # exes
         set_target_properties(${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${dir})

@@ -3,6 +3,8 @@
 #   Main cmake header for fips, this must be included in the top-level
 #   CMakeLists.txt file of a fips project
 #-------------------------------------------------------------------------------
+get_filename_component(FIPS_PROJECT_DIR "." ABSOLUTE)
+get_filename_component(FIPS_DEPLOY_DIR "../fips-deploy" ABSOLUTE)
 
 include("${FIPS_ROOT_DIR}/cmake/fips_private.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_unittests.cmake")
@@ -49,6 +51,11 @@ macro(fips_setup)
         message("FIPS_PROJECT_DIR: ${FIPS_PROJECT_DIR}")
     else()
         message(FATAL_ERROR "Must specify absolute FIPS_PROJECT_DIR before calling fips_setup()!")
+    endif()
+    if (FIPS_DEPLOY_DIR)
+        message("FIPS_DEPLOY_DIR: ${FIPS_DEPLOY_DIR}")
+    else()
+        message(FATAL_ERROR "Mist specify absolute FIPS_DEPLOY_DIR before calling fips_setup()!")
     endif()
 
     # set host system variables
@@ -115,6 +122,13 @@ macro(fips_setup)
         message("PYTHON INTERPRETER NOT FOUND, NO SOURCE CODE GENERATION!")
     endif()
 
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_finish()
+#
+macro(fips_finish)
+    # FIXME!
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -190,11 +204,9 @@ endmacro()
 #   End defining a static link library.
 #
 macro(fips_end_lib)
-    
     # add library target
     add_library(${CurLibraryName} ${CurSources})
     fips_apply_target_group(${CurLibraryName})
-
 endmacro()
 
 #-------------------------------------------------------------------------------
