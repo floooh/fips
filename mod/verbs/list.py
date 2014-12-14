@@ -71,3 +71,19 @@ def run(fips_dir, proj_dir, args) :
         list_generators()
     if which == 'all' or which == 'configs' :
         list_configs(fips_dir)
+
+#-------------------------------------------------------------------------------
+def help() :
+    """print help text for list verb"""
+    log.info(log.YELLOW +
+             "fips list\n"
+             "fips list all\n"
+             "fips list configs\n"
+             "fips list build-tools\n"
+             "fips list build-types\n"
+             "fips list platforms\n"
+             "fips list generators\n"
+             + log.DEF +
+             "    list available configs, build-tools, build-types, platforms and generators")
+
+

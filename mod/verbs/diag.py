@@ -50,4 +50,16 @@ def run(fips_dir, proj_dir, args) :
     if which == 'all' or which == 'configs' :
         check_configs(fips_dir)
 
+#-------------------------------------------------------------------------------
+def help() :
+    """print help for diag verb"""
+    log.info(log.YELLOW +
+             "fips diag\n"
+             "fips diag all\n"
+             "fips diag tools\n"
+             "fips diag configs\n"
+             + log.DEF +
+             "    run diagnostics and check for errors")
+
+
 

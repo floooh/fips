@@ -253,6 +253,7 @@ class config_testcase(unittest.TestCase) :
         cfg = config.load('osx-make-debug', [root_path + '/configs'])[0]
         self.assertTrue(config.check_config_valid(cfg))
 
+
 #===============================================================================        
 unittest.main()
 

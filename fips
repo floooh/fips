@@ -2,6 +2,7 @@
 '''
 fips build system main script
 '''
+VERSION = '0.0.1'
 
 import sys
 import os
@@ -20,19 +21,30 @@ verbs = {
 fips_path = os.path.dirname(os.path.abspath(__file__))
 proj_path = fips_path
 
+#-------------------------------------------------------------------------------
+def show_help(args) :
+    """show help text"""
+    log.info("fips: the high-level, multi-platform build system wrapper\n"
+             "v{}\n"
+             "https://www.github.com/floooh/fips\n".format(VERSION))
+    for verb in [list, diag] :
+        verb.help()
+        log.info(' ')
+
+#===============================================================================
 if len(sys.argv) <= 1:
-    print('FIXME: help')
+    print("run 'fips help' for more info")
 else :
     verb = sys.argv[1]
     verb_args = sys.argv[2:]
-    if verb in verbs :
+    if verb == 'help' or verb == '--help' or verb == '-help' :
+        show_help(verb_args)
+    elif verb == '--version' :
+        log.info(VERSION)
+    elif verb in verbs :
         verbs[verb].run(fips_path, proj_path, verb_args)
     else :
         log.error("unknown verb '{}'".format(verb))
-
-
-
-            
 
 
 
