@@ -7,7 +7,7 @@ VERSION = '0.0.1'
 import sys
 import os
 from mod import log
-from mod.verbs import diag,list
+from mod.verbs import diag,list,init
 try :
     import yaml 
 except ImportError:
@@ -15,7 +15,8 @@ except ImportError:
 
 verbs = {
     'diag': diag,
-    'list': list
+    'list': list,
+    'init': init
 }
 
 fips_path = os.path.dirname(os.path.abspath(__file__))
@@ -27,7 +28,7 @@ def show_help(args) :
     log.info("fips: the high-level, multi-platform build system wrapper\n"
              "v{}\n"
              "https://www.github.com/floooh/fips\n".format(VERSION))
-    for verb in [list, diag] :
+    for verb in [list, diag, init] :
         verb.help()
         log.info(' ')
 

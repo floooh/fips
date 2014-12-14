@@ -1,0 +1,5 @@
+#!/usr/bin/env python
+'''
+fips bootstrap script for fips projects
+'''
+print("FIXME FIXME FIXME")

@@ -22,6 +22,11 @@ def error(msg, fatal=True) :
         sys.exit(10)
 
 #-------------------------------------------------------------------------------
+def warn(msg) :
+    """print a warning message"""
+    print('{}[WARNING]{} {}\n'.format(YELLOW, DEF, msg)) 
+
+#-------------------------------------------------------------------------------
 def ok(item, status) :
     """print a green 'ok' message
 
