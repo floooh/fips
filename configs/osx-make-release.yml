@@ -1,0 +1,6 @@
+---
+platform: osx 
+generator: Unix Makefiles
+build_tool: make
+build_type: Release
+

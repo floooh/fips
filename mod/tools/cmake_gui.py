@@ -2,11 +2,14 @@
 import subprocess
 
 name = 'cmake-gui'
-platforms = ['Windows']
+platforms = ['win']
 
 #-------------------------------------------------------------------------------
 def check_exists() :
-    """test if cmake-gui is in the path"""
+    """test if cmake-gui is in the path
+    
+    :returns:   True if cmake-gui is in the path
+    """
     try:
         out = subprocess.check_output(['cmake-gui', '--version'])
         return True
@@ -17,9 +20,10 @@ def check_exists() :
 def run(build_dir) :
     """run the cmake-gui tool
 
-    build_dir -- directory where cmake-generated build files are located
+    :params build_dir:  directory where cmake-generated build files are located
+    :returns:           True if cmake-gui returns successful
     """
-    cmdLine = ['ccmake-gui', '.']
+    cmdLine = ['cmake-gui', '.']
     res = subprocess.call(args=cmdLine, cwd=build_dir)
     return res == 0
     

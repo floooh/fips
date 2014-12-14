@@ -5,6 +5,7 @@ import os
 import platform
 
 from mod.tools import cmake,ccmake,cmake_gui,make,ninja,xcodebuild,git
+from mod import config
 
 root_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -192,6 +193,65 @@ class git_testcase(unittest.TestCase) :
             name = 'fips',
             cwd = test_dir))
         self.assertTrue(os.path.isfile(test_dir + '/fips/test.py'))
+
+#-------------------------------------------------------------------------------
+class config_testcase(unittest.TestCase) :
+
+    def test_valid_platform(self) :
+        platforms = ['osx', 'win32', 'win64', 'linux', 'emscripten', 'pnacl', 'ios', 'android']
+        for p in platforms :
+            self.assertTrue(config.valid_platform(p))
+
+    def test_valid_generator(self) :
+        generators = ['Unix Makefiles', 'Ninja', 'Xcode', 'Visual Studio 12', 'Visual Studio 12 Win64']
+        for gen in generators :
+            self.assertTrue(config.valid_generator(gen))
+        self.assertFalse(config.valid_generator('Bla'))
+    
+    def test_valid_build_tool(self) :
+        tools = ['make', 'ninja', 'xcodebuild', 'cmake']
+        for tool in tools :
+            self.assertTrue(config.valid_build_tool(tool))
+        self.assertFalse(config.valid_build_tool('bla'))
+
+    def test_valid_build_type(self) :
+        build_types = ['Release', 'Debug', 'Profiling']
+        for t in build_types :
+            self.assertTrue(config.valid_build_type(t))
+        self.assertFalse(config.valid_build_type('bla'))
+
+    def test_get_host_platform(self) :
+        self.assertTrue(config.get_host_platform() in ['osx', 'win', 'linux'])
+
+    def test_exists(self) :
+        cfg_dirs = [root_path + '/configs']
+
+        self.assertTrue(config.exists('osx-make-debug', cfg_dirs))
+        self.assertTrue(config.exists('osx-make-release', cfg_dirs))
+        self.assertTrue(config.exists('osx-make-*', cfg_dirs))
+        self.assertTrue(config.exists('*-make-*', cfg_dirs))
+        self.assertFalse(config.exists('blub-make-debug', cfg_dirs))
+
+    def test_load(self) :
+        cfg_dirs = [root_path + '/configs']
+        cfg = config.load('osx-make-debug', cfg_dirs)
+        self.assertEqual(len(cfg), 1)
+        self.assertEqual(cfg[0]['name'], 'osx-make-debug')
+        self.assertEqual(cfg[0]['build_tool'], 'make')
+        self.assertEqual(cfg[0]['platform'], 'osx')
+        self.assertEqual(cfg[0]['build_type'], 'Debug')
+        self.assertEqual(cfg[0]['generator'], 'Unix Makefiles')
+        cfg = config.load('osx-make-*', cfg_dirs)
+        self.assertEqual(len(cfg), 2)
+
+    def test_list(self) :
+        cfg_dirs = [root_path + '/configs']
+        cfg = config.list('osx-*', cfg_dirs)
+        self.assertTrue(len(cfg), 2)
+
+    def test_check_config_valid(self) :
+        cfg = config.load('osx-make-debug', [root_path + '/configs'])[0]
+        self.assertTrue(config.check_config_valid(cfg))
 
 #===============================================================================        
 unittest.main()

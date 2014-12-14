@@ -4,11 +4,14 @@ wrapper for ccmake command line tool
 import subprocess
 
 name = 'ccmake'
-platforms = ['Linux', 'Darwin']
+platforms = ['linux', 'osx']
 
 #-------------------------------------------------------------------------------
 def check_exists() :
-    """test if ccmake is in the path"""
+    """test if ccmake is in the path
+    
+    :returns: True if ccmake is in the path
+    """
     try:
         out = subprocess.check_output(['ccmake', '--version'])
         return True
@@ -19,7 +22,8 @@ def check_exists() :
 def run(build_dir) :
     """run ccmake to configure cmake project
 
-    build_dir -- directory where ccmake should run
+    :param build_dir:   directory where ccmake should run
+    :returns:           True if ccmake returns successful
     """
     cmdLine = ['ccmake', '.']
     res = subprocess.call(args=cmdLine, cwd=build_dir)

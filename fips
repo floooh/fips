@@ -4,23 +4,29 @@ fips build system main script
 '''
 
 import sys
-from mod.util import log
-from mod.verbs import diag
+import os
+from mod import log
+from mod.verbs import diag,list
 try :
     import yaml 
 except ImportError:
     log.error("could not import 'yaml', run 'pip --user install PyYAML' to install")
 
 verbs = {
-    'diag': diag
+    'diag': diag,
+    'list': list
 }
+
+fips_path = os.path.dirname(os.path.abspath(__file__))
+proj_path = fips_path
 
 if len(sys.argv) <= 1:
     print('FIXME: help')
 else :
     verb = sys.argv[1]
+    verb_args = sys.argv[2:]
     if verb in verbs :
-        verbs[verb].run(sys.argv)
+        verbs[verb].run(fips_path, proj_path, verb_args)
     else :
         log.error("unknown verb '{}'".format(verb))
 

@@ -3,11 +3,14 @@
 import subprocess
 
 name = 'git'
-platforms = ['Linux', 'Darwin', 'Windows']
+platforms = ['linux', 'osx', 'win']
 
 #-------------------------------------------------------------------------------
 def check_exists() :
-    """test if git is in the path"""
+    """test if git is in the path
+    
+    :returns:   True if git is in the path
+    """
     try :
         subprocess.check_output(['git', '--version'])
         return True
@@ -18,9 +21,10 @@ def check_exists() :
 def clone(url, name, cwd) :
     """git clone a remote git repo
     
-    url     -- the git url to clone from
-    name    -- the directory name to clone into
-    cwd     -- the directory where to run git
+    :param url:     the git url to clone from
+    :param name:    the directory name to clone into
+    :param cwd:     the directory where to run git
+    :returns:       True if git returns successful
     """
     res = subprocess.call(['git', 'clone', url, name], cwd=cwd)
     return res == 0

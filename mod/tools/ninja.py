@@ -2,11 +2,14 @@
 import subprocess
 
 name = 'ninja'
-platforms = ['Linux', 'Darwin']
+platforms = ['linux', 'osx']
 
 #------------------------------------------------------------------------------
 def check_exists() :
-    """test if ninja is in the path"""
+    """test if ninja is in the path
+    
+    :returns: True if ninja is in the path
+    """
     try:
         out = subprocess.check_output(['ninja', '--version'])
         return True
@@ -17,9 +20,10 @@ def check_exists() :
 def run_build(target, build_dir, num_jobs=1) :
     """build a target
 
-    target      -- name of build target, of None
-    build_dir   -- directory of the build.ninja file
-    num_jobs    -- number of parallel jobs (default: 1)
+    :param target:      name of build target, of None
+    :param build_dir:   directory of the build.ninja file
+    :param num_jobs:    number of parallel jobs (default: 1)
+    :returns:           True if build was successful
     """
     cmdLine = ['ninja', '-j', str(num_jobs)]
     if target is not None :
@@ -31,7 +35,8 @@ def run_build(target, build_dir, num_jobs=1) :
 def run_clean(build_dir) :
     """run the special 'clean' target
 
-    build_dir -- directory of the build.ninja file
+    :param build_dir:   directory of the build.ninja file
+    :returns:           True if ninja returned without error
     """
     res = subprocess.call(['ninja', 'clean'], cwd=build_dir)
     return res == 0
