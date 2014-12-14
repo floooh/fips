@@ -1,3 +1,15 @@
-# fips project yml file
+# fips.yml template
 ---
+# name: project name
+# cmake: location of root CMakeLists.txt file
+# depends:
+#     project-name:
+#         url: git-url
+#     ...
+
+
+
+
+
+
 
