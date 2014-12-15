@@ -1,36 +1,32 @@
-"""get a project or dependencies
+"""git-clone a project or dependencies
 
-get project [url]
-get deps
-get deps [project]
+clone [git-url]
 """
 
-from mod import log, project
+from mod import log, project, registry
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
     """run the get verb"""
     if len(args) > 0 :
-        noun = args[0]
-        if noun == 'project' :
-            if len(args) > 1 :
-                url = args[1]
-                project.get(fips_dir, url)
-            else :
-                log.error("git-url expected (fips get project [url])")
-        elif noun == 'deps' :
-            log.error("'fips get deps' NOT YET IMPLEMENTED")
+        name = args[0]
+        
+        # check project registry to resolve git url
+        if registry.exists(fips_dir, name) :
+            url = registry.lookup_url(fips_dir, name)
+            log.info("registry lookup: {} => {}'".format(name, url))
+        else :
+            url = name
+            log.info("'{}' not in fips registry, trying as git url".format(url))
+        project.clone(fips_dir, url)
     else :
-        log.error("noun 'project' or 'deps' expected")
+        log.error("expected one arg [git-url]")
 
 #-------------------------------------------------------------------------------
 def help() :
-    """print help text for 'get' verb"""
-    log.info(log.YELLOW + "fips get project [git-url]\n" + log.DEF +
-             "    fetch a project directory from a git repo\n"
-             + log.YELLOW + 
-             "fips get deps\n"
-             "fips get deps [project-name]\n" + log.DEF +
-             "    fetch dependencies for current or named project")
+    """print help text for 'clone' verb"""
+    log.info(log.YELLOW + "fips clone [project]\n" + log.DEF +
+             "    fetch a project directory from a git repo, project is either\n"
+             "    a direct git-url, or a project name in the fips registry")
              
 
