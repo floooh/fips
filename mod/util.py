@@ -12,23 +12,26 @@ def get_workspace_dir(fips_dir) :
     return os.path.split(fips_dir)[0]
 
 #-------------------------------------------------------------------------------
-def get_project_dir(fips_dir, name) :
+def get_project_dir(fips_dir, proj_name) :
     """get absolute path to project directory in same workspace as fips
 
     :param fips_dir:    absolute path of fips
-    :param name:        project name
+    :param proj_name:   project name
     :returns:           absolute path to project in same directory as fips
     """
-    return get_workspace_dir(fips_dir) + '/' + name
+    return get_workspace_dir(fips_dir) + '/' + proj_name
 
 #-------------------------------------------------------------------------------
-def get_build_dir(fips_dir) :
-    """get absolute path to build directory in same workspace as fips
+def get_build_dir(fips_dir, proj_name, cfg) :
+    """get absolute path to build directory in same workspace as fips for 
+    given configuration
 
     :param fips_dir:    absolute path of fips
+    :param proj_name:   project name
+    :param cfg:         config object
     :returns:           absolute path of build directory
     """
-    return get_workspace_dir(fips_dir) + '/fips-build'
+    return '{}/fips-build/{}/{}'.format(get_workspace_dir(fips_dir), proj_name, cfg['name'])
 
 #-------------------------------------------------------------------------------
 def get_deploy_dir(fips_dir) :
@@ -48,3 +51,11 @@ def get_project_name_from_url(url) :
     """
     return os.path.splitext(url.split('/')[-1])[0]
 
+#-------------------------------------------------------------------------------
+def get_project_name_from_dir(proj_dir) :
+    """extract the project name from the absolute project directory
+
+    :param proj_dir:    absolute project directory
+    :returns:           project name (last dir-name of project directory)
+    """
+    return os.path.split(proj_dir)[1]

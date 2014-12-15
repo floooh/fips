@@ -17,6 +17,23 @@ platforms = [
     'android'
 ]
 
+# non-cross-compiling platforms
+native_platforms = [
+    'osx',
+    'linux',
+    'win32',
+    'win64'
+] 
+
+# cross-compiling platforms
+cross_platforms = [
+    'emscripten',
+    'pnacl',
+    'ios',
+    'android'
+]
+
+# supported cmake generators
 generators = [
     'Unix Makefiles',
     'Ninja',
@@ -101,29 +118,43 @@ def get_host_platform() :
     return host_platforms[platform.system()]
 
 #-------------------------------------------------------------------------------
-def exists(pattern, dirs) : 
+def get_toolchain_for_platform(fips_dir, plat) :
+    """get the toolchain path location for a target platform, returns None
+    for 'native host platform
+
+    :param fips_dir:    absolute path to fips
+    :param plat:        the target platform name
+    :returns:           path to toolchain file or None for non-cross-compiling
+    """
+    if plat in native_platforms :
+        return None
+    else :
+        return '{}/cmake-toolchains/{}.toolchain.cmake'.format(fips_dir, plat)
+
+#-------------------------------------------------------------------------------
+def exists(pattern, proj_dirs) : 
     """test if at least one matching config exists
 
-    :param pattern: config name pattern (e.g. 'linux-make-*')
-    :param dir:     array of dirs to search
-    :returns:       True if at least one matching config exists
+    :param pattern:     config name pattern (e.g. 'linux-make-*')
+    :param proj_dir:    array of toplevel dirs to search (must have /configs subdir)
+    :returns:           True if at least one matching config exists
     """
-    for curDir in dirs :
-        if len(glob.glob('{}/{}.yml'.format(curDir, pattern))) > 0 :
+    for curDir in proj_dirs :
+        if len(glob.glob('{}/configs/{}.yml'.format(curDir, pattern))) > 0 :
             return True
     return False
 
 #-------------------------------------------------------------------------------
-def list(pattern, dirs) :
+def list(pattern, proj_dirs) :
     """return { dir : [cfgname, ...] } of all configs in given dirs
 
-    :param dirs:    array of directories with config yml files
-    :returns:       a map of matching configs per dir
+    :param proj_dirs:   array of toplevel dirs to search (must have /configs subdir)
+    :returns:           a map of matching configs per dir
     """
     res = {}
-    for curDir in dirs :
+    for curDir in proj_dirs :
         res[curDir] = []
-        paths = glob.glob('{}/*.yml'.format(curDir))
+        paths = glob.glob('{}/configs/*.yml'.format(curDir))
         for path in paths :
             fname = os.path.split(path)[1]
             fname = os.path.splitext(fname)[0]
@@ -131,16 +162,16 @@ def list(pattern, dirs) :
     return res
 
 #-------------------------------------------------------------------------------
-def load(pattern, dirs) :
+def load(pattern, proj_dirs) :
     """load one or more matching configs
 
     :param pattern:     config name pattern (e.g. 'linux-make-*')
-    :param dirs:        array of dirs to search
+    :param proj_dirs:   array of toplevel dirs to search (must have /configs subdir)
     :returns:   an array of loaded config objects
     """
     configs = []
-    for curDir in dirs :
-        paths = glob.glob('{}/{}.yml'.format(curDir, pattern))
+    for curDir in proj_dirs :
+        paths = glob.glob('{}/configs/{}.yml'.format(curDir, pattern))
         for path in paths :
             try :
                 f = open(path, 'r')
@@ -153,6 +184,9 @@ def load(pattern, dirs) :
                 cfg['path'] = path
                 cfg['folder'] = folder
                 cfg['name'] = os.path.splitext(fname)[0]
+
+                if 'defines' not in cfg :
+                    cfg['defines'] = None
                 
                 configs.append(cfg)
             except yaml.error.YAMLError, e:

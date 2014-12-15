@@ -29,23 +29,22 @@ def check_exists() :
         return False
 
 #------------------------------------------------------------------------------
-def run_gen(generator, build_type, defines, toolchain_path, build_dir, project_dir) :
+def run_gen(cfg, project_dir, build_dir, toolchain_path) :
     """run cmake tool to generate build files
     
-    :param generator:       the cmake generator (e.g. "Unix Makefiles", "Ninja", ...)
-    :param build_type:      CMAKE_BUILD_TYPE string (e.g. Release, Debug)
-    :param toolchain_path:  path to toolchain file, or None
-    :param defines:         additional defines (array of key/value pairs)
-    :param build_dir:       path to where the build files are generated
-    :param project_dir:     path to where the root CMakeLists.txt file lives
+    :param cfg:             a fips config object
+    :param project_dir:     absolute path to project (must have root CMakeLists.txt file)
+    :param build_dir:       absolute path to build directory (where cmake files are generated)
+    :param toolchain:       toolchain path or None
     :returns:               True if cmake returned successful
     """
-    cmdLine = ['cmake', '-G', generator, '-DCMAKE_BUILD_TYPE={}'.format(build_type)]
+    cmdLine = ['cmake', '-G', cfg['generator'], '-DCMAKE_BUILD_TYPE={}'.format(cfg['build_type'])]
     if toolchain_path is not None :
-        cmdLine.append('-DDCMAKE_TOOLCHAIN_FILE={}'.format(toolchain))
-    if defines is not None :
-        for key in defines :
-            cmdLine.append('-D{}={}'.format(key, defines[key]))
+        cmdLine.append('-DDCMAKE_TOOLCHAIN_FILE={}'.format(toolchain_path))
+    cmdLine.append('-DFIPS_CONFIG={}'.format(cfg['name']))
+    if cfg['defines'] is not None :
+        for key in cfg['defines'] :
+            cmdLine.append('-D{}={}'.format(key, cfg['defines'][key]))
     cmdLine.append(project_dir)
     
     res = subprocess.call(args=cmdLine, cwd=build_dir)

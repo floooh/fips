@@ -6,10 +6,11 @@ list build-types    -- list supported build types
 list platforms      -- list supported platform names
 list generators     -- list supported generator names
 list configs        -- list available configs
+list registry       -- list content of fips registry
 list                -- same as 'list all'
 """
 
-from mod import config,log
+from mod import config,log,registry
 
 #-------------------------------------------------------------------------------
 def list_build_tools() :
@@ -43,12 +44,20 @@ def list_generators() :
 def list_configs(fips_dir) :
     """list available configs"""
     log.colored(log.YELLOW, '=== configs:')
-    dirs = [ fips_dir + '/configs' ]
+    dirs = [ fips_dir ]
     configs = config.list('*', dirs)
     for folder in configs :
         log.info('{}:'.format(folder))
         for cfg in configs[folder] :
             log.info('  {}'.format(cfg))
+
+#-------------------------------------------------------------------------------
+def list_registry(fips_dir) :
+    """list registry entries"""
+    log.colored(log.YELLOW, '=== registry:')
+    registry.load(fips_dir)
+    for key in registry.registry :
+        log.info('{}: {}'.format(key, registry.registry[key]))
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
@@ -61,6 +70,8 @@ def run(fips_dir, proj_dir, args) :
     which = 'all'
     if len(args) > 0 :
         which = args[0]
+    if which == 'all' or which == 'configs' :
+        list_configs(fips_dir)
     if which == 'all' or which == 'build-tools' :
         list_build_tools()
     if which == 'all' or which == 'build-types' :
@@ -69,8 +80,8 @@ def run(fips_dir, proj_dir, args) :
         list_platforms()
     if which == 'all' or which == 'generators' :
         list_generators()
-    if which == 'all' or which == 'configs' :
-        list_configs(fips_dir)
+    if which == 'all' or which == 'registry' :
+        list_registry(fips_dir)
 
 #-------------------------------------------------------------------------------
 def help() :
@@ -83,7 +94,8 @@ def help() :
              "fips list build-types\n"
              "fips list platforms\n"
              "fips list generators\n"
+             "fips list registry\n"
              + log.DEF +
-             "    list available configs, build-tools, build-types, platforms and generators")
+             "    list available configs, build-tools, etc...")
 
 

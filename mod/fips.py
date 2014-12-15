@@ -3,7 +3,7 @@
 VERSION = '0.0.1'
 
 from mod import log
-from mod.verbs import diag,list,init,get,gen
+from mod.verbs import diag,list,init,clone,gen
 try :
     import yaml 
 except ImportError:
@@ -13,7 +13,7 @@ verbs = {
     'diag': diag,
     'list': list,
     'init': init,
-    'get': get,
+    'clone': clone,
     'gen': gen,
 }
 
@@ -23,7 +23,7 @@ def show_help(args) :
     log.info("fips: the high-level, multi-platform build system wrapper\n"
              "v{}\n"
              "https://www.github.com/floooh/fips\n".format(VERSION))
-    for verb in [list, diag, init, get, gen] :
+    for verb in [list, diag, init, clone, gen] :
         verb.help()
         log.info(' ')
 

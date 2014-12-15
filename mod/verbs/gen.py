@@ -12,14 +12,13 @@ def run(fips_dir, proj_dir, args) :
     """run the gen verb"""
     cfg_name = None
     proj_name = None
-    build_dir = util.get_build_dir(fips_dir)
     if len(args) > 0 :
         cfg_name = args[0]
         if len(args) > 1 :
             proj_name = args[1]
     if cfg_name == None :
         log.error("FIXME: use active config!")
-    project.gen(fips_dir, proj_dir, build_dir, cfg_name, proj_name)
+    project.gen(fips_dir, proj_dir, cfg_name, proj_name)
 
 #-------------------------------------------------------------------------------
 def help() :

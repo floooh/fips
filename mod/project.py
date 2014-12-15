@@ -3,8 +3,26 @@
 import os
 import shutil
 
-from mod import log, util
-from mod.tools import git
+from mod import log, util, config
+from mod.tools import git, cmake
+
+#-------------------------------------------------------------------------------
+def is_valid_project_dir(proj_dir) :
+    """test if the provided directory is a valid fips project (has a
+    fips.yml and a fips file)
+
+    :param proj_dir:    absolute project directory to check
+    :returns:           True if a valid fips project
+    """
+    if os.path.isdir(proj_dir) :
+        if not os.path.isfile(proj_dir + '/fips') :
+            log.error("no file 'fips' in project dir '{}'\n".format(proj_dir), False)
+            return False
+        if not os.path.isfile(proj_dir + '/fips.yml') :
+            log.error("no file 'fips.yml' in project dir '{}'\n".format(proj_dir), False)
+            return False
+        return True
+    return False
 
 #-------------------------------------------------------------------------------
 def is_valid_project(fips_dir, name) :
@@ -15,16 +33,8 @@ def is_valid_project(fips_dir, name) :
     :param name:        project/directory name
     :returns:           True if this is a valid fips project
     """
-    proj_dir = util.get_proj_dir(fips_dir, name)
-    if os.path.isdir(proj_dir) :
-        if not os.path.isfile(proj_dir + '/fips') :
-            log.error("no file 'fips' in project dir '{}'\n".format(proj_dir), False)
-            return False
-        if not os.path.isfile(proj_dir + '/fips.yml') :
-            log.error("no file 'fips.yml' in project dir '{}'\n".format(proj_dir), False)
-            return False
-        return True
-    return False
+    proj_dir = util.get_project_dir(fips_dir, name)
+    return is_valid_project_dir(proj_dir)
 
 #-------------------------------------------------------------------------------
 def init(fips_dir, url) :
@@ -66,7 +76,7 @@ def init(fips_dir, url) :
         return False
 
 #-------------------------------------------------------------------------------
-def get(fips_dir, url) :
+def clone(fips_dir, url) :
     """clone an existing fips project with git
 
     :param fips_dir:    absolute path to fips
@@ -87,15 +97,51 @@ def get(fips_dir, url) :
         return False
 
 #-------------------------------------------------------------------------------
-def gen(fips_dir, proj_dir, build_dir, cfg_name, proj_name) :
+def gen(fips_dir, proj_dir, cfg_name, proj_name) :
     """generate build files with cmake
 
     :param fips_dir:    absolute path to fips
     :param proj_dir:    absolute path to project
-    :param build_dir:   absolute path to build directory
-    :param cfg_name:    config name (e.g. osx-make-debug)
+    :param cfg_name:    config name or pattern (e.g. osx-make-debug)
     :param proj_name:   project name (or None to use current project path)
     :returns:           True if successful
     """
-    log.error("FIXME FIXME FIXME")
 
+    # if a project name is given, build a project dir from it
+    if proj_name :
+        proj_dir = util.get_project_dir(fips_dir, proj_name)
+    else :
+        proj_name = util.get_project_name_from_dir(proj_dir)
+
+    # check if proj_dir is a valid fips project
+    if not is_valid_project_dir(proj_dir) :
+        log.error("'{}' is not a valid fips project".format(proj_dir))
+    
+    # load the config(s)
+    configs = config.load(cfg_name, [fips_dir])
+    num_valid_configs = 0
+    for cfg in configs :
+        # check if config is valid
+        if config.check_config_valid(cfg) :
+            log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
+
+            # get build-dir and make sure it exists
+            build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+            if not os.path.isdir(build_dir) :
+                os.makedirs(build_dir)
+            toolchain_path = config.get_toolchain_for_platform(fips_dir, cfg['platform'])
+            
+            # run cmake for this config
+            if cmake.run_gen(cfg, proj_dir, build_dir, toolchain_path) :
+                num_valid_configs += 1
+            else :
+                log.error("failed to generate build files for config '{}'".format(cfg['name']), False)
+        else :
+            log.error("'{}' is not a valid config".format(cfg['name']), False)
+
+    if num_valid_configs != len(configs) :
+        log.error('{} out of {} configs failed!'.format(len(configs) - num_valid_configs, len(configs)))
+        return False      
+    else :
+        log.colored(log.GREEN, '{} configs generated'.format(num_valid_configs))
+        return True
