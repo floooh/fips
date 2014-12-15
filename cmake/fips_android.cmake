@@ -57,7 +57,7 @@ endmacro()
 #-------------------------------------------------------------------------------
 #   fips_android_postbuildstep
 #   Setup a post-build-step which creates the actual APK file, and copy to
-#   bin/android
+#   deploy directory.
 #
 macro(fips_android_postbuildstep target)
     if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
@@ -67,6 +67,6 @@ macro(fips_android_postbuildstep target)
         set(ANT_BUILD_TYPE "debug")
     endif()
     add_custom_command(TARGET ${target} POST_BUILD COMMAND ${ANDROID_ANT} ${ANT_BUILD_TYPE} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/android)
-    add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${FIPS_DEPLOY_DIR}/${CMAKE_PROJECT_NAME}/bin/${FIPS_PLATFORM_NAME} COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/android/bin/${target}-debug.apk ${FIPS_DEPLOY_DIR}/${CMAKE_PROJECT_NAME}/bin/${FIPS_PLATFORM_NAME}/)
+    add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${FIPS_DEPLOY_DIR}/${CMAKE_PROJECT_NAME}/${FIPS_CONFIG} COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/android/bin/${target}-debug.apk ${FIPS_DEPLOY_DIR}/${CMAKE_PROJECT_NAME}/${FIPS_CONFIG}/)
 endmacro()
 

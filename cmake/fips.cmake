@@ -55,7 +55,12 @@ macro(fips_setup)
     if (FIPS_DEPLOY_DIR)
         message("FIPS_DEPLOY_DIR: ${FIPS_DEPLOY_DIR}")
     else()
-        message(FATAL_ERROR "Mist specify absolute FIPS_DEPLOY_DIR before calling fips_setup()!")
+        message(FATAL_ERROR "Must specify absolute FIPS_DEPLOY_DIR before calling fips_setup()!")
+    endif()
+    if (FIPS_CONFIG)
+        message("FIPS_CONFIG: ${FIPS_CONFIG}")
+    else()
+        message(FATAL_ERROR "Must provide -DFIPS_CONFIG='config-name' on command line!")
     endif()
 
     # set host system variables
