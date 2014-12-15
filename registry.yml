@@ -1,0 +1,5 @@
+# fips project registry, allows to refer to git repos with a short-name
+#
+
+fips-hello-world: git@github.com:floooh/fips-hello-world.git
+
