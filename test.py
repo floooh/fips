@@ -27,13 +27,15 @@ class cmake_testcase(unittest.TestCase) :
         ensure_dir('build/cmake_testcase')
 
     def generate(self) :
-        return cmake.run_gen(
-            generator = 'Unix Makefiles',
-            build_type = 'Release',
-            defines = None,
-            toolchain_path = None,
-            build_dir = make_path('build/cmake_testcase'),
-            project_dir = make_path('proj'))
+        cfg = {
+            'generator': 'Unix Makefiles',
+            'build_type': 'Release',
+            'defines': None,
+            'name': 'test-test-test',
+        }
+        proj_dir = make_path('proj')
+        build_dir = make_path('build/cmake_testcase')
+        return cmake.run_gen(cfg, proj_dir, build_dir, None)
 
     def build(self) :
         return cmake.run_build(
@@ -64,18 +66,6 @@ class ccmake_testcase(unittest.TestCase) :
         if platform.system() in ['Linux', 'Darwin'] :
             self.assertTrue(ccmake.check_exists())
 
-    def test_run(self) :
-        if platform.system() in ['Linux', 'Darwin'] :
-            buildDir = make_path('build/ccmake_testcase')
-            self.assertTrue(cmake.run_gen(
-                generator = 'Unix Makefiles',
-                build_type = 'Release',
-                defines = None,
-                toolchain_path = None,
-                build_dir = buildDir,
-                project_dir = make_path('proj')))
-            self.assertTrue(ccmake.run(buildDir))
-
 #-------------------------------------------------------------------------------
 class cmake_gui_testcase(unittest.TestCase) :
 
@@ -85,18 +75,6 @@ class cmake_gui_testcase(unittest.TestCase) :
     def test_exists(self) :
         if platform.system() == 'Windows' :
             self.assertTrue(cmake_gui.check_exists())
-
-    def test_run(self) :
-        if platform.system() == 'Windows' :
-            buildDir = make_path('build/cmake_gui_testcase')
-            self.assertTrue(cmake.run_gen(
-                generator = 'Unix Makefiles',
-                build_type = 'Release',
-                defines = None,
-                toolchain_path = None,
-                build_dir = buildDir,
-                project_dir = make_path('proj')))
-            self.assertTrue(cmake_gui.run(buildDir))
 
 #-------------------------------------------------------------------------------
 class make_testcase(unittest.TestCase) :
@@ -110,17 +88,18 @@ class make_testcase(unittest.TestCase) :
 
     def test_run(self) :
         if platform.system() in ['Linux', 'Darwin'] :
-            buildDir = make_path('build/make_testcase')
-            self.assertTrue(cmake.run_gen(
-                generator = 'Unix Makefiles',
-                build_type = 'Release',
-                defines = None,
-                toolchain_path = None,
-                build_dir = buildDir,
-                project_dir = make_path('proj')))
-            self.assertTrue(make.run_build(target=None, build_dir=buildDir))
-            self.assertTrue(make.run_clean(build_dir=buildDir))
-            self.assertTrue(make.run_build(target='hello', build_dir=buildDir, num_jobs=3))
+            cfg = {
+                'generator': 'Unix Makefiles',
+                'build_type': 'Release',
+                'defines': None,
+                'name': 'test-test-test',
+            }
+            proj_dir = make_path('proj')
+            build_dir = make_path('build/make_testcase')
+            self.assertTrue(cmake.run_gen(cfg, proj_dir, build_dir, None))
+            self.assertTrue(make.run_build(target=None, build_dir=build_dir))
+            self.assertTrue(make.run_clean(build_dir=build_dir))
+            self.assertTrue(make.run_build(target='hello', build_dir=build_dir, num_jobs=3))
 
 #-------------------------------------------------------------------------------
 class ninja_testcase(unittest.TestCase) :
@@ -134,17 +113,18 @@ class ninja_testcase(unittest.TestCase) :
 
     def test_run(self) :
         if platform.system() in ['Linux', 'Darwin'] :
-            buildDir = make_path('build/ninja_testcase')
-            self.assertTrue(cmake.run_gen(
-                generator = 'Ninja',
-                build_type = 'Release',
-                defines = None,
-                toolchain_path = None,
-                build_dir = buildDir,
-                project_dir = make_path('proj')))
-            self.assertTrue(ninja.run_build(target=None, build_dir=buildDir))
-            self.assertTrue(ninja.run_clean(build_dir=buildDir))
-            self.assertTrue(ninja.run_build(target='hello', build_dir=buildDir, num_jobs=3))
+            cfg = {
+                'generator': 'Ninja',
+                'build_type': 'Release',
+                'defines': None,
+                'name': 'test-test-test',
+            }
+            proj_dir = make_path('proj')
+            build_dir = make_path('build/ninja_testcase')
+            self.assertTrue(cmake.run_gen(cfg, proj_dir, build_dir, None))
+            self.assertTrue(ninja.run_build(target=None, build_dir=build_dir))
+            self.assertTrue(ninja.run_clean(build_dir=build_dir))
+            self.assertTrue(ninja.run_build(target='hello', build_dir=build_dir, num_jobs=3))
 
 #-------------------------------------------------------------------------------
 class xcodebuild_testcase(unittest.TestCase) :
@@ -158,23 +138,24 @@ class xcodebuild_testcase(unittest.TestCase) :
 
     def test_run(self) :
         if platform.system() == 'Darwin' :
-            buildDir = make_path('build/xcodebuild_testcase')
-            self.assertTrue(cmake.run_gen(
-                generator = 'Xcode',
-                build_type = 'Release',
-                defines = None,
-                toolchain_path = None,
-                build_dir = buildDir,
-                project_dir = make_path('proj')))
+            cfg = {
+                'generator': 'Xcode',
+                'build_type': 'Release',
+                'defines': None,
+                'name': 'test-test-test',
+            }
+            proj_dir = make_path('proj')
+            build_dir = make_path('build/xcodebuild_testcase')
+            self.assertTrue(cmake.run_gen(cfg, proj_dir, build_dir, None))
             self.assertTrue(xcodebuild.run_build(
                 target = None, 
                 build_type = 'Release', 
-                build_dir = buildDir))
-            self.assertTrue(xcodebuild.run_clean(buildDir))
+                build_dir = build_dir))
+            self.assertTrue(xcodebuild.run_clean(build_dir))
             self.assertTrue(xcodebuild.run_build(
                 target = 'hello', 
                 build_type = 'Release', 
-                build_dir = buildDir, 
+                build_dir = build_dir, 
                 num_jobs = 3))
                     
 #-------------------------------------------------------------------------------
@@ -224,7 +205,7 @@ class config_testcase(unittest.TestCase) :
         self.assertTrue(config.get_host_platform() in ['osx', 'win', 'linux'])
 
     def test_exists(self) :
-        cfg_dirs = [root_path + '/configs']
+        cfg_dirs = [root_path]
 
         self.assertTrue(config.exists('osx-make-debug', cfg_dirs))
         self.assertTrue(config.exists('osx-make-release', cfg_dirs))
@@ -233,7 +214,7 @@ class config_testcase(unittest.TestCase) :
         self.assertFalse(config.exists('blub-make-debug', cfg_dirs))
 
     def test_load(self) :
-        cfg_dirs = [root_path + '/configs']
+        cfg_dirs = [root_path]
         cfg = config.load('osx-make-debug', cfg_dirs)
         self.assertEqual(len(cfg), 1)
         self.assertEqual(cfg[0]['name'], 'osx-make-debug')
@@ -250,7 +231,7 @@ class config_testcase(unittest.TestCase) :
         self.assertTrue(len(cfg), 2)
 
     def test_check_config_valid(self) :
-        cfg = config.load('osx-make-debug', [root_path + '/configs'])[0]
+        cfg = config.load('osx-make-debug', [root_path])[0]
         self.assertTrue(config.check_config_valid(cfg))
 
 
