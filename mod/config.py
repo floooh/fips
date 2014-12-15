@@ -73,6 +73,12 @@ host_platforms = {
     'Windows':  'win'
 }
 
+default_config = {
+    'osx':      'osx-xcode-debug',
+    'linux':    'linux-make-debug',
+    'win':      'win64-vstudio-debug',
+}
+
 #-------------------------------------------------------------------------------
 def valid_platform(name) :
     """test if provided platform name is valid
@@ -116,6 +122,14 @@ def get_host_platform() :
     :returns: platform name (osx, linux, win)
     """
     return host_platforms[platform.system()]
+
+#-------------------------------------------------------------------------------
+def get_default_config() :
+    """get the default config name for this platform
+
+    :returns:   default config name for this host platform
+    """
+    return default_config[get_host_platform()]
 
 #-------------------------------------------------------------------------------
 def get_toolchain_for_platform(fips_dir, plat) :

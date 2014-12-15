@@ -17,10 +17,10 @@ def is_valid_project_dir(proj_dir) :
     """
     if os.path.isdir(proj_dir) :
         if not os.path.isfile(proj_dir + '/fips') :
-            log.error("no file 'fips' in project dir '{}'\n".format(proj_dir), False)
+            log.error("no file 'fips' in project dir '{}'".format(proj_dir), False)
             return False
         if not os.path.isfile(proj_dir + '/fips.yml') :
-            log.error("no file 'fips.yml' in project dir '{}'\n".format(proj_dir), False)
+            log.error("no file 'fips.yml' in project dir '{}'".format(proj_dir), False)
             return False
         return True
     return False

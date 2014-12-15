@@ -7,10 +7,11 @@ list platforms      -- list supported platform names
 list generators     -- list supported generator names
 list configs        -- list available configs
 list registry       -- list content of fips registry
+list settings       -- list fips settings of current project
 list                -- same as 'list all'
 """
 
-from mod import config,log,registry
+from mod import log, config, registry, project, settings
 
 #-------------------------------------------------------------------------------
 def list_build_tools() :
@@ -60,6 +61,20 @@ def list_registry(fips_dir) :
         log.info('{}{}{}: {}'.format(log.BLUE, key, log.DEF, registry.registry[key]))
 
 #-------------------------------------------------------------------------------
+def list_settings(proj_dir) :
+    """list settings file content"""
+    log.colored(log.YELLOW, '=== settings:')
+    if project.is_valid_project_dir(proj_dir) :
+        cfg_name = settings.get(proj_dir, 'config')
+        cfg_default = ' (default value)' if cfg_name == settings.get_default('config') else ''
+        tgt_name = settings.get(proj_dir, 'target')
+        tgt_default = ' (default value)' if tgt_name == settings.get_default('target') else ''
+        log.info('  config: {}{}'.format(cfg_name, cfg_default))
+        log.info('  target: {}{}'.format(tgt_name, cfg_default))
+    else :
+        log.info('  not in a valid project directory')
+
+#-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
     """list stuff
     
@@ -67,21 +82,34 @@ def run(fips_dir, proj_dir, args) :
     :param proj_dir:    absolute path to current project
     :param args:        command line args
     """
-    which = 'all'
+    noun = 'all'
+    ok = False
     if len(args) > 0 :
-        which = args[0]
-    if which == 'all' or which == 'configs' :
+        noun = args[0]
+    if noun in ['all', 'configs'] :
         list_configs(fips_dir)
-    if which == 'all' or which == 'build-tools' :
+        ok = True
+    if noun in ['all', 'build-tools'] :
         list_build_tools()
-    if which == 'all' or which == 'build-types' :
+        ok = True
+    if noun in ['all', 'build-types'] :
         list_build_types()
-    if which == 'all' or which == 'platforms' :
+        ok = True
+    if noun in ['all', 'platforms'] :
         list_platforms()
-    if which == 'all' or which == 'generators' :
+        ok = True
+    if noun in ['all', 'generators'] :
         list_generators()
-    if which == 'all' or which == 'registry' :
+        ok = True
+    if noun in ['all', 'registry'] :
         list_registry(fips_dir)
+        ok = True
+    if noun in ['all', 'settings'] :
+        list_settings(proj_dir)
+        ok = True
+
+    if not ok :
+        log.error("invalid noun '{}'".format(noun))
 
 #-------------------------------------------------------------------------------
 def help() :
@@ -95,6 +123,7 @@ def help() :
              "fips list platforms\n"
              "fips list generators\n"
              "fips list registry\n"
+             "fips list settings\n"
              + log.DEF +
              "    list available configs, build-tools, etc...")
 

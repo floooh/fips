@@ -5,7 +5,7 @@ build [config]
 build [config] [project]
 """
 
-from mod import log, config, project
+from mod import log, config, project, settings
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
@@ -17,7 +17,7 @@ def run(fips_dir, proj_dir, args) :
         if len(args) > 1 :
             proj_name = args[1]
     if cfg_name == None :
-        log.error("FIXME: use active config")
+        cfg_name = settings.get(proj_dir, 'config')
     project.build(fips_dir, proj_dir, cfg_name, proj_name)
 
 #-------------------------------------------------------------------------------
