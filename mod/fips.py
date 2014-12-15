@@ -3,7 +3,8 @@
 VERSION = '0.0.1'
 
 from mod import log
-from mod.verbs import diag,list,init,clone,gen
+from mod.verbs import diag,list,init,clone,gen,build
+from mod.verbs import run as vrun   # prevent collision with run() function
 try :
     import yaml 
 except ImportError:
@@ -15,6 +16,8 @@ verbs = {
     'init': init,
     'clone': clone,
     'gen': gen,
+    'build': build,
+    'run': vrun
 }
 
 #-------------------------------------------------------------------------------
@@ -23,7 +26,7 @@ def show_help(args) :
     log.info("fips: the high-level, multi-platform build system wrapper\n"
              "v{}\n"
              "https://www.github.com/floooh/fips\n".format(VERSION))
-    for verb in [list, diag, init, clone, gen] :
+    for verb in [list, diag, init, clone, gen, build, vrun] :
         verb.help()
         log.info(' ')
 

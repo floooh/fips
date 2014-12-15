@@ -26,7 +26,7 @@ def check_tools() :
 def check_configs(fips_dir) :
     """find configs and check if they are valid"""
     log.colored(log.YELLOW, '=== configs:')
-    dirs = [ fips_dir + '/configs' ]
+    dirs = [ fips_dir ]
     configs = config.load('*', dirs)
     for cfg in configs :
         if config.check_config_valid(cfg) :

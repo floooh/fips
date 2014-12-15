@@ -57,7 +57,7 @@ def list_registry(fips_dir) :
     log.colored(log.YELLOW, '=== registry:')
     registry.load(fips_dir)
     for key in registry.registry :
-        log.info('{}: {}'.format(key, registry.registry[key]))
+        log.info('{}{}{}: {}'.format(log.BLUE, key, log.DEF, registry.registry[key]))
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :

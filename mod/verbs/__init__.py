@@ -1,3 +1,3 @@
 """fips verb implementations"""
-__all__ = ['diag', 'list', 'init', 'clone', 'gen']
+__all__ = ['diag', 'list', 'init', 'clone', 'gen', 'build', 'run']
 

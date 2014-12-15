@@ -51,14 +51,17 @@ def run_gen(cfg, project_dir, build_dir, toolchain_path) :
     return res == 0
 
 #------------------------------------------------------------------------------
-def run_build(build_type, build_dir) :
+def run_build(target, build_type, build_dir) :
     """run cmake in build mode
 
+    :param target:          build target, can be None (builds all)
     :param build_type:      CMAKE_BUILD_TYPE string (e.g. Release, Debug)
     :param build_dir:       path to the build directory
     :returns:               True if cmake returns successful
     """
     cmdLine = ['cmake', '--build', '.', '--config', build_type]
+    if target :
+        cmdLine.extend(['--target', target])
     res = subprocess.call(args=cmdLine, cwd=build_dir)
     return res == 0
 
