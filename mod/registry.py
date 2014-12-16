@@ -38,3 +38,19 @@ def lookup_url(fips_dir, proj_name) :
     else :
         return None
 
+#-------------------------------------------------------------------------------
+def get_url(fips_dir, name_or_url) :
+    """Checks if name_or_url is in the registry, if yes, return url
+    from registry, otherwise return name_or_url. This is useful
+    if a parameter can be either a project name or a valid URL, and
+    must be converted into an URL.
+
+    :param fips_dir:    the absolute fips directory
+    :param name_or_url: a project-name or URL
+    :returns:           URL from registry, or the original name_or_url param
+    """
+    load(fips_dir)
+    if name_or_url in registry :
+        return registry[name_or_url]
+    else :
+        return name_or_url

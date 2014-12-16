@@ -38,47 +38,42 @@ def is_valid_project(fips_dir, name) :
     return is_valid_project_dir(proj_dir)
 
 #-------------------------------------------------------------------------------
-def init(fips_dir, url) :
-    """clone an existing, empty git project and setup as fips project, 
-    the project will be cloned into a sister directory of fips named 'name',
-    a bootstrap-fips script and fips.yml file will be copied.
+def init(fips_dir, proj_name) :
+    """initialize an existing project directory as a fips directory by
+    copying a fips python script and fips.yml file to it. the directory
+    must exist in the same directory as the fips directory.
 
     :param fips_dir:    absolute path to fips
-    :param url:         the git url to clone from
+    :param proj_name:   project directory name (dir must exist)
     :returns:           True if the project was successfully initialized
     """
     ws_dir = util.get_workspace_dir(fips_dir)
-    proj_name = util.get_project_name_from_url(url)
     proj_dir = util.get_project_dir(fips_dir, proj_name)
-    if not os.path.isdir(proj_dir) :
-        if git.clone(url, proj_name, ws_dir) :
-            src = fips_dir + '/templates/fips'
-            dst = proj_dir + '/fips'
-            if not os.path.isfile(dst) :
-                shutil.copy(src, dst)
-                os.chmod(dst, 0o744)
-                log.info("copied '{}' to '{}'".format(src, dst))
-            else :
-                log.warn("file '{}' already exists".format(dst))
-            src = fips_dir + '/templates/fips.yml'
-            dst = proj_dir + '/fips.yml'
-            if not os.path.isfile(dst) :
-                shutil.copy(src, dst)
-                log.info("copied '{}' to '{}'".format(src, dst))
-            else :
-                log.warn("file '{}' already exists".format(dst))
-            log.info("project dir initialized, please edit '{}' next".format(dst))
-            return True
+    if os.path.isdir(proj_dir) :
+        src = fips_dir + '/templates/fips'
+        dst = proj_dir + '/fips'
+        if not os.path.isfile(dst) :
+            shutil.copy(src, dst)
+            os.chmod(dst, 0o744)
+            log.info("copied '{}' to '{}'".format(src, dst))
         else :
-            log.error("failed to 'git clone {}' into '{}'".format(url, proj_dir))
-            return False
+            log.warn("file '{}' already exists".format(dst))
+        src = fips_dir + '/templates/fips.yml'
+        dst = proj_dir + '/fips.yml'
+        if not os.path.isfile(dst) :
+            shutil.copy(src, dst)
+            log.info("copied '{}' to '{}'".format(src, dst))
+        else :
+            log.warn("file '{}' already exists".format(dst))
+        log.info("project dir initialized, please edit '{}' next".format(dst))
+        return True
     else :
-        log.error("project dir '{}' already exists".format(proj_dir))
+        log.error("project dir '{}' does not exist".format(proj_dir))
         return False
 
 #-------------------------------------------------------------------------------
 def clone(fips_dir, url) :
-    """clone an existing fips project with git
+    """clone an existing fips project with git, do NOT fetch dependencies
 
     :param fips_dir:    absolute path to fips
     :param url:         git url to clone from

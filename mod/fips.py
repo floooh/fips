@@ -3,7 +3,7 @@
 VERSION = '0.0.1'
 
 from mod import log
-from mod.verbs import diag,list,init,clone,gen,build,set,unset
+from mod.verbs import diag, list, init, clone, gen, build, set, unset, fetch
 from mod.verbs import run as vrun   # prevent collision with run() function
 try :
     import yaml 
@@ -19,7 +19,8 @@ verbs = {
     'build': build,
     'run': vrun,
     'set': set,
-    'unset': unset
+    'unset': unset,
+    'fetch': fetch
 }
 
 #-------------------------------------------------------------------------------
@@ -28,7 +29,7 @@ def show_help(args) :
     log.info("fips: the high-level, multi-platform build system wrapper\n"
              "v{}\n"
              "https://www.github.com/floooh/fips\n".format(VERSION))
-    for verb in [list, diag, init, clone, gen, build, vrun, set, unset] :
+    for verb in [list, diag, init, clone, gen, build, vrun, set, unset, fetch] :
         verb.help()
         log.info(' ')
 

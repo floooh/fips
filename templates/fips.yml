@@ -2,9 +2,9 @@
 ---
 # name: project name
 # cmake: location of root CMakeLists.txt file
-# depends:
-#     project-name:
-#         url: git-url
+# imports:
+#     project-name or git-url:
+#         dep-remote-name: dep-local-name
 #     ...
 
 

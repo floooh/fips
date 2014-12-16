@@ -1,26 +1,26 @@
 """initialize a new fips project
 
-init [name] [giturl]
+init [project]
 """
 
-from mod import log, project
+from mod import log, project, registry
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
     """run the init verb"""
     if len(args) >= 1 :
-        url  = args[0]
-        project.init(fips_dir, url)
+        proj_name = args[0]
+        project.init(fips_dir, proj_name)
     else :
-        log.error("one ore more args missing (expected: 'fips init [git-url]')")
+        log.error("expected one arg [project]")
 
 #-------------------------------------------------------------------------------
 def help() :
     """print help text for init verb"""
     log.info(log.YELLOW +
-             "fips init [url]\n"
+             "fips init [project]\n"
              + log.DEF +
-             "    clone empty github repo and initialize as fips project")
+             "    initialize a project directory as fips project")
 
     
 

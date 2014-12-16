@@ -17,14 +17,14 @@ def error(msg, fatal=True) :
     :param msg:     string message
     :param fatal:   exit program with error code 10 if True (default is true)
     """
-    print('{}[ERROR]{} {}\n'.format(RED, DEF, msg))
+    print('{}[ERROR]{} {}'.format(RED, DEF, msg))
     if fatal :
         sys.exit(10)
 
 #-------------------------------------------------------------------------------
 def warn(msg) :
     """print a warning message"""
-    print('{}[WARNING]{} {}\n'.format(YELLOW, DEF, msg)) 
+    print('{}[WARNING]{} {}'.format(YELLOW, DEF, msg)) 
 
 #-------------------------------------------------------------------------------
 def ok(item, status) :

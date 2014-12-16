@@ -3,7 +3,7 @@
 clone [git-url]
 """
 
-from mod import log, project, registry
+from mod import log, util, project, registry, dep
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
@@ -14,11 +14,15 @@ def run(fips_dir, proj_dir, args) :
         # check project registry to resolve git url
         if registry.exists(fips_dir, name) :
             url = registry.lookup_url(fips_dir, name)
-            log.info("registry lookup: {} => {}'".format(name, url))
+            log.info("registry lookup: {} => {}".format(name, url))
         else :
             url = name
             log.info("'{}' not in fips registry, trying as git url".format(url))
-        project.clone(fips_dir, url)
+        if project.clone(fips_dir, url) :
+            # also fetch dependencies
+            proj_name = util.get_project_name_from_url(url)
+            proj_dir  = util.get_project_dir(fips_dir, proj_name)
+            dep.fetch_imports(fips_dir, proj_dir)
     else :
         log.error("expected one arg [git-url]")
 
