@@ -26,12 +26,21 @@ verbs = {
 #-------------------------------------------------------------------------------
 def show_help(args) :
     """show help text"""
-    log.info("fips: the high-level, multi-platform build system wrapper\n"
-             "v{}\n"
-             "https://www.github.com/floooh/fips\n".format(VERSION))
-    for verb in [list, diag, init, clone, gen, build, vrun, set, unset, fetch] :
-        verb.help()
-        log.info(' ')
+    if len(args) > 0 :
+        # show help for one verb
+        verb = args[0]
+        if verb in verbs :
+            verbs[verb].help()
+        else :
+            log.error("unknown verb '{}'".format(verb))
+    else :
+        # show generic help
+        log.info("fips: the high-level, multi-platform build system wrapper\n"
+                 "v{}\n"
+                 "https://www.github.com/floooh/fips\n".format(VERSION))
+        for verb in [list, diag, init, clone, gen, build, vrun, set, unset, fetch] :
+            verb.help()
+            log.info(' ')
 
 #-------------------------------------------------------------------------------
 def run(fips_path, proj_path, args) :
