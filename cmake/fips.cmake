@@ -13,6 +13,8 @@ include("${FIPS_ROOT_DIR}/cmake/fips_osx.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_pnacl.cmake")
 #include("${FIPS_ROOT_DIR}/cmake/fips_generators.cmake")
 
+set(FIPS_NAMESPACE)
+
 #-------------------------------------------------------------------------------
 #   define top-level options for the whole project
 #-------------------------------------------------------------------------------
@@ -137,6 +139,22 @@ macro(fips_finish)
 endmacro()
 
 #-------------------------------------------------------------------------------
+#   fips_namespace(ns)
+#   Set the current fips namespace (for imported targets)
+#
+macro(fips_namespace ns)
+    set(FIPS_NAMESPACE "${ns}_")
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_reset_namespace()
+#   Reset the fips namespace to an empty string.
+#
+macro(fips_namespace)
+    set(FIPS_NAMESPACE)
+endmacro()
+
+#-------------------------------------------------------------------------------
 #   fips_ide_group(group)
 #   Define the IDE group name for the following targets. 
 #
@@ -157,6 +175,7 @@ endmacro()
 #   Begin defining an fips module.
 #
 macro(fips_begin_module name)
+    set(name ${FIPS_NAMESPACE}${name})
     if (FIPS_CMAKE_VERBOSE)
         message("Module: name=" ${name})
     endif()
@@ -197,6 +216,7 @@ endmacro()
 #   Begin defining a static link library
 #
 macro(fips_begin_lib name)
+    set(name ${FIPS_NAMESPACE}${name})
     if (FIPS_CMAKE_VERBOSE)
         message("Library: name=" ${name})
     endif()
