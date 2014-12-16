@@ -1,6 +1,10 @@
 fips
 ====
 
+**WORK IN PROGRESS**
+
+- first progress video: https://www.youtube.com/watch?v=6F_AecDqRIY
+
 **fips** is a combination of Python and cmake scripts to integrate existing build tools, IDEs and platform SDKs into an easy-to-use, high-level, multi-platform build system for C/C++ projects.
 
 Or in other words: it's [Oryol's](https://github.com/floooh/oryol/blob/master/doc/BUILD.md) build system, moved into its own project, plus support for external dependencies.
