@@ -32,7 +32,7 @@ def show_help(args) :
         if verb in verbs :
             verbs[verb].help()
         else :
-            log.error("unknown verb '{}'".format(verb))
+            log.error("unknown noun '{}'".format(verb))
     else :
         # show generic help
         log.info("fips: the high-level, multi-platform build system wrapper\n"
