@@ -4,7 +4,7 @@
 #   CMakeLists.txt file of a fips project
 #-------------------------------------------------------------------------------
 get_filename_component(FIPS_PROJECT_DIR "." ABSOLUTE)
-get_filename_component(FIPS_DEPLOY_DIR "../fips-deploy" ABSOLUTE)
+get_filename_component(FIPS_DEPLOY_DIR "../.fips-deploy" ABSOLUTE)
 
 include("${FIPS_ROOT_DIR}/cmake/fips_private.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_unittests.cmake")

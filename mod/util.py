@@ -33,7 +33,7 @@ def get_build_dir(fips_dir, proj_name, cfg) :
     :param cfg:         config object
     :returns:           absolute path of build directory
     """
-    return '{}/fips-build/{}/{}'.format(get_workspace_dir(fips_dir), proj_name, cfg['name'])
+    return '{}/.fips-build/{}/{}'.format(get_workspace_dir(fips_dir), proj_name, cfg['name'])
 
 #-------------------------------------------------------------------------------
 def get_deploy_dir(fips_dir, proj_name, cfg) :
@@ -44,7 +44,7 @@ def get_deploy_dir(fips_dir, proj_name, cfg) :
     :param cfg:         config object
     :returns:           absolute path of deploy directory
     """
-    return '{}/fips-deploy/{}/{}'.format(get_workspace_dir(fips_dir), proj_name, cfg['name'])
+    return '{}/.fips-deploy/{}/{}'.format(get_workspace_dir(fips_dir), proj_name, cfg['name'])
 
 #-------------------------------------------------------------------------------
 def get_project_name_from_url(url) :
