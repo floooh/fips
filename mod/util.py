@@ -1,6 +1,7 @@
 """various utility functions"""
 
 import os.path
+import yaml
 
 #-------------------------------------------------------------------------------
 def get_workspace_dir(fips_dir) :
@@ -61,3 +62,21 @@ def get_project_name_from_dir(proj_dir) :
     :returns:           project name (last dir-name of project directory)
     """
     return os.path.split(proj_dir)[1]
+
+#-------------------------------------------------------------------------------
+def load_fips_yml(proj_dir) :
+    """load the fips.yml file from project directory
+
+    :param proj_dir:    absolute project directory
+    :returns:           dictionary object
+    """
+    dic = None
+    path = proj_dir + '/fips.yml'
+    if os.path.isfile(path) :
+        f = open(path, 'r')
+        dic = yaml.load(f)
+        f.close()
+    if not dic :
+        dic = {}
+    return dic
+

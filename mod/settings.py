@@ -2,8 +2,38 @@
 
 import yaml
 import os.path
+
 from mod import log, util, project, config
 
+#-------------------------------------------------------------------------------
+def load(proj_dir) :
+    """load the .fips-settings.yml file from project directory
+
+    :param proj_dir:    absolute project directory
+    :returns:           dictionary object
+    """
+    settings = None
+    path = proj_dir + '/.fips-settings.yml'
+    if os.path.isfile(path) :
+        f = open(path, 'r')
+        settings = yaml.load(f)
+        f.close()
+    if not settings :
+        settings = {}
+    return settings
+
+#-------------------------------------------------------------------------------
+def save(proj_dir, settings) :
+    """save settings back to .fips-settings.yml file in project directory
+
+    :param proj_dir:    absolute project directory
+    :param settings:    settings dictionary object
+    """
+    path = proj_dir + '/.fips-settings.yml'
+    f = open(path, 'w')
+    yaml.dump(settings, f)
+    f.close()
+    
 #-------------------------------------------------------------------------------
 def get_default(key) :
     """get the default value for a settings key
@@ -25,18 +55,12 @@ def get(proj_dir, key) :
     :param key:         settings key
     :returns:           settings value, default value for key, or None
     """
-    if not project.is_valid_project_dir(proj_dir) :
-        log.error("not a valid project dir: '{}'".format(proj_dir))
+    project.ensure_valid_project_dir(proj_dir)
 
     value = None
-    path = proj_dir + '/.fips-settings.yml'
-    if os.path.isfile(path) :
-        f = open(path, 'r')
-        settings = yaml.load(f)
-        f.close()
-        if key in settings :
-            value = settings[key]
-
+    settings = load(proj_dir)
+    if key in settings :
+        value = settings[key]
     if value is None :
         value = get_default(key)
 
@@ -51,25 +75,11 @@ def set(proj_dir, key, value) :
     :param key:         settings key
     :param value:       new value associated with key
     """
-    if not project.is_valid_project_dir(proj_dir) :
-        log.error("not a valid project dir: '{}'".format(proj_dir))
+    project.ensure_valid_project_dir(proj_dir)
 
-    path = proj_dir + '/.fips-settings.yml'
-    settings = {}
-
-    # load existing settings file
-    if os.path.isfile(path) :
-        f = open(path, 'r')
-        settings = yaml.load(f)
-        f.close()
-
-    # update value
+    settings = load(proj_dir)
     settings[key] = value
-
-    # write back settings file
-    f = open(path, 'w')
-    yaml.dump(settings, f)
-    f.close()
+    save(proj_dir, settings)
 
     proj_name = util.get_project_name_from_dir(proj_dir)
     log.info("'{}' set to '{}' in project '{}".format(key, value, proj_name))
@@ -81,26 +91,12 @@ def unset(proj_dir, key) :
     :param proj_dir:    absolute project directory
     :param key:         settings key
     """
-    if not project.is_valid_project_dir(proj_dir) :
-        log.error("not a valid project dir: '{}'".format(proj_dir))
+    project.ensure_valid_project_dir(proj_dir)
 
-    path = proj_dir + '/.fips-settings.yml'
-    settings = {}
-
-    # load existing settings file
-    if os.path.isfile(path) :
-        f = open(path, 'r')
-        settings = yaml.load(f)
-        f.close()
-
-    # clear key if exists
+    settings = load(proj_dir)
     if key in settings :
         del settings[key]
-
-    # and save back
-    f = open(path, 'w')
-    yaml.dump(settings, f)
-    f.close()
+    save(proj_dir)
 
     proj_name = util.get_project_name_from_dir(proj_dir)
     log.info("'{}' unset in project '{}'".format(key, proj_name))

@@ -17,25 +17,24 @@ def is_valid_project_dir(proj_dir) :
     """
     if os.path.isdir(proj_dir) :
         if not os.path.isfile(proj_dir + '/fips') :
-            log.error("no file 'fips' in project dir '{}'".format(proj_dir), False)
+            log.warn("no file 'fips' in project dir '{}'".format(proj_dir))
             return False
         if not os.path.isfile(proj_dir + '/fips.yml') :
-            log.error("no file 'fips.yml' in project dir '{}'".format(proj_dir), False)
+            log.warn("no file 'fips.yml' in project dir '{}'".format(proj_dir))
             return False
         return True
-    return False
+    else :
+        log.warn("project dir '{}' does not exist".format(proj_dir))
+        return False
 
 #-------------------------------------------------------------------------------
-def is_valid_project(fips_dir, name) :
-    """test if a named project directory exists in the fips workspace and
-    check whether a fips bootstrap script and fips.yml file exists
-    
-    :param fips_dir:    absolute path of fips
-    :param name:        project/directory name
-    :returns:           True if this is a valid fips project
+def ensure_valid_project_dir(proj_dir) :
+    """test if project dir is valid, if not, dump error and abort
+
+    :param proj_dir:    absolute project directory to check
     """
-    proj_dir = util.get_project_dir(fips_dir, name)
-    return is_valid_project_dir(proj_dir)
+    if not is_valid_project_dir(proj_dir) :
+        log.error("'{}' is not a valid project directory".format(proj_dir))
 
 #-------------------------------------------------------------------------------
 def init(fips_dir, proj_name) :
@@ -116,8 +115,7 @@ def gen(fips_dir, proj_dir, cfg_name, proj_name) :
         proj_name = util.get_project_name_from_dir(proj_dir)
 
     # check if proj_dir is a valid fips project
-    if not is_valid_project_dir(proj_dir) :
-        log.error("'{}' is not a valid fips project".format(proj_dir))
+    ensure_valid_project_dir(proj_dir)
     
     # load the config(s)
     configs = config.load(cfg_name, [fips_dir])
@@ -163,8 +161,7 @@ def build(fips_dir, proj_dir, cfg_name, proj_name) :
         proj_name = util.get_project_name_from_dir(proj_dir)
 
     # check if proj_dir is a valid fips project
-    if not is_valid_project_dir(proj_dir) :
-        log.error("'{}' is not a valid fips project".format(proj_dir))
+    ensure_valid_project_dir(proj_dir)
     
     # load the config(s)
     configs = config.load(cfg_name, [fips_dir])
@@ -222,8 +219,7 @@ def run(fips_dir, proj_dir, cfg_name, proj_name, target_name) :
         proj_name = util.get_project_name_from_dir(proj_dir)
 
     # check if proj_dir is a valid fips project
-    if not is_valid_project_dir(proj_dir) :
-        log.error("'{}' is not a valid fips project".format(proj_dir))
+    ensure_valid_project_dir(proj_dir)
     
     # load the config(s)
     configs = config.load(cfg_name, [fips_dir])

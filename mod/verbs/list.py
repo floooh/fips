@@ -8,10 +8,12 @@ list generators     -- list supported generator names
 list configs        -- list available configs
 list registry       -- list content of fips registry
 list settings       -- list fips settings of current project
+list exports        -- list project exports
+list imports        -- list project imports
 list                -- same as 'list all'
 """
 
-from mod import log, config, registry, project, settings
+from mod import log, config, registry, project, settings, dep
 
 #-------------------------------------------------------------------------------
 def list_build_tools() :
@@ -58,7 +60,7 @@ def list_registry(fips_dir) :
     log.colored(log.YELLOW, '=== registry:')
     registry.load(fips_dir)
     for key in registry.registry :
-        log.info('{}{}{}: {}'.format(log.BLUE, key, log.DEF, registry.registry[key]))
+        log.info('{} => {}'.format(key, registry.registry[key]))
 
 #-------------------------------------------------------------------------------
 def list_settings(proj_dir) :
@@ -70,9 +72,54 @@ def list_settings(proj_dir) :
         tgt_name = settings.get(proj_dir, 'target')
         tgt_default = ' (default value)' if tgt_name == settings.get_default('target') else ''
         log.info('  config: {}{}'.format(cfg_name, cfg_default))
-        log.info('  target: {}{}'.format(tgt_name, cfg_default))
+        log.info('  target: {}{}'.format(tgt_name, tgt_default))
     else :
-        log.info('  not in a valid project directory')
+        log.info('  currently not in a valid project directory')
+
+#-------------------------------------------------------------------------------
+def list_exports(fips_dir, proj_dir) :
+    """list project exports"""
+    log.colored(log.YELLOW, '=== exports:')
+    if project.is_valid_project_dir(proj_dir) :
+        success, result = dep.get_all_imports_exports(fips_dir, proj_dir)
+        if not success :
+            log.warn("missing import project directories, please un 'fips fetch'")
+        for dep_proj_name in result :
+            cur_dep = result[dep_proj_name]
+            log.info("project '{}' exports:".format(dep_proj_name))
+            if cur_dep['exports'] :
+                for exp_mod in cur_dep['exports'] :
+                    log.info("  module '{}' at '{}'".format(exp_mod, cur_dep['exports'][exp_mod]))
+            else :
+                log.info("  nothing")
+    else :
+        log.info('  currently not in a valid project directory')
+
+#-------------------------------------------------------------------------------
+def list_imports(fips_dir, proj_dir) :
+    """list project imports"""
+    log.colored(log.YELLOW, '=== imports:')
+    if project.is_valid_project_dir(proj_dir) :
+        success, result = dep.get_all_imports_exports(fips_dir, proj_dir)
+        if not success :
+            log.warn("missing import project directories, please run 'fips fetch'")
+        for dep_proj_name in result :
+            # top level project is in result, but has no URL set, filter
+            # this from the output
+            cur_dep = result[dep_proj_name]
+            if not cur_dep['url'] :
+                log.info("project '{}' imports:".format(dep_proj_name))
+            else :
+                log.info("project '{}' at '{}' imports:".format(dep_proj_name, cur_dep['url']))
+            if cur_dep['imports'] :
+                for imp_proj in cur_dep['imports'] :
+                    log.info("  from '{}':".format(imp_proj))
+                    for imp_mod in cur_dep['imports'][imp_proj] :
+                        log.info("    module '{}'".format(imp_mod))
+            else :
+                log.info("    nothing")
+    else :
+        log.info('  currently not in a valid project directory')
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
@@ -107,7 +154,12 @@ def run(fips_dir, proj_dir, args) :
     if noun in ['all', 'settings'] :
         list_settings(proj_dir)
         ok = True
-
+    if noun in ['all', 'exports'] :
+        list_exports(fips_dir, proj_dir)
+        ok = True
+    if noun in ['all', 'imports'] :
+        list_imports(fips_dir, proj_dir)
+        ok = True
     if not ok :
         log.error("invalid noun '{}'".format(noun))
 
