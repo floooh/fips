@@ -2,7 +2,6 @@
 
 run [target]
 run [target] [config]
-run [target] [config] [project]
 """
 
 from mod import log, config, project, settings
@@ -10,15 +9,15 @@ from mod import log, config, project, settings
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
     """run fips project build targets"""
+    if not project.is_valid_project_dir(proj_dir) :
+        log.error('must be run in a project directory')
+    proj_name = util.get_project_name_from_dir(proj_dir)
     cfg_name = settings.get(proj_dir, 'config')
     target_name = settings.get(proj_dir, 'target')
-    proj_name = None
     if len(args) > 0 :
         target_name = args[0]
     if len(args) > 1:
         cfg_name = args[1]
-    if len(args) > 2:
-        proj_name = args[2]
     if target_name :
         project.run(fips_dir, proj_dir, cfg_name, proj_name, target_name)
     else :
@@ -32,6 +31,5 @@ def help() :
             "fips run\n"
             "fips run [target]\n" 
             "fips run [target] [config]\n"
-            "fips run [target] [config] [project]\n" + log.DEF +
-            "   run a build target for current or named config and project")
+            "   run a build target for current or named config")
 
