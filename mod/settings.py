@@ -3,7 +3,7 @@
 import yaml
 import os.path
 
-from mod import log, util, project, config
+from mod import log, util, config
 
 #-------------------------------------------------------------------------------
 def load(proj_dir) :
@@ -55,7 +55,7 @@ def get(proj_dir, key) :
     :param key:         settings key
     :returns:           settings value, default value for key, or None
     """
-    project.ensure_valid_project_dir(proj_dir)
+    util.ensure_valid_project_dir(proj_dir)
 
     value = None
     settings = load(proj_dir)
@@ -75,7 +75,7 @@ def set(proj_dir, key, value) :
     :param key:         settings key
     :param value:       new value associated with key
     """
-    project.ensure_valid_project_dir(proj_dir)
+    util.ensure_valid_project_dir(proj_dir)
 
     settings = load(proj_dir)
     settings[key] = value
@@ -91,7 +91,7 @@ def unset(proj_dir, key) :
     :param proj_dir:    absolute project directory
     :param key:         settings key
     """
-    project.ensure_valid_project_dir(proj_dir)
+    util.ensure_valid_project_dir(proj_dir)
 
     settings = load(proj_dir)
     if key in settings :

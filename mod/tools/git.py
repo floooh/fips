@@ -19,16 +19,6 @@ def check_exists() :
         return False
 
 #-------------------------------------------------------------------------------
-def is_valid_url(url) :
-    """check if 'url' is a valid git url
-
-    :param url:     url string
-    :returns:       True if a valid url
-    """
-    # we simply check whether the url ends with '.git'
-    return url[-4:] == '.git'
-
-#-------------------------------------------------------------------------------
 def clone(url, name, cwd) :
     """git clone a remote git repo
     

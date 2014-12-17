@@ -13,7 +13,7 @@ from mod import log, util, settings, config, project
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
     """run the 'open' verb (opens project in IDE)"""
-    if not project.is_valid_project_dir(proj_dir) :
+    if not util.is_valid_project_dir(proj_dir) :
         log.error('must be run in a project directory')
     proj_name = util.get_project_name_from_dir(proj_dir)
     cfg_name = None

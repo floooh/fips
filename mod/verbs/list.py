@@ -13,7 +13,7 @@ list imports        -- list project imports
 list                -- same as 'list all'
 """
 
-from mod import log, config, registry, project, settings, dep
+from mod import log, util, config, registry, settings, dep
 
 #-------------------------------------------------------------------------------
 def list_build_tools() :
@@ -66,7 +66,7 @@ def list_registry(fips_dir) :
 def list_settings(proj_dir) :
     """list settings file content"""
     log.colored(log.YELLOW, '=== settings:')
-    if project.is_valid_project_dir(proj_dir) :
+    if util.is_valid_project_dir(proj_dir) :
         cfg_name = settings.get(proj_dir, 'config')
         cfg_default = ' (default value)' if cfg_name == settings.get_default('config') else ''
         tgt_name = settings.get(proj_dir, 'target')
@@ -80,7 +80,7 @@ def list_settings(proj_dir) :
 def list_exports(fips_dir, proj_dir) :
     """list project exports"""
     log.colored(log.YELLOW, '=== exports:')
-    if project.is_valid_project_dir(proj_dir) :
+    if util.is_valid_project_dir(proj_dir) :
         success, result = dep.get_all_imports_exports(fips_dir, proj_dir)
         if not success :
             log.warn("missing import project directories, please un 'fips fetch'")
@@ -99,7 +99,7 @@ def list_exports(fips_dir, proj_dir) :
 def list_imports(fips_dir, proj_dir) :
     """list project imports"""
     log.colored(log.YELLOW, '=== imports:')
-    if project.is_valid_project_dir(proj_dir) :
+    if util.is_valid_project_dir(proj_dir) :
         success, result = dep.get_all_imports_exports(fips_dir, proj_dir)
         if not success :
             log.warn("missing import project directories, please run 'fips fetch'")

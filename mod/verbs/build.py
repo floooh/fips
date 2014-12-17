@@ -4,12 +4,12 @@ build
 build [config]
 """
 
-from mod import log, config, project, settings
+from mod import log, util, config, project, settings
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
     """build fips project"""
-    if not project.is_valid_project_dir(proj_dir) :
+    if not util.is_valid_project_dir(proj_dir) :
         log.error('must be run in a project directory')
     proj_name = util.get_project_name_from_dir(proj_dir)
     cfg_name = None

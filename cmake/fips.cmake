@@ -127,6 +127,11 @@ macro(fips_setup)
         message("PYTHON INTERPRETER NOT FOUND, NO SOURCE CODE GENERATION!")
     endif()
 
+    # load generated .fips-imports.cmake if exists
+    if (EXISTS "${FIPS_PROJECT_DIR}/.fips-imports.cmake")
+        include("${FIPS_PROJECT_DIR}/.fips-imports.cmake")
+    endif()
+
 endmacro()
 
 #-------------------------------------------------------------------------------

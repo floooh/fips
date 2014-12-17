@@ -4,37 +4,8 @@ import os
 import shutil
 import subprocess
 
-from mod import log, util, config
+from mod import log, util, config, dep
 from mod.tools import git, cmake, make, ninja, xcodebuild
-
-#-------------------------------------------------------------------------------
-def is_valid_project_dir(proj_dir) :
-    """test if the provided directory is a valid fips project (has a
-    fips.yml and a fips file)
-
-    :param proj_dir:    absolute project directory to check
-    :returns:           True if a valid fips project
-    """
-    if os.path.isdir(proj_dir) :
-        if not os.path.isfile(proj_dir + '/fips') :
-            log.warn("no file 'fips' in project dir '{}'".format(proj_dir))
-            return False
-        if not os.path.isfile(proj_dir + '/fips.yml') :
-            log.warn("no file 'fips.yml' in project dir '{}'".format(proj_dir))
-            return False
-        return True
-    else :
-        log.warn("project dir '{}' does not exist".format(proj_dir))
-        return False
-
-#-------------------------------------------------------------------------------
-def ensure_valid_project_dir(proj_dir) :
-    """test if project dir is valid, if not, dump error and abort
-
-    :param proj_dir:    absolute project directory to check
-    """
-    if not is_valid_project_dir(proj_dir) :
-        log.error("'{}' is not a valid project directory".format(proj_dir))
 
 #-------------------------------------------------------------------------------
 def init(fips_dir, proj_name) :
@@ -115,8 +86,11 @@ def gen(fips_dir, proj_dir, cfg_name, proj_name) :
         proj_name = util.get_project_name_from_dir(proj_dir)
 
     # check if proj_dir is a valid fips project
-    ensure_valid_project_dir(proj_dir)
+    util.ensure_valid_project_dir(proj_dir)
     
+    # generate the .fips-imports.cmake file
+    dep.write_imports_file(fips_dir, proj_dir)
+
     # load the config(s)
     configs = config.load(cfg_name, [fips_dir])
     num_valid_configs = 0
@@ -161,7 +135,7 @@ def build(fips_dir, proj_dir, cfg_name, proj_name) :
         proj_name = util.get_project_name_from_dir(proj_dir)
 
     # check if proj_dir is a valid fips project
-    ensure_valid_project_dir(proj_dir)
+    util.ensure_valid_project_dir(proj_dir)
     
     # load the config(s)
     configs = config.load(cfg_name, [fips_dir])
@@ -219,7 +193,7 @@ def run(fips_dir, proj_dir, cfg_name, proj_name, target_name) :
         proj_name = util.get_project_name_from_dir(proj_dir)
 
     # check if proj_dir is a valid fips project
-    ensure_valid_project_dir(proj_dir)
+    util.ensure_valid_project_dir(proj_dir)
     
     # load the config(s)
     configs = config.load(cfg_name, [fips_dir])
