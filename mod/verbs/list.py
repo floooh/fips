@@ -87,11 +87,30 @@ def list_exports(fips_dir, proj_dir) :
         for dep_proj_name in result :
             cur_dep = result[dep_proj_name]
             log.info("project '{}' exports:".format(dep_proj_name))
-            if cur_dep['exports'] :
-                for exp_mod in cur_dep['exports'] :
-                    log.info("  module '{}' at '{}'".format(exp_mod, cur_dep['exports'][exp_mod]))
+
+            log.info("  modules:")
+            cur_modules = cur_dep['exports']['modules']
+            if cur_modules :
+                for mod in cur_modules :
+                    log.info("    '{}' => '{}'".format(mod, cur_modules[mod]))
             else :
-                log.info("  nothing")
+                log.info("    none")
+
+            log.info("  header search dirs:")
+            cur_hdrs = cur_dep['exports']['header-dirs']
+            if cur_hdrs :
+                for hdr in cur_hdrs :
+                    log.info("    {}".format(hdr))
+            else :
+                log.info("    none")
+
+            log.info("  lib search dirs:")
+            cur_libs = cur_dep['exports']['lib-dirs']
+            if cur_libs :
+                for lub in cur_libs :
+                    log.info("    {}".format(lib))
+            else :
+                log.info("    none")
     else :
         log.info('  currently not in a valid project directory')
 
