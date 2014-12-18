@@ -5,6 +5,7 @@ fips
 
 - first progress video: https://www.youtube.com/watch?v=6F_AecDqRIY
 - 2nd progress video: https://www.youtube.com/watch?v=W0MYjpR0G8c
+- 3rd progress video: https://www.youtube.com/watch?v=3bQrYYaYU4w
 
 **fips** is a combination of Python and cmake scripts to integrate existing build tools, IDEs and platform SDKs into an easy-to-use, high-level, multi-platform build system for C/C++ projects.
 
