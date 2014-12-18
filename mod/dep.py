@@ -141,7 +141,7 @@ def _rec_fetch_imports(fips_dir, proj_dir, handled) :
             dep_proj_name = util.get_project_name_from_url(dep_url)
             if dep_proj_name not in handled:
                 dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
-                log.colored(log.YELLOW, "=== depedency: '{}':".format(dep_proj_name))
+                log.colored(log.YELLOW, "=== dependency: '{}':".format(dep_proj_name))
                 dep_ok = False
                 if not os.path.isdir(dep_proj_dir) :
                     # directory did not exist, do a fresh git clone
