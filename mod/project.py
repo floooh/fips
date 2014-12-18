@@ -43,6 +43,8 @@ def clone(fips_dir, url) :
     proj_dir = util.get_project_dir(fips_dir, proj_name)
     if not os.path.isdir(proj_dir) :
         if git.clone(url, proj_name, ws_dir) :
+            # fetch imports
+            dep.fetch_imports(fips_dir, proj_dir)
             return True
         else :
             log.error("failed to 'git clone {}' into '{}'".format(url, proj_dir))
@@ -67,6 +69,9 @@ def gen(fips_dir, proj_dir, cfg_name, proj_name) :
     :param proj_name:   project name (or None to use current project path)
     :returns:           True if successful
     """
+
+    # first make sure that imports exist
+    dep.fetch_imports(fips_dir, proj_dir)
 
     # if a project name is given, build a project dir from it
     if proj_name :
@@ -116,6 +121,9 @@ def build(fips_dir, proj_dir, cfg_name, proj_name) :
     :param proj_name:   project name (override project dir) or None
     :returns:           True if build was successful
     """
+
+    # first make sure that imports are fetched
+    dep.fetch_imports(fips_dir, proj_dir)
 
     # if a project name is given, build a project dir from it
     if proj_name :

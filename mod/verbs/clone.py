@@ -18,11 +18,7 @@ def run(fips_dir, proj_dir, args) :
         else :
             url = name
             log.info("'{}' not in fips registry, trying as git url".format(url))
-        if project.clone(fips_dir, url) :
-            # also fetch dependencies
-            proj_name = util.get_project_name_from_url(url)
-            proj_dir  = util.get_project_dir(fips_dir, proj_name)
-            dep.fetch_imports(fips_dir, proj_dir)
+        project.clone(fips_dir, url)
     else :
         log.error("expected one arg [git-url]")
 
