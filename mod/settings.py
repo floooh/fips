@@ -15,9 +15,8 @@ def load(proj_dir) :
     settings = None
     path = proj_dir + '/.fips-settings.yml'
     if os.path.isfile(path) :
-        f = open(path, 'r')
-        settings = yaml.load(f)
-        f.close()
+        with open(path, 'r') as f :
+            settings = yaml.load(f)
     if not settings :
         settings = {}
     return settings
@@ -30,9 +29,8 @@ def save(proj_dir, settings) :
     :param settings:    settings dictionary object
     """
     path = proj_dir + '/.fips-settings.yml'
-    f = open(path, 'w')
-    yaml.dump(settings, f)
-    f.close()
+    with open(path, 'w') as f :
+        yaml.dump(settings, f)
     
 #-------------------------------------------------------------------------------
 def get_default(key) :

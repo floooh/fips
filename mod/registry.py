@@ -9,9 +9,8 @@ def load(fips_dir) :
     """load registry on demand"""
     global registry
     if registry is None :
-        f = open(fips_dir + '/registry.yml', 'r')
-        registry = yaml.load(f)
-        f.close()
+        with open(fips_dir + '/registry.yml', 'r') as f :
+            registry = yaml.load(f)
 
 #-------------------------------------------------------------------------------
 def exists(fips_dir, proj_name) :

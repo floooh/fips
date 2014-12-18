@@ -188,9 +188,8 @@ def load(pattern, proj_dirs) :
         paths = glob.glob('{}/configs/{}.yml'.format(curDir, pattern))
         for path in paths :
             try :
-                f = open(path, 'r')
-                cfg = yaml.load(f)
-                f.close()
+                with open(path, 'r') as f :
+                    cfg = yaml.load(f)
 
                 folder, fname = os.path.split(path)
 

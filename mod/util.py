@@ -74,9 +74,8 @@ def load_fips_yml(proj_dir) :
     dic = None
     path = proj_dir + '/fips.yml'
     if os.path.isfile(path) :
-        f = open(path, 'r')
-        dic = yaml.load(f)
-        f.close()
+        with open(path, 'r') as f:
+            dic = yaml.load(f)
     if not dic :
         dic = {}
     return dic
