@@ -3,13 +3,13 @@
 VERSION = '0.0.1'
 
 from mod import log
-from mod.verbs import diag, list, init, clone, gen
-from mod.verbs import build, set, unset, fetch, open, clean
-from mod.verbs import run as vrun   # prevent collision with run() function
 try :
     import yaml 
 except ImportError:
     log.error("could not import 'yaml', run 'pip --user install PyYAML' to install")
+from mod.verbs import diag, list, init, clone, gen
+from mod.verbs import build, set, unset, fetch, open, clean
+from mod.verbs import run as vrun   # prevent collision with run() function
 
 verbs = {
     'diag': diag,
