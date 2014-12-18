@@ -4,14 +4,13 @@ import os
 import shutil
 import subprocess
 
-from mod import log, util, config, dep
+from mod import log, util, config, dep, template
 from mod.tools import git, cmake, make, ninja, xcodebuild
 
 #-------------------------------------------------------------------------------
 def init(fips_dir, proj_name) :
     """initialize an existing project directory as a fips directory by
-    copying a fips python script and fips.yml file to it. the directory
-    must exist in the same directory as the fips directory.
+    copying essential files and creating or updating .gitignore
 
     :param fips_dir:    absolute path to fips
     :param proj_name:   project directory name (dir must exist)
@@ -20,23 +19,13 @@ def init(fips_dir, proj_name) :
     ws_dir = util.get_workspace_dir(fips_dir)
     proj_dir = util.get_project_dir(fips_dir, proj_name)
     if os.path.isdir(proj_dir) :
-        src = fips_dir + '/templates/fips'
-        dst = proj_dir + '/fips'
-        if not os.path.isfile(dst) :
-            shutil.copy(src, dst)
-            os.chmod(dst, 0o744)
-            log.info("copied '{}' to '{}'".format(src, dst))
-        else :
-            log.warn("file '{}' already exists".format(dst))
-        src = fips_dir + '/templates/fips.yml'
-        dst = proj_dir + '/fips.yml'
-        if not os.path.isfile(dst) :
-            shutil.copy(src, dst)
-            log.info("copied '{}' to '{}'".format(src, dst))
-        else :
-            log.warn("file '{}' already exists".format(dst))
-        log.info("project dir initialized, please edit '{}' next".format(dst))
-        return True
+        templ_values = {
+            'project': proj_name
+        }
+        for f in ['CMakeLists.txt', 'fips', 'fips.cmd', 'fips.yml'] :
+            template.copy_template_file(fips_dir, proj_dir, f, templ_values)
+        gitignore_entries = ['.fips-*']
+        template.write_git_ignore(proj_dir, gitignore_entries)
     else :
         log.error("project dir '{}' does not exist".format(proj_dir))
         return False

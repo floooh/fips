@@ -1,6 +1,7 @@
 """various utility functions"""
 
 import os.path
+import sys
 import yaml
 from mod import log
 
@@ -119,3 +120,18 @@ def is_git_url(url) :
     # we simply check whether the url ends with '.git'
     return url[-4:] == '.git'
 
+#-------------------------------------------------------------------------------
+def confirm(question) :
+    """ask user to confirm (y/N)
+
+    :param question:    the question to confirm
+    :return:            True: user pressed 'y', False: user pressed 'n'
+    """
+    validAnswers={'': False, 'yes': True, 'ye': True, 'y': True, 'no': False, 'n': False }
+    while True :
+        sys.stdout.write(question + ' [y/N]: ')
+        choice = raw_input().lower()
+        if choice in validAnswers :
+            return validAnswers[choice]
+        else :
+            log.info("please respond with 'y', 'yes', 'n' or 'no'")
