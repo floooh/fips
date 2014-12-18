@@ -1,15 +1,20 @@
-# fips.yml template
+# $project
 ---
-# name: project name
-# cmake: location of root CMakeLists.txt file
+# IMPORTS:
+# ========
 # imports:
-#     project-name or git-url:
-#         dep-remote-name: dep-local-name
-#     ...
-
-
-
-
-
+#    proj-name or git-url: [ dep1, dep2, dep3, ... ]
+#
+# EXPORTS:
+# ========
+# exports:
+#     header-dirs : [ dir, ... ]
+#     lib-dirs : [ dir, ... ]
+#     defines :
+#         def1 : value
+#         ...
+#     modules :
+#         dep1: src/dep1
+#         ...
 
 
