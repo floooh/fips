@@ -125,7 +125,11 @@ def build(fips_dir, proj_dir, cfg_name, proj_name) :
 
     # check if proj_dir is a valid fips project
     util.ensure_valid_project_dir(proj_dir)
-    
+
+    # generate the .fips-imports.cmake file
+    # (to make sure it's there if cmake needs to run)
+    dep.write_imports_file(fips_dir, proj_dir)
+
     # load the config(s)
     configs = config.load(cfg_name, [fips_dir])
     num_valid_configs = 0
