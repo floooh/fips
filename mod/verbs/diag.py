@@ -3,11 +3,12 @@
 diag all        -- run all diagnosis functions
 diag tools      -- check if required tools can be found
 diag configs    -- check all configs
+diag imports    -- check all imports
 diag            -- same as 'diag all'
 """
 
 from mod.tools import git,cmake,ccmake,cmake_gui,make,ninja,xcodebuild
-from mod import config, log
+from mod import config, util, log, dep
 
 #-------------------------------------------------------------------------------
 def check_tools() :
@@ -35,6 +36,13 @@ def check_configs(fips_dir) :
             log.failed(cfg['name'], 'FAILED')
 
 #-------------------------------------------------------------------------------
+def check_imports(fips_dir, proj_dir) :
+    """recursively check imports"""
+    log.colored(log.YELLOW, '=== imports:')
+    if util.is_valid_project_dir(proj_dir) :
+        dep.check_imports(fips_dir, proj_dir) 
+
+#-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
     """run diagnostics
 
@@ -46,13 +54,15 @@ def run(fips_dir, proj_dir, args) :
     ok = False
     if len(args) > 0 :
         noun = args[0]
-    if noun == 'all' or noun == 'tools' :
+    if noun in ['all', 'tools'] :
         check_tools()
         ok = True
-    if noun == 'all' or noun == 'configs' :
+    if noun in ['all', 'configs'] :
         check_configs(fips_dir)
         ok = True
-
+    if noun in ['all', 'imports'] :
+        check_imports(fips_dir, proj_dir)
+        ok = True
     if not ok :
         log.error("invalid noun '{}'".format(noun))
 
@@ -64,8 +74,7 @@ def help() :
              "fips diag all\n"
              "fips diag tools\n"
              "fips diag configs\n"
+             "fips diag imports\n"
              + log.DEF +
              "    run diagnostics and check for errors")
-
-
 
