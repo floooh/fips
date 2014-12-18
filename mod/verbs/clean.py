@@ -27,7 +27,7 @@ def help() :
     log.info(log.YELLOW + 
             "fips clean\n" 
             "fips clean all\n"
-            "fips build [config]\n" + log.DEF + 
+            "fips clean [config]\n" + log.DEF + 
             "    clean generated build files for config")
     
         
