@@ -36,6 +36,8 @@ def get_exports(proj_dir) :
         exports['header-dirs'] = []
     if not 'lib-dirs' in exports :
         exports['lib-dirs'] = []
+    if not 'defines' in exports :
+        exports['defines'] = {}
     if not 'modules' in exports :
         exports['modules'] = {}
     return exports
@@ -50,6 +52,9 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, proj_url, result) :
             exports:
                 header-dirs: [ ]
                 lib-dirs: [ ]
+                defines: 
+                    def-key: def-val
+                    ...
                 modules :
                     mod: dir
                     mod: dir
@@ -182,6 +187,7 @@ def write_imports_file(fips_dir, proj_dir) :
         imported_modules = OrderedDict()
         imported_hdrdirs = []
         imported_libdirs = []
+        imported_defines = {}
 
         # for each project:
         for proj_name in deps :
@@ -200,6 +206,7 @@ def write_imports_file(fips_dir, proj_dir) :
                 dep_exports_mods = deps[imp_proj_name]['exports']['modules']
                 dep_exports_hdrdirs = deps[imp_proj_name]['exports']['header-dirs']
                 dep_exports_libdirs = deps[imp_proj_name]['exports']['lib-dirs']
+                dep_exports_defines = deps[imp_proj_name]['exports']['defines']
 
                 # add header search paths
                 for imp_hdr in dep_exports_hdrdirs :
@@ -212,6 +219,16 @@ def write_imports_file(fips_dir, proj_dir) :
                     lib_path = '{}/{}/{}'.format(ws_dir, imp_proj_name, imp_lib)
                     if lib_path not in imported_libdirs :
                         imported_libdirs.append(lib_path)
+
+                # add defines
+                for imp_def in dep_exports_defines :
+                    if imp_def not in imported_defines :
+                        imported_defines[imp_def] = dep_exports_defines[imp_def]
+                    elif imported_defines[imp_def] != dep_exports_defines[imp_def] :
+                        log.warn("define '{}={}' in '{}' collides with '{}={}' in earlier import".format(
+                            imp_def, imported_defines[imp_def],
+                            proj_name, 
+                            imp_def, dep_exports_defines[imp_def]))
 
                 # for each imported module:
                 for imp_mod in imports[imp_proj] :
@@ -234,8 +251,15 @@ def write_imports_file(fips_dir, proj_dir) :
                 f.write('include_directories("{}")\n'.format(hdrdir))
             for libdir in imported_libdirs :
                 f.write('link_directories("{}")\n'.format(libdir))
+            for define in imported_defines :
+                value = imported_defines[define]
+                if type(value) is str :
+                    f.write('add_definitions(-D{}="{}")\n'.format(define, value))
+                else :
+                    f.write('add_definitions(-D{}={})\n'.format(define, value))
             for mod in imported_modules :
                 f.write('add_subdirectory("{}" "{}")\n'.format(mod, imported_modules[mod]))
     
     else :
         log.error("imports are incomplete, please run 'fips fetch'")
+
