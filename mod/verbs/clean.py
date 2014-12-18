@@ -1,29 +1,35 @@
-"""build fips project
+"""implement the 'clean' verb
 
-build
-build [config]
+clean
+clean all
+clean [config]
 """
 
-from mod import log, util, config, project, settings
+from mod import log, util, settings, project
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
-    """build fips project"""
+    """clean generated files"""
     if not util.is_valid_project_dir(proj_dir) :
         log.error('must be run in a project directory')
-    proj_name = util.get_project_name_from_dir(proj_dir)
     cfg_name = None
     if len(args) > 0 :
         cfg_name = args[0]
     if not cfg_name :
         cfg_name = settings.get(proj_dir, 'config')
-    project.build(fips_dir, proj_dir, cfg_name, proj_name)
-
+    if cfg_name == 'all' :
+        cfg_name = '*'
+    project.clean(fips_dir, proj_dir, cfg_name)
+    
 #-------------------------------------------------------------------------------
 def help() :
-    """print build help"""
+    """print 'clean' help"""
     log.info(log.YELLOW + 
-            "fips build\n" 
+            "fips clean\n" 
+            "fips clean all\n"
             "fips build [config]\n" + log.DEF + 
-            "   perform a build for current or named config")
+            "    clean generated build files for config")
+    
+        
+        
     
