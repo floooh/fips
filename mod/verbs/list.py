@@ -92,7 +92,7 @@ def list_exports(fips_dir, proj_dir) :
             cur_modules = cur_dep['exports']['modules']
             if cur_modules :
                 for mod in cur_modules :
-                    log.info("    '{}' => '{}'".format(mod, cur_modules[mod]))
+                    log.info("    {} => {}".format(mod, cur_modules[mod]))
             else :
                 log.info("    none")
 
@@ -109,6 +109,14 @@ def list_exports(fips_dir, proj_dir) :
             if cur_libs :
                 for lub in cur_libs :
                     log.info("    {}".format(lib))
+            else :
+                log.info("    none")
+
+            log.info("  defines:")
+            cur_defs = cur_dep['exports']['defines']
+            if cur_defs :
+                for define in cur_defs :
+                    log.info("    {} => {}".format(define, cur_defs[define]))
             else :
                 log.info("    none")
     else :
