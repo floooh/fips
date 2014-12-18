@@ -24,6 +24,6 @@ def help() :
     """print gen help"""
     log.info(log.YELLOW + 
             "fips gen\n" 
-            "fips gen [config]\n"
+            "fips gen [config]\n" + log.DEF +
             "    generate build files for current or named config")
     

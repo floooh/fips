@@ -42,13 +42,19 @@ def run(fips_dir, proj_dir, args) :
     :param proj_dir:    absolute path to current project
     :args:              command line args
     """
-    which = 'all'
+    noun = 'all'
+    ok = False
     if len(args) > 0 :
-        which = args[0]
-    if which == 'all' or which == 'tools' :
+        noun = args[0]
+    if noun == 'all' or noun == 'tools' :
         check_tools()
-    if which == 'all' or which == 'configs' :
+        ok = True
+    if noun == 'all' or noun == 'configs' :
         check_configs(fips_dir)
+        ok = True
+
+    if not ok :
+        log.error("invalid noun '{}'".format(noun))
 
 #-------------------------------------------------------------------------------
 def help() :
