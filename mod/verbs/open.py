@@ -52,6 +52,6 @@ def help() :
     """print help for verb 'open'"""
     log.info(log.YELLOW + 
             "fips open\n" 
-            "fips open [config]\n"
+            "fips open [config]\n" + log.DEF +
             "   open IDE for current or named config")
 
