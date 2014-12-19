@@ -12,6 +12,7 @@
 # exports:
 #     header-dirs : [ dir, ... ]
 #     lib-dirs : [ dir, ... ]
+#     generator-dirs: [ dir, ... ]
 #     defines :
 #         def1 : value
 #         ...

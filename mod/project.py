@@ -24,7 +24,7 @@ def init(fips_dir, proj_name) :
         }
         for f in ['CMakeLists.txt', 'fips', 'fips.cmd', 'fips.yml'] :
             template.copy_template_file(fips_dir, proj_dir, f, templ_values)
-        gitignore_entries = ['.fips-*']
+        gitignore_entries = ['.fips-*', '*.pyc']
         template.write_git_ignore(proj_dir, gitignore_entries)
     else :
         log.error("project dir '{}' does not exist".format(proj_dir))
@@ -83,7 +83,7 @@ def gen(fips_dir, proj_dir, cfg_name, proj_name) :
     util.ensure_valid_project_dir(proj_dir)
     
     # generate the .fips-imports.cmake file
-    dep.write_imports_file(fips_dir, proj_dir)
+    dep.write_imports_files(fips_dir, proj_dir)
 
     # load the config(s)
     configs = config.load(cfg_name, [fips_dir])
@@ -136,7 +136,7 @@ def build(fips_dir, proj_dir, cfg_name, proj_name) :
 
     # generate the .fips-imports.cmake file
     # (to make sure it's there if cmake needs to run)
-    dep.write_imports_file(fips_dir, proj_dir)
+    dep.write_imports_files(fips_dir, proj_dir)
 
     # load the config(s)
     configs = config.load(cfg_name, [fips_dir])

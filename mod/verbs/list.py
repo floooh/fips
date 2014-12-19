@@ -107,8 +107,16 @@ def list_exports(fips_dir, proj_dir) :
             log.info("  lib search dirs:")
             cur_libs = cur_dep['exports']['lib-dirs']
             if cur_libs :
-                for lub in cur_libs :
+                for lib in cur_libs :
                     log.info("    {}".format(lib))
+            else :
+                log.info("    none")
+
+            log.info("  generator search dirs:")
+            cur_gendirs = cur_dep['exports']['generator-dirs']
+            if cur_gendirs :
+                for gendir in cur_gendirs :
+                    log.info("    {}".format(gendir))
             else :
                 log.info("    none")
 

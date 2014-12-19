@@ -11,7 +11,7 @@ include("${FIPS_ROOT_DIR}/cmake/fips_unittests.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_android.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_osx.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_pnacl.cmake")
-#include("${FIPS_ROOT_DIR}/cmake/fips_generators.cmake")
+include("${FIPS_ROOT_DIR}/cmake/fips_generators.cmake")
 
 #-------------------------------------------------------------------------------
 #   define top-level options for the whole project

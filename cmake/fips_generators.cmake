@@ -29,8 +29,8 @@ macro(fips_handle_py_files_posttarget target pyFiles)
     if (PYTHON)
         # ...and add a custom target to build the sources
         add_custom_target(${target}_py 
-            COMMAND ${PYTHON} ${FIPS_ROOT_DIR}/generators/pygen.py ${pyFiles} 
-            WORKING_DIRECTORY ${FIPS_ROOT_DIR}/generators
+            COMMAND ${PYTHON} ${FIPS_PROJECT_DIR}/.fips-gen.py ${pyFiles} 
+            WORKING_DIRECTORY ${FIPS_PROJECT_DIR}
             COMMENT "Generating sources...")
         set_target_properties(${target}_py PROPERTIES FOLDER "Generators")
         add_dependencies(${target} ${target}_py)

@@ -43,7 +43,7 @@ def write_git_ignore(proj_dir, entries) :
     log.info("wrote '{}'".format(path))
     
 #-------------------------------------------------------------------------------
-def copy_template_file(fips_dir, proj_dir, filename, values) :
+def copy_template_file(fips_dir, proj_dir, filename, values, silent=False) :
     """copy a template file from fips/templates to the project 
     directory and replace template values (e.g. the project name),
     ask for user permission if files exist
@@ -52,6 +52,7 @@ def copy_template_file(fips_dir, proj_dir, filename, values) :
     :param proj_dir:    absolute project directory
     :param filename:    filename to copy from fips/templates
     :param values:      template key/value dictionary
+    :param silent:      if True, overwrite existing file and don't print status
     :returns:           True file overwritten, False on not overwritten
     """
     
@@ -60,11 +61,12 @@ def copy_template_file(fips_dir, proj_dir, filename, values) :
 
     if not os.path.isfile(src_path) :
         log.error("template src file '{}' doesn't exist".format(src_path))
-
-    if os.path.isfile(dst_path) :
-        if not util.confirm("overwrite '{}'?".format(dst_path)) :
-            log.info("skipping '{}'".format(dst_path))
-            return False
+    
+    if not silent :
+        if os.path.isfile(dst_path) :
+            if not util.confirm("overwrite '{}'?".format(dst_path)) :
+                log.info("skipping '{}'".format(dst_path))
+                return False
 
     content = None
     with open(src_path, 'r') as f :
@@ -73,7 +75,8 @@ def copy_template_file(fips_dir, proj_dir, filename, values) :
     with open(dst_path, 'w') as f :
         f.write(content)
 
-    log.info("wrote '{}'".format(dst_path))
+    if not silent :
+        log.info("wrote '{}'".format(dst_path))
     return True
 
 
