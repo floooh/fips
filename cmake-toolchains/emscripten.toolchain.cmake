@@ -86,7 +86,7 @@ macro(find_emscripten_sdk)
     if (EXISTS "${EMSCRIPTEN_ROOT_PATH}/emcc")
         message("Emscripten SDK found (emsdk): ${EMSCRIPTEN_ROOT_PATH}")
     else()
-        message(FATAL_ERROR "Could not find emscripten SDK! See BUILD.md for instructions to setup Oryol for emscripten development!")
+        message(FATAL_ERROR "Could not find emscripten SDK! Please run 'fips setup emscripten'!")
     endif()
 endmacro()
 
