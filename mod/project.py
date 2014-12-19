@@ -112,13 +112,13 @@ def gen(fips_dir, proj_dir, cfg_name, proj_name) :
         return True
 
 #-------------------------------------------------------------------------------
-def build(fips_dir, proj_dir, cfg_name, proj_name) :
+def build(fips_dir, proj_dir, cfg_name, target=None) :
     """perform a build of config(s) in project
 
     :param fips_dir:    absolute path of fips
     :param proj_dir:    absolute path of project dir
     :param cfg_name:    config name or pattern
-    :param proj_name:   project name (override project dir) or None
+    :param target:      optional target name (build all if None)
     :returns:           True if build was successful
     """
 
@@ -126,10 +126,7 @@ def build(fips_dir, proj_dir, cfg_name, proj_name) :
     dep.fetch_imports(fips_dir, proj_dir)
 
     # if a project name is given, build a project dir from it
-    if proj_name :
-        proj_dir = util.get_project_dir(fips_dir, proj_name)
-    else :
-        proj_name = util.get_project_name_from_dir(proj_dir)
+    proj_name = util.get_project_name_from_dir(proj_dir)
 
     # check if proj_dir is a valid fips project
     util.ensure_valid_project_dir(proj_dir)
@@ -157,7 +154,6 @@ def build(fips_dir, proj_dir, cfg_name, proj_name) :
             # select and run build tool
             # FIXME: make number of jobs configurable
             # FIXME: make target configurable?
-            target = None
             num_jobs = 3
             result = False
             if cfg['build_tool'] == make.name :

@@ -94,7 +94,7 @@ def unset(proj_dir, key) :
     settings = load(proj_dir)
     if key in settings :
         del settings[key]
-    save(proj_dir)
+    save(proj_dir, settings)
 
     proj_name = util.get_project_name_from_dir(proj_dir)
     log.info("'{}' unset in project '{}'".format(key, proj_name))
