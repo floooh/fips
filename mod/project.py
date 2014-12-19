@@ -201,15 +201,29 @@ def run(fips_dir, proj_dir, cfg_name, proj_name, target_name) :
         # find deploy dir where executables live
         deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
 
-        # special case: Mac app
-        if os.path.isdir('{}/{}.app'.format(deploy_dir, target_name)) :
-            cmdLine = ['open', '{}/{}.app'.format(deploy_dir, target_name)]
+        cmd_line = []
+        if os.path.isfile('{}/{}.html'.format(deploy_dir, target_name)) :
+            # special case: emscripten app
+            if config.get_host_platform() == 'osx' :
+                log.info('Ctrl-C to quit');
+                subprocess.call(['open http://localhost:8000/{}.html ; python -m SimpleHTTPServer'.format(target_name)],
+                    cwd = deploy_dir, shell=True)
+            elif config.get_host_platform() == 'win' :
+                log.error('FIXME: start HTML app on Windows')
+            elif config.get_host_platform() == 'linux' :
+                log.error('FIXME: start HTML app on Linux')
+            else :
+                log.error("don't know how to start HTML app on this platform")
+        elif os.path.isdir('{}/{}.app'.format(deploy_dir, target_name)) :
+            # special case: Mac app
+            cmd_line = ['open', '{}/{}.app'.format(deploy_dir, target_name)]
         else :
-            cmdLine = [ '{}/{}'.format(deploy_dir, target_name) ]
-        try:
-            subprocess.call(args=cmdLine, cwd=deploy_dir)
-        except OSError, e:
-            log.error("Failed to execute '{}' with '{}'".format(target_name, e.strerror))
+            cmd_line = [ '{}/{}'.format(deploy_dir, target_name) ]
+        if cmd_line :
+            try:
+                subprocess.call(args=cmd_line, cwd=deploy_dir)
+            except OSError, e:
+                log.error("Failed to execute '{}' with '{}'".format(target_name, e.strerror))
 
 #-------------------------------------------------------------------------------
 def clean(fips_dir, proj_dir, cfg_name) :

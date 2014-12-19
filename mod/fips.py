@@ -7,7 +7,7 @@ try :
     import yaml 
 except ImportError:
     log.error("could not import 'yaml', run 'pip install --user PyYAML' to install")
-from mod.verbs import diag, list, init, clone, gen
+from mod.verbs import diag, list, init, clone, gen, setup
 from mod.verbs import build, set, unset, fetch, open, clean, make
 from mod.verbs import run as vrun   # prevent collision with run() function
 
@@ -24,7 +24,8 @@ verbs = {
     'fetch': fetch,
     'open': open,
     'clean': clean,
-    'make': make
+    'make': make,
+    'setup': setup
 }
 
 #-------------------------------------------------------------------------------
@@ -42,7 +43,7 @@ def show_help(args) :
         log.info("fips: the high-level, multi-platform build system wrapper\n"
                  "v{}\n"
                  "https://www.github.com/floooh/fips\n".format(VERSION))
-        for verb in [list, diag, init, clone, gen, build, make, vrun, set, unset, fetch, open, clean] :
+        for verb in [list, diag, init, clone, gen, build, make, vrun, set, unset, fetch, open, clean, setup] :
             verb.help()
             log.info(' ')
 
@@ -61,10 +62,5 @@ def run(fips_path, proj_path, args) :
             verbs[verb].run(fips_path, proj_path, verb_args)
         else :
             log.error("unknown verb '{}'".format(verb))
-
-
-
-
-
 
 

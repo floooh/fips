@@ -135,3 +135,10 @@ def confirm(question) :
             return validAnswers[choice]
         else :
             log.info("please respond with 'y', 'yes', 'n' or 'no'")
+
+#-------------------------------------------------------------------------------
+def url_download_hook(count, block_size, total_size) :
+    """a download progress hook for urllib"""
+    percent = int(count * block_size * 100 / total_size)
+    sys.stdout.write('\r{}%'.format(percent))
+

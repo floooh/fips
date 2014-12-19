@@ -40,7 +40,7 @@ def run_gen(cfg, project_dir, build_dir, toolchain_path) :
     """
     cmdLine = ['cmake', '-G', cfg['generator'], '-DCMAKE_BUILD_TYPE={}'.format(cfg['build_type'])]
     if toolchain_path is not None :
-        cmdLine.append('-DDCMAKE_TOOLCHAIN_FILE={}'.format(toolchain_path))
+        cmdLine.append('-DCMAKE_TOOLCHAIN_FILE={}'.format(toolchain_path))
     cmdLine.append('-DFIPS_CONFIG={}'.format(cfg['name']))
     if cfg['defines'] is not None :
         for key in cfg['defines'] :
