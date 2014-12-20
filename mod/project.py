@@ -205,9 +205,12 @@ def run(fips_dir, proj_dir, cfg_name, proj_name, target_name) :
         if os.path.isfile('{}/{}.html'.format(deploy_dir, target_name)) :
             # special case: emscripten app
             if config.get_host_platform() == 'osx' :
-                log.info('Ctrl-C to quit');
-                subprocess.call(['open http://localhost:8000/{}.html ; python -m SimpleHTTPServer'.format(target_name)],
-                    cwd = deploy_dir, shell=True)
+                try :
+                    subprocess.call(
+                        ['open http://localhost:8000/{}.html ; python {}/mod/httpserver.py'.format(target_name, fips_dir)],
+                        cwd = deploy_dir, shell=True)
+                except KeyboardInterrupt :
+                    pass
             elif config.get_host_platform() == 'win' :
                 log.error('FIXME: start HTML app on Windows')
             elif config.get_host_platform() == 'linux' :
