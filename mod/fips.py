@@ -7,9 +7,9 @@ try :
     import yaml 
 except ImportError:
     log.error("could not import 'yaml', run 'pip install --user PyYAML' to install")
-from mod.verbs import diag, list, init, clone, gen, setup
-from mod.verbs import build, set, unset, fetch, open, clean, make
-from mod.verbs import run as vrun   # prevent collision with run() function
+from verbs import diag, list, init, clone, gen, setup
+from verbs import build, set, unset, fetch, open, clean, make
+from verbs import run as vrun   # prevent collision with run() function
 
 verbs = {
     'diag': diag,
