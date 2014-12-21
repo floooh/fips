@@ -29,7 +29,6 @@ set(FIPS_PLATFORM EMSCRIPTEN)
 set(FIPS_PLATFORM_NAME "emsc")
 set(FIPS_EMSCRIPTEN 1)
 set(FIPS_POSIX 1)
-set(FIPS_PLATFORM_DEFINES " -DFIPS_EMSCRIPTEN=1 -DFIPS_POSIX=1")
 
 # total memory is 128MB for main thread, and 16 MB for worker
 # NOTE: USE_MEMORY_INIT_FILE has/had problems that the script is already starting but the MEM file isn't loaded yet(?)
@@ -138,13 +137,13 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 set(CMAKE_SYSTEM_INCLUDE_PATH "${EMSCRIPTEN_ROOT_PATH}/system/include")
 
 # c++ compiler flags
-set(CMAKE_CXX_FLAGS "${FIPS_PLATFORM_DEFINES} ${EMSCRIPTEN_CONFIG_OPTIONS} -std=c++11 -stdlib=libc++ ${FIPS_EMSC_EXCEPTION_FLAGS} -fstrict-aliasing -Wall -Wno-warn-absolute-paths -Wno-multichar -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue")
+set(CMAKE_CXX_FLAGS "${EMSCRIPTEN_CONFIG_OPTIONS} -std=c++11 -stdlib=libc++ ${FIPS_EMSC_EXCEPTION_FLAGS} -fstrict-aliasing -Wall -Wno-warn-absolute-paths -Wno-multichar -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O3 -g -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 set(CMAKE_CXX_FLAGS_PROFILING "-O3 --profiling")
 
 # c compiler flags
-set(CMAKE_C_FLAGS "${FIPS_PLATFORM_DEFINES} ${EMSCRIPTEN_CONFIG_OPTIONS} -fstrict-aliasing -Wall -Wno-warn-absolute-paths -Wextra -Wno-multichar -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue")
+set(CMAKE_C_FLAGS "${EMSCRIPTEN_CONFIG_OPTIONS} -fstrict-aliasing -Wall -Wno-warn-absolute-paths -Wextra -Wno-multichar -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue")
 set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
 set(CMAKE_C_FLAGS_DEBUG "-O3 -g -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 set(CMAKE_C_FLAGS_PROFILING "-O3 --profiling")

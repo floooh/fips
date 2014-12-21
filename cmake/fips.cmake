@@ -97,34 +97,17 @@ macro(fips_setup)
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
     set(TARGET_GROUP "")
     
-    # various global defines
-    if (FIPS_ALLOCATOR_DEBUG)
-        add_definitions(-DFIPS_ALLOCATOR_DEBUG=1)
-    else()
-        add_definitions(-DFIPS_ALLOCATOR_DEBUG=0)
-    endif()
-    if (FIPS_UNITTESTS)
-        add_definitions(-DFIPS_UNITTESTS=1)
-        if (FIPS_UNITTESTS_HEADLESS)
-            add_definitions(-DFIPS_UNITTESTS_HEADLESS=1)
-        else()
-            add_definitions(-DFIPS_UNITTESTS_HEADLESS=0)
-        endif()
-    else()
-        add_definitions(-DFIPS_UNITTESTS=0)
-    endif()
-    if (FIPS_NO_ASSERTS_IN_RELEASE)
-        add_definitions(-DFIPS_NO_ASSERT=1)
-    else()
-        add_definitions(-DFIPS_NO_ASSERT=0)
-    endif()
-
     # check whether python is installed
     find_program(PYTHON "python")
     if (PYTHON)
         message("PYTHON INTERPRETER FOUND")
     else()
         message("PYTHON INTERPRETER NOT FOUND, NO SOURCE CODE GENERATION!")
+    endif()
+
+    # load project-local fips-include.cmake if exists
+    if (EXISTS "${FIPS_PROJECT_DIR}/fips-include.cmake")
+        include("${FIPS_PROJECT_DIR}/fips-include.cmake")
     endif()
 
     # load generated .fips-imports.cmake if exists
