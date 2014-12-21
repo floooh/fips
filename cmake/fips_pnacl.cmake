@@ -8,14 +8,9 @@
 #   Setup post-build step to run the PNaCl finalizer.
 #
 macro(fips_pnacl_post_buildsteps target)
-    if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-        set(PNACL_POSTFIX "_debug")
-    else()
-        set(PNACL_POSTFIX "")
-    endif()
     add_custom_command(TARGET ${target} POST_BUILD COMMAND ${NACL_TOOLCHAIN_ROOT}/bin/pnacl-finalize --compress $<TARGET_FILE:${target}>)
-    add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/${target}${PNACL_POSTFIX}.nmf $<TARGET_FILE_DIR:${target}>)
-    add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/${target}${PNACL_POSTFIX}_pnacl.html $<TARGET_FILE_DIR:${target}>)
+    add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/${target}.nmf $<TARGET_FILE_DIR:${target}>)
+    add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/${target}_pnacl.html $<TARGET_FILE_DIR:${target}>)
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -23,26 +18,21 @@ endmacro()
 #   Create wrapper files for NaCl projects (a shell HTML, and the manifest)
 #
 macro(fips_pnacl_create_wrapper target)
-    if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-        set(PNACL_POSTFIX "_debug")
-    else()
-        set(PNACL_POSTFIX "")
-    endif()
     
     # create the manifest file
-    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${target}${PNACL_POSTFIX}.nmf
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${target}.nmf
         "{\n"
         "  \"program\": {\n"
         "    \"portable\": {\n"
         "      \"pnacl-translate\": {\n"
-        "        \"url\": \"${target}${PNACL_POSTFIX}.pexe\"\n"
+        "        \"url\": \"${target}.pexe\"\n"
         "      }\n"
         "    }\n"
         "  }\n"
         "}\n")
 
     # create the HTML wrapper file
-    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${target}${PNACL_POSTFIX}_pnacl.html
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${target}_pnacl.html
         "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n"
         "<html>\n"
         "<head>\n"
@@ -58,7 +48,7 @@ macro(fips_pnacl_create_wrapper target)
         "    <code id=\"statusField\">NO-STATUS</code>\n"
         "  </div>\n"
         "  <div class=\"pnacl_border\">\n"
-        "    <embed src=\"${target}${PNACL_POSTFIX}.nmf\" class=\"pnacl\" id=\"pnacl_module\" name=\"pnacl_module\" width=\"800\" height=\"452\" type=\"application/x-pnacl\"/>\n"
+        "    <embed src=\"${target}.nmf\" class=\"pnacl\" id=\"pnacl_module\" name=\"pnacl_module\" width=\"800\" height=\"452\" type=\"application/x-pnacl\"/>\n"
         "  </div>\n"
         "  <textarea class=\"pnacl\" id=\"output\" rows=\"20\" cols=\"80\"></textarea>\n"
         "  <script type=\"text/javascript\">\n"
