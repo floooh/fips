@@ -154,7 +154,6 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
 
             # select and run build tool
             # FIXME: make number of jobs configurable
-            # FIXME: make target configurable?
             num_jobs = 3
             result = False
             if cfg['build_tool'] == make.name :
