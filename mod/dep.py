@@ -36,8 +36,6 @@ def get_exports(proj_dir) :
         exports['header-dirs'] = []
     if not 'lib-dirs' in exports :
         exports['lib-dirs'] = []
-    if not 'generator-dirs' in exports :
-        exports['generator-dirs'] = []
     if not 'defines' in exports :
         exports['defines'] = {}
     if not 'modules' in exports :
@@ -54,7 +52,6 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, proj_url, result) :
             exports:
                 header-dirs: [ ]
                 lib-dirs: [ ]
-                generator-dirs: [ ]
                 defines: 
                     def-key: def-val
                     ...
@@ -211,7 +208,6 @@ def write_imports_files(fips_dir, proj_dir, dry_run=False) :
                 dep_exports_mods = deps[imp_proj_name]['exports']['modules']
                 dep_exports_hdrdirs = deps[imp_proj_name]['exports']['header-dirs']
                 dep_exports_libdirs = deps[imp_proj_name]['exports']['lib-dirs']
-                dep_exports_gendirs = deps[imp_proj_name]['exports']['generator-dirs']
                 dep_exports_defines = deps[imp_proj_name]['exports']['defines']
 
                 # add header search paths
@@ -229,14 +225,6 @@ def write_imports_files(fips_dir, proj_dir, dry_run=False) :
                         log.warn("lib search path '{}' not found in project '{}'".format(lib_path, imp_proj_name))
                     if lib_path not in imported_libdirs :
                         imported_libdirs.append(lib_path)
-
-                # add generator import paths
-                for imp_gen in dep_exports_gendirs :
-                    gen_path = '{}/{}/{}'.format(ws_dir, imp_proj_name, imp_gen)
-                    if not os.path.isdir(gen_path) :
-                        log.warn("generator path '{}' not found in project '{}'".format(gen_path, imp_proj_name))
-                    if gen_path not in imported_gendirs :
-                        imported_gendirs.append(gen_path)
 
                 # add defines
                 for imp_def in dep_exports_defines :
@@ -281,9 +269,10 @@ def write_imports_files(fips_dir, proj_dir, dry_run=False) :
 
             # write the .fips-imports.py file (copy from template)
             gen_search_paths  = '"{}/generators",\n'.format(fips_dir)
-            gen_search_paths += '"{}/generators",\n'.format(proj_dir)
-            for gendir in imported_gendirs :
-                gen_search_paths += '"' + gendir + '",\n'
+            for imp_proj_name in deps :
+                gen_dir = util.get_project_dir(fips_dir, imp_proj_name) + '/fips-generators'
+                if os.path.isdir(gen_dir) :
+                    gen_search_paths += '"' + gen_dir + '",\n' 
             template.copy_template_file(fips_dir, proj_dir, '.fips-gen.py', { 'genpaths': gen_search_paths}, True) 
     else :
         log.warn("imports are incomplete, please run 'fips fetch'")
