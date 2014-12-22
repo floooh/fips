@@ -34,18 +34,13 @@ def import_verbs_from(proj_name, verb_dir) :
                 verb_module_name = os.path.splitext(verb_module_name)[0]
                 if not verb_module_name.startswith('__') :
                     if not verb_module_name in verbs :
-                        # try to import the module
-                        try :
-                            fp, pathname, desc = imp.find_module(verb_module_name, [verb_dir])
-                            verb_module = imp.load_module(verb_module_name, fp, pathname, desc)
-                            verbs[verb_module_name] = verb_module
-                            if proj_name not in proj_verbs :
-                                proj_verbs[proj_name] = []
-                            proj_verbs[proj_name].append(verb_module_name)
-                        except Exception as e :
-                            log.warn("failed to import module '{}' in '{}'".format(
-                                verb_module_name, proj_name))
-
+                        fp, pathname, desc = imp.find_module(verb_module_name, [verb_dir])
+                        verb_module = imp.load_module(verb_module_name, fp, pathname, desc)
+                        verbs[verb_module_name] = verb_module
+                        if proj_name not in proj_verbs :
+                            proj_verbs[proj_name] = []
+                        proj_verbs[proj_name].append(verb_module_name)
+                        
 #-------------------------------------------------------------------------------
 def import_verbs(fips_dir, proj_dir) :
     """import verbs from local and imported projects, populates
