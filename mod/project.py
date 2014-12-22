@@ -203,12 +203,16 @@ def run(fips_dir, proj_dir, cfg_name, proj_name, target_name) :
         deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
 
         cmd_line = []
-        if os.path.isfile('{}/{}.html'.format(deploy_dir, target_name)) :
+        if cfg['platform'] in ['emscripten', 'pnacl'] : 
             # special case: emscripten app
+            if cfg['platform'] == 'emscripten' :
+                html_name = target_name + '.html'
+            else :
+                html_name = target_name + '_pnacl.html'
             if config.get_host_platform() == 'osx' :
                 try :
                     subprocess.call(
-                        ['open http://localhost:8000/{}.html ; python {}/mod/httpserver.py'.format(target_name, fips_dir)],
+                        ['open http://localhost:8000/{} ; python {}/mod/httpserver.py'.format(html_name, fips_dir)],
                         cwd = deploy_dir, shell=True)
                 except KeyboardInterrupt :
                     pass
