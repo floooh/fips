@@ -5,7 +5,7 @@ setup nacl
 setup android
 """
 
-from mod import log, emscripten, nacl
+from mod import log, emscripten, nacl, android
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
@@ -18,8 +18,7 @@ def run(fips_dir, proj_dir, args) :
     elif sdk_name == 'nacl' :
         nacl.setup(fips_dir, proj_dir)
     elif sdk_name == 'android' :
-        # FIXME!
-        log.error('Android SDK setup not yet implemented!')
+        android.setup(fips_dir, proj_dir)
     else :
         log.error("invalid SDK name (must be 'emscripten', 'nacl' or 'android')")
 
