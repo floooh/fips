@@ -84,15 +84,12 @@ def load_fips_yml(proj_dir) :
 #-------------------------------------------------------------------------------
 def is_valid_project_dir(proj_dir) :
     """test if the provided directory is a valid fips project (has a
-    fips.yml and a fips file)
+    fips.yml file)
 
     :param proj_dir:    absolute project directory to check
     :returns:           True if a valid fips project
     """
     if os.path.isdir(proj_dir) :
-        if not os.path.isfile(proj_dir + '/fips') :
-            log.warn("no file 'fips' in project dir '{}'".format(proj_dir))
-            return False
         if not os.path.isfile(proj_dir + '/fips.yml') :
             log.warn("no file 'fips.yml' in project dir '{}'".format(proj_dir))
             return False
