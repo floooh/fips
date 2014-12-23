@@ -51,4 +51,6 @@ I'm trying to put up progress videos from time to time:
 - 2nd progress video: https://www.youtube.com/watch?v=W0MYjpR0G8c
 - 3rd progress video: https://www.youtube.com/watch?v=3bQrYYaYU4w
 - 4th progress video: https://vimeo.com/115050871
+- using fips with Oryol 3D engine: https://www.youtube.com/watch?v=LaC4Sqatyts
+- compiling and debugging in QtCreator and CLion IDEs: https://www.youtube.com/watch?v=Sp5TywYeNzE
 
