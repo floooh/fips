@@ -27,7 +27,7 @@ def clone(url, name, cwd) :
     :param cwd:     the directory where to run git
     :returns:       True if git returns successful
     """
-    res = subprocess.call(['git', 'clone', url, name], cwd=cwd)
+    res = subprocess.call(['git', 'clone', '--recursive', url, name], cwd=cwd)
     return res == 0
 
 #-------------------------------------------------------------------------------
