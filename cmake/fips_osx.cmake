@@ -181,6 +181,7 @@ macro(fips_osx_add_target_properties target)
             set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer")    
             set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2")
         endif()
+        # FIXME: these placeholders are not replaced when compiling with make or ninja on OSX...
         set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_EXECUTABLE_NAME \${EXECUTABLE_NAME})
         set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_PRODUCT_NAME \${PRODUCT_NAME})
         set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "fips.${target}")
