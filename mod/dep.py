@@ -60,9 +60,9 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, proj_url, result) :
                     mod: dir
                 ...
             imports:
-                project or url:
-                    import-name: local-name
-                    import-name: local-name
+                proj-name or url,
+                proj-name or url,
+                ...
                 ...
         ...
 
@@ -237,18 +237,14 @@ def write_imports_files(fips_dir, proj_dir, dry_run=False) :
                             imp_def, dep_exports_defines[imp_def]))
 
                 # for each imported module:
-                for imp_mod in imports[imp_proj] :
-                    # find the exported source directory
-                    if imp_mod in dep_exports_mods :
-                        imp_mod_src = dep_exports_mods[imp_mod]
-                        # import module source directory (where module's CMakeLists.txt is)
-                        src_dir = '{}/{}/{}'.format(ws_dir, imp_proj_name, imp_mod_src)
-                        # cmake build subdirectory
-                        build_dir = '{}_{}'.format(imp_proj_name, imp_mod)
-                        if src_dir not in imported_modules :
-                            imported_modules[src_dir] = build_dir
-                    else :
-                        log.warn("imported module '{}' not found as export in project '{}'".format(imp_mod, imp_proj_name))
+                for imp_mod in dep_exports_mods :
+                    imp_mod_src = dep_exports_mods[imp_mod]
+                    # import module source directory (where module's CMakeLists.txt is)
+                    src_dir = '{}/{}/{}'.format(ws_dir, imp_proj_name, imp_mod_src)
+                    # cmake build subdirectory
+                    build_dir = '{}_{}'.format(imp_proj_name, imp_mod)
+                    if src_dir not in imported_modules :
+                        imported_modules[src_dir] = build_dir
 
         if not dry_run :
             # write the .fips-imports.cmake file
@@ -268,7 +264,7 @@ def write_imports_files(fips_dir, proj_dir, dry_run=False) :
                     f.write('add_subdirectory("{}" "{}")\n'.format(mod, imported_modules[mod]))
 
             # write the .fips-imports.py file (copy from template)
-            gen_search_paths  = '"{}/generators",\n'.format(fips_dir)
+            gen_search_paths = '"{}/generators",\n'.format(fips_dir)
             for imp_proj_name in deps :
                 gen_dir = util.get_project_dir(fips_dir, imp_proj_name) + '/fips-generators'
                 if os.path.isdir(gen_dir) :

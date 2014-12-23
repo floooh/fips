@@ -140,9 +140,7 @@ def list_imports(fips_dir, proj_dir) :
                 log.info("project '{}' at '{}' imports:".format(dep_proj_name, cur_dep['url']))
             if cur_dep['imports'] :
                 for imp_proj in cur_dep['imports'] :
-                    log.info("  from '{}':".format(imp_proj))
-                    for imp_mod in cur_dep['imports'][imp_proj] :
-                        log.info("    module '{}'".format(imp_mod))
+                    log.info("  {}".format(imp_proj))
             else :
                 log.info("    nothing")
     else :
