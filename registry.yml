@@ -2,6 +2,7 @@
 #
 
 oryol:  git@github.com:floooh/oryol.git
+gliml:  git@github.com:floooh/gliml.git
 
 fips-hello-world: git@github.com:floooh/fips-hello-world.git
 fips-hello-dep1:  git@github.com:floooh/fips-hello-dep1.git
