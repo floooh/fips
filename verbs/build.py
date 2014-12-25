@@ -4,7 +4,7 @@ build
 build [config]
 """
 
-from mod import log, util, config, project, settings
+from mod import log, util, project, settings
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :

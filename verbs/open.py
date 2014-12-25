@@ -33,7 +33,7 @@ def run(fips_dir, proj_dir, args) :
         build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
         if not os.path.isdir(build_dir) :
             log.warn("build dir not found, generating...")
-            project.gen(fips_dir, proj_dir, cfg['name'], proj_name)
+            project.gen(fips_dir, proj_dir, cfg['name'])
 
         if 'Xcode' in cfg['generator'] :
             # find the Xcode project

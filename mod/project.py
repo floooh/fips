@@ -5,7 +5,7 @@ import shutil
 import subprocess
 
 from mod import log, util, config, dep, template
-from mod.tools import git, cmake, make, ninja, xcodebuild
+from mod.tools import git, cmake, make, ninja, xcodebuild, ccmake, cmake_gui
 
 #-------------------------------------------------------------------------------
 def init(fips_dir, proj_name) :
@@ -55,55 +55,48 @@ def clone(fips_dir, url) :
         return False
 
 #-------------------------------------------------------------------------------
-def gen_project(fips_dir, proj_dir, build_dir, cfg) :
+def gen_project(fips_dir, proj_dir, cfg) :
     """private: generate build files for one config"""
+
+    log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
+    proj_name = util.get_project_name_from_dir(proj_dir)
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+    if not os.path.isdir(build_dir) :
+        os.makedirs(build_dir)
     toolchain_path = config.get_toolchain_for_platform(fips_dir, cfg['platform'])
     return cmake.run_gen(cfg, proj_dir, build_dir, toolchain_path)
 
 #-------------------------------------------------------------------------------
-def gen(fips_dir, proj_dir, cfg_name, proj_name) :
+def gen(fips_dir, proj_dir, cfg_name) :
     """generate build files with cmake
 
     :param fips_dir:    absolute path to fips
     :param proj_dir:    absolute path to project
     :param cfg_name:    config name or pattern (e.g. osx-make-debug)
-    :param proj_name:   project name (or None to use current project path)
     :returns:           True if successful
     """
 
-    # first make sure that imports exist
+    # prepare
     dep.fetch_imports(fips_dir, proj_dir)
-
-    # if a project name is given, build a project dir from it
-    if proj_name :
-        proj_dir = util.get_project_dir(fips_dir, proj_name)
-    else :
-        proj_name = util.get_project_name_from_dir(proj_dir)
-
-    # check if proj_dir is a valid fips project
+    proj_name = util.get_project_name_from_dir(proj_dir)
     util.ensure_valid_project_dir(proj_dir)
-    
-    # generate the .fips-imports.cmake file
     dep.write_imports_files(fips_dir, proj_dir)
 
     # load the config(s)
     configs = config.load(cfg_name, [fips_dir])
     num_valid_configs = 0
-    for cfg in configs :
-        # check if config is valid
-        if config.check_config_valid(cfg) :
-            log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
-
-            # get build-dir and make sure it exists
-            build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
-            if not os.path.isdir(build_dir) :
-                os.makedirs(build_dir)
-            if gen_project(fips_dir, proj_dir, build_dir, cfg) :
-                num_valid_configs += 1
+    if configs :
+        for cfg in configs :
+            # check if config is valid
+            if config.check_config_valid(cfg) :
+                if gen_project(fips_dir, proj_dir, cfg) :
+                    num_valid_configs += 1
+                else :
+                    log.error("failed to generate build files for config '{}'".format(cfg['name']), False)
             else :
-                log.error("failed to generate build files for config '{}'".format(cfg['name']), False)
-        else :
-            log.error("'{}' is not a valid config".format(cfg['name']), False)
+                log.error("'{}' is not a valid config".format(cfg['name']), False)
+    else :
+        log.error("No configs found for '{}'".format(cfg_name))
 
     if num_valid_configs != len(configs) :
         log.error('{} out of {} configs failed!'.format(len(configs) - num_valid_configs, len(configs)))
@@ -111,6 +104,41 @@ def gen(fips_dir, proj_dir, cfg_name, proj_name) :
     else :
         log.colored(log.GREEN, '{} configs generated'.format(num_valid_configs))
         return True
+
+#-------------------------------------------------------------------------------
+def configure(fips_dir, proj_dir, cfg_name) :
+    """run ccmake or cmake-gui on the provided project and config
+
+    :param fips_dir:    absolute fips path
+    :param proj_dir:    absolute project dir
+    :cfg_name:          build config name
+    """
+
+    dep.fetch_imports(fips_dir, proj_dir)
+    proj_name = util.get_project_name_from_dir(proj_dir)
+    util.ensure_valid_project_dir(proj_dir)
+    dep.write_imports_files(fips_dir, proj_dir)
+
+    # load configs, if more then one, only use first one
+    configs = config.load(cfg_name, [fips_dir])
+    if configs :
+        cfg = configs[0]
+        log.colored(log.YELLOW, '=== configuring: {}'.format(cfg['name']))
+
+        # generate build files
+        if not gen_project(fips_dir, proj_dir, cfg) :
+            log.error("Failed to generate '{}' of project '{}'".format(cfg['name'], proj_name))
+
+        # run ccmake or cmake-gui
+        build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+        if ccmake.check_exists() :
+            ccmake.run(build_dir)
+        elif cmake_gui.check_exists() :
+            cmake_gui.run(build_dir)
+        else :
+            log.error("Neither 'ccmake' nor 'cmake-gui' found (run 'fips diag')")
+    else :
+        log.error("No configs found for '{}'".format(cfg_name))
 
 #-------------------------------------------------------------------------------
 def build(fips_dir, proj_dir, cfg_name, target=None) :
@@ -123,114 +151,107 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
     :returns:           True if build was successful
     """
 
-    # first make sure that imports are fetched
+    # prepare
     dep.fetch_imports(fips_dir, proj_dir)
-
-    # if a project name is given, build a project dir from it
     proj_name = util.get_project_name_from_dir(proj_dir)
-
-    # check if proj_dir is a valid fips project
     util.ensure_valid_project_dir(proj_dir)
-
-    # generate the .fips-imports.cmake file
-    # (to make sure it's there if cmake needs to run)
     dep.write_imports_files(fips_dir, proj_dir)
 
     # load the config(s)
     configs = config.load(cfg_name, [fips_dir])
     num_valid_configs = 0
-    for cfg in configs :
-        # check if config is valid
-        if config.check_config_valid(cfg) :
-            log.colored(log.YELLOW, "=== building: {}".format(cfg['name']))
+    if configs :
+        for cfg in configs :
+            # check if config is valid
+            if config.check_config_valid(cfg) :
+                log.colored(log.YELLOW, "=== building: {}".format(cfg['name']))
 
-            # generate build files on demand
-            build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
-            if not os.path.isdir(build_dir) :
-                log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
-                os.makedirs(build_dir)
-                if not gen_project(fips_dir, proj_dir, build_dir, cfg) :
+                if not gen_project(fips_dir, proj_dir, cfg) :
                     log.error("Failed to generate '{}' of project '{}'".format(cfg['name'], proj_name))
 
-            # select and run build tool
-            # FIXME: make number of jobs configurable
-            num_jobs = 3
-            result = False
-            if cfg['build_tool'] == make.name :
-                result = make.run_build(target, build_dir, num_jobs)
-            elif cfg['build_tool'] == ninja.name :
-                result = ninja.run_build(target, build_dir, num_jobs)
-            elif cfg['build_tool'] == xcodebuild.name :
-                result = xcodebuild.run_build(target, cfg['build_type'], build_dir, num_jobs)
-            else :
-                result = cmake.run_build(target, cfg['build_type'], build_dir)
-            
-            if not result :
-                log.error("Failed to build config '{}' of project '{}'".format(cfg['name'], proj_name))
+                # select and run build tool
+                # FIXME: make number of jobs configurable
+                build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+                num_jobs = 3
+                result = False
+                if cfg['build_tool'] == make.name :
+                    result = make.run_build(target, build_dir, num_jobs)
+                elif cfg['build_tool'] == ninja.name :
+                    result = ninja.run_build(target, build_dir, num_jobs)
+                elif cfg['build_tool'] == xcodebuild.name :
+                    result = xcodebuild.run_build(target, cfg['build_type'], build_dir, num_jobs)
+                else :
+                    result = cmake.run_build(target, cfg['build_type'], build_dir)
+                
+                if result :
+                    num_valid_configs += 1
+                else :
+                    log.error("Failed to build config '{}' of project '{}'".format(cfg['name'], proj_name))
+    else :
+        log.error("No valid configs found for '{}'".format(cfg_name))
 
-    log.colored(log.GREEN, "Successfully built {} configs in project '{}'".format(len(configs), proj_name))
-    return True
+    if num_valid_configs != len(configs) :
+        log.error('{} out of {} configs failed!'.format(len(configs) - num_valid_configs, len(configs)))
+        return False      
+    else :
+        log.colored(log.GREEN, '{} configs built'.format(num_valid_configs))
+        return True
 
 #-------------------------------------------------------------------------------
-def run(fips_dir, proj_dir, cfg_name, proj_name, target_name) :
+def run(fips_dir, proj_dir, cfg_name, target_name) :
     """run a build target executable
 
     :param fips_dir:    absolute path of fips
     :param proj_dir:    absolute path of project dir
     :param cfg_name:    config name or pattern
-    :param proj_name:   project name (override project dir) or None
     :param target_name: the target name
     :returns:           True if build was successful
     """
 
-    # if a project name is given, build a project dir from it
-    if proj_name :
-        proj_dir = util.get_project_dir(fips_dir, proj_name)
-    else :
-        proj_name = util.get_project_name_from_dir(proj_dir)
-
-    # check if proj_dir is a valid fips project
+    proj_name = util.get_project_name_from_dir(proj_dir)
     util.ensure_valid_project_dir(proj_dir)
     
     # load the config(s)
     configs = config.load(cfg_name, [fips_dir])
-    num_valid_configs = 0
-    for cfg in configs :
-        log.colored(log.YELLOW, "=== run '{}' (config: {}, project: {}):".format(target_name, cfg['name'], proj_name))
+    if configs :
+        for cfg in configs :
+            log.colored(log.YELLOW, "=== run '{}' (config: {}, project: {}):".format(target_name, cfg['name'], proj_name))
 
-        # find deploy dir where executables live
-        deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
+            # find deploy dir where executables live
+            deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
 
-        cmd_line = []
-        if cfg['platform'] in ['emscripten', 'pnacl'] : 
-            # special case: emscripten app
-            if cfg['platform'] == 'emscripten' :
-                html_name = target_name + '.html'
+            cmd_line = []
+            if cfg['platform'] in ['emscripten', 'pnacl'] : 
+                # special case: emscripten app
+                if cfg['platform'] == 'emscripten' :
+                    html_name = target_name + '.html'
+                else :
+                    html_name = target_name + '_pnacl.html'
+                if config.get_host_platform() == 'osx' :
+                    try :
+                        subprocess.call(
+                            ['open http://localhost:8000/{} ; python {}/mod/httpserver.py'.format(html_name, fips_dir)],
+                            cwd = deploy_dir, shell=True)
+                    except KeyboardInterrupt :
+                        pass
+                elif config.get_host_platform() == 'win' :
+                    log.error('FIXME: start HTML app on Windows')
+                elif config.get_host_platform() == 'linux' :
+                    log.error('FIXME: start HTML app on Linux')
+                else :
+                    log.error("don't know how to start HTML app on this platform")
+            elif os.path.isdir('{}/{}.app'.format(deploy_dir, target_name)) :
+                # special case: Mac app
+                cmd_line = ['open', '{}/{}.app'.format(deploy_dir, target_name)]
             else :
-                html_name = target_name + '_pnacl.html'
-            if config.get_host_platform() == 'osx' :
-                try :
-                    subprocess.call(
-                        ['open http://localhost:8000/{} ; python {}/mod/httpserver.py'.format(html_name, fips_dir)],
-                        cwd = deploy_dir, shell=True)
-                except KeyboardInterrupt :
-                    pass
-            elif config.get_host_platform() == 'win' :
-                log.error('FIXME: start HTML app on Windows')
-            elif config.get_host_platform() == 'linux' :
-                log.error('FIXME: start HTML app on Linux')
-            else :
-                log.error("don't know how to start HTML app on this platform")
-        elif os.path.isdir('{}/{}.app'.format(deploy_dir, target_name)) :
-            # special case: Mac app
-            cmd_line = ['open', '{}/{}.app'.format(deploy_dir, target_name)]
-        else :
-            cmd_line = [ '{}/{}'.format(deploy_dir, target_name) ]
-        if cmd_line :
-            try:
-                subprocess.call(args=cmd_line, cwd=deploy_dir)
-            except OSError, e:
-                log.error("Failed to execute '{}' with '{}'".format(target_name, e.strerror))
+                cmd_line = [ '{}/{}'.format(deploy_dir, target_name) ]
+            if cmd_line :
+                try:
+                    subprocess.call(args=cmd_line, cwd=deploy_dir)
+                except OSError, e:
+                    log.error("Failed to execute '{}' with '{}'".format(target_name, e.strerror))
+    else :
+        log.error("No valid configs found for '{}'".format(cfg_name))
 
 #-------------------------------------------------------------------------------
 def clean(fips_dir, proj_dir, cfg_name) :
@@ -242,16 +263,19 @@ def clean(fips_dir, proj_dir, cfg_name) :
     """
     proj_name = util.get_project_name_from_dir(proj_dir)
     configs = config.load(cfg_name, [fips_dir])
-    for cfg in configs :
-        log.colored(log.YELLOW, "=== clean: {}".format(cfg['name']))
+    if configs :
+        for cfg in configs :
+            log.colored(log.YELLOW, "=== clean: {}".format(cfg['name']))
 
-        build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
-        if os.path.isdir(build_dir) :
-            shutil.rmtree(build_dir)
-            log.info("  deleted '{}'".format(build_dir))
+            build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+            if os.path.isdir(build_dir) :
+                shutil.rmtree(build_dir)
+                log.info("  deleted '{}'".format(build_dir))
 
-        deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
-        if os.path.isdir(deploy_dir) :
-            shutil.rmtree(deploy_dir)
-            log.info("  deleted '{}'".format(deploy_dir))
+            deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
+            if os.path.isdir(deploy_dir) :
+                shutil.rmtree(deploy_dir)
+                log.info("  deleted '{}'".format(deploy_dir))
+    else :
+        log.error("No valid configs found for '{}'".format(cfg_name))
 

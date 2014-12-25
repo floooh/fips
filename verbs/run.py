@@ -11,7 +11,6 @@ def run(fips_dir, proj_dir, args) :
     """run fips project build targets"""
     if not util.is_valid_project_dir(proj_dir) :
         log.error('must be run in a project directory')
-    proj_name = util.get_project_name_from_dir(proj_dir)
     cfg_name = settings.get(proj_dir, 'config')
     target_name = settings.get(proj_dir, 'target')
     if len(args) > 0 :
@@ -19,7 +18,7 @@ def run(fips_dir, proj_dir, args) :
     if len(args) > 1:
         cfg_name = args[1]
     if target_name :
-        project.run(fips_dir, proj_dir, cfg_name, proj_name, target_name)
+        project.run(fips_dir, proj_dir, cfg_name, target_name)
     else :
         log.error('no target provided')
 
