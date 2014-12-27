@@ -40,6 +40,10 @@ complex multi-platform C/C++ projects:
 * fips isn't a general build job scheduler (like Jenkins)
 * fips isn't a replacement for cmake, premake, scons etc...
 
+### Documentation
+
+* [Getting Started](doc/getting_started.md)
+
 ### Progress
 
 fips is currently heavily **work in progress**, everything may change or
