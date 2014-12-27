@@ -2,12 +2,9 @@
 
 VERSION = '0.0.1'
 
-from mod import log
-try :
-    import yaml 
-except ImportError:
-    log.error("could not import 'yaml', run 'pip install --user PyYAML' to install")
+import yaml 
 
+from mod import log
 from mod import verb
 
 #-------------------------------------------------------------------------------
