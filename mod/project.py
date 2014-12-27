@@ -237,7 +237,12 @@ def run(fips_dir, proj_dir, cfg_name, target_name) :
                 elif config.get_host_platform() == 'win' :
                     log.error('FIXME: start HTML app on Windows')
                 elif config.get_host_platform() == 'linux' :
-                    log.error('FIXME: start HTML app on Linux')
+                    try :
+                        subprocess.call(
+                            ['xdg-open http://localhost:8000/{}; python {}/mod/httpserver.py'.format(html_name, fips_dir)],
+                            cwd = deploy_dir, shell=True)
+                    except KeyboardInterrupt :
+                        pass
                 else :
                     log.error("don't know how to start HTML app on this platform")
             elif os.path.isdir('{}/{}.app'.format(deploy_dir, target_name)) :
