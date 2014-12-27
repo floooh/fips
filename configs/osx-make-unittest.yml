@@ -1,0 +1,9 @@
+---
+platform: osx
+generator: Unix Makefiles
+build_tool: make
+build_type: Debug
+defines:
+    FIPS_UNITTESTS: ON
+    FIPS_UNITTESTS_HEADLESS: ON
+
