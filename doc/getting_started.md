@@ -97,7 +97,7 @@ Clone the 'fips-hello-world' sample project. It's dependencies will also
 automatically be cloned from github:
 
 ```bash
-./fips clone fips-hello-world
+> ./fips clone fips-hello-world
 registry lookup: fips-hello-world => https://github.com/floooh/fips-hello-world.git
 Cloning into 'fips-hello-world'...
 remote: Counting objects: 66, done.
