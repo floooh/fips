@@ -161,4 +161,55 @@ Imported int define: 1
 > _
 ```
 
+#### Working with build configs
+
+A build config describes how to build a project for different 
+platforms, build tools and build modes. Run 'fips list configs' to see
+a list of available configs:
+
+```bash
+> fips list configs
+=== configs:
+/Users/floh/fips-workspace/fips:
+  android-make-debug
+  android-make-release
+  androidmips-make-debug
+  androidmips-make-release
+  androidx86-make-debug
+  androidx86-make-release
+  emsc-make-debug
+  emsc-make-release
+...
+  osx-xcode-unittest
+  pnacl-make-debug
+  pnacl-make-release
+  pnacl-ninja-debug
+  pnacl-ninja-release
+> _
+```
+
+There is no hard rule for build config names, but usually they are made
+from 3 parts, first the target platform name (e.g. osx, linux, win32), 
+then the build tool (e.g. make, xcode, vstudio) and the build mode (e.g.
+debug, release).
+
+Not all build configs are supported on a given host platform, for instance it
+is not possible to build for iOS on Windows or Linux platforms.
+
+It is possible to select a build config when building, for instance on 
+OSX it is possible to use make instead of xcodebuild, the build result
+is the same, but the console output looks prettier:
+
+```bash
+> ./fips build osx-make-release
+=== dependency: 'fips-hello-dep1':
+dir '/Users/floh/fips-workspace/fips-hello-dep1' exists
+=== dependency: 'fips-hello-dep2':
+dir '/Users/floh/fips-workspace/fips-hello-dep2' exists
+=== building: osx-make-debug
+=== generating: osx-make-debug
+-- The C compiler identification is AppleClang 6.0.0.6000056
+...
+> _
+```
 
