@@ -53,7 +53,7 @@ fips unset target
 You can show help for a specific command:
 
 ```bash
-> fips help diag
+> ./fips help diag
 fips diag
 fips diag all
 fips diag tools
