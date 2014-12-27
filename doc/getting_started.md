@@ -213,3 +213,16 @@ dir '/Users/floh/fips-workspace/fips-hello-dep2' exists
 > _
 ```
 
+To start from scratch and clean all generated files, run 'fips clean all':
+
+```bash
+> ./fips clean all
+=== clean: android-make-debug
+=== clean: android-make-release
+...
+=== clean: pnacl-ninja-debug
+=== clean: pnacl-ninja-release
+> _
+```
+
+
