@@ -48,6 +48,30 @@ def get_deploy_dir(fips_dir, proj_name, cfg) :
     return '{}/fips-deploy/{}/{}'.format(get_workspace_dir(fips_dir), proj_name, cfg['name'])
 
 #-------------------------------------------------------------------------------
+def get_giturl_from_url(url) :
+    """extracts the actual git url from an url string
+    (splits off the branch name after the optional '#')
+
+    :param url:     an url string, with optional '#' branch name appended
+    :returns:       the actual git url
+    """
+    return url.split('#')[0]
+
+#-------------------------------------------------------------------------------
+def get_gitbranch_from_url(url) :
+    """extracts the branch name from an url string
+    (after the optional '#'), returns 'master' if no branch name
+    specified.
+
+    :param url:     an url string, with optional '#' branch name appended
+    :returns:       the extracted branch name, or 'master'
+    """
+    if '#' in url :
+        return url.split('#')[1]
+    else :
+        return 'master'
+
+#-------------------------------------------------------------------------------
 def get_project_name_from_url(url) :
     """get the project name from a git url
 
@@ -114,7 +138,8 @@ def is_git_url(url) :
     :param url:     url string
     :returns:       True if a valid url
     """
-    # we simply check whether the url ends with '.git'
+    # we simply check whether the 'naked' url ends with '.git'
+    url = get_giturl_from_url(url)
     return url[-4:] == '.git'
 
 #-------------------------------------------------------------------------------

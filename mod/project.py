@@ -36,14 +36,16 @@ def clone(fips_dir, url) :
     """clone an existing fips project with git, do NOT fetch dependencies
 
     :param fips_dir:    absolute path to fips
-    :param url:         git url to clone from
+    :param url:         git url to clone from (may contain branch name separated by '#')
     :return:            True if project was successfully cloned
     """
     ws_dir = util.get_workspace_dir(fips_dir)
     proj_name = util.get_project_name_from_url(url)
     proj_dir = util.get_project_dir(fips_dir, proj_name)
     if not os.path.isdir(proj_dir) :
-        if git.clone(url, proj_name, ws_dir) :
+        git_url = util.get_giturl_from_url(url)
+        git_branch = util.get_gitbranch_from_url(url)
+        if git.clone(git_url, git_branch, proj_name, ws_dir) :
             # fetch imports
             dep.fetch_imports(fips_dir, proj_dir)
             return True

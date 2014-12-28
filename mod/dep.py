@@ -145,7 +145,9 @@ def _rec_fetch_imports(fips_dir, proj_dir, handled) :
                 dep_ok = False
                 if not os.path.isdir(dep_proj_dir) :
                     # directory did not exist, do a fresh git clone
-                    if git.clone(dep_url, dep_proj_name, ws_dir) :
+                    git_url = util.get_giturl_from_url(dep_url)
+                    git_branch = util.get_gitbranch_from_url(dep_url) 
+                    if git.clone(git_url, git_branch, dep_proj_name, ws_dir) :
                         dep_ok = True
                     else :
                         log.error('failed to git clone {} into {}'.format(dep_url, dep_proj_dir))

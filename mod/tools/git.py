@@ -19,15 +19,21 @@ def check_exists() :
         return False
 
 #-------------------------------------------------------------------------------
-def clone(url, name, cwd) :
+def clone(url, branch, name, cwd) :
     """git clone a remote git repo
     
     :param url:     the git url to clone from
+    :param branch:  branch name (can be None)
     :param name:    the directory name to clone into
     :param cwd:     the directory where to run git
     :returns:       True if git returns successful
     """
-    res = subprocess.call(['git', 'clone', '--recursive', url, name], cwd=cwd)
+    cmd = ['git', 'clone', '--recursive']
+    if branch :
+        cmd.extend(['--branch', branch, '--single-branch', '--depth', '10'])
+    cmd.extend([url, name])
+    print(cmd)
+    res = subprocess.call(cmd, cwd=cwd)
     return res == 0
 
 #-------------------------------------------------------------------------------

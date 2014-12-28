@@ -171,6 +171,7 @@ class git_testcase(unittest.TestCase) :
         test_dir = make_path('build/git_testcase')
         self.assertTrue(git.clone(
             url = 'git@github.com:floooh/fips.git',
+            branch = 'master',
             name = 'fips',
             cwd = test_dir))
         self.assertTrue(os.path.isfile(test_dir + '/fips/test.py'))

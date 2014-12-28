@@ -1,7 +1,7 @@
 # fips project registry, allows to refer to git repos with a short-name
 #
 
-oryol:  https://github.com/floooh/oryol.git
+oryol:  https://github.com/floooh/oryol.git#fips
 gliml:  https://github.com/floooh/gliml.git
 fips-glm: https://github.com/floooh/fips-glm.git
 
