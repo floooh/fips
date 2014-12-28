@@ -35,9 +35,9 @@ endmacro()
 #   Setup the link library search paths.
 #
 macro(fips_setup_link_directories)
-    # FIXME: this must be setup with the library search paths 
-    # of all projects
-    link_directories(${FIPS_PROJECT_DIR}/lib/${FIPS_PLATFORM_NAME})
+    if (EXISTS ${FIPS_PROJECT_DIR}/lib/${FIPS_PLATFORM_NAME})
+        link_directories(${FIPS_PROJECT_DIR}/lib/${FIPS_PLATFORM_NAME})
+    endif()
 endmacro()
 
 #-------------------------------------------------------------------------------

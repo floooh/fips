@@ -15,7 +15,7 @@ verbs = {}
 proj_verbs = OrderedDict()
 
 #-------------------------------------------------------------------------------
-def import_verbs_from(proj_name, verb_dir) :
+def import_verbs_from(proj_name, proj_dir, verb_dir) :
     """import all verb modules from a directory, populates the
     verb and proj_verbs global variables
 
@@ -23,6 +23,10 @@ def import_verbs_from(proj_name, verb_dir) :
     :param verb_dir:    directory with verb python scripts
     """
     global verbs, proj_verbs
+
+    # make sure project-verbs find their modules
+    if not proj_dir in sys.path :
+        sys.path.insert(0, proj_dir)
 
     if os.path.isdir(verb_dir) :
 
@@ -51,14 +55,14 @@ def import_verbs(fips_dir, proj_dir) :
     """
 
     # first import verbs from fips directory
-    import_verbs_from('fips', fips_dir + '/verbs')
+    import_verbs_from('fips', fips_dir, fips_dir + '/verbs')
 
     # now go through all imported projects
     if fips_dir != proj_dir :
         _, imported_projs = dep.get_all_imports_exports(fips_dir, proj_dir)
         for imported_proj_name in imported_projs :
             imported_proj_dir = util.get_project_dir(fips_dir, imported_proj_name)
-            import_verbs_from(imported_proj_name, imported_proj_dir + '/fips-verbs')
+            import_verbs_from(imported_proj_name, imported_proj_dir, imported_proj_dir + '/fips-verbs')
 
     
 
