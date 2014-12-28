@@ -57,4 +57,5 @@ I'm trying to put up progress videos from time to time:
 - 4th progress video: https://vimeo.com/115050871
 - using fips with Oryol 3D engine: https://www.youtube.com/watch?v=LaC4Sqatyts
 - compiling and debugging in QtCreator and CLion IDEs: https://www.youtube.com/watch?v=Sp5TywYeNzE
+- building a standalone Oryol app: https://www.youtube.com/watch?v=z8nwrGh2Zsc
 
