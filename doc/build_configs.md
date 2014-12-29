@@ -1,10 +1,36 @@
-### About fips build configs
+### About build configs
 
-**WORK IN PROGRESS**
+A build config describes how cmake should generate build system files:
 
-Build configs are YML files which describe how cmake should generate build
-files. Fips comes with a number of standard config files, and fips projects
-can define their own configs.
+* the **target platform** (e.g. OSX, Linux, emscripten, ...)
+* the **build tool or IDE** (e.g. make, ninja, VStudio, Xcode...)
+* the **build type** (Release, Debug, Profiling...)
+* additional **cmake options** for tweaking the build
+
+Build configs have a unique, descriptive name, e.g.:
+
+* osx-xcode-debug
+* linux-make-debug
+* android-make-debug
+
+The build config name resolves to a small YML file in the _fips/configs_
+directory, for instance the _android-make-debug_ config lives in the file 
+_fips/configs/android-make-debug.yml_ and looks like this:
+
+```yml
+---
+platform: android
+generator: Unix Makefiles
+build_tool: make
+build_type: Debug
+defines:
+    ANDROID_CPU: arm
+    ANDROID_API: android-19
+```
+
+Fips keeps all build files separate from each other by config name, building
+a project for one config will not overwrite the build files of other configs.
+
 
 #### Listing available configs
 
@@ -18,13 +44,6 @@ from /Users/floh/projects/fips/configs:
   android-make-debug
   android-make-release
   androidmips-make-debug
-  androidmips-make-release
-  androidx86-make-debug
-  androidx86-make-release
-  emsc-make-debug
-  emsc-make-release
-  emsc-ninja-debug
-  emsc-ninja-release
   ...
   pnacl-ninja-debug
   pnacl-ninja-release
@@ -78,13 +97,118 @@ is provided:
 * **Windows**: win64-vstudio-debug
 
 #### Active config
-[TODO]
 
-#### Sample commands
-[TODO]
+To save typing, an _active config_ can be set per project with 
+**fips set config [config]**, this active config is used when a fips command
+expects a config name, but none is given. 
 
-#### Config file content
-[TODO]
+The active config can be unset with **fips unset config**.
 
-#### Project custom configs
-[TODO]
+Finally, the currently active config can be displayed with **fips list settings**
+
+For instance in a fips project:
+
+```bash
+# first check that now active config is set:
+> ./fips list settings
+=== settings:
+  config: osx-xcode-debug (default value)
+  target: None (default value)
+
+# if no config is currently set, the default config is used:
+> ./fips gen
+=== generating: osx-xcode-debug
+...
+
+# now set a different 'active config' 
+> ./fips set config osx-make-debug
+'config' set to 'osx-make-debug' in project 'oryol'
+> ./fips list settings
+=== settings:
+  config: osx-make-debug
+  target: None (default value)
+
+# when no config is given, the 'active config' will now be used
+> ./fips gen
+=== generating: osx-make-debug
+...
+
+# it's possible to override the active config:
+> ./fips gen emsc-make-debug
+=== generating: emsc-make-debug
+...
+
+# unset the active config, so that it switches back to the default config:
+> ./fips unset config
+'config' unset in project 'oryol'
+> ./fips list settings
+=== settings:
+  config: osx-xcode-debug (default value)
+  target: None (default value) 
+```
+
+#### Command using config names 
+
+The following fips commands expect a config name (excerpt from 'fips help'):
+
+```bash
+fips build
+fips build [config]
+   perform a build for current or named config
+
+fips clean
+fips clean all
+fips clean [config]
+    clean generated build files for config
+
+fips config
+fips config [config]
+   configure the current or named build config
+   (runs ccmake or cmake-gui)
+
+fips gen
+fips gen [config]
+    generate build files for current or named config
+
+fips make
+fips make [target]
+fips make [target] [config]
+   build a single target in current or named config
+
+fips open
+fips open [config]
+   open IDE for current or named config
+
+fips run
+fips run [target]
+fips run [target] [config]
+   run a build target for current or named config
+```
+
+
+#### Project-specific custom configs
+
+A fips project can define its own configs in a special subdirectory
+called _fips-configs_. As an example, check the Oryol project directory
+(https://github.com/floooh/oryol.git):
+
+```bash
+> cd oryol
+> cd fips-configs
+> ls
+oryol-emsc-unittest.yml
+> cat oryol-emsc-unittest.yml
+# this demonstrates how to add a custom config to fips projects
+# usually you'll want to tweak cmake-options with such
+# custom settings
+---
+platform: emscripten
+generator: Ninja
+build_tool: ninja
+build_type: Debug
+defines:
+    FIPS_UNITTESTS: ON
+    FIPS_UNITTESTS_HEADLESS: ON
+> _
+```
+
