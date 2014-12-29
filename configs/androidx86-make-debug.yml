@@ -5,3 +5,4 @@ build_tool: make
 build_type: Debug
 defines :
     ANDROID_CPU: x86
+    ANDROID_API: android-19

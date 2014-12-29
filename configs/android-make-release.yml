@@ -3,4 +3,7 @@ platform: android
 generator: Unix Makefiles
 build_tool: make
 build_type: Release
+defines:
+    ANDROID_CPU: arm
+    ANDROID_API: android-19
 
