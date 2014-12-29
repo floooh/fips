@@ -23,7 +23,7 @@ def run(fips_dir, proj_dir, args) :
         cfg_name = settings.get(proj_dir, 'config')
         
     # check the cmake generator of this config
-    configs = config.load(cfg_name, [fips_dir])
+    configs = config.load(fips_dir, proj_dir, cfg_name)
     if configs :
         # hmm, only look at first match, 'open' doesn't
         # make sense with config-patterns

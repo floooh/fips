@@ -214,27 +214,6 @@ class config_testcase(unittest.TestCase) :
         self.assertTrue(config.exists('*-make-*', cfg_dirs))
         self.assertFalse(config.exists('blub-make-debug', cfg_dirs))
 
-    def test_load(self) :
-        cfg_dirs = [root_path]
-        cfg = config.load('osx-make-debug', cfg_dirs)
-        self.assertEqual(len(cfg), 1)
-        self.assertEqual(cfg[0]['name'], 'osx-make-debug')
-        self.assertEqual(cfg[0]['build_tool'], 'make')
-        self.assertEqual(cfg[0]['platform'], 'osx')
-        self.assertEqual(cfg[0]['build_type'], 'Debug')
-        self.assertEqual(cfg[0]['generator'], 'Unix Makefiles')
-        cfg = config.load('osx-make-*', cfg_dirs)
-        self.assertEqual(len(cfg), 2)
-
-    def test_list(self) :
-        cfg_dirs = [root_path + '/configs']
-        cfg = config.list('osx-*', cfg_dirs)
-        self.assertTrue(len(cfg), 2)
-
-    def test_check_config_valid(self) :
-        cfg = config.load('osx-make-debug', [root_path])[0]
-        self.assertTrue(config.check_config_valid(cfg))
-
 
 #===============================================================================        
 unittest.main()

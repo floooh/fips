@@ -85,7 +85,7 @@ def gen(fips_dir, proj_dir, cfg_name) :
     dep.write_imports_files(fips_dir, proj_dir)
 
     # load the config(s)
-    configs = config.load(cfg_name, [fips_dir])
+    configs = config.load(fips_dir, proj_dir, cfg_name)
     num_valid_configs = 0
     if configs :
         for cfg in configs :
@@ -122,7 +122,7 @@ def configure(fips_dir, proj_dir, cfg_name) :
     dep.write_imports_files(fips_dir, proj_dir)
 
     # load configs, if more then one, only use first one
-    configs = config.load(cfg_name, [fips_dir])
+    configs = config.load(fips_dir, proj_dir, cfg_name)
     if configs :
         cfg = configs[0]
         log.colored(log.YELLOW, '=== configuring: {}'.format(cfg['name']))
@@ -160,7 +160,7 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
     dep.write_imports_files(fips_dir, proj_dir)
 
     # load the config(s)
-    configs = config.load(cfg_name, [fips_dir])
+    configs = config.load(fips_dir, proj_dir, cfg_name)
     num_valid_configs = 0
     if configs :
         for cfg in configs :
@@ -214,7 +214,7 @@ def run(fips_dir, proj_dir, cfg_name, target_name) :
     util.ensure_valid_project_dir(proj_dir)
     
     # load the config(s)
-    configs = config.load(cfg_name, [fips_dir])
+    configs = config.load(fips_dir, proj_dir, cfg_name)
     if configs :
         for cfg in configs :
             log.colored(log.YELLOW, "=== run '{}' (config: {}, project: {}):".format(target_name, cfg['name'], proj_name))
@@ -269,7 +269,7 @@ def clean(fips_dir, proj_dir, cfg_name) :
     :param cfg_name:    config name (or pattern)
     """
     proj_name = util.get_project_name_from_dir(proj_dir)
-    configs = config.load(cfg_name, [fips_dir])
+    configs = config.load(fips_dir, proj_dir, cfg_name)
     if configs :
         for cfg in configs :
             log.colored(log.YELLOW, "=== clean: {}".format(cfg['name']))

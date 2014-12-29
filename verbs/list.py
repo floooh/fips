@@ -44,13 +44,12 @@ def list_generators() :
         log.info('{}'.format(gen))
 
 #-------------------------------------------------------------------------------
-def list_configs(fips_dir) :
+def list_configs(fips_dir, proj_dir) :
     """list available configs"""
     log.colored(log.YELLOW, '=== configs:')
-    dirs = [ fips_dir ]
-    configs = config.list('*', dirs)
+    configs = config.list(fips_dir, proj_dir, '*')
     for folder in configs :
-        log.info('{}:'.format(folder))
+        log.colored(log.BLUE, 'from {}:'.format(folder))
         for cfg in configs[folder] :
             log.info('  {}'.format(cfg))
 
@@ -60,7 +59,7 @@ def list_registry(fips_dir) :
     log.colored(log.YELLOW, '=== registry:')
     registry.load(fips_dir)
     for key in registry.registry :
-        log.info('{} => {}'.format(key, registry.registry[key]))
+        log.info('{}{}{} => {}'.format(log.BLUE, key, log.DEF, registry.registry[key]))
 
 #-------------------------------------------------------------------------------
 def list_settings(proj_dir) :
@@ -71,8 +70,8 @@ def list_settings(proj_dir) :
         cfg_default = ' (default value)' if cfg_name == settings.get_default('config') else ''
         tgt_name = settings.get(proj_dir, 'target')
         tgt_default = ' (default value)' if tgt_name == settings.get_default('target') else ''
-        log.info('  config: {}{}'.format(cfg_name, cfg_default))
-        log.info('  target: {}{}'.format(tgt_name, tgt_default))
+        log.info('  {}config:{} {}{}'.format(log.BLUE, log.DEF, cfg_name, cfg_default))
+        log.info('  {}target:{} {}{}'.format(log.BLUE, log.DEF, tgt_name, tgt_default))
     else :
         log.info('  currently not in a valid project directory')
 
@@ -86,7 +85,7 @@ def list_exports(fips_dir, proj_dir) :
             log.warn("missing import project directories, please un 'fips fetch'")
         for dep_proj_name in result :
             cur_dep = result[dep_proj_name]
-            log.info("project '{}' exports:".format(dep_proj_name))
+            log.colored(log.BLUE, "project '{}' exports:".format(dep_proj_name))
 
             log.info("  modules:")
             cur_modules = cur_dep['exports']['modules']
@@ -135,9 +134,9 @@ def list_imports(fips_dir, proj_dir) :
             # this from the output
             cur_dep = result[dep_proj_name]
             if not cur_dep['url'] :
-                log.info("project '{}' imports:".format(dep_proj_name))
+                log.colored(log.BLUE, "project '{}' imports:".format(dep_proj_name))
             else :
-                log.info("project '{}' at '{}' imports:".format(dep_proj_name, cur_dep['url']))
+                log.colored(log.BLUE, "project '{}' at '{}' imports:".format(dep_proj_name, cur_dep['url']))
             if cur_dep['imports'] :
                 for imp_proj in cur_dep['imports'] :
                     log.info("  {}".format(imp_proj))
@@ -159,7 +158,7 @@ def run(fips_dir, proj_dir, args) :
     if len(args) > 0 :
         noun = args[0]
     if noun in ['all', 'configs'] :
-        list_configs(fips_dir)
+        list_configs(fips_dir, proj_dir)
         ok = True
     if noun in ['all', 'build-tools'] :
         list_build_tools()

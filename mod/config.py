@@ -4,6 +4,7 @@ import platform
 import os.path
 import glob
 import yaml
+from collections import OrderedDict
 from mod import log
 
 platforms = [
@@ -159,16 +160,24 @@ def exists(pattern, proj_dirs) :
     return False
 
 #-------------------------------------------------------------------------------
-def list(pattern, proj_dirs) :
-    """return { dir : [cfgname, ...] } of all configs in given dirs
+def list(fips_dir, proj_dir, pattern) :
+    """return { dir : [cfgname, ...] } in fips_dir/configs and
+    proj_dir/fips-configs
 
-    :param proj_dirs:   array of toplevel dirs to search (must have /configs subdir)
+    :param fips_dir:    absolute fips directory
+    :param proj_dir:    absolute project directory
+    :param pattern:     global pattern for config-name(s)
     :returns:           a map of matching configs per dir
     """
-    res = {}
-    for curDir in proj_dirs :
+    if fips_dir == proj_dir :
+        dirs = [ fips_dir + '/configs' ]
+    else :
+        dirs = [ fips_dir + '/configs', proj_dir + '/fips-configs' ]
+
+    res = OrderedDict()
+    for curDir in dirs :
         res[curDir] = []
-        paths = glob.glob('{}/configs/*.yml'.format(curDir))
+        paths = glob.glob('{}/*.yml'.format(curDir))
         for path in paths :
             fname = os.path.split(path)[1]
             fname = os.path.splitext(fname)[0]
@@ -176,16 +185,22 @@ def list(pattern, proj_dirs) :
     return res
 
 #-------------------------------------------------------------------------------
-def load(pattern, proj_dirs) :
-    """load one or more matching configs
+def load(fips_dir, proj_dir, pattern) :
+    """load one or more matching configs from fips and current project dir
 
+    :param fips_dir:    absolute fips directory
+    :param proj_dir:    absolute project directory
     :param pattern:     config name pattern (e.g. 'linux-make-*')
-    :param proj_dirs:   array of toplevel dirs to search (must have /configs subdir)
     :returns:   an array of loaded config objects
     """
+    if fips_dir == proj_dir :
+        dirs = [ fips_dir + '/configs' ]
+    else :
+        dirs = [ fips_dir + '/configs', proj_dir + '/fips-configs' ]
+
     configs = []
-    for curDir in proj_dirs :
-        paths = glob.glob('{}/configs/{}.yml'.format(curDir, pattern))
+    for curDir in dirs :
+        paths = glob.glob('{}/{}.yml'.format(curDir, pattern))
         for path in paths :
             try :
                 with open(path, 'r') as f :

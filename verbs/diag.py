@@ -24,11 +24,11 @@ def check_tools() :
                 log.failed(tool.name, 'NOT FOUND')
 
 #-------------------------------------------------------------------------------
-def check_configs(fips_dir) :
+def check_configs(fips_dir, proj_dir) :
     """find configs and check if they are valid"""
     log.colored(log.YELLOW, '=== configs:')
     dirs = [ fips_dir ]
-    configs = config.load('*', dirs)
+    configs = config.load(fips_dir, proj_dir, '*')
     for cfg in configs :
         if config.check_config_valid(cfg) :
             log.ok(cfg['name'], 'ok')
@@ -58,7 +58,7 @@ def run(fips_dir, proj_dir, args) :
         check_tools()
         ok = True
     if noun in ['all', 'configs'] :
-        check_configs(fips_dir)
+        check_configs(fips_dir, proj_dir)
         ok = True
     if noun in ['all', 'imports'] :
         check_imports(fips_dir, proj_dir)
