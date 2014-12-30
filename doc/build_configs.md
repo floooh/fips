@@ -2,10 +2,10 @@
 
 A build config describes how cmake should generate build system files:
 
-* the **target platform** (e.g. OSX, Linux, emscripten, ...)
-* the **build tool or IDE** (e.g. make, ninja, VStudio, Xcode...)
-* the **build type** (Release, Debug, Profiling...)
-* additional **cmake options** for tweaking the build
+* what **target platform** to compile to (e.g. OSX, Linux, emscripten, ...)
+* what **build tool or IDE** to use (e.g. make, ninja, VStudio, Xcode...)
+* what **build type** to compile (Release, Debug, Profiling...)
+* what additional **cmake options** to use for tweaking the build
 
 Build configs have a unique, descriptive name, e.g.:
 
@@ -71,7 +71,7 @@ Note the custom config called _oryol-emsc-unittest_ at the end of the list.
 #### Config names
 
 There are no naming conventions for configs, so custom configs can have any
-name. 
+name that doesn't clash with a standard config name.
 
 The standard config names are usually made of 3 parts separated by 
 dashes to be as self-descriptive as possible:
