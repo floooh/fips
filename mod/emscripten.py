@@ -27,7 +27,7 @@ def get_sdk_url() :
 #-------------------------------------------------------------------------------
 def get_sdk_dir(fips_dir) :
     """return the platform-specific SDK dir"""
-    return util.get_workspace_dir(fips_dir) + '/.fips-sdks/' + config.get_host_platform()
+    return util.get_workspace_dir(fips_dir) + '/fips-sdks/' + config.get_host_platform()
 
 #-------------------------------------------------------------------------------
 def get_emsdk_dir(fips_dir) :
