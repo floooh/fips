@@ -3,6 +3,8 @@ import subprocess
 
 name = 'xcodebuild'
 platforms = ['osx']
+optional = False
+not_found = 'please install Xcode and Xcode cmd line tools'
 
 #------------------------------------------------------------------------------
 def check_exists() :

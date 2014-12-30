@@ -5,6 +5,8 @@ from mod import log
 
 name = 'cmake'
 platforms = ['linux', 'osx', 'win']
+optional = False
+not_found = 'please install cmake 2.8.11 or newer'
 
 # required version
 major = 2

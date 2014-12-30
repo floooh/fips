@@ -1,0 +1,20 @@
+"""wrapper for node.js, only check_exists"""
+import subprocess
+
+name = 'node'
+platforms = ['osx', 'linux', 'win']
+optional = True
+not_found = 'node.js required for emscripten cross-compiling'
+
+#------------------------------------------------------------------------------
+def check_exists() :
+    try :
+        out = subprocess.check_output(['node', '--version'])
+        if not out.startswith('v') :
+            log.warn("this doesn't look like a proper node.js 'node'")
+            return False 
+        return True
+    except OSError:
+        return False
+
+

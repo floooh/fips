@@ -5,6 +5,8 @@ import subprocess
 
 name = 'make'
 platforms = ['linux', 'osx']
+optional = True
+not_found = "required for building '*-make-*' configs"
 
 #-------------------------------------------------------------------------------
 def check_exists() :

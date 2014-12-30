@@ -5,6 +5,8 @@ import subprocess
 
 name = 'ccmake'
 platforms = ['linux', 'osx']
+optional = True
+not_found = "required for 'fips config' functionality"
 
 #-------------------------------------------------------------------------------
 def check_exists() :

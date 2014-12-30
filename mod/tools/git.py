@@ -5,6 +5,8 @@ from mod import log
 
 name = 'git'
 platforms = ['linux', 'osx', 'win']
+optional = False
+not_found = "git not found in path, can't happen(?)"
 
 #-------------------------------------------------------------------------------
 def check_exists() :

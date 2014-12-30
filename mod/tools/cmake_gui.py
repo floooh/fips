@@ -3,6 +3,8 @@ import subprocess
 
 name = 'cmake-gui'
 platforms = ['win']
+optional = True
+not_found = "required for 'fips config' functionality"
 
 #-------------------------------------------------------------------------------
 def check_exists() :

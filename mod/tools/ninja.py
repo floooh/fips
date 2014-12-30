@@ -3,6 +3,8 @@ import subprocess
 
 name = 'ninja'
 platforms = ['linux', 'osx']
+optional = True
+not_found = "required for building '*-ninja-*' configs"
 
 #------------------------------------------------------------------------------
 def check_exists() :
