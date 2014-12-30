@@ -45,6 +45,15 @@ def failed(item, status) :
     print('{}:\t{}{}{}'.format(item, RED, status, DEF))
 
 #-------------------------------------------------------------------------------
+def optional(item, status) :
+    """print a yellow 'optional' message
+
+    :param item:    first part of message
+    :param status:  status (colored red)
+    """
+    print('{}:\t{}{}{}'.format(item, YELLOW, status, DEF))
+
+#-------------------------------------------------------------------------------
 def info(msg) :
     """print a normal log message
 
