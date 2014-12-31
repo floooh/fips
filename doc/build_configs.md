@@ -147,7 +147,7 @@ For instance in a fips project:
   target: None (default value) 
 ```
 
-#### Command using config names 
+#### Commands using config names 
 
 The following fips commands expect a config name (excerpt from 'fips help'):
 
