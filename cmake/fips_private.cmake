@@ -8,6 +8,7 @@
 #   Reset the global tracker variables.
 #
 macro(fips_reset target)
+    set(CurDir)
     set(CurSources)
     set(CurPyFiles)
     set(CurDependencies)

@@ -140,10 +140,8 @@ macro(fips_setup)
     
     # check whether python is installed
     find_program(PYTHON "python")
-    if (PYTHON)
-        message("PYTHON INTERPRETER FOUND")
-    else()
-        message("PYTHON INTERPRETER NOT FOUND, NO SOURCE CODE GENERATION!")
+    if (NOT PYTHON)
+        message(WARNING "Python not found, code generation will be disabled!")
     endif()
 
     # load project-local fips-include.cmake if exists
@@ -367,11 +365,73 @@ macro(fips_libs libs)
 endmacro()
 
 #-------------------------------------------------------------------------------
+#   fips_dir(dir)
+#   Enter a source code subdirectory.
+#
+macro(fips_dir dir)
+    if (${dir} STREQUAL ".")
+        set(CurDir)
+    else()
+        set(CurDir ${dir})
+    endif()
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_files(files ...)
+#   Add files to current target.
+#
+macro(fips_files files)
+
+    # determine source group name
+    if (CurDir)
+        string(REPLACE / \\ group_name ${CurDir})
+    else()
+        set(group_name "")
+    endif()
+
+    foreach (cur_file ${ARGV})
+
+        # handle subdirectory
+        if (CurDir)
+            set(cur_file "${CurDir}/${cur_file}")
+        endif()
+        get_filename_component(f_ext ${cur_file} EXT)
+        
+        # add file to current source group
+        source_group("${group_name}" FILES ${cur_file})
+
+        # add generated source file
+        if (${f_ext} STREQUAL ".py")
+            get_filename_component(f_abs ${cur_file} ABSOLUTE)
+            list(APPEND CurPyFiles ${f_abs})
+            string(REPLACE .py .cc py_src ${cur_file})
+            string(REPLACE .py .h py_hdr ${cur_file})
+            list(APPEND CurSources ${py_src} ${py_hdr})
+            source_group("${group_name}" FILES ${py_src} ${py_hdr})
+        endif()
+
+        # add to global tracker variables
+        list(APPEND CurSources ${cur_file})
+
+        # remove dups
+        if (CurSources)
+            list(REMOVE_DUPLICATES CurSources)
+        endif()
+
+    endforeach()
+
+endmacro()
+
+#-------------------------------------------------------------------------------
 #   fips_sources(dirs ...)
+#   *** OBSOLETE ***
 #   Parse one or more directories for sources and add them to the current
 #   target.
 #
 macro(fips_sources dirs)
+    
+    message("fips_sources is obsolete, please us fips_files instead!")
+
     foreach (dir ${ARGV})
         # gather files
         file(GLOB src ${dir}/*.cc ${dir}/*.cpp ${dir}/*.c ${dir}/*.m ${dir}/*.mm ${dir}/*.h ${dir}/*.hh)
@@ -409,86 +469,6 @@ macro(fips_sources dirs)
         endif()
 
     endforeach()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_sources_posix(dirs ...)
-#   Add POSIX specific sources.
-#
-macro(fips_sources_posix dirs)
-    if (FIPS_POSIX)
-        fips_sources(${ARGV})
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_sources_linux(dirs ...)
-#   Add Linux specific sources.
-#-------------------------------------------------------------------------------
-macro(fips_sources_linux dirs)
-    if (FIPS_LINUX)
-        fips_sources(${ARGV})
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_sources_windows(dirs ...)
-#   Add Windows specific sources.
-#
-macro(fips_sources_windows dirs)
-    if (FIPS_WINDOWS)
-        fips_sources(${ARGV})
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_sources_osx(dirs ...)
-#   Add OSX specific sources (iOS or MacOS)
-#-------------------------------------------------------------------------------
-macro(fips_sources_osx dirs)
-    if (FIPS_OSX)
-        fips_sources(${ARGV})
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_sources_emscripten(dirs ...)
-#   Add emscripten specific sources.
-#-------------------------------------------------------------------------------
-macro(fips_sources_emscripten dirs)
-    if (FIPS_EMSCRIPTEN)
-        fips_sources(${ARGV})
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_sources_pnacl(dirs ...)
-#   Add PNACL specific sources.
-#-------------------------------------------------------------------------------
-macro(fips_sources_pnacl dirs)
-    if (FIPS_PNACL)
-        fips_sources(${ARGV})
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_sources_android(dirs ...)
-#   Add Android specific sources.
-#-------------------------------------------------------------------------------
-macro(fips_sources_android dirs)
-    if (FIPS_ANDROID)
-        fips_sources(${ARGV})
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_sources_ios(dirs ...)
-#   Add IOS specific sources.
-#-------------------------------------------------------------------------------
-macro(fips_sources_ios dirs)
-    if (FIPS_IOS)
-        fips_sources(${ARGV})
-    endif()
 endmacro()
 
 #-------------------------------------------------------------------------------
