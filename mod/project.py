@@ -57,16 +57,21 @@ def clone(fips_dir, url) :
         return False
 
 #-------------------------------------------------------------------------------
-def gen_project(fips_dir, proj_dir, cfg) :
+def gen_project(fips_dir, proj_dir, cfg, force) :
     """private: generate build files for one config"""
 
-    log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
     proj_name = util.get_project_name_from_dir(proj_dir)
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+    do_it = force
     if not os.path.isdir(build_dir) :
         os.makedirs(build_dir)
-    toolchain_path = config.get_toolchain_for_platform(fips_dir, cfg['platform'])
-    return cmake.run_gen(cfg, proj_dir, build_dir, toolchain_path)
+        do_it = True
+    if do_it :
+        log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
+        toolchain_path = config.get_toolchain_for_platform(fips_dir, cfg['platform'])
+        return cmake.run_gen(cfg, proj_dir, build_dir, toolchain_path)
+    else :
+        return True
 
 #-------------------------------------------------------------------------------
 def gen(fips_dir, proj_dir, cfg_name) :
@@ -91,7 +96,7 @@ def gen(fips_dir, proj_dir, cfg_name) :
         for cfg in configs :
             # check if config is valid
             if config.check_config_valid(cfg) :
-                if gen_project(fips_dir, proj_dir, cfg) :
+                if gen_project(fips_dir, proj_dir, cfg, True) :
                     num_valid_configs += 1
                 else :
                     log.error("failed to generate build files for config '{}'".format(cfg['name']), False)
@@ -128,7 +133,7 @@ def configure(fips_dir, proj_dir, cfg_name) :
         log.colored(log.YELLOW, '=== configuring: {}'.format(cfg['name']))
 
         # generate build files
-        if not gen_project(fips_dir, proj_dir, cfg) :
+        if not gen_project(fips_dir, proj_dir, cfg, True) :
             log.error("Failed to generate '{}' of project '{}'".format(cfg['name'], proj_name))
 
         # run ccmake or cmake-gui
@@ -168,7 +173,7 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
             if config.check_config_valid(cfg) :
                 log.colored(log.YELLOW, "=== building: {}".format(cfg['name']))
 
-                if not gen_project(fips_dir, proj_dir, cfg) :
+                if not gen_project(fips_dir, proj_dir, cfg, False) :
                     log.error("Failed to generate '{}' of project '{}'".format(cfg['name'], proj_name))
 
                 # select and run build tool
