@@ -6,7 +6,7 @@ gliml:              https://github.com/floooh/gliml.git
 fips-glm:           https://github.com/floooh/fips-glm.git
 fips-unittestpp:    https://github.com/floooh/fips-unittestpp.git
 fips-zlib:          https://github.com/floooh/fips-zlib.git
-fips-glfw:          htpps://github.com/floooh/fips-glfw.git
+fips-glfw:          https://github.com/floooh/fips-glfw.git
 
 oryol-test-app:     https://github.com/floooh/oryol-test-app.git
 
