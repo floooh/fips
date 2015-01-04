@@ -2,6 +2,9 @@
 
 VERSION = '0.0.1'
 
+from colorama import init
+init()
+
 import yaml 
 
 from mod import log
