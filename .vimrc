@@ -7,4 +7,4 @@
 "
 
 " CtrlP ignore patterns
-let g:ctrlp_custom_ignore = '.pyc\|test/build'
+let g:ctrlp_custom_ignore = '.pyc\|test/build\|site/_site'
