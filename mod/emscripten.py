@@ -14,9 +14,9 @@ archives = {
 }
 
 urls = {
-    'win':      'https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-1.27.0-portable-64bit.zip',
-    'osx' :     'https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz',
-    'linux' :   'https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz'
+    'win':      'http://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-1.27.0-portable-64bit.zip',
+    'osx' :     'http://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz',
+    'linux' :   'http://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz'
 }
 
 #-------------------------------------------------------------------------------
