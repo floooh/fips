@@ -9,7 +9,7 @@ not_found = 'required for Android cross-compilation'
 #------------------------------------------------------------------------------
 def check_exists(fips_dir) :
     try :
-        subprocess.check_output(['ant', '-version'], shell=True)
+        subprocess.check_output(['ant', '-version'])
         return True
     except OSError:
         return False
