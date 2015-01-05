@@ -6,6 +6,15 @@ import yaml
 from mod import log
 
 #-------------------------------------------------------------------------------
+def fix_path(path) :
+    """if on Windows, replace backslashes in path with forward slashes
+
+    :param path:    input path
+    :returns:       fixed up path
+    """
+    return path.replace('\\', '/')
+
+#-------------------------------------------------------------------------------
 def get_workspace_dir(fips_dir) :
     """get workspace (parent) dir from fips dir
     
