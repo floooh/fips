@@ -7,7 +7,7 @@ optional = False
 not_found = 'please install Xcode and Xcode cmd line tools'
 
 #------------------------------------------------------------------------------
-def check_exists() :
+def check_exists(fips_dir) :
     """test if xcodebuild is in the path
     
     :returns:   True if xcodebuild is in the path
@@ -19,7 +19,7 @@ def check_exists() :
         return False
 
 #------------------------------------------------------------------------------
-def run_build(target, build_type, build_dir, num_jobs=1) :
+def run_build(fips_dir, target, build_type, build_dir, num_jobs=1) :
     """build a target
 
     :param target:      name of build target, or None
@@ -35,7 +35,7 @@ def run_build(target, build_type, build_dir, num_jobs=1) :
     return res == 0
 
 #------------------------------------------------------------------------------
-def run_clean(build_dir) :
+def run_clean(fips_dir, build_dir) :
     """run the special 'clean' target
 
     :params build_dir:  directory where the xcode project file is located

@@ -67,6 +67,10 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
         os.makedirs(build_dir)
         do_it = True
     if do_it :
+        # if Ninja build tool and on Windows, need to copy 
+        # the precompiled ninja.exe to the build dir
+        if cfg['build_tool'] == 'ninja' :
+            ninja.prepare_ninja_tool(fips_dir, build_dir)
         log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
         toolchain_path = config.get_toolchain_for_platform(fips_dir, cfg['platform'])
         return cmake.run_gen(cfg, proj_dir, build_dir, toolchain_path)
@@ -138,9 +142,9 @@ def configure(fips_dir, proj_dir, cfg_name) :
 
         # run ccmake or cmake-gui
         build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
-        if ccmake.check_exists() :
+        if ccmake.check_exists(fips_dir) :
             ccmake.run(build_dir)
-        elif cmake_gui.check_exists() :
+        elif cmake_gui.check_exists(fips_dir) :
             cmake_gui.run(build_dir)
         else :
             log.error("Neither 'ccmake' nor 'cmake-gui' found (run 'fips diag')")
@@ -182,13 +186,13 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
                 num_jobs = 3
                 result = False
                 if cfg['build_tool'] == make.name :
-                    result = make.run_build(target, build_dir, num_jobs)
+                    result = make.run_build(fips_dir, target, build_dir, num_jobs)
                 elif cfg['build_tool'] == ninja.name :
-                    result = ninja.run_build(target, build_dir, num_jobs)
+                    result = ninja.run_build(fips_dir, target, build_dir, num_jobs)
                 elif cfg['build_tool'] == xcodebuild.name :
-                    result = xcodebuild.run_build(target, cfg['build_type'], build_dir, num_jobs)
+                    result = xcodebuild.run_build(fips_dir, target, cfg['build_type'], build_dir, num_jobs)
                 else :
-                    result = cmake.run_build(target, cfg['build_type'], build_dir)
+                    result = cmake.run_build(fips_dir, target, cfg['build_type'], build_dir)
                 
                 if result :
                     num_valid_configs += 1
@@ -242,7 +246,12 @@ def run(fips_dir, proj_dir, cfg_name, target_name) :
                     except KeyboardInterrupt :
                         pass
                 elif config.get_host_platform() == 'win' :
-                    log.error('FIXME: start HTML app on Windows')
+                    try :
+                        subprocess.call(
+                            ['cmd /c start http://localhost:8000/{} && python {}/mod/httpserver.py'.format(html_name, fips_dir)],
+                            cwd = deploy_dir, shell=True)
+                    except KeyboardInterrupt :
+                        pass
                 elif config.get_host_platform() == 'linux' :
                     try :
                         subprocess.call(

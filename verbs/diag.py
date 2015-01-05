@@ -12,14 +12,14 @@ from mod.tools import make, ninja, xcodebuild, ant, java, node
 from mod import config, util, log, dep
 
 #-------------------------------------------------------------------------------
-def check_tools() :
+def check_tools(fips_dir) :
     """check whether required command line tools can be found"""
     log.colored(log.YELLOW, '=== tools:')
     tools = [ git, cmake, ccmake, cmake_gui, make, ninja, xcodebuild, ant, java, node ]
     platform = config.get_host_platform()
     for tool in tools:
         if platform in tool.platforms :
-            if tool.check_exists() :
+            if tool.check_exists(fips_dir) :
                 log.ok(tool.name, 'found')
             else :
                 if tool.optional :
@@ -59,7 +59,7 @@ def run(fips_dir, proj_dir, args) :
     if len(args) > 0 :
         noun = args[0]
     if noun in ['all', 'tools'] :
-        check_tools()
+        check_tools(fips_dir)
         ok = True
     if noun in ['all', 'configs'] :
         check_configs(fips_dir, proj_dir)

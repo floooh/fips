@@ -7,7 +7,7 @@ optional = True
 not_found = "required for 'fips config' functionality"
 
 #-------------------------------------------------------------------------------
-def check_exists() :
+def check_exists(fips_dir) :
     """test if cmake-gui is in the path
     
     :returns:   True if cmake-gui is in the path

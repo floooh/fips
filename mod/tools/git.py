@@ -9,7 +9,7 @@ optional = False
 not_found = "git not found in path, can't happen(?)"
 
 #-------------------------------------------------------------------------------
-def check_exists() :
+def check_exists(fips_dir) :
     """test if git is in the path
     
     :returns:   True if git is in the path

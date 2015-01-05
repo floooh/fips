@@ -9,7 +9,7 @@ optional = True
 not_found = "required for 'fips config' functionality"
 
 #-------------------------------------------------------------------------------
-def check_exists() :
+def check_exists(fips_dir) :
     """test if ccmake is in the path
     
     :returns: True if ccmake is in the path

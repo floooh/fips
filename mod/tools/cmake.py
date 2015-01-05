@@ -13,7 +13,7 @@ major = 2
 minor = 8
 
 #------------------------------------------------------------------------------
-def check_exists() :
+def check_exists(fips_dir) :
     """test if cmake is in the path and has the required version
     
     :returns:   True if cmake found and is the required version
@@ -53,7 +53,7 @@ def run_gen(cfg, project_dir, build_dir, toolchain_path) :
     return res == 0
 
 #------------------------------------------------------------------------------
-def run_build(target, build_type, build_dir) :
+def run_build(fips_dir, target, build_type, build_dir) :
     """run cmake in build mode
 
     :param target:          build target, can be None (builds all)
@@ -68,7 +68,7 @@ def run_build(target, build_type, build_dir) :
     return res == 0
 
 #------------------------------------------------------------------------------
-def run_clean(build_dir) :
+def run_clean(fips_dir, build_dir) :
     """run cmake in build mode
 
     :param build_dir:   path to the build directory
