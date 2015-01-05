@@ -16,9 +16,10 @@ message("Target Platform: emscripten")
 #
 
 # emscripten SDK location
-# (FIXME: it should also be possible to configure this from the outside)
+# (FIXME: the emscripten SDK version should be a cmake option)
+# NOTE: on Windows, use the stable SDK, on other platforms, the bleeding-edge version
 if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
-    set(EMSC_EMSDK_DIRNAME "../fips-sdks/win/emsdk_portable/emscripten/incoming")
+    set(EMSC_EMSDK_DIRNAME "../fips-sdks/win/emsdk_portable/emscripten/1.27.0")
 elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
     set(EMSC_EMSDK_DIRNAME "../fips-sdks/osx/emsdk_portable/emscripten/incoming")
 elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")

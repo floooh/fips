@@ -247,9 +247,8 @@ def run(fips_dir, proj_dir, cfg_name, target_name) :
                         pass
                 elif config.get_host_platform() == 'win' :
                     try :
-                        subprocess.call(
-                            ['cmd /c start http://localhost:8000/{} && python {}/mod/httpserver.py'.format(html_name, fips_dir)],
-                            cwd = deploy_dir, shell=True)
+                        cmd = ['cmd /c start http://localhost:8000/{} && python {}/mod/httpserver.py'.format(html_name, fips_dir)]
+                        subprocess.call(cmd, cwd = deploy_dir, shell=True)
                     except KeyboardInterrupt :
                         pass
                 elif config.get_host_platform() == 'linux' :
