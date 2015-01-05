@@ -40,8 +40,9 @@ def run(fips_dir, proj_dir, args) :
             proj = glob.glob(build_dir + '/*.xcodeproj')
             subprocess.call(['open', proj[0]])
         elif 'Visual Studio' in cfg['generator'] :
-            # open in Visual Studio
-            log.error("FIXME: implement open for Visual Studio") 
+            # find the VisualStudio project file
+            proj = glob.glob(build_dir + '/*.sln')
+            subprocess.call(['cmd', '/c', 'start', proj[0]])
         else :
             log.error("don't know how to open a '{}' project".format(cfg['generator']))
     else :
