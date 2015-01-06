@@ -1,0 +1,8 @@
+---
+platform: android 
+generator: Ninja 
+build_tool: ninja
+build_type: Debug
+defines:
+    ANDROID_CPU: arm
+    ANDROID_API: android-19
