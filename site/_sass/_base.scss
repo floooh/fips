@@ -154,15 +154,16 @@ pre {
  * Wrapper
  */
 .wrapper {
-    max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit} * 2));
-    max-width:         calc(#{$content-width} - (#{$spacing-unit} * 2));
-    margin-right: auto;
-    margin-left: auto;
-    padding-right: $spacing-unit;
-    padding-left: $spacing-unit;
+    min-width: 100%;
+    min-height: 100%;
+    background-color: white;
+    position: relative;
+    top: 0;
+    bottom: 100%;
+    left: 0;
+    z-index: 1;
     @extend %clearfix;
 }
-
 
 
 /**
@@ -176,7 +177,6 @@ pre {
         clear: both;
     }
 }
-
 
 
 /**

@@ -5,9 +5,6 @@
     border-bottom: 1px solid $grey-color-light;
     background-color: $header-background-color;
     min-height: $header-line-height;
-
-    // Positioning context for the mobile navigation icon
-    position: relative;
 } 
 
 .site-title {
@@ -34,73 +31,70 @@
     float: left;
 }
 
-.site-nav {
-    float: left;
+.navigation {
+    list-style: none;
+    background: #111;
 
-    .menu-icon {
-        display: none;
-    }
-
-    .list {
-        width: 200px;
-        margin-left: 0px;
-        padding-left: 0px;
-        list-style-type: none;
-        padding: 0px;
-        .item {
-        }
-    }
-
-    .page-link {
-        color: $title-color;
-        line-height: $base-line-height;
-    }
-
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    background-color: $grey-color-light;
-    border: 1px solid $grey-color;
-    border-radius: 3px;
-    text-align: right;
-
-    .menu-icon {
-        display: block;
-        float: right;
-        width: 36px;
-        height: 26px;
-        line-height: 0;
-        padding-top: 10px;
-        text-align: center;
-
-        > svg {
-            width: 18px;
-            height: 15px;
-
-            path {
-                fill: $grey-color-dark;
-            }
-        }
-    }
-
-    .trigger {
-        clear: both;
-        display: none;
-    }
-
-    &:hover .trigger {
-        display: block;
-        padding-bottom: 5px;
-    }
-
-    .page-link {
-        color: $text-color;
-        top: 0px;
-        display: block;
-        padding: 5px 10px;
-    }
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 72px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
 }
 
+.nav-item {
+    width: 200px;
+    border-top: 1px solid #111;
+    border-bottom: 1px solid #000;
+}
+
+.nav-item a {
+    display: block;
+    padding: 1em;
+    background: black;
+    color: white;
+    font-size: 1.2em;
+    text-decoration: none;
+    transition: color 0.2s, background 0.5s;
+}
+
+.nav-item a:hover {
+    color: #ff0000;
+    background: #00ff00;
+}
+
+.nav-trigger {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+}
+
+label[for="nav-trigger"] {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6'/><rect y='24' width='30' height='6'/><rect y='12' width='30' height='6'/></svg>");
+    background-size: contain;
+}
+
+.nav-trigger + label, .wrapper {
+    transition: left 0.2s;
+}
+
+.nav-trigger:checked + label {
+    left: 215px;
+}
+
+.nav-trigger:checked ~ .wrapper {
+    left: 200px;
+    box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
+}
 
 
 /**
@@ -109,7 +103,7 @@
 .site-footer {
     clear: both;
     border-top: 1px solid $grey-color-light;
-    padding: $spacing-unit 0;
+    /*padding: $spacing-unit 0;*/
 }
 
 .footer-heading {
@@ -133,7 +127,7 @@
 .footer-col {
     float: left;
     margin-bottom: $spacing-unit / 2;
-    padding-left: $spacing-unit / 2;
+    /*padding-left: $spacing-unit / 2;*/
 }
 
 .footer-col-1 {
@@ -166,7 +160,7 @@
  * Page content
  */
 .page-content {
-    padding: $spacing-unit 0;
+    /*padding: $spacing-unit 0;*/
 }
 
 .page-heading {
