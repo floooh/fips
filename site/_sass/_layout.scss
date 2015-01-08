@@ -2,6 +2,9 @@
  * Site header
  */
 .site-header {
+    position: fixed;
+    z-index: 2;
+    width: 100%;
     border-bottom: 1px solid $grey-color-light;
     background-color: $header-background-color;
     min-height: $header-line-height;
@@ -11,7 +14,7 @@
     font-size: 48px;
     line-height: $header-line-height;
     letter-spacing: -1px;
-    margin-left: 20px;
+    margin-left: 60px;
     margin-bottom: 0;
     float: left;
 
@@ -24,7 +27,7 @@
 .site-subtitle {
     color: $title-color;
     position: relative;
-    top: 32px;
+    top: 30px;
     font-size: 20px;
     line-height: $base-line-height;
     margin-left: 10px;
@@ -43,6 +46,7 @@
     bottom: 0;
     left: 0;
     z-index: 0;
+    margin-left: 0;
 }
 
 .nav-item {
@@ -73,25 +77,21 @@
 
 label[for="nav-trigger"] {
     position: fixed;
-    top: 15px;
+    top: 22px;
     left: 15px;
     z-index: 2;
     width: 30px;
     height: 30px;
     cursor: pointer;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6'/><rect y='24' width='30' height='6'/><rect y='12' width='30' height='6'/></svg>");
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6' fill='white'/><rect y='24' width='30' height='6' fill='white'/><rect y='12' width='30' height='6' fill='white'/></svg>");
     background-size: contain;
 }
 
-.nav-trigger + label, .wrapper {
+.nav-trigger + label, .page-content {
     transition: left 0.2s;
 }
 
-.nav-trigger:checked + label {
-    left: 215px;
-}
-
-.nav-trigger:checked ~ .wrapper {
+.nav-trigger:checked ~ .page-content {
     left: 200px;
     box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
 }
@@ -160,7 +160,17 @@ label[for="nav-trigger"] {
  * Page content
  */
 .page-content {
-    /*padding: $spacing-unit 0;*/
+    min-width: 100%;
+    min-height: 100%;
+    background-color: white;
+    position: relative;
+    top: 70px;
+    bottom: 100%;
+    padding-top: 10px;
+    padding-left: 15px;
+    left: 0;
+    z-index: 1;
+    @extend %clearfix;
 }
 
 .page-heading {
