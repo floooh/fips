@@ -11,21 +11,23 @@
 } 
 
 .site-title {
+    font-weight: $header-font-weight;
     font-size: 48px;
     line-height: $header-line-height;
     letter-spacing: -1px;
-    margin-left: 60px;
+    margin-left: 32px;
     margin-bottom: 0;
     float: left;
 
     &,
     &:visited {
-        color: $title-color;
+        color: $header-title-color;
     }
 }
 
 .site-subtitle {
-    color: $title-color;
+    font-weight: $header-font-weight;
+    color: $header-title-color;
     position: relative;
     top: 30px;
     font-size: 20px;
@@ -45,6 +47,7 @@
     right: 0;
     bottom: 0;
     left: 0;
+    padding-left: 60px;
     z-index: 0;
     margin-left: 0;
 }
@@ -57,17 +60,18 @@
 
 .nav-item a {
     display: block;
-    padding: 1em;
+    padding: 0.25em;
+    padding-left: 10px;
     background: black;
     color: white;
-    font-size: 1.2em;
+    font-size: 1.0em;
     text-decoration: none;
-    transition: color 0.2s, background 0.5s;
+    transition: color 0.2s, background 0.2s;
 }
 
 .nav-item a:hover {
-    color: #ff0000;
-    background: #00ff00;
+    color: #000000;
+    background: #CCCCCC;
 }
 
 .nav-trigger {
@@ -77,7 +81,7 @@
 
 label[for="nav-trigger"] {
     position: fixed;
-    top: 22px;
+    top: 90px;
     left: 15px;
     z-index: 2;
     width: 30px;
@@ -93,7 +97,6 @@ label[for="nav-trigger"] {
 
 .nav-trigger:checked ~ .page-content {
     left: 200px;
-    box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
 }
 
 
@@ -101,10 +104,14 @@ label[for="nav-trigger"] {
  * Site footer
  */
 .site-footer {
-    clear: both;
+    position: fixed;
+    bottom: 0;
+    z-index: 2;
+    width: 100%;
+    height: $footer-line-height;
     border-top: 1px solid $grey-color-light;
-    /*padding: $spacing-unit 0;*/
-}
+    background-color: $header-background-color;
+} 
 
 .footer-heading {
     font-size: 18px;
@@ -160,14 +167,17 @@ label[for="nav-trigger"] {
  * Page content
  */
 .page-content {
-    min-width: 100%;
+    min-width: 80%;
     min-height: 100%;
     background-color: white;
     position: relative;
     top: 70px;
     bottom: 100%;
+    left: 20px;
+    margin-left: 60px;
     padding-top: 10px;
     padding-left: 15px;
+    padding-right: 15px;
     left: 0;
     z-index: 1;
     @extend %clearfix;
