@@ -4,29 +4,29 @@ title: Cross-Compiling
 permalink: crosscompiling.html
 ---
 
-### Cross-Compiling
+# Cross-Compiling
 
 Fips provides easy cross-compiling support to the following platforms:
 
-- iOS
-- Android (https://developer.android.com/tools/sdk/ndk/index.html)
-- emscripten (http://kripken.github.io/emscripten-site/index.html)
-- PNaCl (https://developer.chrome.com/native-client)
+- **iOS**
+- **Android** (https://developer.android.com/tools/sdk/ndk/index.html)
+- **emscripten** (http://kripken.github.io/emscripten-site/index.html)
+- **PNaCl** (https://developer.chrome.com/native-client)
 
 Cross-compilation to iOS is only supported on the OSX host platform. All
 other target platforms are supported on all 3 host platforms (OSX, Linux, Windows).
 
 
-#### Setting up the platform SDKs
+### Setting up the platform SDKs
 
 Fips provides simple commands to setup the SDKs for Android, emscripten and
 PNaCl:
 
-```bash
+{% highlight bash %}
 > ./fips setup emscripten
 > ./fips setup nacl
 > ./fips setup android
-```
+{% endhighlight %}
 
 This will download, unpack and setup the respective SDKs into a directory
 _fips-sdks_ next to the fips directory.
@@ -36,30 +36,30 @@ _fips-sdks_ next to the fips directory.
 You should also run 'fips diag tools' to make sure that all required
 tools are in the path:
 
-```bash
+{% highlight bash %}
 > ./fips diag tools
+...
+{% endhighlight %}
 
-```
-
-#### Testing cross-compilation
+### Testing cross-compilation
 
 Cross-compilation requires a portable code base, in the case of Android and
 PNaCl this is a bit non-trivial (e.g. the canonical C 'Hello World' doesn't
 work). Let's use the Oryol 3D engine for testing:
 
-```bash
+{% highlight bash %}
 > ./fips clone oryol
 > cd ../oryol
-```
+{% endhighlight %}
 
 First let's try whether **emscripten** compilation works:
 
-```bash
+{% highlight bash %}
 > ./fips set config emsc-make-release
 > ./fips build
 ...
 > ./fips run Triangle
-```
+{% endhighlight %}
 
 The last command should open the default web browser and a local http server.
 It may be necessary to refresh the page in case the http server needs too long
@@ -67,12 +67,12 @@ to start.
 
 Cross-compiling to **PNaCl** is just as easy, just use a different config:
 
-```bash
+{% highlight bash %}
 > ./fips set config pnacl-make-release
 > ./fips build
 ...
 > ./fips run Triangle
-```
+{% endhighlight %}
 
 Same for **Android**, note that Android provides 3 types of config, one for each
 CPU type. 'Running' an Android will only deploy the application to the device,
@@ -80,28 +80,28 @@ after that it must be started manually.
 
 > NOTE: './fips run' for Android is not implemented yet
 
-```bash
+{% highlight bash %}
 > ./fips build android-make-release
 > ./fips build androidx86-make-release
 > ./fips build androidmips-make-release
 
 > NOTE: Android MIPS is not yet fully supported on Oryol!
-```
+{% endhighlight %}
 
 Finally iOS: this works a bit diffently since iOS compiling and debugging
 works best directly in Xcode. Instead of a command line build, we only 
 generate the Xcode project files, and then start Xcode:
 
-```bash
+{% highlight bash %}
 > ./fips set config ios-xcode-debug
 > ./fips gen
 > ./fips open
-```
+{% endhighlight %}
 
 Once in Xcode, the samples can be compiled and debugged either in the simulator
 or on a real device (provided Xcode is properly setup for iOS development).
 
-#### Under the hood
+### Under the hood
 
 Cross-compiling currently has a few caveats:
 

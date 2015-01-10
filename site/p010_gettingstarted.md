@@ -4,26 +4,26 @@ title: Getting Started
 permalink: gettingstarted.html
 ---
 
-### Getting Started with fips
+# Getting Started with fips
 
 This is a step-by-step guide from installing fips to building a
 sample 'Hello World' project.
 
-#### You need:
+### You need:
 
 * Python 2.7.x
 * CMake (at least version 2.8.11)
 * a working C/C++ development environment for your OS (e.g. Xcode on OSX,
 make/gcc on Linux, Visual Studio on Windows)
 
-#### Setting up and testing fips:
+### Setting up and testing fips:
 
 Clone the fips git repo into a separate directory, and check if the 
 fips main script runs.
 
 >NOTE: on Windows, run 'fips' instead of './fips'! 
 
-```bash
+{% highlight bash %}
 > cd ~
 > mkdir fips-workspace
 > cd fips-workspace
@@ -33,13 +33,13 @@ fips main script runs.
 > ./fips
 run 'fips help' for more info
 > _
-```
+{% endhighlight %}
 
-#### Showing help:
+### Showing help:
 
 Run 'fips help' to get an overview of available commands:
 
-```bash
+{% highlight bash %}
 > ./fips help
 fips: the high-level, multi-platform build system wrapper
 v0.0.1
@@ -54,11 +54,11 @@ fips unset target
     unset currently active config or make-target
 
 > _
-```
+{% endhighlight %}
 
 You can show help for a specific command:
 
-```bash
+{% highlight bash %}
 > ./fips help diag
 fips diag
 fips diag all
@@ -66,14 +66,14 @@ fips diag tools
 fips diag configs
 fips diag imports
     run diagnostics and check for errors
-```
+{% endhighlight %}
 
-#### Check if required tools are installed
+### Check if required tools are installed
 
 Run 'fips diag tools' to check whether the required command line
 tools are found by fips:
 
-```bash
+{% highlight bash %}
 > ./fips diag tools
 === tools:
 git:    found
@@ -82,27 +82,27 @@ ccmake:    found
 make:    found
 ninja:    NOT FOUND
 xcodebuild:    found
-```
+{% endhighlight %}
 
 Install any tools which are shown as 'NOT FOUND'.
 
-#### Clone the sample project
+### Clone the sample project
 
 List the fips project registry, and clone the 'Hello World' sample
 project and its dependencies:
 
-```bash
+{% highlight bash %}
 > ./fips list registry
 === registry:
 ...
 fips-hello-world => https://github.com/floooh/fips-hello-world.git
 ...
-```
+{% endhighlight %}
 
 Clone the 'fips-hello-world' sample project. It's dependencies will also
 automatically be cloned from github:
 
-```bash
+{% highlight bash %}
 > ./fips clone fips-hello-world
 registry lookup: fips-hello-world => https://github.com/floooh/fips-hello-world.git
 Cloning into 'fips-hello-world'...
@@ -127,14 +127,14 @@ Receiving objects: 100% (60/60), 7.49 KiB | 0 bytes/s, done.
 Resolving deltas: 100% (15/15), done.
 Checking connectivity... done.
 > _
-```
+{% endhighlight %}
 
-#### Build and run the fips-hello-world project:
+### Build and run the fips-hello-world project:
 
 fips sample projects live side-by-side next to the fips directory,
 a fips project can be built by cd'ing to it, and running './fips build':
 
-```bash
+{% highlight bash %}
 > cd ../fips-hello-world
 > ./fips build
 === dependency: 'fips-hello-dep1':
@@ -152,11 +152,11 @@ dir '/Users/floh/fips-workspace/fips-hello-dep2' exists
 
 1 configs built
 > _
-```
+{% endhighlight %}
 
 Now run the compiled 'hello' executable:
 
-```bash
+{% highlight bash %}
 > ./fips run hello
 === run 'hello' (config: osx-xcode-debug, project: fips-hello-world):
 Hello World!
@@ -165,15 +165,15 @@ Hello from dep2!
 Imported string define: Bla
 Imported int define: 1
 > _
-```
+{% endhighlight %}
 
-#### Working with build configs
+### Working with build configs
 
 A build config describes how to build a project for different 
 platforms, build tools and build modes. Run 'fips list configs' to see
 a list of available configs:
 
-```bash
+{% highlight bash %}
 > fips list configs
 === configs:
 /Users/floh/fips-workspace/fips:
@@ -192,7 +192,7 @@ a list of available configs:
   pnacl-ninja-debug
   pnacl-ninja-release
 > _
-```
+{% endhighlight %}
 
 There is no hard rule for build config names, but usually they are made
 from 3 parts, first the target platform name (e.g. osx, linux, win32), 
@@ -206,7 +206,7 @@ It is possible to select a build config when building, for instance on
 OSX it is possible to use make instead of xcodebuild, the build result
 is the same, but the console output looks prettier:
 
-```bash
+{% highlight bash %}
 > ./fips build osx-make-release
 === dependency: 'fips-hello-dep1':
 dir '/Users/floh/fips-workspace/fips-hello-dep1' exists
@@ -217,11 +217,11 @@ dir '/Users/floh/fips-workspace/fips-hello-dep2' exists
 -- The C compiler identification is AppleClang 6.0.0.6000056
 ...
 > _
-```
+{% endhighlight %}
 
 To start from scratch and clean all generated files, run 'fips clean all':
 
-```bash
+{% highlight bash %}
 > ./fips clean all
 === clean: android-make-debug
 === clean: android-make-release
@@ -229,6 +229,6 @@ To start from scratch and clean all generated files, run 'fips clean all':
 === clean: pnacl-ninja-debug
 === clean: pnacl-ninja-release
 > _
-```
+{% endhighlight %}
 
 

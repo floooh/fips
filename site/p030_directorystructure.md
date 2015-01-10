@@ -4,13 +4,12 @@ title: Directory Structure
 permalink: dirstruct.html
 ---
 
-### Directory Structure
+# Directory Structure
 
 fips creates project directories and a few special directories on the same
 level as the fips directory itself.
 
 ```
-.
 ┣━━ fips/
 ┣━━ fips-build/
 ┣━━ fips-deploy/
@@ -20,7 +19,7 @@ level as the fips directory itself.
 ┣━━ .../
 ```
 
-#### The fips-build directory
+### The fips-build directory
 
 The **fips-build** directory contains the generated cmake build files, 
 separated in subdirectories by project name and config name. The
@@ -28,7 +27,6 @@ content of fips-build is created with the _'fips gen'_ action (or on the
 fly during _'fips build'_ or _'fips make'_):
 
 ```
-.
 ┗━━ fips-build/
     ┣━━ project-1/
     ┃   ┣━━ osx-xcode-debug/
@@ -46,7 +44,7 @@ fly during _'fips build'_ or _'fips make'_):
             ┗━━ ...
 ```
 
-#### The fips-deploy directory
+### The fips-deploy directory
 
 The **fips-deploy** directory contains the built executable files, also 
 separated in subdirectories by project and config name. The content of the
@@ -54,7 +52,6 @@ fips-deploy directory is created during the _'fips build'_ or _'fips make'_
 actions:
 
 ```
-.
 ┗━━ fips-build/
     ┣━━ project-1/
     ┃   ┣━━ osx-xcode-debug/
@@ -80,21 +77,20 @@ it is not dangerous to completely delete these directories.
 The fips command _'fips clean [config]'_ deletes the generated files for all, 
 the current, or a named config.
 
-#### The fips-sdks directory
+### The fips-sdks directory
 
 The fips-sdks directory contains the platform SDK files installed with:
 
-```bash
+{% highlight bash %}
 > fips setup emscripten
 > fips setup android
 > fips setup nacl
-```
+{% endhighlight %}
 
 The fips-sdks directory structure currently looks like this (details
 may change in the future):
 
 ```
-.
 ┗━━ fips-sdks/
     ┗━━ osx/
         ┣━━ emsdk_portable/
@@ -104,13 +100,12 @@ may change in the future):
         ┗━━ ...
 ```
 
-#### Special fips files in projects
+### Special fips files in projects
 
 A project needs at least a **fips.yml** file to be recognized as a fips project.
 Most projects have additional fips-specific files and directories:
 
 ```
-.
 ┗━━ project-1/
     ┣━━ fips.yml 
     ┣━━ fips 
