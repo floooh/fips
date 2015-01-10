@@ -10,4 +10,8 @@ twitter_username: flohofwoe
 github_username:  floooh
 
 # Build settings
-markdown: redcarpet 
+highlighter: pygments
+markdown: kramdown
+kramdown:
+    input: GFM
+
