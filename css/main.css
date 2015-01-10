@@ -171,8 +171,7 @@ pre {
   background: black;
   color: white;
   font-size: 1.0em;
-  text-decoration: none;
-  transition: color 0.2s, background 0.2s; }
+  text-decoration: none; }
 
 .nav-item a:hover {
   color: black;
