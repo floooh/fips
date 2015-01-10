@@ -6,7 +6,7 @@ permalink: index.html
 
 TODO!
 
-Highlighting tests:
+Syntax highlighting tests:
 
 {% highlight bash %}
 > cd bla
