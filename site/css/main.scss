@@ -27,10 +27,8 @@ $grey-color:       #828282;
 $grey-color-light: lighten($grey-color, 40%);
 $grey-color-dark:  darken($grey-color, 25%);
 
-$footer-line-height:    24px;
-
-// Width of the content area
-$content-width:    720px;
+$content-width:     720px;
+$nav-width:         200px;
 
 // Import partials from `sass_dir` (defaults to `_sass`)
 @import

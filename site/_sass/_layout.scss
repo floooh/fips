@@ -8,6 +8,7 @@
     border-bottom: 1px solid $grey-color-light;
     background-color: $header-background-color;
     min-height: $header-line-height;
+    height: $header-line-height;
 } 
 
 .site-title {
@@ -26,34 +27,29 @@
 }
 
 .site-subtitle {
+    position: relative;
     font-weight: $header-font-weight;
     color: $header-title-color;
-    position: relative;
-    top: 30px;
     font-size: 20px;
-    line-height: $base-line-height;
-    margin-left: 10px;
-    float: left;
 }
 
 .navigation {
     list-style: none;
     background: #111;
 
-    width: 100%;
-    height: 100%;
     position: fixed;
+    width: $nav-width;
+    height: 100%;
     top: 72px;
-    right: 0;
-    bottom: 0;
     left: 0;
-    padding-left: 60px;
     z-index: 0;
     margin-left: 0;
+    padding-top: 10px;
 }
 
 .nav-item {
     width: 200px;
+    padding-left: 10px;
     border-top: 1px solid #111;
     border-bottom: 1px solid #000;
 }
@@ -70,169 +66,25 @@
 }
 
 .nav-item a:hover {
-    color: #000000;
-    background: #CCCCCC;
-}
-
-.nav-trigger {
-    position: absolute;
-    clip: rect(0, 0, 0, 0);
-}
-
-label[for="nav-trigger"] {
-    position: fixed;
-    top: 90px;
-    left: 15px;
-    z-index: 2;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6' fill='white'/><rect y='24' width='30' height='6' fill='white'/><rect y='12' width='30' height='6' fill='white'/></svg>");
-    background-size: contain;
-}
-
-.nav-trigger + label, .page-content {
-    transition: left 0.2s;
-}
-
-.nav-trigger:checked ~ .page-content {
-    left: 200px;
-}
-
-
-/**
- * Site footer
- */
-.site-footer {
-    position: fixed;
-    bottom: 0;
-    z-index: 2;
-    width: 100%;
-    height: $footer-line-height;
-    border-top: 1px solid $grey-color-light;
-    background-color: $header-background-color;
-} 
-
-.footer-heading {
-    font-size: 18px;
-    margin-bottom: $spacing-unit / 2;
-}
-
-.contact-list,
-.social-media-list {
-    list-style: none;
-    margin-left: 0;
-}
-
-.footer-col-wrapper {
-    font-size: 15px;
-    color: $grey-color;
-    margin-left: -$spacing-unit / 2;
-    @extend %clearfix;
-}
-
-.footer-col {
-    float: left;
-    margin-bottom: $spacing-unit / 2;
-    /*padding-left: $spacing-unit / 2;*/
-}
-
-.footer-col-1 {
-    width: -webkit-calc(35% - (#{$spacing-unit} / 2));
-    width:         calc(35% - (#{$spacing-unit} / 2));
-}
-
-.footer-col-2 {
-    width: -webkit-calc(20% - (#{$spacing-unit} / 2));
-    width:         calc(20% - (#{$spacing-unit} / 2));
-}
-
-.footer-col-3 {
-    width: -webkit-calc(45% - (#{$spacing-unit} / 2));
-    width:         calc(45% - (#{$spacing-unit} / 2));
-}
-
-.footer-col-1,
-.footer-col-2 {
-    width: -webkit-calc(50% - (#{$spacing-unit} / 2));
-    width:         calc(50% - (#{$spacing-unit} / 2));
-}
-
-.footer-col-3 {
-    width: -webkit-calc(100% - (#{$spacing-unit} / 2));
-    width:         calc(100% - (#{$spacing-unit} / 2));
+    color: black;
+    background: white;
 }
 
 /**
  * Page content
  */
 .page-content {
-    min-width: 80%;
+    position: relative;
     min-height: 100%;
     background-color: white;
-    position: relative;
     top: 70px;
     bottom: 100%;
-    left: 20px;
-    margin-left: 60px;
-    padding-top: 10px;
+    margin-left: $nav-width;
+    padding-top: 20px;
     padding-left: 15px;
     padding-right: 15px;
-    left: 0;
+    padding-bottom: 20px;
     z-index: 1;
-    @extend %clearfix;
-}
-
-.page-heading {
-    font-size: 20px;
-}
-
-.post-list {
-    margin-left: 0;
-    list-style: none;
-
-    > li {
-        margin-bottom: $spacing-unit;
-    }
-}
-
-.post-meta {
-    font-size: $small-font-size;
-    color: $grey-color;
-}
-
-.post-link {
-    display: block;
-    font-size: 24px;
 }
 
 
-
-/**
- * Posts
- */
-.post-header {
-    margin-bottom: $spacing-unit;
-}
-
-.post-title {
-    font-size: 42px;
-    letter-spacing: -1px;
-    line-height: 1;
-}
-
-.post-content {
-    margin-bottom: $spacing-unit;
-
-    h2 {
-        font-size: 32px;
-    }
-
-    h3 {
-        font-size: 26px;
-    }
-
-    h4 {
-        font-size: 20px;
-    }
-}

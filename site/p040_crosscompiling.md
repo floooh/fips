@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Cross-Compiling
-permalink: /crosscompile/
+permalink: crosscompiling.html
 ---
 
 ### Cross-Compiling

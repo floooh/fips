@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Build Configs
-permalink: /buildconfigs/
+permalink: buildconfigs.html
 ---
 
 ### About build configs

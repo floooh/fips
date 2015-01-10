@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Getting Started 
-permalink: /getstarted/
+permalink: gettingstarted.html
 ---
 
 ### Getting Started with fips

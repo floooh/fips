@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Directory Structure
-permalink: /dirstruct/
+permalink: dirstruct.html
 ---
 
 ### Directory Structure
