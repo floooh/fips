@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Cross-Compiling</title>
+  <meta name="description" content="cmake-based high-level build system for multi-platform C/C++ projects
+">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://yourdomain.com/crosscompiling.html">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+    <!-- this is the 'fork me on github' label -->
+    <a href="https://github.com/floooh/fips"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+
+    <div class="site-title">
+        fips
+        <span class="site-subtitle">the friendly cmake wrapper</span>
+    </div>
+</header>
+
+
+
+
+    <ul class="navigation">
+    
+        
+        <li class="nav-item">
+            <a href="/index.html">About Fips</a>
+        </li>
+        
+    
+        
+    
+        
+        <li class="nav-item">
+            <a href="/gettingstarted.html">Getting Started</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/buildconfigs.html">Build Configs</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/dirstruct.html">Directory Structure</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/crosscompiling.html">Cross-Compiling</a>
+        </li>
+        
+    
+</ul>
+
+
+
+    <div class="page-content">
+        <div>
+
+  <article>
+    <h1 id="cross-compiling">Cross-Compiling</h1>
+
+<p>Fips provides easy cross-compiling support to the following platforms:</p>
+
+<ul>
+  <li><strong>iOS</strong></li>
+  <li><strong>Android</strong> (https://developer.android.com/tools/sdk/ndk/index.html)</li>
+  <li><strong>emscripten</strong> (http://kripken.github.io/emscripten-site/index.html)</li>
+  <li><strong>PNaCl</strong> (https://developer.chrome.com/native-client)</li>
+</ul>
+
+<p>Cross-compilation to iOS is only supported on the OSX host platform. All<br />
+other target platforms are supported on all 3 host platforms (OSX, Linux, Windows).</p>
+
+<h3 id="setting-up-the-platform-sdks">Setting up the platform SDKs</h3>
+
+<p>Fips provides simple commands to setup the SDKs for Android, emscripten and<br />
+PNaCl:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips setup emscripten
+&gt; ./fips setup nacl
+&gt; ./fips setup android</code></pre></div>
+
+<p>This will download, unpack and setup the respective SDKs into a directory<br />
+<em>fips-sdks</em> next to the fips directory.</p>
+
+<blockquote>
+  <p>NOTE: there is currently no way to use an SDK installed to another location</p>
+</blockquote>
+
+<p>You should also run ‘fips diag tools’ to make sure that all required<br />
+tools are in the path:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips diag tools
+...</code></pre></div>
+
+<h3 id="testing-cross-compilation">Testing cross-compilation</h3>
+
+<p>Cross-compilation requires a portable code base, in the case of Android and<br />
+PNaCl this is a bit non-trivial (e.g. the canonical C ‘Hello World’ doesn’t<br />
+work). Let’s use the Oryol 3D engine for testing:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips clone oryol
+&gt; <span class="nb">cd</span> ../oryol</code></pre></div>
+
+<p>First let’s try whether <strong>emscripten</strong> compilation works:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">set </span>config emsc-make-release
+&gt; ./fips build
+...
+&gt; ./fips run Triangle</code></pre></div>
+
+<p>The last command should open the default web browser and a local http server.<br />
+It may be necessary to refresh the page in case the http server needs too long<br />
+to start.</p>
+
+<p>Cross-compiling to <strong>PNaCl</strong> is just as easy, just use a different config:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">set </span>config pnacl-make-release
+&gt; ./fips build
+...
+&gt; ./fips run Triangle</code></pre></div>
+
+<p>Same for <strong>Android</strong>, note that Android provides 3 types of config, one for each<br />
+CPU type. ‘Running’ an Android will only deploy the application to the device,<br />
+after that it must be started manually.</p>
+
+<blockquote>
+  <p>NOTE: ‘./fips run’ for Android is not implemented yet</p>
+</blockquote>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips build android-make-release
+&gt; ./fips build androidx86-make-release
+&gt; ./fips build androidmips-make-release
+
+&gt; NOTE: Android MIPS is not yet fully supported on Oryol!</code></pre></div>
+
+<p>Finally iOS: this works a bit diffently since iOS compiling and debugging<br />
+works best directly in Xcode. Instead of a command line build, we only <br />
+generate the Xcode project files, and then start Xcode:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">set </span>config ios-xcode-debug
+&gt; ./fips gen
+&gt; ./fips open</code></pre></div>
+
+<p>Once in Xcode, the samples can be compiled and debugged either in the simulator<br />
+or on a real device (provided Xcode is properly setup for iOS development).</p>
+
+<h3 id="under-the-hood">Under the hood</h3>
+
+<p>Cross-compiling currently has a few caveats:</p>
+
+<ul>
+  <li>it is currently not possible to use existing SDKs in other filesystem locations</li>
+  <li>the <em>emscripten</em> SDK always uses the <em>incoming</em> branch, not the <em>master</em> branch</li>
+  <li>the NaCl SDK currently always uses the pepper_canary API version</li>
+  <li>for Android, ‘universal binaries’ containing ARM, X86 and MIPS binaries are <br />
+currently not supported</li>
+</ul>
+
+<p>Cross-compiling build settings are defined in cmake toolchain files in:</p>
+
+<ul>
+  <li>fips/cmake-toolchains/android.toolchain.cmake</li>
+  <li>fips/cmake-toolchains/emscripten.toolchain.cmake</li>
+  <li>fips/cmake-toolchains/ios.toolchain.cmake</li>
+  <li>fips/cmake-toolchains/pnacl.toolchain.cmake</li>
+</ul>
+
+<p>For some target platforms, cmake generates additional files during the cmake run:</p>
+
+<p>On <strong>Android</strong>, a Java wrapper application directory and AndroidManifest.xml <br />
+file is created (see fips/cmake/fips_android.cmake).</p>
+
+<p>On <strong>PNaCl</strong>, a manifest (.nmf) and a HTML file is generated, and the PNaCl <br />
+finalizer tool is run as post-build-step (see fips/cmake/fips_pnacl.cmake).</p>
+
+<p>On <strong>iOS</strong>, a .plist file is generated (see fips/cmake/fips_osx.cmake).</p>
+
+
+  </article>
+
+</div>
+
+    </div>
+
+  </body>
+
+</html>

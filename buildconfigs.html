@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Build Configs</title>
+  <meta name="description" content="cmake-based high-level build system for multi-platform C/C++ projects
+">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://yourdomain.com/buildconfigs.html">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+    <!-- this is the 'fork me on github' label -->
+    <a href="https://github.com/floooh/fips"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+
+    <div class="site-title">
+        fips
+        <span class="site-subtitle">the friendly cmake wrapper</span>
+    </div>
+</header>
+
+
+
+
+    <ul class="navigation">
+    
+        
+        <li class="nav-item">
+            <a href="/index.html">About Fips</a>
+        </li>
+        
+    
+        
+    
+        
+        <li class="nav-item">
+            <a href="/gettingstarted.html">Getting Started</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/buildconfigs.html">Build Configs</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/dirstruct.html">Directory Structure</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/crosscompiling.html">Cross-Compiling</a>
+        </li>
+        
+    
+</ul>
+
+
+
+    <div class="page-content">
+        <div>
+
+  <article>
+    <h1 id="about-build-configs">About build configs</h1>
+
+<p>A build config describes how cmake should generate build system files:</p>
+
+<ul>
+  <li>what <strong>target platform</strong> to compile to (e.g. OSX, Linux, emscripten, …)</li>
+  <li>what <strong>build tool or IDE</strong> to use (e.g. make, ninja, VStudio, Xcode…)</li>
+  <li>what <strong>build type</strong> to compile (Release, Debug, Profiling…)</li>
+  <li>what additional <strong>cmake options</strong> to use for tweaking the build</li>
+</ul>
+
+<p>Build configs have a unique, descriptive name, e.g.:</p>
+
+<ul>
+  <li>osx-xcode-debug</li>
+  <li>linux-make-debug</li>
+  <li>android-make-debug</li>
+</ul>
+
+<p>The build config name resolves to a small YML file in the <em>fips/configs</em><br />
+directory, for instance the <em>android-make-debug</em> config lives in the file <br />
+<em>fips/configs/android-make-debug.yml</em> and looks like this:</p>
+
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
+<span class="l-Scalar-Plain">platform</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">android</span>
+<span class="l-Scalar-Plain">generator</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Unix Makefiles</span>
+<span class="l-Scalar-Plain">build_tool</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">make</span>
+<span class="l-Scalar-Plain">build_type</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Debug</span>
+<span class="l-Scalar-Plain">defines</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">ANDROID_CPU</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">arm</span>
+    <span class="l-Scalar-Plain">ANDROID_API</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">android-19</span></code></pre></div>
+
+<p>Fips keeps all build files separate from each other by config name, building<br />
+a project for one config will not overwrite the build files of other configs.</p>
+
+<h3 id="listing-available-configs">Listing available configs</h3>
+
+<p>The currently available standard configs can be shown with the <br />
+‘fips list configs’ command from within the fips directory:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips list <span class="nv">configs</span>
+<span class="o">===</span> configs:
+from /Users/floh/projects/fips/configs:
+  android-make-debug
+  android-make-release
+  androidmips-make-debug
+  ...
+  pnacl-ninja-debug
+  pnacl-ninja-release
+&gt; _</code></pre></div>
+
+<p>When ‘fips list configs’ is executed inside a project directory, it will<br />
+also list any custom configs defined by that project. For instance from<br />
+inside the Oryol directory:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips list <span class="nv">configs</span>
+<span class="o">===</span> configs:
+from /Users/floh/projects/fips/configs:
+  android-make-debug
+  android-make-release
+  ...
+from /Users/floh/projects/oryol/fips-configs:
+  oryol-emsc-unittest
+&gt; _</code></pre></div>
+
+<p>Note the custom config called <em>oryol-emsc-unittest</em> at the end of the list.</p>
+
+<h3 id="config-names">Config names</h3>
+
+<p>There are no naming conventions for configs, so custom configs can have any<br />
+name that doesn’t clash with a standard config name.</p>
+
+<p>The standard config names are usually made of 3 parts separated by <br />
+dashes to be as self-descriptive as possible:</p>
+
+<ol>
+  <li>the target platform (e.g. osx, linux, win32)</li>
+  <li>the build tool (e.g. make, ninja, vstudio, …)</li>
+  <li>the build type (e.g release, debug, …)</li>
+</ol>
+
+<blockquote>
+  <p>[platform]-[buildtool]-[buildtype]</p>
+</blockquote>
+
+<p>For instance:</p>
+
+<p><strong>osx-xcode-debug</strong> means: target platform is OSX, the build tool is Xcode,<br />
+and the Debug version should be built (with debug info and no optimizations)</p>
+
+<h3 id="default-configs">Default configs</h3>
+
+<p>Every host platform has a default config which is used when no config name<br />
+is provided:</p>
+
+<ul>
+  <li><strong>Linux</strong>: linux-make-debug</li>
+  <li><strong>OSX</strong>: osx-xcode-debug</li>
+  <li><strong>Windows</strong>: win64-vstudio-debug</li>
+</ul>
+
+<h3 id="active-config">Active config</h3>
+
+<p>To save typing, an <em>active config</em> can be set per project with <br />
+<strong>fips set config [config]</strong>, this active config is used when a fips command<br />
+expects a config name, but none is given. </p>
+
+<p>The active config can be unset with <strong>fips unset config</strong>.</p>
+
+<p>Finally, the currently active config can be displayed with <strong>fips list settings</strong></p>
+
+<p>For instance in a fips project:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># first check that now active config is set:</span>
+&gt; ./fips list <span class="nv">settings</span>
+<span class="o">===</span> settings:
+  config: osx-xcode-debug <span class="o">(</span>default value<span class="o">)</span>
+  target: None <span class="o">(</span>default value<span class="o">)</span>
+
+<span class="c"># if no config is currently set, the default config is used:</span>
+&gt; ./fips <span class="nv">gen</span>
+<span class="o">===</span> generating: osx-xcode-debug
+...
+
+<span class="c"># now set a different &#39;active config&#39; </span>
+&gt; ./fips <span class="nb">set </span>config osx-make-debug
+<span class="s1">&#39;config&#39;</span> <span class="nb">set </span>to <span class="s1">&#39;osx-make-debug&#39;</span> in project <span class="s1">&#39;oryol&#39;</span>
+&gt; ./fips list <span class="nv">settings</span>
+<span class="o">===</span> settings:
+  config: osx-make-debug
+  target: None <span class="o">(</span>default value<span class="o">)</span>
+
+<span class="c"># when no config is given, the &#39;active config&#39; will now be used</span>
+&gt; ./fips <span class="nv">gen</span>
+<span class="o">===</span> generating: osx-make-debug
+...
+
+<span class="c"># it&#39;s possible to override the active config:</span>
+&gt; ./fips gen emsc-make-debug
+<span class="o">===</span> generating: emsc-make-debug
+...
+
+<span class="c"># unset the active config, so that it switches back to the default config:</span>
+&gt; ./fips <span class="nb">unset </span>config
+<span class="s1">&#39;config&#39;</span> <span class="nb">unset </span>in project <span class="s1">&#39;oryol&#39;</span>
+&gt; ./fips list <span class="nv">settings</span>
+<span class="o">===</span> settings:
+  config: osx-xcode-debug <span class="o">(</span>default value<span class="o">)</span>
+  target: None <span class="o">(</span>default value<span class="o">)</span></code></pre></div>
+
+<h3 id="commands-using-config-names">Commands using config names</h3>
+
+<p>The following fips commands expect a config name (excerpt from ‘fips help’):</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">fips build
+fips build <span class="o">[</span>config<span class="o">]</span>
+   perform a build <span class="k">for</span> current or named config
+
+fips clean
+fips clean all
+fips clean <span class="o">[</span>config<span class="o">]</span>
+    clean generated build files <span class="k">for</span> config
+
+fips config
+fips config <span class="o">[</span>config<span class="o">]</span>
+   configure the current or named build config
+   <span class="o">(</span>runs ccmake or cmake-gui<span class="o">)</span>
+
+fips gen
+fips gen <span class="o">[</span>config<span class="o">]</span>
+    generate build files <span class="k">for</span> current or named config
+
+fips make
+fips make <span class="o">[</span>target<span class="o">]</span>
+fips make <span class="o">[</span>target<span class="o">]</span> <span class="o">[</span>config<span class="o">]</span>
+   build a single target in current or named config
+
+fips open
+fips open <span class="o">[</span>config<span class="o">]</span>
+   open IDE <span class="k">for</span> current or named config
+
+fips run
+fips run <span class="o">[</span>target<span class="o">]</span>
+fips run <span class="o">[</span>target<span class="o">]</span> <span class="o">[</span>config<span class="o">]</span>
+   run a build target <span class="k">for</span> current or named config</code></pre></div>
+
+<h3 id="project-specific-custom-configs">Project-specific custom configs</h3>
+
+<p>A fips project can define its own configs in a special subdirectory<br />
+called <em>fips-configs</em>. As an example, check the Oryol project directory<br />
+(https://github.com/floooh/oryol.git):</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; <span class="nb">cd </span>oryol
+&gt; <span class="nb">cd </span>fips-configs
+&gt; ls
+oryol-emsc-unittest.yml
+&gt; cat oryol-emsc-unittest.yml
+<span class="c"># this demonstrates how to add a custom config to fips projects</span>
+<span class="c"># usually you&#39;ll want to tweak cmake-options with such</span>
+<span class="c"># custom settings</span>
+---
+platform: emscripten
+generator: Ninja
+build_tool: ninja
+build_type: Debug
+defines:
+    FIPS_UNITTESTS: ON
+    FIPS_UNITTESTS_HEADLESS: ON
+&gt; _</code></pre></div>
+
+
+  </article>
+
+</div>
+
+    </div>
+
+  </body>
+
+</html>
