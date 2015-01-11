@@ -73,27 +73,27 @@
         <div>
 
   <article>
-    <h1 id="about-build-configs">About build configs</h1>
+    <h1>About build configs</h1>
 
 <p>A build config describes how cmake should generate build system files:</p>
 
 <ul>
-  <li>what <strong>target platform</strong> to compile to (e.g. OSX, Linux, emscripten, …)</li>
-  <li>what <strong>build tool or IDE</strong> to use (e.g. make, ninja, VStudio, Xcode…)</li>
-  <li>what <strong>build type</strong> to compile (Release, Debug, Profiling…)</li>
-  <li>what additional <strong>cmake options</strong> to use for tweaking the build</li>
+<li>what <strong>target platform</strong> to compile to (e.g. OSX, Linux, emscripten, ...)</li>
+<li>what <strong>build tool or IDE</strong> to use (e.g. make, ninja, VStudio, Xcode...)</li>
+<li>what <strong>build type</strong> to compile (Release, Debug, Profiling...)</li>
+<li>what additional <strong>cmake options</strong> to use for tweaking the build</li>
 </ul>
 
 <p>Build configs have a unique, descriptive name, e.g.:</p>
 
 <ul>
-  <li>osx-xcode-debug</li>
-  <li>linux-make-debug</li>
-  <li>android-make-debug</li>
+<li>osx-xcode-debug</li>
+<li>linux-make-debug</li>
+<li>android-make-debug</li>
 </ul>
 
-<p>The build config name resolves to a small YML file in the <em>fips/configs</em><br />
-directory, for instance the <em>android-make-debug</em> config lives in the file <br />
+<p>The build config name resolves to a small YML file in the <em>fips/configs</em>
+directory, for instance the <em>android-make-debug</em> config lives in the file 
 <em>fips/configs/android-make-debug.yml</em> and looks like this:</p>
 
 <div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
@@ -105,13 +105,13 @@ directory, for instance the <em>android-make-debug</em> config lives in the file
     <span class="l-Scalar-Plain">ANDROID_CPU</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">arm</span>
     <span class="l-Scalar-Plain">ANDROID_API</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">android-19</span></code></pre></div>
 
-<p>Fips keeps all build files separate from each other by config name, building<br />
+<p>Fips keeps all build files separate from each other by config name, building
 a project for one config will not overwrite the build files of other configs.</p>
 
-<h3 id="listing-available-configs">Listing available configs</h3>
+<h3>Listing available configs</h3>
 
-<p>The currently available standard configs can be shown with the <br />
-‘fips list configs’ command from within the fips directory:</p>
+<p>The currently available standard configs can be shown with the 
+&#39;fips list configs&#39; command from within the fips directory:</p>
 
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips list <span class="nv">configs</span>
 <span class="o">===</span> configs:
@@ -124,8 +124,8 @@ from /Users/floh/projects/fips/configs:
   pnacl-ninja-release
 &gt; _</code></pre></div>
 
-<p>When ‘fips list configs’ is executed inside a project directory, it will<br />
-also list any custom configs defined by that project. For instance from<br />
+<p>When &#39;fips list configs&#39; is executed inside a project directory, it will
+also list any custom configs defined by that project. For instance from
 inside the Oryol directory:</p>
 
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips list <span class="nv">configs</span>
@@ -140,44 +140,44 @@ from /Users/floh/projects/oryol/fips-configs:
 
 <p>Note the custom config called <em>oryol-emsc-unittest</em> at the end of the list.</p>
 
-<h3 id="config-names">Config names</h3>
+<h3>Config names</h3>
 
-<p>There are no naming conventions for configs, so custom configs can have any<br />
-name that doesn’t clash with a standard config name.</p>
+<p>There are no naming conventions for configs, so custom configs can have any
+name that doesn&#39;t clash with a standard config name.</p>
 
-<p>The standard config names are usually made of 3 parts separated by <br />
+<p>The standard config names are usually made of 3 parts separated by 
 dashes to be as self-descriptive as possible:</p>
 
 <ol>
-  <li>the target platform (e.g. osx, linux, win32)</li>
-  <li>the build tool (e.g. make, ninja, vstudio, …)</li>
-  <li>the build type (e.g release, debug, …)</li>
+<li>the target platform (e.g. osx, linux, win32)</li>
+<li>the build tool (e.g. make, ninja, vstudio, ...)</li>
+<li>the build type (e.g release, debug, ...)</li>
 </ol>
 
 <blockquote>
-  <p>[platform]-[buildtool]-[buildtype]</p>
+<p>[platform]-[buildtool]-[buildtype]</p>
 </blockquote>
 
 <p>For instance:</p>
 
-<p><strong>osx-xcode-debug</strong> means: target platform is OSX, the build tool is Xcode,<br />
+<p><strong>osx-xcode-debug</strong> means: target platform is OSX, the build tool is Xcode,
 and the Debug version should be built (with debug info and no optimizations)</p>
 
-<h3 id="default-configs">Default configs</h3>
+<h3>Default configs</h3>
 
-<p>Every host platform has a default config which is used when no config name<br />
+<p>Every host platform has a default config which is used when no config name
 is provided:</p>
 
 <ul>
-  <li><strong>Linux</strong>: linux-make-debug</li>
-  <li><strong>OSX</strong>: osx-xcode-debug</li>
-  <li><strong>Windows</strong>: win64-vstudio-debug</li>
+<li><strong>Linux</strong>: linux-make-debug</li>
+<li><strong>OSX</strong>: osx-xcode-debug</li>
+<li><strong>Windows</strong>: win64-vstudio-debug</li>
 </ul>
 
-<h3 id="active-config">Active config</h3>
+<h3>Active config</h3>
 
-<p>To save typing, an <em>active config</em> can be set per project with <br />
-<strong>fips set config [config]</strong>, this active config is used when a fips command<br />
+<p>To save typing, an <em>active config</em> can be set per project with 
+<strong>fips set config [config]</strong>, this active config is used when a fips command
 expects a config name, but none is given. </p>
 
 <p>The active config can be unset with <strong>fips unset config</strong>.</p>
@@ -223,9 +223,9 @@ expects a config name, but none is given. </p>
   config: osx-xcode-debug <span class="o">(</span>default value<span class="o">)</span>
   target: None <span class="o">(</span>default value<span class="o">)</span></code></pre></div>
 
-<h3 id="commands-using-config-names">Commands using config names</h3>
+<h3>Commands using config names</h3>
 
-<p>The following fips commands expect a config name (excerpt from ‘fips help’):</p>
+<p>The following fips commands expect a config name (excerpt from &#39;fips help&#39;):</p>
 
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">fips build
 fips build <span class="o">[</span>config<span class="o">]</span>
@@ -259,10 +259,10 @@ fips run <span class="o">[</span>target<span class="o">]</span>
 fips run <span class="o">[</span>target<span class="o">]</span> <span class="o">[</span>config<span class="o">]</span>
    run a build target <span class="k">for</span> current or named config</code></pre></div>
 
-<h3 id="project-specific-custom-configs">Project-specific custom configs</h3>
+<h3>Project-specific custom configs</h3>
 
-<p>A fips project can define its own configs in a special subdirectory<br />
-called <em>fips-configs</em>. As an example, check the Oryol project directory<br />
+<p>A fips project can define its own configs in a special subdirectory
+called <em>fips-configs</em>. As an example, check the Oryol project directory
 (https://github.com/floooh/oryol.git):</p>
 
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; <span class="nb">cd </span>oryol
@@ -282,7 +282,6 @@ defines:
     FIPS_UNITTESTS: ON
     FIPS_UNITTESTS_HEADLESS: ON
 &gt; _</code></pre></div>
-
 
   </article>
 
