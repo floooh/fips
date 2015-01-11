@@ -4,36 +4,66 @@ title: About Fips
 permalink: index.html
 ---
 
-TODO!
+# fips is like Vagrant, but for cmake.
 
-Syntax highlighting tests:
+Fips simplifies working with many different cmake build configurations just
+as Vagrant simplifies working with many different Virtual Machine
+configurations.
 
-{% highlight bash %}
-> cd bla
-> ./fips blub
-{% endhighlight %}
+### Features Overview
 
-{% highlight yaml %}
----
-platform: emscripten 
-generator: Unix Makefiles
-build_tool: make
-build_type: Debug
-{% endhighlight %}
+Fips is a Python tool which provides an 'Integrated Build Environment'
+on the command line for multi-platform, modular C/C++ projects by wiring
+together existing build tools. 
 
-{% highlight cmake %}
-cmake_minimum_required(VERSION 2.8)
+#### An 'Integrated Build Environment"
 
-# include the fips main cmake file
-get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
-include("$${FIPS_ROOT_DIR}/cmake/fips.cmake")
+Fips doesn't reinvent the wheel by implement yet-another build system
+from scratch, but instead wires existing build tools together:
 
-# include_directories(src)
+* **cmake** to describe the project structure and generated build files
+* **make, ninja, xcodebuild** as command line build tools
+* IDE support as provided by cmake (i.e. **Visual Studio, Xcode, QtCreator**)
+* **git** to resolve external project dependencies
 
-fips_setup()
-fips_project($project)
-# fips_add_subdirectory(src/...)
-# fips_add_subdirectory(src/...)
-fips_finish()
-{% endhighlight %}
+#### Multi-Platform Support
+
+Fips can build on **Windows, OSX, Linux**, and cross-compile to **iOS,
+emscripten, PNaCl, Android**. Fips takes care of installing cross-platform
+SDKs with a simple command.
+
+#### Build Configuration Management
+
+Multi-platform projects often have dozens of different build configurations
+for combinations of target platforms, build tools and compilation settings.
+Fips simplifies working with many different build configurations and
+keeps build files for different configurations separate from each other.
+
+#### Dependency Management
+
+Fips projects can define exports-to and imports-from other fips projects,
+and thus serve as a simple package manager for code modules. External
+projects will be pulled in via git and fips will import external build targets,
+and setup header and library search paths. A project with external dependencies
+will look and feel exactly the same like a completely local project.
+
+#### Code Generation
+
+Fips implements a simple but very powerful code generation mechanism via 
+Python. Any Python script that is added as 'source file' is run during the 
+build process and is expected to generate one C/C++ header/source pair.
+
+#### Extensible
+
+Fips projects can implement their own fips commands, build configurations and
+code generator scripts. This allows projects to either implement missing
+fips features and integrate fips with existing workflows and build processes.
+
+
+### What fips is not:
+
+- fips is not a build job scheduler like Jenkins, Hudson, msbuild or ant
+- fips is not a distributed build system like Incredibuild
+- fips is not a replacement for cmake, premake or scons
+- fips is not a game asset exporter pipeline
 
