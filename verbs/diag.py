@@ -34,10 +34,13 @@ def check_configs(fips_dir, proj_dir) :
     dirs = [ fips_dir ]
     configs = config.load(fips_dir, proj_dir, '*')
     for cfg in configs :
-        if config.check_config_valid(cfg) :
-            log.ok(cfg['name'], 'ok')
+        log.colored(log.BLUE, cfg['name'])
+        valid, errors = config.check_config_valid(fips_dir, cfg)
+        if valid :
+            log.colored(log.GREEN, '  ok')
         else :
-            log.failed(cfg['name'], 'FAILED')
+            for error in errors :
+                log.info('  {}'.format(error))
 
 #-------------------------------------------------------------------------------
 def check_imports(fips_dir, proj_dir) :
