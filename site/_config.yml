@@ -12,7 +12,5 @@ github_username:  floooh
 
 # Build settings
 highlighter: pygments
-markdown: kramdown
-kramdown:
-    input: GFM
+markdown: redcarpet 
 
