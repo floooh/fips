@@ -21,7 +21,7 @@ together existing build tools.
 Fips doesn't reinvent the wheel by implement yet-another build system
 from scratch, but instead wires existing build tools together:
 
-* **cmake** to describe the project structure and generated build files
+* **cmake** to describe the project structure and generate build files
 * **make, ninja, xcodebuild** as command line build tools
 * IDE support as provided by cmake (i.e. **Visual Studio, Xcode, QtCreator**)
 * **git** to resolve external project dependencies
