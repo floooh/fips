@@ -16,7 +16,7 @@ def check_tools(fips_dir) :
     """check whether required command line tools can be found"""
     log.colored(log.YELLOW, '=== tools:')
     tools = [ git, cmake, ccmake, cmake_gui, make, ninja, xcodebuild, ant, java, node ]
-    platform = config.get_host_platform()
+    platform = util.get_host_platform()
     for tool in tools:
         if platform in tool.platforms :
             if tool.check_exists(fips_dir) :

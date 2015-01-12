@@ -5,7 +5,7 @@ import urllib
 import zipfile
 import subprocess
 
-from mod import log, util, config
+from mod import log, util
 
 archives = {
     'win': 'emsdk-1.27.0-portable-64bit.zip',
@@ -32,16 +32,16 @@ sdk_version = {
 #-------------------------------------------------------------------------------
 def get_sdk_url() :
     """lookup SDK url for this host platform"""
-    return urls[config.get_host_platform()]
+    return urls[util.get_host_platform()]
 
 #-------------------------------------------------------------------------------
 def get_sdk_dir(fips_dir) :
     """return the platform-specific SDK dir"""
-    return util.get_workspace_dir(fips_dir) + '/fips-sdks/' + config.get_host_platform()
+    return util.get_workspace_dir(fips_dir) + '/fips-sdks/' + util.get_host_platform()
 
 #-------------------------------------------------------------------------------
 def get_sdk_version() :
-    return sdk_version[config.get_host_platform()]
+    return sdk_version[util.get_host_platform()]
 
 #-------------------------------------------------------------------------------
 def get_emsdk_dir(fips_dir) :
@@ -51,7 +51,7 @@ def get_emsdk_dir(fips_dir) :
 #-------------------------------------------------------------------------------
 def get_archive_name() :
     """return name of sdk archive"""
-    return archives[config.get_host_platform()]
+    return archives[util.get_host_platform()]
 
 #-------------------------------------------------------------------------------
 def get_archive_path(fips_dir) :
@@ -79,7 +79,7 @@ def finish(sdk_dir) :
 
     FIXME: the used SDK version should be configurable!
     """
-    if config.get_host_platform() == 'win' :
+    if util.get_host_platform() == 'win' :
         # on Windows use a stable SDK version which doesn't require clang to be compiled
         subprocess.call(args=['emsdk.bat', 'update'], cwd=sdk_dir, shell=True)
         subprocess.call(args=['emsdk.bat', 'install', get_sdk_version()], cwd=sdk_dir, shell=True)
@@ -113,6 +113,10 @@ def setup(fips_dir, proj_dir) :
 
     log.colored(log.GREEN, "done.")
 
+#-------------------------------------------------------------------------------
+def check_exists(fips_dir) :
+    """check if the emscripten sdk has been installed"""
+    return os.path.isdir(get_emsdk_dir(fips_dir))
 
     
 

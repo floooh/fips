@@ -2,8 +2,15 @@
 
 import os.path
 import sys
+import platform
 import yaml
 from mod import log
+
+host_platforms = {
+    'Darwin':   'osx',
+    'Linux':    'linux',
+    'Windows':  'win'
+}
 
 #-------------------------------------------------------------------------------
 def fix_path(path) :
@@ -172,4 +179,13 @@ def url_download_hook(count, block_size, total_size) :
     """a download progress hook for urllib"""
     percent = int(count * block_size * 100 / total_size)
     sys.stdout.write('\r{}%'.format(percent))
+
+#-------------------------------------------------------------------------------
+def get_host_platform() :
+    """get the current host platform name (osx, linux or win)
+
+    :returns: platform name (osx, linux, win)
+    """
+    return host_platforms[platform.system()]
+
 

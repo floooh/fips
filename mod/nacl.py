@@ -6,7 +6,7 @@ import urllib
 import zipfile
 import subprocess
 
-from mod import log, util, config
+from mod import log, util
 
 #-------------------------------------------------------------------------------
 def get_sdk_url() :
@@ -16,7 +16,7 @@ def get_sdk_url() :
 #-------------------------------------------------------------------------------
 def get_sdk_dir(fips_dir) :
     """return the platform-specific SDK dir"""
-    return util.get_workspace_dir(fips_dir) + '/fips-sdks/' + config.get_host_platform()
+    return util.get_workspace_dir(fips_dir) + '/fips-sdks/' + util.get_host_platform()
 
 #-------------------------------------------------------------------------------
 def get_naclsdk_dir(fips_dir) :
@@ -73,4 +73,8 @@ def setup(fips_dir, proj_dir) :
 
     log.colored(log.GREEN, "done.")
 
+#-------------------------------------------------------------------------------
+def check_exists(fips_dir) :
+    """check if nacl sdk is installed"""
+    return os.path.isdir(get_naclsdk_dir(fips_dir))
     

@@ -99,7 +99,8 @@ def gen(fips_dir, proj_dir, cfg_name) :
     if configs :
         for cfg in configs :
             # check if config is valid
-            if config.check_config_valid(cfg) :
+            config_valid, _ = config.check_config_valid(fips_dir, cfg, print_errors = True)
+            if config_valid :
                 if gen_project(fips_dir, proj_dir, cfg, True) :
                     num_valid_configs += 1
                 else :
@@ -174,7 +175,8 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
     if configs :
         for cfg in configs :
             # check if config is valid
-            if config.check_config_valid(cfg) :
+            config_valid, _ = config.check_config_valid(fips_dir, cfg, print_errors=True)
+            if config_valid :
                 log.colored(log.YELLOW, "=== building: {}".format(cfg['name']))
 
                 if not gen_project(fips_dir, proj_dir, cfg, False) :
@@ -198,6 +200,8 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
                     num_valid_configs += 1
                 else :
                     log.error("Failed to build config '{}' of project '{}'".format(cfg['name'], proj_name))
+            else :
+                log.error("Config '{}' not valid in this environment".format(cfg['name']))
     else :
         log.error("No valid configs found for '{}'".format(cfg_name))
 
@@ -238,20 +242,20 @@ def run(fips_dir, proj_dir, cfg_name, target_name) :
                     html_name = target_name + '.html'
                 else :
                     html_name = target_name + '_pnacl.html'
-                if config.get_host_platform() == 'osx' :
+                if util.get_host_platform() == 'osx' :
                     try :
                         subprocess.call(
                             ['open http://localhost:8000/{} ; python {}/mod/httpserver.py'.format(html_name, fips_dir)],
                             cwd = deploy_dir, shell=True)
                     except KeyboardInterrupt :
                         pass
-                elif config.get_host_platform() == 'win' :
+                elif util.get_host_platform() == 'win' :
                     try :
                         cmd = ['cmd /c start http://localhost:8000/{} && python {}/mod/httpserver.py'.format(html_name, fips_dir)]
                         subprocess.call(cmd, cwd = deploy_dir, shell=True)
                     except KeyboardInterrupt :
                         pass
-                elif config.get_host_platform() == 'linux' :
+                elif util.get_host_platform() == 'linux' :
                     try :
                         subprocess.call(
                             ['xdg-open http://localhost:8000/{}; python {}/mod/httpserver.py'.format(html_name, fips_dir)],

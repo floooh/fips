@@ -1,12 +1,12 @@
 """build config functions"""
 
-import platform
 import os.path
 import glob
 import yaml
 from collections import OrderedDict
-from mod import log
+from mod import log, util
 from mod.tools import cmake, make, ninja, xcodebuild
+from mod import emscripten, nacl, android
 
 platforms = [
     'osx', 
@@ -76,12 +76,6 @@ build_types = [
     'Profiling'
 ]
 
-host_platforms = {
-    'Darwin':   'osx',
-    'Linux':    'linux',
-    'Windows':  'win'
-}
-
 default_config = {
     'osx':      'osx-xcode-debug',
     'linux':    'linux-make-debug',
@@ -125,20 +119,12 @@ def valid_build_type(name) :
     return name in build_types
 
 #-------------------------------------------------------------------------------
-def get_host_platform() :
-    """get the current host platform name (osx, linux or win)
-
-    :returns: platform name (osx, linux, win)
-    """
-    return host_platforms[platform.system()]
-
-#-------------------------------------------------------------------------------
 def get_default_config() :
     """get the default config name for this platform
 
     :returns:   default config name for this host platform
     """
-    return default_config[get_host_platform()]
+    return default_config[util.get_host_platform()]
 
 #-------------------------------------------------------------------------------
 def get_toolchain_for_platform(fips_dir, plat) :
@@ -244,7 +230,19 @@ def check_build_tool(fips_dir, tool_name) :
         return False;
 
 #-------------------------------------------------------------------------------
-def check_config_valid(fips_dir, cfg) :
+def check_sdk(fips_dir, platform_name) :
+    """check whether an external crossplatform-SDK is installed"""
+    if platform_name == 'emscripten' :
+        return emscripten.check_exists(fips_dir)
+    elif platform_name == 'pnacl' :
+        return nacl.check_exists(fips_dir)
+    elif platform_name == 'android' :
+        return android.check_exists(fips_dir)
+    else :
+        return True
+
+#-------------------------------------------------------------------------------
+def check_config_valid(fips_dir, cfg, print_errors=False) :
     """check if provided config is valid, and print errors if not
 
     :param cfg:     a loaded config object
@@ -268,8 +266,13 @@ def check_config_valid(fips_dir, cfg) :
         valid = False
 
     # check if the platform can be built on current host platform
-    if cfg['platform'] not in target_platforms[get_host_platform()] :
-        errors.append("'{}' is not a valid target platform for host '{}'".format(cfg['platform'], get_host_platform()))
+    if cfg['platform'] not in target_platforms[util.get_host_platform()] :
+        errors.append("'{}' is not a valid target platform for host '{}'".format(cfg['platform'], util.get_host_platform()))
+        valid = False
+
+    # check if the target platform SDK is installed
+    if not check_sdk(fips_dir, cfg['platform']) :
+        errors.append("platform sdk for '{}' not installed (see './fips help setup')".format(cfg['platform']))
         valid = False
 
     # check if the generator name is valid
@@ -291,6 +294,10 @@ def check_config_valid(fips_dir, cfg) :
     if not valid_build_type(cfg['build_type']) :
         errors.append("invalid build_type '{}' in '{}'".format(cfg['build_type'], cfg['path']))
         valid = False
+
+    if print_errors :
+        for error in errors :
+            log.error(error, False)
 
     return (valid, errors)
 

@@ -5,7 +5,7 @@ import urllib
 import zipfile
 import subprocess
 
-from mod import log, util, config
+from mod import log, util 
 
 sdk_urls = {
     'win' :     'http://dl.google.com/android/android-sdk_r22.6.2-windows.zip',
@@ -39,19 +39,19 @@ ndk_archives = {
 
 #-------------------------------------------------------------------------------
 def get_sdk_url() :
-    return sdk_urls[config.get_host_platform()]
+    return sdk_urls[util.get_host_platform()]
 
 #-------------------------------------------------------------------------------
 def get_ndk_url() :
-    return ndk_urls[config.get_host_platform()]
+    return ndk_urls[util.get_host_platform()]
 
 #-------------------------------------------------------------------------------
 def get_sdk_dir(fips_dir) :
-    return util.get_workspace_dir(fips_dir) + '/fips-sdks/' + config.get_host_platform()
+    return util.get_workspace_dir(fips_dir) + '/fips-sdks/' + util.get_host_platform()
 
 #-------------------------------------------------------------------------------
 def get_androidsdk_dir(fips_dir) :
-    return get_sdk_dir(fips_dir) + '/' + sdk_paths[config.get_host_platform()]
+    return get_sdk_dir(fips_dir) + '/' + sdk_paths[util.get_host_platform()]
 
 #-------------------------------------------------------------------------------
 def get_androidndk_dir(fips_dir) :
@@ -59,11 +59,11 @@ def get_androidndk_dir(fips_dir) :
 
 #-------------------------------------------------------------------------------
 def get_androidsdk_archive_path(fips_dir) :
-    return get_sdk_dir(fips_dir) + '/' + sdk_archives[config.get_host_platform()]
+    return get_sdk_dir(fips_dir) + '/' + sdk_archives[util.get_host_platform()]
 
 #-------------------------------------------------------------------------------
 def get_androidndk_archive_path(fips_dir) :
-    return get_sdk_dir(fips_dir) + '/' + ndk_archives[config.get_host_platform()]
+    return get_sdk_dir(fips_dir) + '/' + ndk_archives[util.get_host_platform()]
 
 #-------------------------------------------------------------------------------
 def get_adb_path(fips_dir) :
@@ -89,7 +89,7 @@ def uncompress(fips_dir, path) :
 #-------------------------------------------------------------------------------
 def update_android_sdk(fips_dir, proj_dir) :
     # FIXME: hardcoded version numbers should be configurable
-    if config.get_host_platform() == 'win' :
+    if util.get_host_platform() == 'win' :
         cmd = ['{}/tools/android.bat'.format(get_androidsdk_dir(fips_dir)),
                'update','sdk',
                '-f', '-u', '--all',
@@ -135,3 +135,7 @@ def setup(fips_dir, proj_dir) :
 
     log.colored(log.GREEN, "done.")
 
+#-------------------------------------------------------------------------------
+def check_exists(fips_dir) :
+    """check if the android sdk/ndk has been installed"""
+    return os.path.isdir(get_androidsdk_dir(fips_dir)) and os.path.isdir(get_androidndk_dir(fips_dir))
