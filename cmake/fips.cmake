@@ -144,6 +144,9 @@ macro(fips_setup)
         message(WARNING "Python not found, code generation will be disabled!")
     endif()
 
+    # write empty target files (will be populated in the fips_end macros)
+    fips_reset_targets_list()
+
     # load project-local fips-include.cmake if exists
     if (EXISTS "${FIPS_PROJECT_DIR}/fips-include.cmake")
         include("${FIPS_PROJECT_DIR}/fips-include.cmake")
@@ -218,6 +221,9 @@ macro(fips_end_module)
         fips_handle_py_files_posttarget(${CurModuleName} "${CurPyFiles}")
     endif()
 
+    # record target name and type in the fips_targets.yml file
+    fips_addto_targets_list(${CurModuleName} "module")
+
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -241,6 +247,10 @@ macro(fips_end_lib)
     # add library target
     add_library(${CurLibraryName} ${CurSources})
     fips_apply_target_group(${CurLibraryName})
+    
+    # record target name and type in the fips_targets.yml file
+    fips_addto_targets_list(${CurLibraryName} "lib")
+
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -341,6 +351,9 @@ macro(fips_end_app)
     # setup executable output directory and postfixes (_debug, etc...)
     fips_exe_output_directory(${CurAppName})    
     fips_config_postfixes_for_exe(${CurAppName})
+
+    # record target name and type in the fips_targets.yml file
+    fips_addto_targets_list(${CurAppName} "app")
 
 endmacro()
 

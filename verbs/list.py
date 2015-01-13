@@ -13,7 +13,7 @@ list imports        -- list project imports
 list                -- same as 'list all'
 """
 
-from mod import log, util, config, registry, settings, dep
+from mod import log, util, config, project, registry, settings, dep
 
 #-------------------------------------------------------------------------------
 def list_build_tools() :
@@ -72,6 +72,31 @@ def list_settings(proj_dir) :
         tgt_default = ' (default value)' if tgt_name == settings.get_default('target') else ''
         log.info('  {}config:{} {}{}'.format(log.BLUE, log.DEF, cfg_name, cfg_default))
         log.info('  {}target:{} {}{}'.format(log.BLUE, log.DEF, tgt_name, tgt_default))
+    else :
+        log.info('  currently not in a valid project directory')
+
+#-------------------------------------------------------------------------------
+def list_targets(fips_dir, proj_dir, args) :
+    log.colored(log.YELLOW, "=== targets:")
+    if util.is_valid_project_dir(proj_dir) :
+        # get config name
+        if len(args) == 0 :
+            cfg_name = settings.get(proj_dir, 'config')
+        else :
+            cfg_name = args[0]
+        log.info('{}  config:{} {}'.format(log.BLUE, log.DEF, cfg_name))
+
+        # get the target list
+        success, targets = project.get_target_list(fips_dir, proj_dir, cfg_name)
+        if success :
+            # split targets by type
+            for type in ['lib', 'module', 'app'] :
+                type_targets = [tgt for tgt in targets if targets[tgt] == type]
+                log.colored(log.BLUE, '  {}:'.format(type))
+                for tgt in type_targets :
+                    log.info('    ' + tgt)
+        else :
+            log.info("  can't fetch project target list, please run 'fips gen' first!")  
     else :
         log.info('  currently not in a valid project directory')
 
@@ -184,6 +209,9 @@ def run(fips_dir, proj_dir, args) :
     if noun in ['all', 'imports'] :
         list_imports(fips_dir, proj_dir)
         ok = True
+    if noun in ['all', 'targets'] :
+        list_targets(fips_dir, proj_dir, args[1:])
+        ok = True
     if not ok :
         log.error("invalid noun '{}'".format(noun))
 
@@ -200,6 +228,7 @@ def help() :
              "fips list generators\n"
              "fips list registry\n"
              "fips list settings\n"
+             "fips list targets [config]\n"
              + log.DEF +
              "    list available configs, build-tools, etc...")
 

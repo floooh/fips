@@ -3,6 +3,7 @@
 import os
 import shutil
 import subprocess
+import yaml
 
 from mod import log, util, config, dep, template
 from mod.tools import git, cmake, make, ninja, xcodebuild, ccmake, cmake_gui
@@ -300,6 +301,32 @@ def clean(fips_dir, proj_dir, cfg_name) :
             if os.path.isdir(deploy_dir) :
                 shutil.rmtree(deploy_dir)
                 log.info("  deleted '{}'".format(deploy_dir))
+    else :
+        log.error("No valid configs found for '{}'".format(cfg_name))
+
+#-------------------------------------------------------------------------------
+def get_target_list(fips_dir, proj_dir, cfg_name) :
+    """get project targets config name, only works
+    if a cmake run was performed before
+
+    :param fips_dir:        absolute path to fips
+    :param proj_dir:        absolute project path
+    :param cfg_name:        the config name
+    :returns:   (success, targets)
+    """
+    proj_name = util.get_project_name_from_dir(proj_dir)
+    configs = config.load(fips_dir, proj_dir, cfg_name)
+    if configs :
+        cfg = configs[0]
+        build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+        targets_path = build_dir + '/fips_targets.yml'
+        if os.path.isfile(targets_path) :
+            targets = []
+            with open(targets_path) as f :
+                targets = yaml.load(f)
+            return True, targets
+        else :
+            return False, []
     else :
         log.error("No valid configs found for '{}'".format(cfg_name))
 

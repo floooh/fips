@@ -131,7 +131,6 @@ def is_valid_project_dir(proj_dir) :
     """
     if os.path.isdir(proj_dir) :
         if not os.path.isfile(proj_dir + '/fips.yml') :
-            log.warn("no file 'fips.yml' in project dir '{}'".format(proj_dir))
             return False
         return True
     else :

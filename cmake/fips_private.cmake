@@ -145,3 +145,19 @@ function(fips_exe_output_directory target)
     endif()
 endfunction()
 
+#-------------------------------------------------------------------------------
+#   fips_reset_targets_list()
+#   Clears a .yml file which keeps track of all targets.
+#
+function(fips_reset_targets_list)
+    file(WRITE "${CMAKE_BINARY_DIR}/fips_targets.yml" "---\n")
+endfunction()
+
+#-------------------------------------------------------------------------------
+#   fips_addto_targets_list(target type)
+#   Adds a new entry to the targets type list, this is called from 
+#   the fips_end_xxx() functions.
+#
+function(fips_addto_targets_list target type)
+    file(APPEND "${CMAKE_BINARY_DIR}/fips_targets.yml" "${target} : ${type}\n")
+endfunction()
