@@ -329,7 +329,7 @@ def check_imports(fips_dir, proj_dir) :
                 if git.check_out_of_sync(imp_proj_dir) :
                     log.warn("  '{}' is out of sync with remote git repo".format(imp_proj_dir))
                 else :
-                    log.colored(log.GREEN, '  ok')
+                    log.colored(log.GREEN, '  uptodate')
             else :
                 log.warn("  '{}' does not exist, please run 'fips fetch'".format(imp_proj_dir))
     if success and num_imports == 0 :

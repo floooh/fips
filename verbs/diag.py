@@ -12,6 +12,15 @@ from mod.tools import make, ninja, xcodebuild, ant, java, node
 from mod import config, util, log, dep
 
 #-------------------------------------------------------------------------------
+def check_fips(fips_dir) :
+    """check whether fips is uptodate"""
+    log.colored(log.YELLOW, '=== fips:')
+    if git.check_branch_out_of_sync(fips_dir, 'master') :
+        log.warn("'fips' is not update, please run 'git pull' in fips directory!")
+    else :
+        log.colored(log.GREEN, '  uptodate')
+
+#-------------------------------------------------------------------------------
 def check_tools(fips_dir) :
     """check whether required command line tools can be found"""
     log.colored(log.YELLOW, '=== tools:')
@@ -47,7 +56,9 @@ def check_imports(fips_dir, proj_dir) :
     """recursively check imports"""
     log.colored(log.YELLOW, '=== imports:')
     if util.is_valid_project_dir(proj_dir) :
-        dep.check_imports(fips_dir, proj_dir) 
+        dep.check_imports(fips_dir, proj_dir)
+    else :
+        log.warn('currently not in a project directory')
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
@@ -61,14 +72,17 @@ def run(fips_dir, proj_dir, args) :
     ok = False
     if len(args) > 0 :
         noun = args[0]
-    if noun in ['all', 'tools'] :
-        check_tools(fips_dir)
-        ok = True
     if noun in ['all', 'configs'] :
         check_configs(fips_dir, proj_dir)
         ok = True
     if noun in ['all', 'imports'] :
         check_imports(fips_dir, proj_dir)
+        ok = True
+    if noun in ['all', 'tools'] :
+        check_tools(fips_dir)
+        ok = True
+    if noun in ['all', 'fips'] :
+        check_fips(fips_dir)
         ok = True
     if not ok :
         log.error("invalid noun '{}'".format(noun))
@@ -79,6 +93,7 @@ def help() :
     log.info(log.YELLOW +
              "fips diag\n"
              "fips diag all\n"
+             "fips diag fips\n"
              "fips diag tools\n"
              "fips diag configs\n"
              "fips diag imports\n"

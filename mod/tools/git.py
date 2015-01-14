@@ -129,3 +129,12 @@ def check_out_of_sync(proj_dir) :
                     
     return out_of_sync
 
+#-------------------------------------------------------------------------------
+def check_branch_out_of_sync(proj_dir, branch) :
+    """check if a single branch is out of sync with remote repo"""
+    out_of_sync = False
+    remote_branches = get_branches(proj_dir)
+    remote_rev = get_remote_rev(proj_dir, remote_branches[branch])
+    local_rev = get_local_rev(proj_dir, branch)
+    return remote_rev != local_rev
+
