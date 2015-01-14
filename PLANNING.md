@@ -1,5 +1,6 @@
 
 #### Workspace:
+
 - a directory with several **projects**
 - exactly one **fips** directory
 - 2 ways to setup fips:
