@@ -7,7 +7,7 @@ permalink: index.html
 # fips is like Vagrant, but for cmake.
 
 Fips simplifies working with many different cmake build configurations just
-as Vagrant simplifies working with many different Virtual Machine
+like Vagrant simplifies working with many different Virtual Machine
 configurations.
 
 ### Features Overview
@@ -18,10 +18,10 @@ together existing build tools.
 
 #### An 'Integrated Build Environment"
 
-Fips doesn't reinvent the wheel by implement yet-another build system
+Fips doesn't reinvent the wheel by implementing yet-another build system
 from scratch, but instead wires existing build tools together:
 
-* **cmake** to describe the project structure and generate build files
+* **cmake** to describe the project structure and generate project files
 * **make, ninja, xcodebuild** as command line build tools
 * IDE support as provided by cmake (i.e. **Visual Studio, Xcode, QtCreator**)
 * **git** to resolve external project dependencies
@@ -29,15 +29,18 @@ from scratch, but instead wires existing build tools together:
 #### Multi-Platform Support
 
 Fips can build on **Windows, OSX, Linux**, and cross-compile to **iOS,
-emscripten, PNaCl, Android**. Fips takes care of installing cross-platform
-SDKs with a simple command.
+emscripten, PNaCl** and **Android**. Fips also takes care of setting 
+the cross-platform SDKs and provides a unified cmake build environment 
+for all target platforms. Instead of fighting the many different build
+systems used by those cross-platform SDKs you only maintain a single set 
+of cmake files for all target platforms.
 
 #### Build Configuration Management
 
 Multi-platform projects often have dozens of different build configurations
-for combinations of target platforms, build tools and compilation settings.
-Fips simplifies working with many different build configurations and
-keeps build files for different configurations separate from each other.
+for combinations of target platforms, build tools and build settings.
+Fips makes it easy to work with many different build configurations, and
+keeps the build files for each configuration separated from each other.
 
 #### Dependency Management
 
