@@ -6,6 +6,7 @@ import zipfile
 import subprocess
 
 from mod import log, util 
+from mod.tools import java
 
 sdk_urls = {
     'win' :     'http://dl.google.com/android/android-sdk_r22.6.2-windows.zip',
@@ -106,6 +107,11 @@ def update_android_sdk(fips_dir, proj_dir) :
 def setup(fips_dir, proj_dir) :
     """setup the Android SDK and NDK"""
     log.colored(log.YELLOW, '=== setup Android SDK/NDK :')
+
+    # first make sure that java is present, otherwise the Android
+    # SDK setup will finish without errors, but is not actually usable
+    if not java.check_exists(fips_dir) :
+        log.error("please install java first (see './fips diag tools')")
 
     ensure_sdk_dirs(fips_dir)
 
