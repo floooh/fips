@@ -51,8 +51,8 @@ not, simply run a 'git pull' from within the fips directory to get the
 latest version.
 
 {% highlight bash %}
-> ./fips diag fips
-FIXME
+=== fips:
+  uptodate
 {% endhighlight %}
 
 './fips diag configs' goes through all existing build config files, checks
