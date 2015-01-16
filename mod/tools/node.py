@@ -2,7 +2,7 @@
 import subprocess
 
 name = 'node'
-platforms = ['osx', 'linux']
+platforms = ['linux']
 optional = True
 not_found = 'node.js required for emscripten cross-compiling'
 

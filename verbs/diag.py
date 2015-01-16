@@ -7,7 +7,7 @@ diag imports    -- check all imports
 diag            -- same as 'diag all'
 """
 
-from mod.tools import git, cmake, ccmake, cmake_gui
+from mod.tools import git, cmake, ccmake, cmake_gui, python2
 from mod.tools import make, ninja, xcodebuild, ant, java, node
 from mod import config, util, log, dep
 
@@ -24,7 +24,7 @@ def check_fips(fips_dir) :
 def check_tools(fips_dir) :
     """check whether required command line tools can be found"""
     log.colored(log.YELLOW, '=== tools:')
-    tools = [ git, cmake, ccmake, cmake_gui, make, ninja, xcodebuild, ant, java, node ]
+    tools = [ git, cmake, ccmake, cmake_gui, make, ninja, xcodebuild, java, ant, node, python2 ]
     platform = util.get_host_platform()
     for tool in tools:
         if platform in tool.platforms :
