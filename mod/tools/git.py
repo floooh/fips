@@ -34,7 +34,6 @@ def clone(url, branch, name, cwd) :
     if branch :
         cmd.extend(['--branch', branch, '--single-branch', '--depth', '10'])
     cmd.extend([url, name])
-    print(cmd)
     res = subprocess.call(cmd, cwd=cwd)
     return res == 0
 
@@ -47,14 +46,17 @@ def get_branches(proj_dir) :
     :returns:           dictionary of all local and remote branches
     """
     branches = {}
-    output = subprocess.check_output(['git', 'branch', '-vv'], cwd=proj_dir)
-    lines = output.splitlines()
-    for line in lines :
-        tokens = line[2:].split()
-        local_branch = tokens[0]
-        remote_branch = tokens[2][1:-1]
-        branches[local_branch] = remote_branch
-    return branches
+    try:
+        output = subprocess.check_output(['git', 'branch', '-vv'], cwd=proj_dir)
+        lines = output.splitlines()
+        for line in lines :
+            tokens = line[2:].split()
+            local_branch = tokens[0]
+            remote_branch = tokens[2][1:-1]
+            branches[local_branch] = remote_branch
+    except subprocess.CalledProcessError :
+        log.error("failed to call 'git branch -vv'")
+    return branches;
 
 #-------------------------------------------------------------------------------
 def has_uncommitted_files(proj_dir) :
@@ -63,11 +65,15 @@ def has_uncommitted_files(proj_dir) :
     :param proj_dir:    a git repo dir
     :returns:           True/False and output string
     """
-    output = subprocess.check_output(['git', 'status', '-s'], cwd=proj_dir)
-    if len(output) > 0 :
-        return True, output
-    else :
-        return False, output
+    try :
+        output = subprocess.check_output(['git', 'status', '-s'], cwd=proj_dir)
+        if len(output) > 0 :
+            return True, output
+        else :
+            return False, output
+    except subprocess.CalledProcessError :
+        log.error("failed to call 'git status -s'")
+        return False, ''
 
 #-------------------------------------------------------------------------------
 def get_remote_rev(proj_dir, remote_branch) :
@@ -75,11 +81,15 @@ def get_remote_rev(proj_dir, remote_branch) :
 
     :param proj_dir:        a git repo dir
     :param remote_branch:   remote branch (e.g. origin/master)
-    :returns:               the revision string of the remote branch head
+    :returns:               the revision string of the remote branch head or None
     """
     tokens = remote_branch.split('/')
-    output = subprocess.check_output(['git', 'ls-remote', tokens[0], tokens[1]], cwd=proj_dir)
-    return output.split()[0]
+    try :
+        output = subprocess.check_output(['git', 'ls-remote', tokens[0], tokens[1]], cwd=proj_dir)
+        return output.split()[0]
+    except subprocess.CalledProcessError :
+        log.error("failed to call 'git ls-remote'")
+        return None
 
 #-------------------------------------------------------------------------------
 def get_local_rev(proj_dir, local_branch) :
@@ -87,10 +97,14 @@ def get_local_rev(proj_dir, local_branch) :
 
     :param proj_dir:        a git repo dir
     :param local_branch:    local branch name (e.g. master)
-    :returns:               the revision string of the local branch head
+    :returns:               the revision string of the local branch head or None
     """
-    output = subprocess.check_output(['git', 'rev-parse', local_branch], cwd=proj_dir)
-    return output.rstrip()
+    try :
+        output = subprocess.check_output(['git', 'rev-parse', local_branch], cwd=proj_dir)
+        return output.rstrip()
+    except subprocess.CalledProcessError :
+        log.error("failed to call 'git rev-parse'")
+        return None
     
 #-------------------------------------------------------------------------------
 def check_out_of_sync(proj_dir) :
