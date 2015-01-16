@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Build Projects</title>
+  <meta name="description" content="cmake-based high-level build system for multi-platform C/C++ projects
+">
+
+  <link rel="stylesheet" href="/fips/css/main.css">
+  <link rel="canonical" href="http://floooh.github.com/fips/build.html">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+    <!-- this is the 'fork me on github' label -->
+    <a href="https://github.com/floooh/fips"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+
+    <div class="site-title">
+        fips
+        <span class="site-subtitle">the friendly cmake wrapper</span>
+    </div>
+</header>
+
+
+
+
+    <ul class="navigation">
+    
+        
+        <li class="nav-item">
+            <a href="/fips/index.html">About Fips</a>
+        </li>
+        
+    
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/getstarted.html">Get Started</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/build.html">Build Projects</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/troubleshooting.html">Troubleshooting</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/crosscompiling.html">Cross-Compiling</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/dirstruct.html">Directory Structure</a>
+        </li>
+        
+    
+</ul>
+
+
+
+    <div class="page-content">
+        <div>
+
+  <article>
+    <h1>Build Projects</h1>
+
+<p>To build the default build configuration of a &#39;fipsified&#39; project for your 
+host platform, simply run &#39;./fips build&#39; in its root directory:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; <span class="nb">cd</span> ~/fips-workspace
+&gt; git clone https://github.com/fips-hello-world.git
+&gt; <span class="nb">cd </span>fips-hello-world
+&gt; ./fips build
+...
+&gt; _</code></pre></div>
+
+<p>By default, a non-optimized <em>debug</em> version will be built, to build
+an optimized <em>release</em> version append the configuration name that is 
+right for your host platform:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># on OSX:</span>
+&gt; ./fips build osx-xcode-release
+...
+<span class="c"># on Linux:</span>
+&gt; ./fips build linux-make-release
+...
+<span class="c"># on Windows:</span>
+&gt; ./fips build win64-make-release
+...
+&gt; _</code></pre></div>
+
+<h3>Build Configs</h3>
+
+<p>Build configs like <em>osx-xcode-release</em> are the core feature of fips. A
+build config tells cmake how to compile the project:</p>
+
+<ul>
+<li>the <strong>target platform</strong> to build for</li>
+<li>the <strong>build tool</strong> to use</li>
+<li>the <strong>build type</strong> (e.g. debug or release)</li>
+<li>additional cmake options to customize a build</li>
+</ul>
+
+<p>To get a list of build configurations, run &#39;./fips list configs&#39;:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips list configs
+from /Users/floh/projects/fips/configs:
+  android-make-debug
+  android-make-release
+  android-ninja-debug
+  android-ninja-release
+...
+  win32-vstudio-debug
+  win32-vstudio-release
+  win64-vstudio-debug
+  win64-vstudio-release
+&gt; _</code></pre></div>
+
+<p>There are dozens of build configs, but not all are supported on every
+host platform, to test which build configs are supported, run 
+&#39;./fips diag configs&#39;:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips diag <span class="nv">configs</span>
+<span class="o">===</span> configs:
+android-make-debug
+  ok
+android-make-release
+  ok
+android-ninja-debug
+  build tool <span class="s1">&#39;ninja&#39;</span> not found
+android-ninja-release
+  build tool <span class="s1">&#39;ninja&#39;</span> not found
+...
+&gt; _</code></pre></div>
+
+<p>In this example, the build configurations which use the &#39;ninja&#39; build tool
+can not be used because ninja is currently not installed (see also &#39;./fips
+diag tools&#39;).</p>
+
+<h3>Active Config</h3>
+
+<p>To save typing, an <em>active config</em> can be set per project. This will
+be used if a fips command expects a config name, but none is given. 
+Use &#39;./fips set config [config-name]&#39; if you
+want to compile the release version of a project instead of the default
+debug version whenever &#39;./fips build&#39; is run:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># on OSX:</span>
+&gt; ./fips <span class="nb">set </span>config osx-xcode-release
+<span class="s1">&#39;config&#39;</span> <span class="nb">set </span>to <span class="s1">&#39;osx-xcode-release&#39;</span> in project <span class="s1">&#39;fips-hello-world&#39;</span>
+&gt; ./fips build
+...
+<span class="c"># on Linux:</span>
+&gt; ./fips <span class="nb">set </span>config linux-make-release
+<span class="s1">&#39;config&#39;</span> <span class="nb">set </span>to <span class="s1">&#39;linux-make-release&#39;</span> in project <span class="s1">&#39;fips-hello-world&#39;</span>
+&gt; ./fips build
+...
+<span class="c"># on Windows:</span>
+&gt; ./fips <span class="nb">set </span>config win64-vstudio-release 
+<span class="s1">&#39;config&#39;</span> <span class="nb">set </span>to <span class="s1">&#39;win64-vstudio-release&#39;</span> in project <span class="s1">&#39;fips-hello-world&#39;</span>
+&gt; ./fips build
+...
+&gt; _</code></pre></div>
+
+<p>Run &#39;./fips list settings&#39; to check what the currently active config is:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips list <span class="nv">settings</span>
+<span class="o">===</span> settings:
+  config: osx-xcode-release
+  target: None <span class="o">(</span>default value<span class="o">)</span></code></pre></div>
+
+<p>To revert back to the default config, run &#39;./fips unset config&#39;:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">unset </span>config
+<span class="s1">&#39;config&#39;</span> <span class="nb">unset </span>in project <span class="s1">&#39;fips-hello-world&#39;</span>
+&gt; ./fips list <span class="nv">settings</span>
+<span class="o">===</span> settings:
+  config: osx-xcode-debug <span class="o">(</span>default value<span class="o">)</span>
+  target: None <span class="o">(</span>default value<span class="o">)</span>
+&gt; _</code></pre></div>
+
+<h3>Build Targets</h3>
+
+<p>Projects are usually made of several build targets, of which fips has 3
+types:</p>
+
+<ul>
+<li><strong>apps</strong>: statically linked applications</li>
+<li><strong>modules</strong>: high level static libraries with dependencies to other modules</li>
+<li><strong>libs</strong>: low-level static libraries, usually 3rd party code with custom compile
+settings</li>
+</ul>
+
+<p>The targets a project is made of and their dependencies are described
+in CMakeLists.txt files. This is a complex topic for later. For now let&#39;s just
+see how to list the targets of a project, and how to build and run specific
+targets.</p>
+
+<p>To get a list of targets in the current project, run &#39;./fips list targets&#39;
+from the project root directory. For this to work, cmake must have generated 
+build files before via &#39;./fips gen&#39;:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips gen
+...
+&gt; ./fips list <span class="nv">targets</span>
+<span class="o">===</span> targets:
+  config: osx-xcode-debug
+  lib:
+  module:
+    dep1
+    dep2
+  app:
+    hello
+&gt; _</code></pre></div>
+
+<p>A specific target can be built with &#39;./fips make [target]&#39;:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips make hello
+...
+&gt; _</code></pre></div>
+
+<p>App targets can be run with &#39;./fips run [target]&#39;:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips run <span class="nv">hello</span>
+<span class="o">===</span> run <span class="s1">&#39;hello&#39;</span> <span class="o">(</span>config: osx-xcode-debug, project: fips-hello-world<span class="o">)</span>:
+Hello World!
+Hello from dep1
+Hello from dep2!
+Imported string define: Bla
+Imported int define: 1
+&gt; _</code></pre></div>
+
+  </article>
+
+</div>
+
+    </div>
+
+  </body>
+
+</html>

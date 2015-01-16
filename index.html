@@ -43,25 +43,31 @@
     
         
         <li class="nav-item">
-            <a href="/fips/gettingstarted.html">Getting Started</a>
+            <a href="/fips/getstarted.html">Get Started</a>
         </li>
         
     
         
         <li class="nav-item">
-            <a href="/fips/buildconfigs.html">Build Configs</a>
+            <a href="/fips/build.html">Build Projects</a>
         </li>
         
     
         
         <li class="nav-item">
-            <a href="/fips/dirstruct.html">Directory Structure</a>
+            <a href="/fips/troubleshooting.html">Troubleshooting</a>
         </li>
         
     
         
         <li class="nav-item">
             <a href="/fips/crosscompiling.html">Cross-Compiling</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/dirstruct.html">Directory Structure</a>
         </li>
         
     
@@ -76,7 +82,7 @@
     <h1>fips is like Vagrant, but for cmake.</h1>
 
 <p>Fips simplifies working with many different cmake build configurations just
-as Vagrant simplifies working with many different Virtual Machine
+like Vagrant simplifies working with many different Virtual Machine
 configurations.</p>
 
 <h3>Features Overview</h3>
@@ -87,11 +93,11 @@ together existing build tools. </p>
 
 <h4>An &#39;Integrated Build Environment&quot;</h4>
 
-<p>Fips doesn&#39;t reinvent the wheel by implement yet-another build system
+<p>Fips doesn&#39;t reinvent the wheel by implementing yet-another build system
 from scratch, but instead wires existing build tools together:</p>
 
 <ul>
-<li><strong>cmake</strong> to describe the project structure and generate build files</li>
+<li><strong>cmake</strong> to describe the project structure and generate project files</li>
 <li><strong>make, ninja, xcodebuild</strong> as command line build tools</li>
 <li>IDE support as provided by cmake (i.e. <strong>Visual Studio, Xcode, QtCreator</strong>)</li>
 <li><strong>git</strong> to resolve external project dependencies</li>
@@ -100,15 +106,18 @@ from scratch, but instead wires existing build tools together:</p>
 <h4>Multi-Platform Support</h4>
 
 <p>Fips can build on <strong>Windows, OSX, Linux</strong>, and cross-compile to <strong>iOS,
-emscripten, PNaCl, Android</strong>. Fips takes care of installing cross-platform
-SDKs with a simple command.</p>
+emscripten, PNaCl</strong> and <strong>Android</strong>. Fips also takes care of setting 
+the cross-platform SDKs and provides a unified cmake build environment 
+for all target platforms. Instead of fighting the many different build
+systems used by those cross-platform SDKs you only maintain a single set 
+of cmake files for all target platforms.</p>
 
 <h4>Build Configuration Management</h4>
 
 <p>Multi-platform projects often have dozens of different build configurations
-for combinations of target platforms, build tools and compilation settings.
-Fips simplifies working with many different build configurations and
-keeps build files for different configurations separate from each other.</p>
+for combinations of target platforms, build tools and build settings.
+Fips makes it easy to work with many different build configurations, and
+keeps the build files for each configuration separated from each other.</p>
 
 <h4>Dependency Management</h4>
 
