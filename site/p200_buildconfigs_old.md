@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Build Configs
+title: Build Configs (OBSOLETE)
 permalink: buildconfigs.html
 ---
 
