@@ -46,7 +46,7 @@ python2:	found
 > _
 {% endhighlight %}
 
-'./fips diag fips' simply checks whether fips itself is up-to-date. If it is
+'./fips diag fips' simply checks whether fips itself is up-to-date. If 
 not, simply run a 'git pull' from within the fips directory to get the
 latest version.
 

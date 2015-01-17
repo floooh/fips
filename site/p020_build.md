@@ -30,7 +30,7 @@ right for your host platform:
 > ./fips build linux-make-release
 ...
 # on Windows:
-> ./fips build win64-make-release
+> ./fips build win64-vstudio-release
 ...
 > _
 {% endhighlight %}

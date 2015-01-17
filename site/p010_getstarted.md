@@ -79,7 +79,7 @@ fips diag imports
 ### Get required tools
 
 Run './fips diag tools' to check for required tools, install any that are
-list as 'NOT FOUND'. The list of required tools may differ depending on 
+listed as 'NOT FOUND'. The list of required tools may differ depending on 
 your host platform.
 
 {% highlight bash %}
