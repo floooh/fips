@@ -85,7 +85,7 @@
 like Vagrant simplifies working with many different Virtual Machine
 configurations.</p>
 
-<h3>Features Overview</h3>
+<h3>Feature Overview</h3>
 
 <p>Fips is a Python tool which provides an &#39;Integrated Build Environment&#39;
 on the command line for multi-platform, modular C/C++ projects by wiring
@@ -106,9 +106,9 @@ from scratch, but instead wires existing build tools together:</p>
 <h4>Multi-Platform Support</h4>
 
 <p>Fips can build on <strong>Windows, OSX, Linux</strong>, and cross-compile to <strong>iOS,
-emscripten, PNaCl</strong> and <strong>Android</strong>. Fips also takes care of setting 
+emscripten, PNaCl</strong> and <strong>Android</strong>. Fips also takes care of installing 
 the cross-platform SDKs and provides a unified cmake build environment 
-for all target platforms. Instead of fighting the many different build
+for all target platforms. Instead of wrestling with the many different build
 systems used by those cross-platform SDKs you only maintain a single set 
 of cmake files for all target platforms.</p>
 
@@ -121,7 +121,7 @@ keeps the build files for each configuration separated from each other.</p>
 
 <h4>Dependency Management</h4>
 
-<p>Fips projects can define exports-to and imports-from other fips projects,
+<p>Fips projects can define exports and imports to and from other fips projects,
 and thus serve as a simple package manager for code modules. External
 projects will be pulled in via git and fips will import external build targets,
 and setup header and library search paths. A project with external dependencies
@@ -129,14 +129,14 @@ will look and feel exactly the same like a completely local project.</p>
 
 <h4>Code Generation</h4>
 
-<p>Fips implements a simple but very powerful code generation mechanism via 
+<p>Fips implements a simple yet powerful code generation mechanism via 
 Python. Any Python script that is added as &#39;source file&#39; is run during the 
 build process and is expected to generate one C/C++ header/source pair.</p>
 
 <h4>Extensible</h4>
 
 <p>Fips projects can implement their own fips commands, build configurations and
-code generator scripts. This allows projects to either implement missing
+code generator scripts. This allows projects to implement missing
 fips features and integrate fips with existing workflows and build processes.</p>
 
 <h3>What fips is not:</h3>
