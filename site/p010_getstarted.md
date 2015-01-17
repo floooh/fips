@@ -25,7 +25,7 @@ the fips directory itself, thus it is recommended to git-clone fips into a separ
 > cd ~
 > mkdir fips-workspace
 > cd fips-workspace
-> git clone https://github.com/floooh/fips.get
+> git clone https://github.com/floooh/fips.git
 > cd fips
 > _
 {% endhighlight %}
