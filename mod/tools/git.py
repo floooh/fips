@@ -9,7 +9,7 @@ optional = False
 not_found = "git not found in path, can't happen(?)"
 
 #-------------------------------------------------------------------------------
-def check_exists(fips_dir) :
+def check_exists(fips_dir=None) :
     """test if git is in the path
     
     :returns:   True if git is in the path
@@ -30,12 +30,16 @@ def clone(url, branch, name, cwd) :
     :param cwd:     the directory where to run git
     :returns:       True if git returns successful
     """
-    cmd = ['git', 'clone', '--recursive']
-    if branch :
-        cmd.extend(['--branch', branch, '--single-branch', '--depth', '10'])
-    cmd.extend([url, name])
-    res = subprocess.call(cmd, cwd=cwd)
-    return res == 0
+    if check_exists() :
+        cmd = ['git', 'clone', '--recursive']
+        if branch :
+            cmd.extend(['--branch', branch, '--single-branch', '--depth', '10'])
+        cmd.extend([url, name])
+        res = subprocess.call(cmd, cwd=cwd)
+        return res == 0
+    else :
+        log.error("git not found, please run and fix './fips diag tools'")
+        return False
 
 #-------------------------------------------------------------------------------
 def get_branches(proj_dir) :
@@ -116,6 +120,10 @@ def check_out_of_sync(proj_dir) :
     :param proj_dir:    a git repo directory
     :returns:           array with branch names that are out-of-sync
     """
+    if not check_exists() :
+        log.error("git not found, please run and fix './fips diag tools'")
+        return False
+
     out_of_sync = False
 
     # first check whether there are uncommitted changes
@@ -146,6 +154,10 @@ def check_out_of_sync(proj_dir) :
 #-------------------------------------------------------------------------------
 def check_branch_out_of_sync(proj_dir, branch) :
     """check if a single branch is out of sync with remote repo"""
+    if not check_exists() :
+        log.error("git not found, please run and fix './fips diag tools'")
+        return False
+
     out_of_sync = False
     remote_branches = get_branches(proj_dir)
     remote_rev = get_remote_rev(proj_dir, remote_branches[branch])
