@@ -41,6 +41,10 @@ def get_default(key) :
     """
     if key == 'config' :
         return config.get_default_config()
+    elif key == 'target' :
+        return None
+    elif key == 'jobs' :
+        return 3
     else :
         return None
 

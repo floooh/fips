@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import yaml
 
-from mod import log, util, config, dep, template
+from mod import log, util, config, dep, template, settings
 from mod.tools import git, cmake, make, ninja, xcodebuild, ccmake, cmake_gui
 
 #-------------------------------------------------------------------------------
@@ -186,7 +186,7 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
                 # select and run build tool
                 # FIXME: make number of jobs configurable
                 build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
-                num_jobs = 3
+                num_jobs = settings.get(proj_dir, 'jobs')
                 result = False
                 if cfg['build_tool'] == make.name :
                     result = make.run_build(fips_dir, target, build_dir, num_jobs)

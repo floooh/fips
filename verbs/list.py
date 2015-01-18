@@ -66,12 +66,10 @@ def list_settings(proj_dir) :
     """list settings file content"""
     log.colored(log.YELLOW, '=== settings:')
     if util.is_valid_project_dir(proj_dir) :
-        cfg_name = settings.get(proj_dir, 'config')
-        cfg_default = ' (default value)' if cfg_name == settings.get_default('config') else ''
-        tgt_name = settings.get(proj_dir, 'target')
-        tgt_default = ' (default value)' if tgt_name == settings.get_default('target') else ''
-        log.info('  {}config:{} {}{}'.format(log.BLUE, log.DEF, cfg_name, cfg_default))
-        log.info('  {}target:{} {}{}'.format(log.BLUE, log.DEF, tgt_name, tgt_default))
+        for key in ['config', 'target', 'jobs'] :
+            value = settings.get(proj_dir, key)
+            default = ' (default value)' if value == settings.get_default(key) else ''
+            log.info('  {}{}:{} {}{}'.format(log.BLUE, key, log.DEF, value, default))
     else :
         log.info('  currently not in a valid project directory')
 

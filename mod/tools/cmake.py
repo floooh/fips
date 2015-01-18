@@ -64,6 +64,7 @@ def run_build(fips_dir, target, build_type, build_dir) :
     cmdLine = ['cmake', '--build', '.', '--config', build_type]
     if target :
         cmdLine.extend(['--target', target])
+    print(cmdLine)
     res = subprocess.call(args=cmdLine, cwd=build_dir)
     return res == 0
 

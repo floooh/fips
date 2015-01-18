@@ -31,6 +31,7 @@ def run_build(fips_dir, target, build_type, build_dir, num_jobs=1) :
     cmdLine = ['xcodebuild', '-jobs', str(num_jobs), '-configuration', build_type]
     if target is not None :
         cmdLine.extend(['-target', target])
+    print(cmdLine)
     res = subprocess.call(cmdLine, cwd=build_dir)
     return res == 0
 

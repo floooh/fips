@@ -23,6 +23,15 @@ def run(fips_dir, proj_dir, args) :
                 settings.set(proj_dir, 'target', target_name)
             else :
                 log.error('expected target name')
+        elif noun == 'jobs' :
+            if len(args) > 1 :
+                num_jobs = args[1]
+                if num_jobs.isdigit() :
+                    settings.set(proj_dir, 'jobs', int(num_jobs))
+                else :
+                    log.error("value for setting 'jobs' must be a number")
+            else :
+                log.error('expected number of build jobs value')
         else :
             log.error("invalid noun '{}', must be 'config' or 'target'".format(noun))
     else :
@@ -33,5 +42,6 @@ def help() :
     """print 'set' help"""
     log.info(log.YELLOW + 
             "fips set config [config-name]\n"
-            "fips set target [target-name]\n" + log.DEF +
-            "    set active config or make-target")
+            "fips set target [target-name]\n" 
+            "fips set jobs [num-build-jobs]\n" + log.DEF +
+            "    set active config, active target, or number of build jobs")

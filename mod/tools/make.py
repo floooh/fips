@@ -29,10 +29,11 @@ def run_build(fips_dir, target, build_dir, num_jobs=1) :
     :param num_jobs:    number of jobs, default is 1
     :returns:           True if build was successful
     """
-    cmdLine = ['make', '-j', str(num_jobs)]
+    cmdLine = ['make', '-j{}'.format(num_jobs)]
     if target is not None :
         cmdLine.append(target)
-    res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
+    print(cmdLine)
+    res = subprocess.call(cmdLine, cwd=build_dir)
     return res == 0
 
 #-------------------------------------------------------------------------------
