@@ -165,6 +165,8 @@ macro(fips_osx_generate_plist_file target)
             "    <string>1</string>\n"
             "    <key>LSMinimumSystemVersion</key>\n"
             "    <string>\${MACOSX_DEPLOYMENT_TARGET}</string>\n"
+            "    <key>NSHighResolutionCapable</key>\n"
+            "    <true/>\n"
             "  </dict>\n"
             "</plist>\n")
     endif()
