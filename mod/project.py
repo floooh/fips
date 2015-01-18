@@ -184,7 +184,6 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
                     log.error("Failed to generate '{}' of project '{}'".format(cfg['name'], proj_name))
 
                 # select and run build tool
-                # FIXME: make number of jobs configurable
                 build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
                 num_jobs = settings.get(proj_dir, 'jobs')
                 result = False
