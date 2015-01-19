@@ -63,6 +63,8 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
 
     proj_name = util.get_project_name_from_dir(proj_dir)
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+    defines = {}
+    defines['FIPS_USE_CCACHE'] = 'ON' if settings.get(proj_dir, 'ccache') else 'OFF'
     do_it = force
     if not os.path.isdir(build_dir) :
         os.makedirs(build_dir)
@@ -74,7 +76,7 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
             ninja.prepare_ninja_tool(fips_dir, build_dir)
         log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
         toolchain_path = config.get_toolchain_for_platform(fips_dir, cfg['platform'])
-        return cmake.run_gen(cfg, proj_dir, build_dir, toolchain_path)
+        return cmake.run_gen(cfg, proj_dir, build_dir, toolchain_path, defines)
     else :
         return True
 

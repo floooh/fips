@@ -31,7 +31,7 @@ def check_exists(fips_dir) :
         return False
 
 #------------------------------------------------------------------------------
-def run_gen(cfg, project_dir, build_dir, toolchain_path) :
+def run_gen(cfg, project_dir, build_dir, toolchain_path, defines) :
     """run cmake tool to generate build files
     
     :param cfg:             a fips config object
@@ -47,6 +47,8 @@ def run_gen(cfg, project_dir, build_dir, toolchain_path) :
     if cfg['defines'] is not None :
         for key in cfg['defines'] :
             cmdLine.append('-D{}={}'.format(key, cfg['defines'][key]))
+    for key in defines :
+        cmdLine.append('-D{}={}'.format(key, defines[key]))
     cmdLine.append(project_dir)
     
     res = subprocess.call(args=cmdLine, cwd=build_dir)

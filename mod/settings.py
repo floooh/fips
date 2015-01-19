@@ -45,6 +45,8 @@ def get_default(key) :
         return None
     elif key == 'jobs' :
         return 3
+    elif key == 'ccache' :
+        return False
     else :
         return None
 
@@ -84,7 +86,11 @@ def set(proj_dir, key, value) :
     save(proj_dir, settings)
 
     proj_name = util.get_project_name_from_dir(proj_dir)
-    log.info("'{}' set to '{}' in project '{}'".format(key, value, proj_name))
+    if type(value) is bool :
+        value_str = 'on' if value else 'off';
+    else :
+        value_str = str(value)
+    log.info("'{}' set to '{}' in project '{}'".format(key, value_str, proj_name))
 
 #-------------------------------------------------------------------------------
 def unset(proj_dir, key) :

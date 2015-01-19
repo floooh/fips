@@ -32,6 +32,15 @@ def run(fips_dir, proj_dir, args) :
                     log.error("value for setting 'jobs' must be a number")
             else :
                 log.error('expected number of build jobs value')
+        elif noun == 'ccache' :
+            if len(args) > 1 :
+                use_ccache = args[1]
+                if use_ccache == 'on' :
+                    settings.set(proj_dir, 'ccache', True)
+                elif use_ccache == 'off' :
+                    settings.set(proj_dir, 'ccache', False)
+                else :
+                    log.error("value for setting 'ccache' must be 'on' or 'off")
         else :
             log.error("invalid noun '{}', must be 'config' or 'target'".format(noun))
     else :
@@ -43,5 +52,9 @@ def help() :
     log.info(log.YELLOW + 
             "fips set config [config-name]\n"
             "fips set target [target-name]\n" 
-            "fips set jobs [num-build-jobs]\n" + log.DEF +
-            "    set active config, active target, or number of build jobs")
+            "fips set jobs [num-build-jobs]\n"
+            "fips set ccache [on|off]\n"+ log.DEF +
+            "    config: set active build config\n"
+            "    target: set active run target\n"
+            "    jobs:   set number of parallel build jobs\n"
+            "    ccache: enable/disable using ccache")

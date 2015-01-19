@@ -24,6 +24,7 @@ option(FIPS_UNITTESTS_HEADLESS "If enabled don't run tests which require a displ
 option(FIPS_EXCEPTIONS "Enable C++ exceptions" OFF)
 option(FIPS_ALLOCATOR_DEBUG "Enable allocator debugging code (slow)" OFF)
 option(FIPS_COMPILE_VERBOSE "Enable very verbose compilation" OFF)
+option(FIPS_USE_CCACHE "Enable ccache when building with gcc or clang" OFF)
 
 # turn some dependent options on/off
 if (FIPS_UNITTESTS)
@@ -131,13 +132,29 @@ macro(fips_setup)
     endif()
     message("FIPS_PLATFORM: " ${FIPS_PLATFORM})
 
+    # enable ccache??
+    if (FIPS_USE_CCACHE)
+        find_program(CCACHE "ccache")
+        if (CCACHE)
+            if (NOT FIPS_EMSCRIPTEN)
+                message("Using ccache")
+                set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ${CCACHE})
+                set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ${CCACHE})
+            else()
+                message("ccache disabled for emscripten")
+            endif()
+        else()
+            message(WARNING "ccache enabled but not found")
+        endif()
+    endif()
+
     # setup standard link directories
     fips_setup_link_directories()
 
     # setup the target group variable, used to group targets into folders in IDEs
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
     set(TARGET_GROUP "")
-    
+
     # check whether python is installed
     find_program(PYTHON "python")
     if (NOT PYTHON)
