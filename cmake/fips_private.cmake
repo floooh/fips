@@ -70,7 +70,7 @@ macro(fips_resolve_dependencies target)
     endif()
     # NOTE: this little hack fixes the dependency-order problem
     # when linking with the GCC toolchain
-    if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+    if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR FIPS_EMSCRIPTEN)
         set(resolvedDeps ${resolvedDeps} ${resolvedDeps} ${resolvedDeps})
     endif()
     target_link_libraries(${target} ${resolvedDeps})
