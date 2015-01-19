@@ -9,9 +9,9 @@ permalink: crosscompiling.html
 Fips provides easy cross-compiling support to the following platforms:
 
 - **iOS**
-- **Android** (https://developer.android.com/tools/sdk/ndk/index.html)
-- **emscripten** (http://kripken.github.io/emscripten-site/index.html)
-- **PNaCl** (https://developer.chrome.com/native-client)
+- [**Android**](https://developer.android.com/tools/sdk/ndk/index.html)
+- [**emscripten**](http://kripken.github.io/emscripten-site/index.html)
+- [**PNaCl**](https://developer.chrome.com/native-client)
 
 Cross-compilation to iOS is only supported on the OSX host platform. All
 other target platforms are supported on all 3 host platforms (OSX, Linux, Windows).
