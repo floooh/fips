@@ -1,0 +1,343 @@
+---
+layout: page
+title: CMake Guide
+permalink: cmakeguide.html
+---
+
+# Fips CMake Guide
+
+Fips projects need to adhere to a few rules in their CMakeLists.txt file
+hierarchy. Fips provides a number of cmake macros, variables and toolchain
+files to simplify working with cmake files and implement some under-the-hood
+magic.
+
+### Fips CMake Macros
+
+Fips provides the following cmake macros to describe a project structure:
+
+#### fips_setup()
+
+Initialize the fips build system in a cmake file hierarchy. Must be
+called once in the root CMakeLists.txt before any other fips cmake
+macros.
+
+#### fips_finish()
+
+Must be called in the root CMakeLists.txt file after any other fips macros
+and does any work that must happen once after each cmake run. Currently
+this is macro does nothing.
+
+#### fips_project(name)
+
+Starts a new project with the given name. This must be called at least
+once in a hierarchy of CMakeLists.txt files, usually right after 
+fips_setup(). 
+
+Call fips_setup() instead of cmake's builtin project() macro
+
+#### fips\_ide\_group(name)
+
+Start a new group/folder in an IDE. This can be used to group build targets
+into IDE folders for a more comprehensive layout in the IDE's project explorer.
+
+#### fips\_add\_subdirectory(dir)
+
+Include a child CMakeLists.txt file from a subdirectory. Use this instead
+of cmake's built-in add_subdirectory().
+
+#### fips\_begin\_module(name)
+
+Starts a fips module. Modules are special high-level static-link libraries
+with a few additional features of conventional libs:
+
+* can define dependencies to other modules, which are automatically
+  resolves when linking apps
+* can contain code-generation python scripts which are added as 
+  custom build targets to the build process
+
+After a fips\_begin\_module() the following fips macros are valid:
+
+* fips_dir()
+* fips_files()
+* fips_deps()
+* fips\_end\_module()
+
+#### fips\_end\_module()
+
+This finishes a fips\_begin\_module() block.
+
+#### fips\_begin\_lib(name)
+
+Starts a fips library. This is a simple static link library in C or C++
+which cannot have dependencies to other libs and cannot contain python
+code generation files.
+
+After a fips\_begin\_lib() the following fips macros are valid:
+
+* fips_dir()
+* fips_files()
+* fips_deps()
+* fips\_end\_lib()
+
+#### fips\_end\_lib()
+
+This finishes a fips\_begin\_lib() block.
+
+#### fips\_begin\_app(name type)
+
+Starts a fips application. The _type_ argument can be either 'windowed'
+or 'cmdline', this only makes a difference on platform where there
+is a difference between a command-line and a UI application, like Windows
+or OSX.
+
+After a fips\_begin\_app() the following fips macros are valid:
+
+* fips_dir()
+* fips_files()
+* fips_deps()
+* fips\_end\_app()
+
+#### fips\_end\_app()
+
+This finishes a fips\_begin\_app() block.
+
+#### fips_dir(dir)
+
+Defines a source code subdirectory for the following fips_files() statements.
+This is only necessary if source files are located in subdirectories of the
+directory where the current CMakeLists.txt file is located. You don't need
+to provide a fips_dir() statement for files in the same directory as 
+their CMakeLists.txt file.
+
+#### fips_files(file ...)
+
+Add source files in current directory to the current module, lib or app.
+This isn't restricted to C/C++ headers, but any file that should show
+up in IDE project explorers. The actual build process will ignore any
+files with file extensions that don't make sense for a C/C++ project.
+
+The following file extensions are recognized by the build process:
+
+* .cc, .cpp:    C++ source files (compiled with C++11 support)
+* .c:           C source files
+* .m, .mm:      Objective-C and Objective-C++ source files
+* .h, .hh:      C/C++/Obj-C headers
+* .py:          Python source code generator scripts
+
+#### fips_deps(dep ...)
+
+Add dependencies to the current app or module. This can be the name
+of another fips module or lib, or the name of a 3rd party static link
+library. Dependencies added to fips modules will be resolved recursively
+when linking apps. Fips will also take care of the dreaded linking order
+problem of the GCC toolchain, where symbols can't be resolved if the
+order of link libraries is wrong or in case of cyclic dependencies.
+
+### The fips-include.cmake File
+
+A fips project may contain an optional cmake file called **fips-include.cmake**
+at the root level of a project (same directory level as the root
+CMakeLists.txt file). The fips-include.cmake file should contain all cmake
+definitions that need to be visible when using this fips project as an
+external dependency in another project. Fips will include this file either
+when the project itself is compiled, or the project is imported as an
+external dependency in other projects.
+
+Check out the [fips-include.cmake](https://github.com/floooh/oryol/blob/master/fips-include.cmake)
+file included in the Oryol 3D engine for a complex example.
+
+### Fips Predefined CMake Variables
+
+Fips defines a number of useful cmake variables:
+
+* **FIPS_POSIX**: set if the target platform is UNIX-ish (basically anything but Windows)
+* **FIPS_WINDOWS**: set if the target platform is Windows
+* **FIPS_OSX**: set if the target platform is OSX-ish (either OSX 10.x or iOS) 
+* **FIPS_LINUX**: set if the target platform is Linux
+* **FIPS_MACOS**: set if the target platform is OSX 10.x
+* **FIPS_IOS**: set if the target platform is iOS
+* **FIPS_WIN32**: set if the target platform is 32-bit Windows
+* **FIPS_WIN64**: set if the target platform is 64-bit Windows
+* **FIPS_EMSCRIPTEN**: set if the target platform is emscripten
+* **FIPS_PNACL**: set if the target platform is PNaCl
+* **FIPS_ANDROID**: set if the target platform is Android
+* **FIPS\_HOST\_WINDOWS**: set if the host platform is Windows
+* **FIPS\_HOST\_OSX**: set if the host platform is OSX
+* **FIPS\_HOST\_LINUX**: set if the host platform is Linux
+* **FIPS\_ROOT\_DIR**: absolute path of the fips root directory
+* **FIPS\_PROJECT\_DIR**: absolute pth of the current project
+* **FIPS\_DEPLOY\_DIR**: absolute path of the deployment directory
+* **FIPS_CONFIG**: name of the current build configuration (e.g. osx-xcode-debug)
+
+### Fips CMake Options
+
+Fips provides a few build options which can be tweaked by running **./fips config**
+(requires the ccmake or cmake-gui tools to be in the path).
+
+Besides _./fips config_, cmake options can also be provided in
+a build config YAML file, for instance the following config file
+sets the FIPS_UNITTESTS and FIPS\_UNITTESTS\_HEADLESS options to ON:
+
+{% highlight yaml %}
+---
+platform: emscripten 
+generator: Ninja 
+build_tool: ninja
+build_type: Debug
+defines:
+    FIPS_UNITTESTS: ON
+    FIPS_UNITTESTS_HEADLESS: ON
+{% endhighlight %}
+
+### CMakeLists.txt Samples
+
+Here's a very simple root CMakeLists.txt file from the _fips-hello-world_
+sample project:
+
+{% highlight cmake %}
+cmake_minimum_required(VERSION 2.8)
+
+# include the fips main cmake file
+get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
+include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
+
+fips_setup()
+fips_project(fips-hello-world)
+fips_add_subdirectory(src)
+fips_finish()
+{% endhighlight %}
+
+The _src_ subdirectory contains the CMakeLists.txt file which defines
+the actual appliction:
+
+{% highlight cmake %}
+fips_begin_app(hello cmdline)
+    fips_files(hello.cc)
+    fips_deps(dep1)
+fips_end_app()
+{% endhighlight %}
+
+This is a more complex root CMakeLists.txt file from the Oryol 3D engine:
+
+{% highlight cmake %}
+#----------------------------------------------------------
+#	oryol cmake root file
+#
+#	See BUILD.md for details how to build oryol.
+#----------------------------------------------------------
+cmake_minimum_required(VERSION 2.8)
+
+get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
+include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
+
+option(ORYOL_SAMPLES "Build Oryol samples" ON)
+
+include_directories(code)
+include_directories(code/Modules)
+include_directories(code/Ext)
+
+fips_setup()
+fips_project(oryol)
+fips_add_subdirectory(code/Hello)
+fips_ide_group(Modules)
+fips_add_subdirectory(code/Modules)
+fips_ide_group(Ext)
+fips_add_subdirectory(code/Ext)
+if (ORYOL_SAMPLES)
+   fips_ide_group(Samples)
+   fips_add_subdirectory(code/Samples)
+endif()
+fips_finish()
+
+{% endhighlight %}
+
+Next a sample which defines a code module with platform-specific source
+code in subdirectories, and towards the end some dependencies to other
+fips modules:
+
+{% highlight cmake %}
+
+#----------------------------------------------------------
+#   oryol Input module
+#----------------------------------------------------------
+fips_begin_module(Input)
+    fips_files(Input.cc Input.h)
+    fips_dir(Core)
+    fips_files(
+        CursorMode.h
+        Gamepad.cc Gamepad.h
+        InputSetup.h
+        Key.cc Key.h
+        Keyboard.cc Keyboard.h
+        Mouse.cc Mouse.h
+        Sensors.h
+        Touchpad.cc Touchpad.h
+        inputMgr.h
+    )
+    fips_dir(base)
+    fips_files(inputMgrBase.cc inputMgrBase.h)
+    fips_dir(touch)
+    fips_files(
+        gestureState.h
+        panDetector.cc
+        panDetector.h
+        pinchDetector.cc
+        pinchDetector.h
+        tapDetector.cc
+        tapDetector.h
+        touchEvent.cc
+        touchEvent.h
+    )
+    if (FIPS_ANDROID)
+        fips_dir(android)
+        fips_files(androidInputMgr.cc androidInputMgr.h)
+    endif()
+    if (FIPS_EMSCRIPTEN)
+        fips_dir(emsc)
+        fips_files(emscInputMgr.cc emscInputMgr.h)
+    endif()
+    if (FIPS_IOS)
+        fips_dir(ios)
+        fips_files(iosInputMgr.cc iosInputMgr.h)
+    endif()
+    if (FIPS_PNACL)
+        fips_dir(pnacl)
+        fips_files(pnaclInputMgr.cc pnaclInputMgr.h)
+    endif()
+    if (FIPS_MACOS OR FIPS_WINDOWS OR FIPS_LINUX)
+        fips_dir(glfw)
+        fips_files(glfwInputMgr.cc glfwInputMgr.h)
+        fips_deps(glfw3)
+    endif()
+    fips_deps(Core Gfx Time)
+fips_end_module()
+
+{% endhighlight %}
+
+Finally an example how to wrap a simple C library with a few custom
+C preprocessor defines:
+
+{% highlight cmake %}
+fips_begin_lib(zlib)
+    fips_files(
+        adler32.c
+        compress.c
+        crc32.c crc32.h
+        deflate.c deflate.h
+        infback.c 
+        inffast.c inffast.h
+        inffixed.h
+        inflate.c inflate.h
+        inftrees.c inftrees.h
+        trees.c trees.h
+        uncompr.c
+        zconf.h
+        zlib.h
+        zutil.c zutil.h
+    )
+    add_definitions(-D_NO_FSEEKO)
+    add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
+    add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)
+fips_end_lib(zlib)
+{% endhighlight %}
+
