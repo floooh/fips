@@ -121,9 +121,9 @@ macro(fips_setup)
 
     # manually include "toolchain" files for non-crosscompiling scenarios
     if (NOT CMAKE_TOOLCHAIN_FILE)
-        if (WIN32)
+        if (FIPS_HOST_WINDOWS)
             include(${FIPS_ROOT_DIR}/cmake-toolchains/windows.cmake)
-        elseif (APPLE)
+        elseif (FIPS_HOST_OSX)
             include(${FIPS_ROOT_DIR}/cmake-toolchains/osx.cmake)
         else()
             include(${FIPS_ROOT_DIR}/cmake-toolchains/linux.cmake)
