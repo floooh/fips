@@ -114,12 +114,12 @@ this is macro does nothing.</p>
 once in a hierarchy of CMakeLists.txt files, usually right after 
 fips_setup(). </p>
 
-<p>Call fips_setup() instead of cmake&#39;s builtin project() macro</p>
+<p>Call fips_project() instead of cmake&#39;s builtin project() macro</p>
 
 <h4>fips_ide_group(name)</h4>
 
-<p>Start a new group/folder in an IDE. This can be used to group build targets
-into IDE folders for a more comprehensive layout in the IDE&#39;s project explorer.</p>
+<p>Start a new group/folder in an IDE. This can be used to group build targets 
+for a more comprehensive layout in the IDE&#39;s project explorer.</p>
 
 <h4>fips_add_subdirectory(dir)</h4>
 
@@ -133,7 +133,7 @@ with a few additional features of conventional libs:</p>
 
 <ul>
 <li>can define dependencies to other modules, which are automatically
-resolves when linking apps</li>
+resolved when linking apps</li>
 <li>can contain code-generation python scripts which are added as 
 custom build targets to the build process</li>
 </ul>
@@ -173,8 +173,8 @@ code generation files.</p>
 <h4>fips_begin_app(name type)</h4>
 
 <p>Starts a fips application. The <em>type</em> argument can be either &#39;windowed&#39;
-or &#39;cmdline&#39;, this only makes a difference on platform where there
-is a difference between a command-line and a UI application, like Windows
+or &#39;cmdline&#39;, this only makes a difference on platform with separate
+command-line and a UI application types, like Windows
 or OSX.</p>
 
 <p>After a fips_begin_app() the following fips macros are valid:</p>
@@ -192,10 +192,10 @@ or OSX.</p>
 
 <h4>fips_dir(dir)</h4>
 
-<p>Defines a source code subdirectory for the following fips<em>files() statements.
+<p>Defines a source code subdirectory for the following fips_files() statements.
 This is only necessary if source files are located in subdirectories of the
 directory where the current CMakeLists.txt file is located. You don&#39;t need
-to provide a fips</em>dir() statement for files in the same directory as 
+to provide a fips_dir() statement for files in the same directory as 
 their CMakeLists.txt file.</p>
 
 <h4>fips_files(file ...)</h4>
@@ -208,11 +208,11 @@ files with file extensions that don&#39;t make sense for a C/C++ project.</p>
 <p>The following file extensions are recognized by the build process:</p>
 
 <ul>
-<li>.cc, .cpp:    C++ source files (compiled with C++11 support)</li>
-<li>.c:           C source files</li>
-<li>.m, .mm:      Objective-C and Objective-C++ source files</li>
-<li>.h, .hh:      C/C++/Obj-C headers</li>
-<li>.py:          Python source code generator scripts</li>
+<li><strong>.cc, .cpp</strong>:    C++ source files (compiled with C++11 support)</li>
+<li><strong>.c</strong>:           C source files</li>
+<li><strong>.m, .mm</strong>:      Objective-C and Objective-C++ source files</li>
+<li><strong>.h, .hh</strong>:      C/C++/Obj-C headers</li>
+<li><strong>.py</strong>:          Python source code generator scripts</li>
 </ul>
 
 <h4>fips_deps(dep ...)</h4>
