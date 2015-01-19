@@ -15,35 +15,35 @@ magic.
 
 Fips provides the following cmake macros to describe a project structure:
 
-#### fips_setup()
+#### fips\_setup()
 
 Initialize the fips build system in a cmake file hierarchy. Must be
 called once in the root CMakeLists.txt before any other fips cmake
 macros.
 
-#### fips_finish()
+#### fips\_finish()
 
 Must be called in the root CMakeLists.txt file after any other fips macros
 and does any work that must happen once after each cmake run. Currently
 this is macro does nothing.
 
-#### fips_project(name)
+#### fips\_project(name)
 
 Starts a new project with the given name. This must be called at least
 once in a hierarchy of CMakeLists.txt files, usually right after 
-fips_setup(). 
+fips\_setup(). 
 
-Call fips_setup() instead of cmake's builtin project() macro
+Call fips\_project() instead of cmake's builtin project() macro
 
 #### fips\_ide\_group(name)
 
-Start a new group/folder in an IDE. This can be used to group build targets
-into IDE folders for a more comprehensive layout in the IDE's project explorer.
+Start a new group/folder in an IDE. This can be used to group build targets 
+for a more comprehensive layout in the IDE's project explorer.
 
 #### fips\_add\_subdirectory(dir)
 
 Include a child CMakeLists.txt file from a subdirectory. Use this instead
-of cmake's built-in add_subdirectory().
+of cmake's built-in add\_subdirectory().
 
 #### fips\_begin\_module(name)
 
@@ -51,15 +51,15 @@ Starts a fips module. Modules are special high-level static-link libraries
 with a few additional features of conventional libs:
 
 * can define dependencies to other modules, which are automatically
-  resolves when linking apps
+  resolved when linking apps
 * can contain code-generation python scripts which are added as 
   custom build targets to the build process
 
 After a fips\_begin\_module() the following fips macros are valid:
 
-* fips_dir()
-* fips_files()
-* fips_deps()
+* fips\_dir()
+* fips\_files()
+* fips\_deps()
 * fips\_end\_module()
 
 #### fips\_end\_module()
@@ -74,9 +74,9 @@ code generation files.
 
 After a fips\_begin\_lib() the following fips macros are valid:
 
-* fips_dir()
-* fips_files()
-* fips_deps()
+* fips\_dir()
+* fips\_files()
+* fips\_deps()
 * fips\_end\_lib()
 
 #### fips\_end\_lib()
@@ -86,30 +86,30 @@ This finishes a fips\_begin\_lib() block.
 #### fips\_begin\_app(name type)
 
 Starts a fips application. The _type_ argument can be either 'windowed'
-or 'cmdline', this only makes a difference on platform where there
-is a difference between a command-line and a UI application, like Windows
+or 'cmdline', this only makes a difference on platform with separate
+command-line and a UI application types, like Windows
 or OSX.
 
 After a fips\_begin\_app() the following fips macros are valid:
 
-* fips_dir()
-* fips_files()
-* fips_deps()
+* fips\_dir()
+* fips\_files()
+* fips\_deps()
 * fips\_end\_app()
 
 #### fips\_end\_app()
 
 This finishes a fips\_begin\_app() block.
 
-#### fips_dir(dir)
+#### fips\_dir(dir)
 
-Defines a source code subdirectory for the following fips_files() statements.
+Defines a source code subdirectory for the following fips\_files() statements.
 This is only necessary if source files are located in subdirectories of the
 directory where the current CMakeLists.txt file is located. You don't need
-to provide a fips_dir() statement for files in the same directory as 
+to provide a fips\_dir() statement for files in the same directory as 
 their CMakeLists.txt file.
 
-#### fips_files(file ...)
+#### fips\_files(file ...)
 
 Add source files in current directory to the current module, lib or app.
 This isn't restricted to C/C++ headers, but any file that should show
@@ -118,13 +118,13 @@ files with file extensions that don't make sense for a C/C++ project.
 
 The following file extensions are recognized by the build process:
 
-* .cc, .cpp:    C++ source files (compiled with C++11 support)
-* .c:           C source files
-* .m, .mm:      Objective-C and Objective-C++ source files
-* .h, .hh:      C/C++/Obj-C headers
-* .py:          Python source code generator scripts
+* **.cc, .cpp**:    C++ source files (compiled with C++11 support)
+* **.c**:           C source files
+* **.m, .mm**:      Objective-C and Objective-C++ source files
+* **.h, .hh**:      C/C++/Obj-C headers
+* **.py**:          Python source code generator scripts
 
-#### fips_deps(dep ...)
+#### fips\_deps(dep ...)
 
 Add dependencies to the current app or module. This can be the name
 of another fips module or lib, or the name of a 3rd party static link
@@ -150,24 +150,24 @@ file included in the Oryol 3D engine for a complex example.
 
 Fips defines a number of useful cmake variables:
 
-* **FIPS_POSIX**: set if the target platform is UNIX-ish (basically anything but Windows)
-* **FIPS_WINDOWS**: set if the target platform is Windows
-* **FIPS_OSX**: set if the target platform is OSX-ish (either OSX 10.x or iOS) 
-* **FIPS_LINUX**: set if the target platform is Linux
-* **FIPS_MACOS**: set if the target platform is OSX 10.x
-* **FIPS_IOS**: set if the target platform is iOS
-* **FIPS_WIN32**: set if the target platform is 32-bit Windows
-* **FIPS_WIN64**: set if the target platform is 64-bit Windows
-* **FIPS_EMSCRIPTEN**: set if the target platform is emscripten
-* **FIPS_PNACL**: set if the target platform is PNaCl
-* **FIPS_ANDROID**: set if the target platform is Android
+* **FIPS\_POSIX**: set if the target platform is UNIX-ish (basically anything but Windows)
+* **FIPS\_WINDOWS**: set if the target platform is Windows
+* **FIPS\_OSX**: set if the target platform is OSX-ish (either OSX 10.x or iOS) 
+* **FIPS\_LINUX**: set if the target platform is Linux
+* **FIPS\_MACOS**: set if the target platform is OSX 10.x
+* **FIPS\_IOS**: set if the target platform is iOS
+* **FIPS\_WIN32**: set if the target platform is 32-bit Windows
+* **FIPS\_WIN64**: set if the target platform is 64-bit Windows
+* **FIPS\_EMSCRIPTEN**: set if the target platform is emscripten
+* **FIPS\_PNACL**: set if the target platform is PNaCl
+* **FIPS\_ANDROID**: set if the target platform is Android
 * **FIPS\_HOST\_WINDOWS**: set if the host platform is Windows
 * **FIPS\_HOST\_OSX**: set if the host platform is OSX
 * **FIPS\_HOST\_LINUX**: set if the host platform is Linux
 * **FIPS\_ROOT\_DIR**: absolute path of the fips root directory
 * **FIPS\_PROJECT\_DIR**: absolute pth of the current project
 * **FIPS\_DEPLOY\_DIR**: absolute path of the deployment directory
-* **FIPS_CONFIG**: name of the current build configuration (e.g. osx-xcode-debug)
+* **FIPS\_CONFIG**: name of the current build configuration (e.g. osx-xcode-debug)
 
 ### Fips CMake Options
 
@@ -176,7 +176,7 @@ Fips provides a few build options which can be tweaked by running **./fips confi
 
 Besides _./fips config_, cmake options can also be provided in
 a build config YAML file, for instance the following config file
-sets the FIPS_UNITTESTS and FIPS\_UNITTESTS\_HEADLESS options to ON:
+sets the FIPS\_UNITTESTS and FIPS\_UNITTESTS\_HEADLESS options to ON:
 
 {% highlight yaml %}
 ---
