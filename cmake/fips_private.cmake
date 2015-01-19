@@ -62,15 +62,16 @@ macro(fips_resolve_dependencies target)
     foreach(dep ${input})
         fips_recurse_deps(${dep} resolvedDeps)
     endforeach()
-
-# NOTE: we do NOT remove dups, this simplifies the tricky linker order
-# requirements on GCC
-# FIXME: there must be a more elegant way...
-#    if (resolvedDeps)
-#       list(REMOVE_DUPLICATES resolvedDeps)
-#    endif()
+    if (resolvedDeps)
+       list(REMOVE_DUPLICATES resolvedDeps)
+    endif()
     if (FIPS_CMAKE_VERBOSE)
         message("${target} Dependencies: ${resolvedDeps}")
+    endif()
+    # NOTE: this little hack fixes the dependency-order problem
+    # when linking with the GCC toolchain
+    if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+        set(resolvedDeps ${resolvedDeps} ${resolvedDeps} ${resolvedDeps})
     endif()
     target_link_libraries(${target} ${resolvedDeps})
 endmacro()
