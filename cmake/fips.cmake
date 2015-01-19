@@ -60,7 +60,7 @@ macro(fips_setup)
     endif()
 
     # set host system variables
-    set (FIPS_HOST_WIN32 0)
+    set (FIPS_HOST_WINDOWS 0)
     set (FIPS_HOST_OSX 0)
     set (FIPS_HOST_LINUX 0)
     if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
