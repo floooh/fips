@@ -98,7 +98,7 @@ magic.</p>
 
 <h4>fips_setup()</h4>
 
-<p>Initialize the fips build system in a cmake file hierarchy. Must be
+<p>Initializes the fips build system in a cmake file hierarchy. Must be
 called once in the root CMakeLists.txt before any other fips cmake
 macros.</p>
 
@@ -114,22 +114,23 @@ this is macro does nothing.</p>
 once in a hierarchy of CMakeLists.txt files, usually right after 
 fips_setup(). </p>
 
-<p>Call fips_project() instead of cmake&#39;s builtin project() macro</p>
+<p>Use the fips_project() macro instead of cmake&#39;s builtin project() macro</p>
 
 <h4>fips_ide_group(name)</h4>
 
-<p>Start a new group/folder in an IDE. This can be used to group build targets 
-for a more comprehensive layout in the IDE&#39;s project explorer.</p>
+<p>Start a new project explorer folder in an IDE. This can be used to 
+group related build targets for a clearer layout in the IDE&#39;s project 
+explorer.</p>
 
 <h4>fips_add_subdirectory(dir)</h4>
 
 <p>Include a child CMakeLists.txt file from a subdirectory. Use this instead
-of cmake&#39;s built-in add_subdirectory().</p>
+of cmake&#39;s built-in add_subdirectory() macro.</p>
 
 <h4>fips_begin_module(name)</h4>
 
-<p>Starts a fips module. Modules are special high-level static-link libraries
-with a few additional features of conventional libs:</p>
+<p>Begin defining a fips module. Modules are special high-level static link-libraries
+with a few additional features over conventional libs:</p>
 
 <ul>
 <li>can define dependencies to other modules, which are automatically
@@ -153,7 +154,7 @@ custom build targets to the build process</li>
 
 <h4>fips_begin_lib(name)</h4>
 
-<p>Starts a fips library. This is a simple static link library in C or C++
+<p>Begin defining a fips library. This is a simple static link library in C or C++
 which cannot have dependencies to other libs and cannot contain python
 code generation files.</p>
 
@@ -172,10 +173,10 @@ code generation files.</p>
 
 <h4>fips_begin_app(name type)</h4>
 
-<p>Starts a fips application. The <em>type</em> argument can be either &#39;windowed&#39;
+<p>Begin defining a fips application. The <em>type</em> argument can be either &#39;windowed&#39;
 or &#39;cmdline&#39;, this only makes a difference on platform with separate
-command-line and a UI application types, like Windows
-or OSX.</p>
+command-line and UI application types, like Windows (WinMain vs main)
+or OSX (app bundle vs command line tool).</p>
 
 <p>After a fips_begin_app() the following fips macros are valid:</p>
 
@@ -200,10 +201,10 @@ their CMakeLists.txt file.</p>
 
 <h4>fips_files(file ...)</h4>
 
-<p>Add source files in current directory to the current module, lib or app.
-This isn&#39;t restricted to C/C++ headers, but any file that should show
-up in IDE project explorers. The actual build process will ignore any
-files with file extensions that don&#39;t make sense for a C/C++ project.</p>
+<p>Add source files in the currently set directory to the current module, lib or app.
+This isn&#39;t restricted to C/C++ files, but any file that should show
+up in the IDE project explorer. The actual build process will ignore any
+files with file extensions that cmake doesn&#39;t know how to build.</p>
 
 <p>The following file extensions are recognized by the build process:</p>
 
@@ -218,10 +219,10 @@ files with file extensions that don&#39;t make sense for a C/C++ project.</p>
 <h4>fips_deps(dep ...)</h4>
 
 <p>Add dependencies to the current app or module. This can be the name
-of another fips module or lib, or the name of a 3rd party static link
+of another fips module or lib, or the name of an existing static link
 library. Dependencies added to fips modules will be resolved recursively
 when linking apps. Fips will also take care of the dreaded linking order
-problem of the GCC toolchain, where symbols can&#39;t be resolved if the
+problem of GCC where symbols can&#39;t be resolved if the
 order of link libraries is wrong or in case of cyclic dependencies.</p>
 
 <h3>The fips-include.cmake File</h3>
@@ -242,20 +243,20 @@ file included in the Oryol 3D engine for a complex example.</p>
 <p>Fips defines a number of useful cmake variables:</p>
 
 <ul>
-<li><strong>FIPS_POSIX</strong>: set if the target platform is UNIX-ish (basically anything but Windows)</li>
-<li><strong>FIPS_WINDOWS</strong>: set if the target platform is Windows</li>
-<li><strong>FIPS_OSX</strong>: set if the target platform is OSX-ish (either OSX 10.x or iOS) </li>
-<li><strong>FIPS_LINUX</strong>: set if the target platform is Linux</li>
-<li><strong>FIPS_MACOS</strong>: set if the target platform is OSX 10.x</li>
-<li><strong>FIPS_IOS</strong>: set if the target platform is iOS</li>
-<li><strong>FIPS_WIN32</strong>: set if the target platform is 32-bit Windows</li>
-<li><strong>FIPS_WIN64</strong>: set if the target platform is 64-bit Windows</li>
-<li><strong>FIPS_EMSCRIPTEN</strong>: set if the target platform is emscripten</li>
-<li><strong>FIPS_PNACL</strong>: set if the target platform is PNaCl</li>
-<li><strong>FIPS_ANDROID</strong>: set if the target platform is Android</li>
-<li><strong>FIPS_HOST_WINDOWS</strong>: set if the host platform is Windows</li>
-<li><strong>FIPS_HOST_OSX</strong>: set if the host platform is OSX</li>
-<li><strong>FIPS_HOST_LINUX</strong>: set if the host platform is Linux</li>
+<li><strong>FIPS_POSIX</strong>: target platform is UNIX-ish (basically anything but Windows)</li>
+<li><strong>FIPS_WINDOWS</strong>: target platform is Windows</li>
+<li><strong>FIPS_OSX</strong>: target platform is OSX-ish (either OSX 10.x or iOS) </li>
+<li><strong>FIPS_LINUX</strong>: target platform is Linux</li>
+<li><strong>FIPS_MACOS</strong>: target platform is OSX 10.x</li>
+<li><strong>FIPS_IOS</strong>: target platform is iOS</li>
+<li><strong>FIPS_WIN32</strong>: target platform is 32-bit Windows</li>
+<li><strong>FIPS_WIN64</strong>: target platform is 64-bit Windows</li>
+<li><strong>FIPS_EMSCRIPTEN</strong>: target platform is emscripten</li>
+<li><strong>FIPS_PNACL</strong>: target platform is PNaCl</li>
+<li><strong>FIPS_ANDROID</strong>: target platform is Android</li>
+<li><strong>FIPS_HOST_WINDOWS</strong>: host platform is Windows</li>
+<li><strong>FIPS_HOST_OSX</strong>: host platform is OSX</li>
+<li><strong>FIPS_HOST_LINUX</strong>: host platform is Linux</li>
 <li><strong>FIPS_ROOT_DIR</strong>: absolute path of the fips root directory</li>
 <li><strong>FIPS_PROJECT_DIR</strong>: absolute pth of the current project</li>
 <li><strong>FIPS_DEPLOY_DIR</strong>: absolute path of the deployment directory</li>
