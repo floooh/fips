@@ -406,6 +406,13 @@ macro(fips_files files)
             source_group("${group_name}" FILES ${py_src} ${py_hdr})
         endif()
 
+        # mark .m as .c file for older cmake versions
+        if (FIPS_OSX)
+            if (${f_ext} STREQUAL ".m")
+                set_source_files_properties(${f_ext} PROPERTIES LANGUAGE C)
+            endif()
+        endif()
+
         # add to global tracker variables
         list(APPEND CurSources ${cur_file})
 
