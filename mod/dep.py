@@ -8,17 +8,46 @@ from mod import log, util, registry, template
 from mod.tools import git
 
 #-------------------------------------------------------------------------------
-def get_imports(proj_dir) :
+def get_imports(fips_dir, proj_dir) :
     """get the imports from the fips.yml file in proj_dir
 
     :param proj_dir:    the project directory
     :returns:           dictionary object with imports (can be empty)
     """
+    proj_name = util.get_project_name_from_dir(proj_dir)
     util.ensure_valid_project_dir(proj_dir)
-    imports = {}
+    imports = None
     dic = util.load_fips_yml(proj_dir)
     if 'imports' in dic :
         imports = dic['imports']
+
+    # warn if this is an old-style list instead of new style dict
+    if imports :
+        if type(imports) is list :
+            log.warn("imports in '{}/fips.yml' uses obsolete array format".format(proj_dir))
+            
+            # convert old style to new dict format
+            # FIXME: should be removed after a while
+            new_imports = {}
+            for dep in imports :
+                dep_url = registry.get_url(fips_dir, dep)
+                if not util.is_git_url(dep_url) :
+                    log.error("'{}' cannot be resolved into a git url (in project '{}')".format(dep_url, proj_name))
+                dep_proj_name = util.get_project_name_from_url(dep_url)
+                new_imports[dep_proj_name] = {}
+                new_imports[dep_proj_name]['git']    = util.get_giturl_from_url(dep_url)
+                new_imports[dep_proj_name]['branch'] = util.get_gitbranch_from_url(dep_url)
+            imports = new_imports
+        elif type(imports) is dict :
+            for dep in imports :
+                if not 'branch' in imports[dep] :
+                    imports[dep]['branch'] = 'master'
+                if not 'git' in imports[dep] :
+                    log.error("no git URL in import '{}' in '{}/fips.yml'!\n".format(dep, proj_dir))
+        else :
+            log.error("imports in '{}/fips.yml' must be a dictionary!".format(proj_dir))
+    else :
+        imports = {}
 
     return imports
 
@@ -45,7 +74,7 @@ def get_exports(proj_dir) :
     return exports
 
 #-------------------------------------------------------------------------------
-def _rec_get_all_imports_exports(fips_dir, proj_dir, proj_url, result) :
+def _rec_get_all_imports_exports(fips_dir, proj_dir, result) :
     """recursively get all imported projects, their exported and
     imported modules in a dictionary object:
         
@@ -62,9 +91,11 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, proj_url, result) :
                     mod: dir
                 ...
             imports:
-                proj-name or url,
-                proj-name or url,
-                ...
+                name:
+                    git:    [git-url]
+                    branch: [optional: branch or tag]
+                name:
+                    ...
                 ...
         ...
 
@@ -79,22 +110,15 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, proj_url, result) :
     if proj_name not in result :
 
         result[proj_name] = {}
-        result[proj_name]['imports'] = get_imports(proj_dir)
+        result[proj_name]['imports'] = get_imports(fips_dir, proj_dir)
         result[proj_name]['exports'] = get_exports(proj_dir)
-        result[proj_name]['url'] = proj_url
 
-        for dep in result[proj_name]['imports'] :
-            # dep can be a project name or a direct git url,
-            # if project name, lookup url via fips registry
-            dep_url = registry.get_url(fips_dir, dep)
-            if not util.is_git_url(dep_url) :
-                log.error("'{}' cannot be resolved into a git url (in project '{}')".format(dep_url, proj_name))
-
-            dep_proj_name = util.get_project_name_from_url(dep_url)
+        for dep_proj_name in result[proj_name]['imports'] :
             if dep_proj_name not in result :
                 dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
+                dep_url = result[proj_name]['imports'][dep_proj_name]['git']
                 if util.is_valid_project_dir(dep_proj_dir) :
-                    success, result = _rec_get_all_imports_exports(fips_dir, dep_proj_dir, dep_url, result)
+                    success, result = _rec_get_all_imports_exports(fips_dir, dep_proj_dir, result)
                 else :
                     success = False
 
@@ -116,7 +140,7 @@ def get_all_imports_exports(fips_dir, proj_dir) :
     :returns:           succes, and result dictionary object
     """
     result = OrderedDict()
-    return _rec_get_all_imports_exports(fips_dir, proj_dir, None, result)
+    return _rec_get_all_imports_exports(fips_dir, proj_dir, result)
 
 #-------------------------------------------------------------------------------
 def _rec_fetch_imports(fips_dir, proj_dir, handled) :
@@ -132,23 +156,17 @@ def _rec_fetch_imports(fips_dir, proj_dir, handled) :
     if proj_name not in handled :
         handled.append(proj_name)
 
-        imports = get_imports(proj_dir)
+        imports = get_imports(fips_dir, proj_dir)
         for dep in imports:
-            # dep can be a project name or direct git url,
-            # if project name, lookup url in fips registry
-            dep_url = registry.get_url(fips_dir, dep)
-            if not util.is_git_url(dep_url) :
-                log.error("'{}' can't be resolved to a git url (in project '{}')".format(dep_url, proj_name))
-
-            dep_proj_name = util.get_project_name_from_url(dep_url)
-            if dep_proj_name not in handled:
+            dep_proj_name = dep
+            if dep not in handled:
                 dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
                 log.colored(log.YELLOW, "=== dependency: '{}':".format(dep_proj_name))
                 dep_ok = False
                 if not os.path.isdir(dep_proj_dir) :
                     # directory did not exist, do a fresh git clone
-                    git_url = util.get_giturl_from_url(dep_url)
-                    git_branch = util.get_gitbranch_from_url(dep_url) 
+                    git_url = imports[dep_proj_name]['git']
+                    git_branch = imports[dep_proj_name]['branch']
                     if git.clone(git_url, git_branch, dep_proj_name, ws_dir) :
                         dep_ok = True
                     else :
@@ -203,10 +221,7 @@ def write_imports_files(fips_dir, proj_dir, dry_run=False) :
             # for each imported project:
             for imp_proj in imports :
                 
-                # imp_proj can be a name or a url, we need the name
                 imp_proj_name = imp_proj
-                if util.is_git_url(imp_proj_name) :
-                    imp_proj_name = util.get_project_name_from_url(imp_proj_name)
 
                 # export of current import module
                 dep_exports_mods = deps[imp_proj_name]['exports']['modules']

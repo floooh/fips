@@ -157,14 +157,13 @@ def list_imports(fips_dir, proj_dir) :
         for dep_proj_name in result :
             # top level project is in result, but has no URL set, filter
             # this from the output
+            log.colored(log.BLUE, "project '{}' imports:".format(dep_proj_name))
             cur_dep = result[dep_proj_name]
-            if not cur_dep['url'] :
-                log.colored(log.BLUE, "project '{}' imports:".format(dep_proj_name))
-            else :
-                log.colored(log.BLUE, "project '{}' at '{}' imports:".format(dep_proj_name, cur_dep['url']))
             if cur_dep['imports'] :
                 for imp_proj in cur_dep['imports'] :
-                    log.info("  {}".format(imp_proj))
+                    git_url = cur_dep['imports'][imp_proj]['git']
+                    git_branch = cur_dep['imports'][imp_proj]['branch']
+                    log.info("  '{}' from '{}' at branch '{}'".format(imp_proj, git_url, git_branch))
             else :
                 log.info("    nothing")
     else :
