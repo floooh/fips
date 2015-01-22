@@ -406,10 +406,10 @@ macro(fips_files files)
             source_group("${group_name}" FILES ${py_src} ${py_hdr})
         endif()
 
-        # mark .m as .c file for older cmake versions
+        # mark .m as .c file for older cmake versions (bug is fixed in cmake 3.1+)
         if (FIPS_OSX)
             if (${f_ext} STREQUAL ".m")
-                set_source_files_properties(${f_ext} PROPERTIES LANGUAGE C)
+                set_source_files_properties(${cur_file} PROPERTIES LANGUAGE C)
             endif()
         endif()
 
