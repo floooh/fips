@@ -166,7 +166,7 @@ Fips defines a number of useful cmake variables:
 * **FIPS\_HOST\_OSX**: host platform is OSX
 * **FIPS\_HOST\_LINUX**: host platform is Linux
 * **FIPS\_ROOT\_DIR**: absolute path of the fips root directory
-* **FIPS\_PROJECT\_DIR**: absolute pth of the current project
+* **FIPS\_PROJECT\_DIR**: absolute path of the current project
 * **FIPS\_DEPLOY\_DIR**: absolute path of the deployment directory
 * **FIPS\_CONFIG**: name of the current build configuration (e.g. osx-xcode-debug)
 
