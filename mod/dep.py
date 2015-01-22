@@ -170,7 +170,7 @@ def _rec_fetch_imports(fips_dir, proj_dir, handled) :
                     if git.clone(git_url, git_branch, dep_proj_name, ws_dir) :
                         dep_ok = True
                     else :
-                        log.error('failed to git clone {} into {}'.format(dep_url, dep_proj_dir))
+                        log.error('failed to git clone {} into {}'.format(git_url, dep_proj_dir))
                 else :
                     # directory already exists
                     log.info("dir '{}' exists".format(dep_proj_dir))
