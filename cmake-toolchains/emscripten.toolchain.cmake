@@ -78,7 +78,6 @@ set(COMPILING on)
 set(CMAKE_CROSSCOMPILING TRUE)
 
 # find the emscripten SDK and set the "EMSC_HAS_LOCAL_CONFIG" variable
-set(EMSC_HAS_LOCAL_CONFIG 0)
 macro(find_emscripten_sdk)
     # first check for the official EMSDK, this does not allow to override
     # the location of the .emscripten config file
@@ -96,15 +95,19 @@ find_emscripten_sdk()
 # Normalize, convert Windows backslashes to forward slashes or CMake will crash.
 get_filename_component(EMSCRIPTEN_ROOT_PATH "${EMSCRIPTEN_ROOT_PATH}" ABSOLUTE)
 
-# Set up options that we always want to pass to emscripten
-if (EMSC_HAS_LOCAL_CONFIG)
-    # Set the path to .emscripten file
-    # FIXME: this should enable separate local emscripten SDKs, need to figure
-    # out how to do this in fips
-    get_filename_component(EMSCRIPTEN_DOT_FILE "${EMSCRIPTEN_ROOT_PATH}/../.emscripten" ABSOLUTE)
-    set(EMSCRIPTEN_CONFIG_OPTIONS "--em-config ${EMSCRIPTEN_DOT_FILE}")
+# Find the .emscripten file and cache, this is either setup locally in the
+# emscripten SDK (this is the preferred way and used by 'fips setup emscripten',
+# but it's a brand new feature: https://github.com/juj/emsdk/issues/24)
+# If an SDK-local .emscripten is not found, fall back to ~/.emscripten
+get_filename_component(EMSCRIPTEN_DOT_FILE "${EMSCRIPTEN_ROOT_PATH}/../../.emscripten" ABSOLUTE)
+get_filename_component(EMSCRIPTEN_CACHE "${EMSCRIPTEN_ROOT_PATH}/../../.emscripten_cache" ABSOLUTE)
+if (EXISTS "${EMSCRIPTEN_DOT_FILE}")
+    set(EMSCRIPTEN_CONFIG_OPTIONS "--em-config ${EMSCRIPTEN_DOT_FILE} --cache ${EMSCRIPTEN_CACHE}")
+    message("Using local emscripten config at ${EMSCRIPTEN_DOT_FILE}")
 else()
+    # no sdk-embedded config found, use the default (~/.emscripten and ~/.emscripten_cache)
     set(EMSCRIPTEN_CONFIG_OPTIONS "")
+    message("Using global emscripten config at ~/.emscripten")
 endif()
 
 # tool suffic (.bat on windows)
