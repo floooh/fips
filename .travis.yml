@@ -1,7 +1,6 @@
 language: cpp
 compiler: gcc
 os: 
-    - osx
     - linux
 
 before_install:
@@ -9,13 +8,11 @@ before_install:
 
 install:
     - echo $TRAVIS_OS_NAME
-    # OSX tools
-    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install cmake; fi
-    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install ninja; fi
-    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install ccache; fi
-    # Linux tools
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -qq ninja-build; fi
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -qq ccache; fi
+    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
+    - sudo apt-get update -qq
+    - sudo apt-get install -qq cmake
+    - sudo apt-get install -qq ninja-build
+    - sudo apt-get install -qq ccache
 
 script:
     - echo $TRAVIS_OS_NAME
@@ -62,39 +59,33 @@ script:
     # test gen command
     - python fips help gen
     - python fips gen
-    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then python fips gen osx-xcode-release; fi
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then python fips gen linux-make-release; fi
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then python fips gen linux-ninja-release; fi
+    - python fips gen linux-make-release
+    - python fips gen linux-ninja-release
     - python fips list targets
     # test build command
     - python fips help build
     - python fips build
-    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then python fips build osx-xcode-release; fi
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then python fips build linux-make-release; fi
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then python fips build linux-ninja-release; fi
+    - python fips build linux-make-release
+    - python fips build linux-ninja-release
     # test run command
     - python fips help run
     - python fips run hello
-    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then python fips run hello osx-xcode-release; fi
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then python fips run hello linux-make-release; fi
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then python fips run hello linux-ninja-release; fi
+    - python fips run hello linux-make-release
+    - python fips run hello linux-ninja-release
     # test clean command
     - python fips help clean
     - python fips clean
-    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then python fips clean osx-xcode-release; fi
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then python fips clean linux-make-release; fi
+    - python fips clean linux-make-release
     - python fips clean all
     # test set command
     - python fips help set
-    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then python fips set config osx-xcode-release; fi
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then python fips set config linux-make-release; fi
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then python fips set ccache on; fi
+    - python fips set config linux-make-release
+    - python fips set ccache on
     # test make command
     - python fips hello make
     - python fips make hello
     - python fips run hello
-    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then python fips make hello osx-xcode-debug; fi
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then python fips make hello linux-make-debug; fi
+    - python fips make hello linux-make-debug
     # test unset command
     - python fips help unset
     - python fips unset config
