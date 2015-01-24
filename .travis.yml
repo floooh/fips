@@ -26,11 +26,8 @@ script:
     - python fips help
     - python fips help clone
     - python fips help config
-    - python fips help init
     - python fips help open
     - python fips help setup
-    - python fips help fips-hello-test
-    - python fips help fips-hello-dep1
     # test list command
     - python fips help list
     - python fips list
@@ -89,3 +86,29 @@ script:
     - python fips help unset
     - python fips unset config
     - python fips unset ccache
+    # test fips init command
+    - python fips help init
+    - mkdir ../test-project
+    - python fips init test-project
+    # run imported commands
+    - python fips help fips-hello-test
+    - python fips fips-hello-test
+    - python fips help fips-hello-dep1
+    - python fips fips-hello-dep1
+    # test setting current target and num make jobs
+    - python fips clean all
+    - python fips set target hello
+    - python fips set jobs 1
+    - python fips set config linux-make-release
+    - python fips list setting
+    - python fips make
+    - python fips run
+    - python fips unset config
+    - python fips unset target
+    - python fips unset jobs
+    - python fips list settings
+
+
+
+
+
