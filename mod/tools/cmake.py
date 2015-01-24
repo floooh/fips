@@ -6,7 +6,7 @@ from mod import log
 name = 'cmake'
 platforms = ['linux', 'osx', 'win']
 optional = False
-not_found = 'please install cmake 2.8.11 or newer'
+not_found = 'please install cmake 2.8 or newer'
 
 # required version
 major = 2
@@ -21,7 +21,7 @@ def check_exists(fips_dir) :
     try:
         out = subprocess.check_output(['cmake', '--version'], universal_newlines=True)
         ver = out.split()[2].split('.')
-        if int(ver[0]) > major or int(ver[0]) == major and int(ver[2]) >= minor:
+        if int(ver[0]) > major or (int(ver[0]) == major and int(ver[1]) >= minor):
             return True
         else :
             log.info('{}NOTE{}: cmake must be at least version {}.{} (found: {}.{}.{})'.format(
