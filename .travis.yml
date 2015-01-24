@@ -84,6 +84,7 @@ script:
     - python fips make hello
     - python fips run hello
     - python fips make hello linux-make-debug
+    - python fips run hello linux-make-debug
     # test unset command
     - python fips help unset
     - python fips unset config
