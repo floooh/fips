@@ -100,7 +100,7 @@ script:
     - python fips set target hello
     - python fips set jobs 1
     - python fips set config linux-make-release
-    - python fips list setting
+    - python fips list settings
     - python fips make
     - python fips run
     - python fips unset config
