@@ -80,7 +80,7 @@ script:
     - python fips set config linux-make-release
     - python fips set ccache on
     # test make command
-    - python fips hello make
+    - python fips make hello
     - python fips make hello
     - python fips run hello
     - python fips make hello linux-make-debug
