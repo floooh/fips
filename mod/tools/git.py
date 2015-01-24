@@ -1,5 +1,6 @@
 """wrapper for some git commands"""
 
+import re
 import subprocess
 from mod import log
 
@@ -56,8 +57,9 @@ def get_branches(proj_dir) :
         for line in lines :
             tokens = line[2:].split()
             local_branch = tokens[0]
-            remote_branch = tokens[2][1:-1]
-            branches[local_branch] = remote_branch
+            if re.compile("^\[.*(:|\])$").match(tokens[2]) :
+                remote_branch = tokens[2][1:-1]
+                branches[local_branch] = remote_branch
     except subprocess.CalledProcessError :
         log.error("failed to call 'git branch -vv'")
     return branches;
@@ -136,6 +138,8 @@ def check_out_of_sync(proj_dir) :
     # check whether local and remote branch are out of sync
     branches_out_of_sync = False
     branches = get_branches(proj_dir)
+    if not branches :
+        log.warn("'{}' no remote branches found".format(proj_dir))
     for local_branch in branches :
         remote_branch = branches[local_branch]
         remote_rev = get_remote_rev(proj_dir, remote_branch)
@@ -160,7 +164,11 @@ def check_branch_out_of_sync(proj_dir, branch) :
 
     out_of_sync = False
     remote_branches = get_branches(proj_dir)
-    remote_rev = get_remote_rev(proj_dir, remote_branches[branch])
     local_rev = get_local_rev(proj_dir, branch)
-    return remote_rev != local_rev
+    if branch in remote_branches :
+        remote_rev = get_remote_rev(proj_dir, remote_branches[branch])
+        out_of_sync = remote_rev != local_rev
+    else :
+        log.warn("'{}' no remote branch found for '{}'".format(proj_dir, branch))
 
+    return out_of_sync
