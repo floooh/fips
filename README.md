@@ -1,6 +1,8 @@
 fips
 ====
 
+[![Build Status](https://travis-ci.org/floooh/fips.svg?branch=master)](https://travis-ci.org/floooh/fips)
+
 fips is a highlevel build system wrapper written in Python for C/C++ projects.
 
 Read the docs to get a better idea what this means:
