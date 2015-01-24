@@ -13,7 +13,6 @@ install:
     - sudo apt-get install -qq g++-4.8
     - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
     - sudo apt-get install -qq cmake
-    - sudo apt-get install -qq ninja-build
     - sudo apt-get install -qq ccache
 
 script:
@@ -62,18 +61,15 @@ script:
     - python fips help gen
     - python fips gen
     - python fips gen linux-make-release
-    - python fips gen linux-ninja-release
     - python fips list targets
     # test build command
     - python fips help build
     - python fips build
     - python fips build linux-make-release
-    - python fips build linux-ninja-release
     # test run command
     - python fips help run
     - python fips run hello
     - python fips run hello linux-make-release
-    - python fips run hello linux-ninja-release
     # test clean command
     - python fips help clean
     - python fips clean
