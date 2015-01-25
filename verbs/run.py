@@ -13,12 +13,17 @@ def run(fips_dir, proj_dir, args) :
         log.error('must be run in a project directory')
     cfg_name = settings.get(proj_dir, 'config')
     target_name = settings.get(proj_dir, 'target')
+    target_args = []
+    if '--' in args :
+        idx = args.index('--')
+        target_args = args[(idx + 1):]
+        args = args[:idx]
     if len(args) > 0 :
         target_name = args[0]
-    if len(args) > 1:
+    if len(args) > 1 :
         cfg_name = args[1]
     if target_name :
-        project.run(fips_dir, proj_dir, cfg_name, target_name)
+        project.run(fips_dir, proj_dir, cfg_name, target_name, target_args)
     else :
         log.error('no target provided')
 
