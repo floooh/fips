@@ -32,8 +32,8 @@ def run(fips_dir, proj_dir, args) :
 def help() :
     """print run help"""
     log.info(log.YELLOW + 
-            "fips run\n"
-            "fips run [target]\n" 
-            "fips run [target] [config]\n" + log.DEF +
+            "fips run [-- args]\n"
+            "fips run [target] [-- args]\n" 
+            "fips run [target] [config] [-- args]\n"+ log.DEF +
             "   run a build target for current or named config")
 
