@@ -136,9 +136,11 @@ macro(fips_setup)
     endif()
 
     # load generated .fips-imports.cmake if exists
+    set(FIPS_IMPORT 1)
     if (EXISTS "${FIPS_PROJECT_DIR}/.fips-imports.cmake")
         include("${FIPS_PROJECT_DIR}/.fips-imports.cmake")
     endif()
+    set(FIPS_IMPORT)
 
 endmacro()
 
