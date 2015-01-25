@@ -375,56 +375,78 @@ macro(fips_dir dir)
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_files(files ...)
-#   Add files to current target.
+#   fips_add_file()
+#   Private helper function to add a single file to the project.
 #
-macro(fips_files files)
-
-    # determine source group name
+macro(fips_add_file in_file gen_ext generator)
+    # handle subdirectory
+    if (CurDir)
+        set(cur_file "${CurDir}/${in_file}")
+    else()
+        set(cur_file ${in_file})
+    endif()
+    get_filename_component(f_ext ${cur_file} EXT)
+    
+    # determine source group name and
+    # add to current source group
     if (CurDir)
         string(REPLACE / \\ group_name ${CurDir})
     else()
         set(group_name "")
     endif()
+    
+    source_group("${group_name}" FILES ${cur_file})
 
-    foreach (cur_file ${ARGV})
-
-        # handle subdirectory
-        if (CurDir)
-            set(cur_file "${CurDir}/${cur_file}")
-        endif()
-        get_filename_component(f_ext ${cur_file} EXT)
-        
-        # add file to current source group
-        source_group("${group_name}" FILES ${cur_file})
-
-        # add generated source file
+    # add generated source file
+    if (${f_ext} STREQUAL ${gen_ext})
+        get_filename_component(f_abs ${cur_file} ABSOLUTE)
         if (${f_ext} STREQUAL ".py")
-            get_filename_component(f_abs ${cur_file} ABSOLUTE)
             list(APPEND CurPyFiles ${f_abs})
-            string(REPLACE .py .cc py_src ${cur_file})
-            string(REPLACE .py .h py_hdr ${cur_file})
-            list(APPEND CurSources ${py_src} ${py_hdr})
-            source_group("${group_name}" FILES ${py_src} ${py_hdr})
+        else()
+            list(APPEND CurGenItems "${generator}#${f_abs}")
         endif()
+        string(REPLACE .py .cc gen_src ${cur_file})
+        string(REPLACE .py .h gen_hdr ${cur_file})
+        list(APPEND CurSources ${gen_src} ${gen_hdr})
+        source_group("${group_name}" FILES ${gen_src} ${gen_hdr})
+    endif()
 
-        # mark .m as .c file for older cmake versions (bug is fixed in cmake 3.1+)
-        if (FIPS_OSX)
-            if (${f_ext} STREQUAL ".m")
-                set_source_files_properties(${cur_file} PROPERTIES LANGUAGE C)
-            endif()
+    # mark .m as .c file for older cmake versions (bug is fixed in cmake 3.1+)
+    if (FIPS_OSX)
+        if (${f_ext} STREQUAL ".m")
+            set_source_files_properties(${cur_file} PROPERTIES LANGUAGE C)
         endif()
+    endif()
 
-        # add to global tracker variables
-        list(APPEND CurSources ${cur_file})
+    # add to global tracker variables
+    list(APPEND CurSources ${cur_file})
 
-        # remove dups
-        if (CurSources)
-            list(REMOVE_DUPLICATES CurSources)
-        endif()
+    # remove dups
+    if (CurSources)
+        list(REMOVE_DUPLICATES CurSources)
+    endif()
+endmacro()
 
+#-------------------------------------------------------------------------------
+#   fips_files(files ...)
+#   Add files to current target.
+#
+macro(fips_files files)
+    foreach (cur_file ${ARGV})
+        fips_add_file(${cur_file} ".py" "NO_GENERATOR")
     endforeach()
+endmacro()
 
+#-------------------------------------------------------------------------------
+#   fips_generate(generator file)
+#   Generic code generation, generator is a python script in 
+#   project/fips-generators (without the .py), and file 
+#   has a custom extensions which is handed as arg to the 
+#   code generator script.
+#
+macro(fips_generate generator file)
+    get_filename_component(f_ext ${file} EXT)
+    fips_add_file(${cur_file} ${f_ext} ${generator}) 
 endmacro()
 
 #-------------------------------------------------------------------------------
