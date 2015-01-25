@@ -28,9 +28,9 @@ def run_build(fips_dir, target, build_type, build_dir, num_jobs=1) :
     :param num_jobs:    number of parallel jobs (default: 1)
     :returns:           True if xcodebuild returns successful
     """
-    cmdLine = ['xcodebuild', '-jobs', str(num_jobs), '-configuration', build_type]
-    if target is not None :
-        cmdLine.extend(['-target', target])
+    if not target :
+        target = "ALL_BUILD"
+    cmdLine = ['xcodebuild', '-jobs', str(num_jobs), '-configuration', build_type, '-target', target]
     print(cmdLine)
     res = subprocess.call(cmdLine, cwd=build_dir)
     return res == 0
