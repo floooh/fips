@@ -169,6 +169,7 @@ Fips defines a number of useful cmake variables:
 * **FIPS\_PROJECT\_DIR**: absolute path of the current project
 * **FIPS\_DEPLOY\_DIR**: absolute path of the deployment directory
 * **FIPS\_CONFIG**: name of the current build configuration (e.g. osx-xcode-debug)
+* **FIPS\_IMPORT**: set inside import CMakeLists.txt files
 
 ### Fips CMake Options
 
