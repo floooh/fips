@@ -268,7 +268,7 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args) :
                     log.error("don't know how to start HTML app on this platform")
             elif os.path.isdir('{}/{}.app'.format(deploy_dir, target_name)) :
                 # special case: Mac app
-                cmd_line = ['open', '{}/{}.app'.format(deploy_dir, target_name, target_args)]
+                cmd_line = ['open', '{}/{}.app'.format(deploy_dir, target_name)]
                 if target_args :
                     cmd_line.append('--args')
             else :
