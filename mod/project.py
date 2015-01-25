@@ -215,14 +215,14 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
         return True
 
 #-------------------------------------------------------------------------------
-def run(fips_dir, proj_dir, cfg_name, target_name) :
+def run(fips_dir, proj_dir, cfg_name, target_name, target_args) :
     """run a build target executable
 
     :param fips_dir:    absolute path of fips
     :param proj_dir:    absolute path of project dir
     :param cfg_name:    config name or pattern
     :param target_name: the target name
-    :returns:           True if build was successful
+    :param target_args: command line arguments for build target
     """
 
     proj_name = util.get_project_name_from_dir(proj_dir)
@@ -269,9 +269,13 @@ def run(fips_dir, proj_dir, cfg_name, target_name) :
             elif os.path.isdir('{}/{}.app'.format(deploy_dir, target_name)) :
                 # special case: Mac app
                 cmd_line = ['open', '{}/{}.app'.format(deploy_dir, target_name)]
+                if target_args :
+                    cmd_line.append('--args')
             else :
                 cmd_line = [ '{}/{}'.format(deploy_dir, target_name) ]
             if cmd_line :
+                if target_args :
+                    cmd_line.extend(target_args)
                 try:
                     subprocess.call(args=cmd_line, cwd=deploy_dir)
                 except OSError, e:
