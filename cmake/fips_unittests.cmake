@@ -10,7 +10,7 @@
 #
 macro(fips_begin_unittest name)
     fips_reset(${name})
-    set(CurAppName ${name}Test)
+    set(CurTargetName ${name}Test)
     if (FIPS_OSX)
 		set(CurAppType "windowed")
 	else()
@@ -27,14 +27,14 @@ macro(fips_end_unittest)
     if (FIPS_UNITTESTS)
 
         if (FIPS_CMAKE_VERBOSE)
-            message("Unit Test: name=" ${CurAppName})
+            message("Unit Test: name=" ${CurTargetName})
         endif()
     
         # FIXME: add unittestpp lib dependency
         fips_deps(unittestpp)
 
         # FIXME: generate a scratch main-source-file
-        set(main_path ${CMAKE_CURRENT_BINARY_DIR}/${CurAppName}_main.cc)
+        set(main_path ${CMAKE_CURRENT_BINARY_DIR}/${CurTargetName}_main.cc)
         file(WRITE ${main_path}
             "// machine generated, do not edit\n"
             "#include \"Pre.h\"\n"
@@ -51,14 +51,14 @@ macro(fips_end_unittest)
         # generate a command line app
         list(APPEND CurSources ${main_path})
         fips_end_app()
-        set_target_properties(${CurAppName} PROPERTIES FOLDER "UnitTests")
+        set_target_properties(${CurTargetName} PROPERTIES FOLDER "UnitTests")
 
         # add as cmake unit test
-        add_test(NAME ${CurAppName} COMMAND ${CurAppName})
+        add_test(NAME ${CurTargetName} COMMAND ${CurTargetName})
 
         # if configured, start the app as post-build-step
         if (FIPS_UNITTESTS_RUN_AFTER_BUILD)
-            add_custom_command (TARGET ${CurAppName} POST_BUILD COMMAND ${CurAppName})
+            add_custom_command (TARGET ${CurTargetName} POST_BUILD COMMAND ${CurTargetName})
         endif()
     endif()
 endmacro()
