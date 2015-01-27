@@ -66,7 +66,9 @@ script:
     # test run command
     - python fips help run
     - python fips run hello
+    - python fips run hello -- arg0 arg1 arg2
     - python fips run hello linux-make-release
+    - python fips run hello linux-make-release -- arg0 arg1 arg2
     # test clean command
     - python fips help clean
     - python fips clean
@@ -77,7 +79,6 @@ script:
     - python fips set config linux-make-release
     - python fips set ccache on
     # test make command
-    - python fips make hello
     - python fips make hello
     - python fips run hello
     - python fips make hello linux-make-debug
