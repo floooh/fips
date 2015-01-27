@@ -102,11 +102,13 @@ get_filename_component(EMSCRIPTEN_ROOT_PATH "${EMSCRIPTEN_ROOT_PATH}" ABSOLUTE)
 get_filename_component(EMSCRIPTEN_DOT_FILE "${EMSCRIPTEN_ROOT_PATH}/../../.emscripten" ABSOLUTE)
 get_filename_component(EMSCRIPTEN_CACHE "${EMSCRIPTEN_ROOT_PATH}/../../.emscripten_cache" ABSOLUTE)
 if (EXISTS "${EMSCRIPTEN_DOT_FILE}")
-    set(EMSCRIPTEN_CONFIG_OPTIONS "--em-config ${EMSCRIPTEN_DOT_FILE} --cache ${EMSCRIPTEN_CACHE}")
+    set(EMSCRIPTEN_CONFIG_OPTION "--em-config ${EMSCRIPTEN_DOT_FILE}")
+    set(EMSCRIPTEN_CACHE_OPTION "--cache ${EMSCRIPTEN_CACHE}")
     message("Using local emscripten config at ${EMSCRIPTEN_DOT_FILE}")
 else()
     # no sdk-embedded config found, use the default (~/.emscripten and ~/.emscripten_cache)
-    set(EMSCRIPTEN_CONFIG_OPTIONS "")
+    set(EMSCRIPTEN_CONFIG_OPTION "")
+    set(EMSCRIPTEN_CACHE_OPTION "")
     message("Using global emscripten config at ~/.emscripten")
 endif()
 
@@ -141,25 +143,28 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 set(CMAKE_SYSTEM_INCLUDE_PATH "${EMSCRIPTEN_ROOT_PATH}/system/include")
 
 # c++ compiler flags
-set(CMAKE_CXX_FLAGS "${EMSCRIPTEN_CONFIG_OPTIONS} -std=c++11 -stdlib=libc++ ${FIPS_EMSC_EXCEPTION_FLAGS} -fstrict-aliasing -Wall -Wno-warn-absolute-paths -Wno-multichar -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue")
+set(CMAKE_CXX_FLAGS "${EMSCRIPTEN_CONFIG_OPTION} ${EMSCRIPTEN_CACHE_OPTION} -std=c++11 -stdlib=libc++ ${FIPS_EMSC_EXCEPTION_FLAGS} -fstrict-aliasing -Wall -Wno-warn-absolute-paths -Wno-multichar -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O3 -g -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 set(CMAKE_CXX_FLAGS_PROFILING "-O3 --profiling")
 
 # c compiler flags
-set(CMAKE_C_FLAGS "${EMSCRIPTEN_CONFIG_OPTIONS} -fstrict-aliasing -Wall -Wno-warn-absolute-paths -Wextra -Wno-multichar -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue")
+set(CMAKE_C_FLAGS "${EMSCRIPTEN_CONFIG_OPTION} ${EMSCRIPTEN_CACHE_OPTION} -fstrict-aliasing -Wall -Wno-warn-absolute-paths -Wextra -Wno-multichar -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue")
 set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
 set(CMAKE_C_FLAGS_DEBUG "-O3 -g -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 set(CMAKE_C_FLAGS_PROFILING "-O3 --profiling")
 
 # linker flags
-set(CMAKE_EXE_LINKER_FLAGS "${EMSCRIPTEN_CONFIG_OPTIONS} --memory-init-file ${EMSCRIPTEN_USE_MEMORY_INIT_FILE} -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s TOTAL_MEMORY=${EMSCRIPTEN_TOTAL_MEMORY} -s DISABLE_EXCEPTION_CATCHING=${EMSCRIPTEN_DISABLE_EXCEPTION_CATCHING} -s NO_FILESYSTEM=${EMSCRIPTEN_NO_FILESYSTEM}")
+set(CMAKE_EXE_LINKER_FLAGS "${EMSCRIPTEN_CONFIG_OPTION} ${EMSCRIPTEN_CACHE_OPTION} --memory-init-file ${EMSCRIPTEN_USE_MEMORY_INIT_FILE} -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s TOTAL_MEMORY=${EMSCRIPTEN_TOTAL_MEMORY} -s DISABLE_EXCEPTION_CATCHING=${EMSCRIPTEN_DISABLE_EXCEPTION_CATCHING} -s NO_FILESYSTEM=${EMSCRIPTEN_NO_FILESYSTEM}")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-O3 --llvm-lto ${EMSCRIPTEN_LTO_LEVEL} -s VERBOSE=${EMSCRIPTEN_BUILD_VERBOSE} -s ASM_JS=1 -s ASSERTIONS=${EMSCRIPTEN_ASSERTIONS} -s OUTLINING_LIMIT=${EMSCRIPTEN_OUTLINING_LIMIT} --closure ${EMSCRIPTEN_USE_CLOSURE}")
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-O3 -g -s ASM_JS=1 -s VERBOSE=${EMSCRIPTEN_BUILD_VERBOSE}")
 set(CMAKE_EXE_LINKER_FLAGS_PROFILING "--profiling -O3 --llvm-lto ${EMSCRIPTEN_LTO_LEVEL} -s VERBOSE=${EMSCRIPTEN_BUILD_VERBOSE} -s ASM_JS=1 -s ASSERTIONS=${EMSCRIPTEN_ASSERTIONS} -s OUTLINING_LIMIT=${EMSCRIPTEN_OUTLINING_LIMIT}")
 
+# static library flags (for CMAKE_AR)
+set(CMAKE_STATIC_LINKER_FLAGS "${EMSCRIPTEN_CONFIG_OPTION}")
+
 # dynamic lib linker flags
-set(CMAKE_SHARED_LINKER_FLAGS "-shared ${EMSCRIPTEN_CONFIG_OPTIONS} --memory-init-file 0 -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s TOTAL_MEMORY=${EMSCRIPTEN_TOTAL_MEMORY_WORKER} -s BUILD_AS_WORKER=1 -s EXPORTED_FUNCTIONS=[\\\"_dowork\\\"] -s DISABLE_EXCEPTION_CATCHING=${EMSCRIPTEN_DISABLE_EXCEPTION_CATCHING} -s NO_FILESYSTEM=${EMSCRIPTEN_NO_FILESYSTEM}")
+set(CMAKE_SHARED_LINKER_FLAGS "-shared ${EMSCRIPTEN_CONFIG_OPTIONS} ${EMSCRIPTEN_CACHE_OPTION} --memory-init-file 0 -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s TOTAL_MEMORY=${EMSCRIPTEN_TOTAL_MEMORY_WORKER} -s BUILD_AS_WORKER=1 -s EXPORTED_FUNCTIONS=[\\\"_dowork\\\"] -s DISABLE_EXCEPTION_CATCHING=${EMSCRIPTEN_DISABLE_EXCEPTION_CATCHING} -s NO_FILESYSTEM=${EMSCRIPTEN_NO_FILESYSTEM}")
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "-O3 --llvm-lto ${EMSCRIPTEN_LTO_LEVEL} -s VERBOSE=${EMSCRIPTEN_BUILD_VERBOSE} -s ASM_JS=1 -s ASSERTIONS=${EMSCRIPTEN_ASSERTIONS} -s OUTLINING_LIMIT=${EMSCRIPTEN_OUTLINING_LIMIT} --closure ${EMSCRIPTEN_USE_CLOSURE}")
 set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-O3 -g -s ASM_JS=1 -s VERBOSE=${EMSCRIPTEN_BUILD_VERBOSE} --closure 0")
 set(CMAKE_SHARED_LINKER_FLAGS_PROFILING "--profiling -O3 --llvm-lto ${EMSCRIPTEN_LTO_LEVEL} -s VERBOSE=${EMSCRIPTEN_BUILD_VERBOSE} -s ASM_JS=1 -s ASSERTIONS=${EMSCRIPTEN_ASSERTIONS} -s OUTLINING_LIMIT=${EMSCRIPTEN_OUTLINING_LIMIT}")
@@ -178,6 +183,7 @@ set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}" CACHE STR
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}" CACHE STRING "Generic Shared Linker Flags" FORCE)
 set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG}" CACHE STRING "Debug Shared Linker Flags" FORCE)
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE}" CACHE STRING "Release Shared Linker Flags" FORCE)
+set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS}" CACHE STRING "Static Lib Flags" FORCE)
 
 # set the build type to use
 if (NOT CMAKE_BUILD_TYPE)
