@@ -124,7 +124,7 @@ macro(fips_setup)
     # check whether python is installed
     find_program(PYTHON "python")
     if (NOT PYTHON)
-        message(WARNING "Python not found, code generation will be disabled!")
+        message(FATAL_ERROR "Python not found, required for code generation!")
     endif()
 
     # write empty target files (will be populated in the fips_end macros)
@@ -192,19 +192,12 @@ macro(fips_end_module)
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
     set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
 
-    # handle generators (pre-target)
-    if (CurPyFiles)
-        fips_handle_py_files_pretarget("${CurPyFiles}")
-    endif()
-
     # add library target
     add_library(${CurTargetName} ${CurSources})
     fips_apply_target_group(${CurTargetName})
 
     # handle generators (post-target)
-    if (CurPyFiles)
-        fips_handle_py_files_posttarget(${CurTargetName} "${CurPyFiles}")
-    endif()
+    fips_handle_generators(${CurTargetName})
 
     # record target name and type in the fips_targets.yml file
     fips_addto_targets_list(${CurTargetName} "module")
@@ -277,11 +270,6 @@ macro(fips_end_app)
         message(FATAL_ERROR "No sources in target: ${CurTargetName} !!!")
     endif()
 
-    # handle generators (pre-target)
-    if (CurPyFiles)
-        fips_handle_py_files_pretarget("${CurPyFiles}")
-    endif()
-
     # add executable target
     if (${CurAppType} STREQUAL "windowed")
         # a windowed application 
@@ -316,9 +304,7 @@ macro(fips_end_app)
     endif()
 
     # handle generators (post-target)
-    if (CurPyFiles)
-        fips_handle_py_files_posttarget(${CurTargetName} "${CurPyFiles}")
-    endif()
+    fips_handle_generators(${CurTargetName})
 
     # PNaCl specific stuff
     if (FIPS_PNACL)
@@ -394,55 +380,6 @@ endmacro()
 macro(fips_generate generator input_file output_files)
     get_filename_component(f_ext ${input_file} EXT)
     fips_add_file(${input_file} ${f_ext} ${generator} ${output_files}) 
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_sources(dirs ...)
-#   *** OBSOLETE ***
-#   Parse one or more directories for sources and add them to the current
-#   target.
-#
-macro(fips_sources dirs)
-    
-    message("fips_sources is obsolete, please us fips_files instead!")
-
-    foreach (dir ${ARGV})
-        # gather files
-        file(GLOB src ${dir}/*.cc ${dir}/*.cpp ${dir}/*.c ${dir}/*.m ${dir}/*.mm ${dir}/*.h ${dir}/*.hh)
-        file(GLOB pys ${dir}/*.py)
-        file(GLOB shds ${dir}/*.shd)
-        file(GLOB imgs ${dir}/*.png ${dir}/*.tga ${dir}/*.jpg)
-
-        # determine group folder name
-        string(REPLACE / \\ groupName ${dir})
-        if (${dir} STREQUAL .)
-            source_group("" FILES ${src} ${pys} ${shds} ${imgs})
-        else()
-            source_group(${groupName} FILES ${src} ${pys} ${shds} ${imgs})
-        endif()
-
-        # add generated source files
-        foreach(py ${pys})
-            string(REPLACE .py .cc pySrc ${py})
-            string(REPLACE .py .h pyHdr ${py})
-            list(APPEND CurSources ${pySrc} ${pyHdr})
-            if (${dir} STREQUAL .)
-                source_group("" FILES ${pySrc} ${pyHdr})
-            else()
-                source_group(${groupName} FILES ${pySrc} ${pyHdr})
-            endif()
-        endforeach()
-
-        # add to global tracker variables
-        list(APPEND CurSources ${src} ${pys} ${shds} ${imgs})
-        list(APPEND CurPyFiles ${pys})
-
-        # remove duplicate sources 
-        if (CurSources)
-            list(REMOVE_DUPLICATES CurSources)
-        endif()
-
-    endforeach()
 endmacro()
 
 #-------------------------------------------------------------------------------

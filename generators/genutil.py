@@ -56,19 +56,19 @@ def fileVersionDirty(filePath, version) :
     return True
 
 #-------------------------------------------------------------------------------
-def isDirty(srcFiles, version, dstSrcPath, dstHdrPath) :
+def isDirty(version, inputs, outputs) :
     '''
     Check if code generation needs to run by comparing version stamp
     and time stamps of a number of source files, and generated
     source and header files.
     '''
-    if fileVersionDirty(dstSrcPath, version) or fileVersionDirty(dstHdrPath, version) :
-        return True
-
-    dstSrcTime = os.path.getmtime(dstSrcPath)
-    dstHdrTime = os.path.getmtime(dstHdrPath)
-    for srcFile in srcFiles :
-        srcTime = os.path.getmtime(srcFile)
-        if srcTime > dstSrcTime or srcTime > dstHdrTime :
+    for output in outputs :
+        if fileVersionDirty(output, version) :
             return True
+        outputTime = os.path.getmtime(output)
+        for input in inputs :
+            inputTime = os.path.getmtime(input)
+            if inputTime > outputTime :
+                return True
     return False
+

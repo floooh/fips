@@ -9,8 +9,8 @@
 #   Begin defining a unit test.
 #
 macro(fips_begin_unittest name)
-    fips_reset(${name})
     set(CurTargetName ${name}Test)
+    fips_reset(${CurTargetName})
     if (FIPS_OSX)
 		set(CurAppType "windowed")
 	else()
