@@ -110,8 +110,7 @@ macro(fips_handle_generators target)
         if (NOT TARGET ALL_GENERATE)
             add_custom_target(ALL_GENERATE
                 COMMAND ${PYTHON} ${FIPS_PROJECT_DIR}/.fips-gen.py ${CMAKE_BINARY_DIR}/fips_codegen.yml
-                WORKING_DIRECTORY ${FIPS_PROJECT_DIR}
-                COMMENT "Generating code...")
+                WORKING_DIRECTORY ${FIPS_PROJECT_DIR})
         endif()
         add_dependencies(${target} ALL_GENERATE)
     endif()
