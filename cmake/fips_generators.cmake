@@ -37,9 +37,9 @@
 #   Called from fips_begin_module, fips_begin_lib, fips_begin_app to 
 #   clear the generator .yml file.
 #
-macro(fips_begin_gen target)
-    file(REMOVE "${CMAKE_CURRENT_BINARY_DIR}/${target}_gen.yml")
-    set(CurTargetHasCodeGen)
+macro(fips_begin_gen)
+    file(REMOVE "${CMAKE_BINARY_DIR}/fips_codegen.yml")
+    set(CurProjectHasCodeGen)
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -49,26 +49,28 @@ endmacro()
 #   source which will be executed and creates a .cc and .h file.
 #   
 macro(fips_add_python_generator group_name py_file)
-    get_filename_component(f_abs ${py_file} ABSOLUTE)
-    get_filename_component(f_dir ${f_abs} DIRECTORY)
-    get_filename_component(f_name ${f_abs} NAME_WE)
-    set(gen_src "${f_dir}/${f_name}.cc")
-    set(gen_hdr "${f_dir}/${f_name}.h")
-    file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/${CurTargetName}_gen.yml" 
-        "- type: simple\n"
-        "  script: '${f_abs}'\n"
-        "  outputs:\n"
-        "    - '${gen_src}'\n"
-        "    - '${gen_hdr}'\n")
-    list(APPEND CurSources ${gen_src} ${gen_hdr})
-    source_group("${group_name}\\gen" FILES ${gen_src} ${gen_hdr})
-    if (NOT EXISTS ${gen_src})
-        file(WRITE ${gen_src} " ")
+    if (FipsAddFilesEnabled)
+        get_filename_component(f_abs ${py_file} ABSOLUTE)
+        get_filename_component(f_dir ${f_abs} DIRECTORY)
+        get_filename_component(f_name ${f_abs} NAME_WE)
+        set(gen_src "${f_dir}/${f_name}.cc")
+        set(gen_hdr "${f_dir}/${f_name}.h")
+        file(APPEND "${CMAKE_BINARY_DIR}/fips_codegen.yml" 
+            "- type: simple\n"
+            "  script: '${f_abs}'\n"
+            "  outputs:\n"
+            "    - '${gen_src}'\n"
+            "    - '${gen_hdr}'\n")
+        list(APPEND CurSources ${gen_src} ${gen_hdr})
+        source_group("${group_name}\\gen" FILES ${gen_src} ${gen_hdr})
+        if (NOT EXISTS ${gen_src})
+            file(WRITE ${gen_src} " ")
+        endif()
+        if (NOT EXISTS ${gen_hdr})
+            file(WRITE ${gen_hdr} " ")
+        endif()
+        set(CurProjectHasCodeGen 1)
     endif()
-    if (NOT EXISTS ${gen_hdr})
-        file(WRITE ${gen_hdr} " ")
-    endif()
-    set(CurTargetHasCodeGen 1)
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -77,24 +79,26 @@ endmacro()
 #   current target.
 #
 macro(fips_add_file_generator group_name in_file generator out_files)
-    get_filename_component(f_abs ${in_file} ABSOLUTE)
-    get_filename_component(f_dir ${f_abs} DIRECTORY)
-    set(yml_content 
-        "- type: generic\n"
-        "  generator: ${generator}\n"
-        "  input: '${f_abs}'\n"
-        "  outputs:\n")
-    foreach(out_file ${out_files})
-        set(out_path "${f_dir}/${out_file}")
-        string(CONCAT yml_content ${yml_content} "  - '${out_path}'")
-        list(APPEND CurSources ${out_path})
-        source_group("${group_name}\\gen" FILES ${out_path})
-        if (NOT EXISTS ${out_path})
-            file(WRITE ${out_path} " ")
-        endif()
-    endforeach()
-    file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/${CurTargetName}_gen.yml" "${yml_content}")
-    set(CurTargetHasCodeGen 1)
+    if (FipsAddFilesEnabled)
+        get_filename_component(f_abs ${in_file} ABSOLUTE)
+        get_filename_component(f_dir ${f_abs} DIRECTORY)
+        set(yml_content 
+            "- type: generic\n"
+            "  generator: ${generator}\n"
+            "  input: '${f_abs}'\n"
+            "  outputs:\n")
+        foreach(out_file ${out_files})
+            set(out_path "${f_dir}/${out_file}")
+            string(CONCAT yml_content ${yml_content} "  - '${out_path}'")
+            list(APPEND CurSources ${out_path})
+            source_group("${group_name}\\gen" FILES ${out_path})
+            if (NOT EXISTS ${out_path})
+                file(WRITE ${out_path} " ")
+            endif()
+        endforeach()
+        file(APPEND "${CMAKE_BINARY_DIR}/fips_codegen.yml" "${yml_content}")
+        set(CurProjectHasCodeGen 1)
+    endif()
 endmacro()
             
 #-------------------------------------------------------------------------------
@@ -102,13 +106,14 @@ endmacro()
 #   Create custom target for .py generator files.
 #
 macro(fips_handle_generators target) 
-    if (CurTargetHasCodeGen)
-        add_custom_target(${target}_gen
-            COMMAND ${PYTHON} ${FIPS_PROJECT_DIR}/.fips-gen.py ${CMAKE_CURRENT_BINARY_DIR}/${target}_gen.yml
-            WORKING_DIRECTORY ${FIPS_PROJECT_DIR}
-            COMMENT "Generating code for ${target}...")
-        set_target_properties(${target}_gen PROPERTIES FOLDER "Generators")
-        add_dependencies(${target} ${target}_gen)
+    if (CurProjectHasCodeGen)
+        if (NOT TARGET ALL_GENERATE)
+            add_custom_target(ALL_GENERATE
+                COMMAND ${PYTHON} ${FIPS_PROJECT_DIR}/.fips-gen.py ${CMAKE_BINARY_DIR}/fips_codegen.yml
+                WORKING_DIRECTORY ${FIPS_PROJECT_DIR}
+                COMMENT "Generating code...")
+        endif()
+        add_dependencies(${target} ALL_GENERATE)
     endif()
 endmacro()
 

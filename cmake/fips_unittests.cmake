@@ -9,13 +9,18 @@
 #   Begin defining a unit test.
 #
 macro(fips_begin_unittest name)
-    set(CurTargetName ${name}Test)
-    fips_reset(${CurTargetName})
-    if (FIPS_OSX)
-		set(CurAppType "windowed")
-	else()
-		set(CurAppType "cmdline")
-	endif()
+    if (FIPS_UNITTESTS)
+        set(CurTargetName ${name}Test)
+        set(FipsAddFilesEnabled 1)
+        fips_reset(${CurTargetName})
+        if (FIPS_OSX)
+            set(CurAppType "windowed")
+        else()
+            set(CurAppType "cmdline")
+        endif()
+    else()
+        set(FipsAddFilesEnabled)
+    endif()
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -61,5 +66,6 @@ macro(fips_end_unittest)
             add_custom_command (TARGET ${CurTargetName} POST_BUILD COMMAND ${CurTargetName})
         endif()
     endif()
+    set(FipsAddFilesEnabled 1)
 endmacro()
 

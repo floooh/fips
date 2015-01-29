@@ -20,6 +20,7 @@ import yaml
 
 def processFile(absPyPath, inputs, outputs) :
     # dynamically load (and execute) the generator module
+    print('Running: {}'.format(absPyPath))
     path, script = os.path.split(absPyPath)
     moduleName, ext = os.path.splitext(script)
     fp, pathname, description = imp.find_module(moduleName, [path])

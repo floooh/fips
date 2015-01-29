@@ -142,6 +142,7 @@ macro(fips_setup)
     endif()
     set(FIPS_IMPORT)
 
+    fips_begin_gen()
 endmacro()
 
 #-------------------------------------------------------------------------------

@@ -8,7 +8,6 @@
 #   Reset the global tracker variables.
 #
 macro(fips_reset target)
-    fips_begin_gen(${target})
     set(CurDir)
     set(CurSources)
     set(CurDependencies)
@@ -17,6 +16,7 @@ macro(fips_reset target)
     set(CurTargetName)
     set(CurAppType)
     set(CurImgFiles)
+    set(FipsAddFilesEnabled 1)
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -210,46 +210,49 @@ endmacro()
 #   additional handling for code generation files.
 #
 macro(fips_add_file in_file gen_ext gen_generator gen_files)
-    # handle subdirectory
-    if (CurDir)
-        set(cur_file "${CurDir}/${in_file}")
-    else()
-        set(cur_file ${in_file})
-    endif()
-    get_filename_component(f_ext ${cur_file} EXT)
-    
-    # determine source group name and
-    # add to current source group
-    if (CurDir)
-        string(REPLACE / \\ group_name ${CurDir})
-    else()
-        set(group_name "")
-    endif()
-    
-    source_group("${group_name}" FILES ${cur_file})
 
-    # handle code generation
-    if (${f_ext} STREQUAL ${gen_ext})
-        if (${f_ext} STREQUAL ".py")
-            fips_add_python_generator("${group_name}" ${cur_file})
+    if (FipsAddFilesEnabled)
+        # handle subdirectory
+        if (CurDir)
+            set(cur_file "${CurDir}/${in_file}")
         else()
-            fips_add_file_generator("${group_name}" ${cur_file} ${gen_generator} ${gen_files})
+            set(cur_file ${in_file})
         endif()
-    endif()
-
-    # mark .m as .c file for older cmake versions (bug is fixed in cmake 3.1+)
-    if (FIPS_OSX)
-        if (${f_ext} STREQUAL ".m")
-            set_source_files_properties(${cur_file} PROPERTIES LANGUAGE C)
+        get_filename_component(f_ext ${cur_file} EXT)
+        
+        # determine source group name and
+        # add to current source group
+        if (CurDir)
+            string(REPLACE / \\ group_name ${CurDir})
+        else()
+            set(group_name "")
         endif()
-    endif()
+        
+        source_group("${group_name}" FILES ${cur_file})
 
-    # add to global tracker variables
-    list(APPEND CurSources ${cur_file})
+        # handle code generation
+        if (${f_ext} STREQUAL ${gen_ext})
+            if (${f_ext} STREQUAL ".py")
+                fips_add_python_generator("${group_name}" ${cur_file})
+            else()
+                fips_add_file_generator("${group_name}" ${cur_file} ${gen_generator} ${gen_files})
+            endif()
+        endif()
 
-    # remove dups
-    if (CurSources)
-        list(REMOVE_DUPLICATES CurSources)
+        # mark .m as .c file for older cmake versions (bug is fixed in cmake 3.1+)
+        if (FIPS_OSX)
+            if (${f_ext} STREQUAL ".m")
+                set_source_files_properties(${cur_file} PROPERTIES LANGUAGE C)
+            endif()
+        endif()
+
+        # add to global tracker variables
+        list(APPEND CurSources ${cur_file})
+
+        # remove dups
+        if (CurSources)
+            list(REMOVE_DUPLICATES CurSources)
+        endif()
     endif()
 endmacro()
 
