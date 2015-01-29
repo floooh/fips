@@ -20,12 +20,13 @@ import yaml
 
 def processFile(absPyPath, inputs, outputs) :
     # dynamically load (and execute) the generator module
-    print('Running: {}'.format(absPyPath))
+    print('Generate: {}'.format(inputs))
     path, script = os.path.split(absPyPath)
+    sys.path.insert(0, path)
     moduleName, ext = os.path.splitext(script)
-    fp, pathname, description = imp.find_module(moduleName, [path])
+    fp, pathname, description = imp.find_module(moduleName)
     module = imp.load_module(moduleName, fp, pathname, description)
-    module.generate(absPyPath, inputs, outputs)
+    module.generate(inputs, outputs)
 
 #=== entry point
 if len(sys.argv) == 2 :
@@ -35,7 +36,7 @@ if len(sys.argv) == 2 :
             if attrs['type'] == 'simple' :
                 processFile(attrs['script'], [attrs['script']], attrs['outputs'])
             else :
-                print("NOT IMPLEMENTED YET")
+                processFile(attrs['generator'], [attrs['input']], attrs['outputs'])
 else :
     print('Needs full path to a generator .yml file!')
     exit(10)

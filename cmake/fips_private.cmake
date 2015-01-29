@@ -235,7 +235,7 @@ macro(fips_add_file in_file gen_ext gen_generator gen_files)
             if (${f_ext} STREQUAL ".py")
                 fips_add_python_generator("${group_name}" ${cur_file})
             else()
-                fips_add_file_generator("${group_name}" ${cur_file} ${gen_generator} ${gen_files})
+                fips_add_file_generator("${group_name}" ${cur_file} ${gen_generator} "${gen_files}")
             endif()
         endif()
 

@@ -380,7 +380,7 @@ endmacro()
 #
 macro(fips_generate generator input_file output_files)
     get_filename_component(f_ext ${input_file} EXT)
-    fips_add_file(${input_file} ${f_ext} ${generator} ${output_files}) 
+    fips_add_file(${input_file} ${f_ext} ${generator} "${output_files}") 
 endmacro()
 
 #-------------------------------------------------------------------------------
