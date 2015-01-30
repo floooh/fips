@@ -40,6 +40,7 @@
 macro(fips_begin_gen)
     file(REMOVE "${CMAKE_BINARY_DIR}/fips_codegen.yml")
     set(CurProjectHasCodeGen)
+    set(CMAKE_INCLUDE_CURRENT_DIR ON)
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -52,9 +53,9 @@ macro(fips_add_python_generator group_name py_file)
     if (FipsAddFilesEnabled)
         get_filename_component(f_abs ${py_file} ABSOLUTE)
         get_filename_component(f_dir ${f_abs} DIRECTORY)
-        get_filename_component(f_name ${f_abs} NAME_WE)
-        set(gen_src "${f_dir}/${f_name}.cc")
-        set(gen_hdr "${f_dir}/${f_name}.h")
+        get_filename_component(f_name_we ${f_abs} NAME_WE)
+        set(gen_src "${CMAKE_CURRENT_BINARY_DIR}/${CurDir}/${f_name_we}.cc")
+        set(gen_hdr "${CMAKE_CURRENT_BINARY_DIR}/${CurDir}/${f_name_we}.h")
         file(APPEND "${CMAKE_BINARY_DIR}/fips_codegen.yml" 
             "- type: simple\n"
             "  script: '${f_abs}'\n"
@@ -88,7 +89,7 @@ macro(fips_add_file_generator group_name in_file generator out_files)
             "  input: '${f_abs}'\n"
             "  outputs:\n")
         foreach(out_file ${out_files})
-            set(out_path "${f_dir}/${out_file}")
+            set(out_path "${CMAKE_CURRENT_BINARY_DIR}/${CurDir}/${out_file}")
             string(CONCAT yml_content ${yml_content} "  - '${out_path}'\n")
             list(APPEND CurSources ${out_path})
             source_group("${group_name}\\gen" FILES ${out_path})

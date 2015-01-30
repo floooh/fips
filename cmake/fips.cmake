@@ -390,3 +390,12 @@ macro(fips_add_subdirectory dir)
     add_subdirectory(${dir})
 endmacro()
 
+#-------------------------------------------------------------------------------
+#   fips_include_directories(dir)
+#
+macro(fips_include_directories dir)
+    foreach (cur_dir ${ARGV})
+        include_directories(${cur_dir} ${CMAKE_CURRENT_BINARY_DIR}/${cur_dir})
+    endforeach()
+endmacro()
+
