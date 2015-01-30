@@ -9,6 +9,10 @@ Read the docs to get a better idea what this means:
 
 http://floooh.github.io/fips/index.html
 
+### Public Service Announcements
+
+- **30-Jan-2015**: please note that the NaCl SDK setup script is currently broken with Python 2.7.9 (2.7.6 works), this is tracked in the following bug: https://code.google.com/p/chromium/issues/detail?id=452137  
+
 ### Progress
 
 fips is currently heavily **work in progress**, everything may change or
