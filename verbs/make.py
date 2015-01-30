@@ -22,7 +22,10 @@ def run(fips_dir, proj_dir, args) :
         cfg_name = settings.get(proj_dir, 'config')
     if not tgt_name :
         tgt_name = settings.get(proj_dir, 'target')
-    project.build(fips_dir, proj_dir, cfg_name, tgt_name)
+    if tgt_name == 'clean' :
+        project.make_clean(fips_dir, proj_dir, cfg_name)
+    else :
+        project.build(fips_dir, proj_dir, cfg_name, tgt_name)
 
 #-------------------------------------------------------------------------------
 def help() :

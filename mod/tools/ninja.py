@@ -70,7 +70,11 @@ def run_clean(fips_dir, build_dir) :
     :returns:           True if ninja returned without error
     """
     prepare_ninja_tool(fips_dir, build_dir)
-    res = subprocess.call([get_ninja_name(), 'clean'], cwd=build_dir, shell=True)
-    return res == 0
+    try :
+        cmdLine = [ '{} clean'.format(get_ninja_name()) ]
+        res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
+        return res == 0
+    except OSError :
+        return False
 
 

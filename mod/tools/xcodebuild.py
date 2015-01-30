@@ -42,7 +42,10 @@ def run_clean(fips_dir, build_dir) :
     :params build_dir:  directory where the xcode project file is located
     :returns:           True if xcodebuild returns successful
     """
-    res = subprocess.call(['xcodebuild', 'clean'], cwd=build_dir)
-    return res == 0
+    try :
+        res = subprocess.call(['xcodebuild', 'clean'], cwd=build_dir)
+        return res == 0
+    except OSError :
+        return False
 
     
