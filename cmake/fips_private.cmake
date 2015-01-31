@@ -13,10 +13,10 @@ macro(fips_reset target)
     set(CurDependencies)
     set(CurLinkLibs)
     set(CurFrameworks)
-    set(CurTargetName)
     set(CurAppType)
     set(CurImgFiles)
     set(FipsAddFilesEnabled 1)
+    set(CurTargetName ${target})
 endmacro()
 
 #-------------------------------------------------------------------------------

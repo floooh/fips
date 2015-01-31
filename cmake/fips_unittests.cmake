@@ -10,9 +10,8 @@
 #
 macro(fips_begin_unittest name)
     if (FIPS_UNITTESTS)
-        set(CurTargetName ${name}Test)
         set(FipsAddFilesEnabled 1)
-        fips_reset(${CurTargetName})
+        fips_reset(${CurTargetName}Test)
         if (FIPS_OSX)
             set(CurAppType "windowed")
         else()
@@ -35,7 +34,7 @@ macro(fips_end_unittest)
             message("Unit Test: name=" ${CurTargetName})
         endif()
     
-        # FIXME: add unittestpp lib dependency
+        # add unittestpp lib dependency
         fips_deps(unittestpp)
 
         # FIXME: generate a scratch main-source-file

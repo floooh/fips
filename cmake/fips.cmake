@@ -178,7 +178,6 @@ macro(fips_begin_module name)
         message("Module: name=" ${name})
     endif()
     fips_reset(${name})
-    set(CurTargetName ${name})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -215,7 +214,6 @@ macro(fips_begin_lib name)
         message("Library: name=" ${name})
     endif()
     fips_reset(${name})
-    set(CurTargetName ${name})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -240,7 +238,6 @@ endmacro()
 macro(fips_begin_app name type)
     if (${type} STREQUAL "windowed" OR ${type} STREQUAL "cmdline")
         fips_reset(${name})
-        set(CurTargetName ${name})
         set(CurAppType ${type})
         if (FIPS_CMAKE_VERBOSE)
             message("App: name=" ${CurTargetName} " type=" ${CurAppType})
