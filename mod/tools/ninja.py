@@ -57,7 +57,7 @@ def run_build(fips_dir, target, build_dir, num_jobs=1) :
     if not target :
         target = 'all'
     prepare_ninja_tool(fips_dir, build_dir)
-    cmdLine = [get_ninja_name(), '-j', str(num_jobs), target]
+    cmdLine = ["{} -j {} {}".format(get_ninja_name(), num_jobs, target)]
     print(cmdLine)
     res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
     return res == 0
