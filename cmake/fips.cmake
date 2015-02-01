@@ -6,6 +6,8 @@
 get_filename_component(FIPS_PROJECT_DIR "." ABSOLUTE)
 get_filename_component(FIPS_DEPLOY_DIR "../fips-deploy" ABSOLUTE)
 
+include(CMakeParseArguments)
+
 include("${FIPS_ROOT_DIR}/cmake/fips_private.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_unittests.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_android.cmake")
@@ -354,7 +356,7 @@ macro(fips_dir dir)
     if (${dir} STREQUAL ".")
         set(CurDir)
     else()
-        set(CurDir ${dir})
+        set(CurDir "${dir}/")
     endif()
 endmacro()
 
@@ -369,15 +371,47 @@ macro(fips_files files)
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_generate(generator file)
-#   Generic code generation, generator is a python script in 
-#   project/fips-generators (without the .py), input_file is a single
-#   input file, output_files is a |-separated string of generated 
-#   output files.
+#   fips_generate(FROM input_file
+#       [TYPE generator_type]
+#       [SOURCE output_source]
+#       [HEADER output_header])
 #
-macro(fips_generate generator input_file output_files)
-    get_filename_component(f_ext ${input_file} EXT)
-    fips_add_file(${input_file} ${f_ext} ${generator} "${output_files}") 
+#   Generic one C/C++ source/header pair from an input definition file
+#   by running a python generator script.
+#
+#   FROM:   name of an input file to be processed 
+#   TYPE:   the generator type, filename of a generator script with the .py
+#   SOURCE: name of generated source file
+#   HEADER: name of generated header file
+#
+#   If no TYPE is provided, the input_file must be a python script.
+#
+#   If both SOURCE and HEADER are omitted, it is assumed that the
+#   generator script generated a input_file.cc/input_file.h pair.
+#   Omitting one of SOURCE or HEADER means the generator script
+#   will only generate either the SOURCE or HEADER file.
+#
+macro(fips_generate)
+    set(options)
+    set(oneValueArgs FROM TYPE SOURCE HEADER)
+    set(multiValueArgs)
+    CMAKE_PARSE_ARGUMENTS(_fg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    if (_fg_UNPARSED_ARGUMENTS)
+        message(FATAL_ERROR "fips_generate(): called with invalid args '${_fg_UNPARSED_ARGUMENTS}'")
+    endif()
+    if (NOT _fg_FROM)
+        message(FATAL_ERROR "fips_generate(): FROM arg required")
+    endif()
+    if (NOT _fg_SOURCE AND NOT _fg_HEADER)
+        # if both no SOURCE and no HEADER provided, set both
+        # to input file plus .cc / .h extension
+        get_filename_component(f_ext ${_fg_FROM} EXT)
+        string(REPLACE ${f_ext} ".cc" _fg_SOURCE ${_fg_FROM})
+        string(REPLACE ${f_ext} ".h" _fg_HEADER ${_fg_FROM})
+    endif()
+    fips_get_groupname(group_name)
+    fips_add_file("${_fg_FROM}")
+    fips_add_generator("${group_name}" "${_fg_TYPE}" "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}")
 endmacro()
 
 #-------------------------------------------------------------------------------

@@ -44,59 +44,45 @@ macro(fips_begin_gen)
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_add_python_generator(py_file)
-#   Add a code-generator python file to the current target. This is one of
-#   two ways for code generation, just list a python file as normal 
-#   source which will be executed and creates a .cc and .h file.
-#   
-macro(fips_add_python_generator group_name py_file)
-    if (FipsAddFilesEnabled)
-        get_filename_component(f_abs ${py_file} ABSOLUTE)
-        get_filename_component(f_dir ${f_abs} DIRECTORY)
-        get_filename_component(f_name_we ${f_abs} NAME_WE)
-        set(gen_src "${CMAKE_CURRENT_BINARY_DIR}/${CurDir}/${f_name_we}.cc")
-        set(gen_hdr "${CMAKE_CURRENT_BINARY_DIR}/${CurDir}/${f_name_we}.h")
-        file(APPEND "${CMAKE_BINARY_DIR}/fips_codegen.yml" 
-            "- type: simple\n"
-            "  script: '${f_abs}'\n"
-            "  outputs:\n"
-            "    - '${gen_src}'\n"
-            "    - '${gen_hdr}'\n")
-        list(APPEND CurSources ${gen_src} ${gen_hdr})
-        source_group("${group_name}\\gen" FILES ${gen_src} ${gen_hdr})
-        if (NOT EXISTS ${gen_src})
-            file(WRITE ${gen_src} " ")
-        endif()
-        if (NOT EXISTS ${gen_hdr})
-            file(WRITE ${gen_hdr} " ")
-        endif()
-        set(CurProjectHasCodeGen 1)
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_add_file_generator(in_file generator out_files)
-#   Add a code generator item (in_file -> generator -> out_files) to the
-#   current target.
+#   fips_add_generator()
+#   Add a code generator item to the current target.
 #
-macro(fips_add_file_generator group_name in_file generator out_files)
+macro(fips_add_generator group_name in_generator in_file out_src out_hdr)
     if (FipsAddFilesEnabled)
-        get_filename_component(f_abs ${in_file} ABSOLUTE)
+        get_filename_component(f_abs ${CurDir}${in_file} ABSOLUTE)
         get_filename_component(f_dir ${f_abs} DIRECTORY)
+        if ("${in_generator}" STREQUAL "")
+            # special case: input file is the generator script
+            set(generator ${f_abs})
+        else()
+            # add .py extension to generator type
+            set(generator "${in_generator}.py")
+        endif()
         set(yml_content 
-            "- type: generic\n"
-            "  generator: ${generator}\n"
-            "  input: '${f_abs}'\n"
-            "  outputs:\n")
-        foreach(out_file ${out_files})
-            set(out_path "${CMAKE_CURRENT_BINARY_DIR}/${CurDir}/${out_file}")
-            string(CONCAT yml_content ${yml_content} "  - '${out_path}'\n")
-            list(APPEND CurSources ${out_path})
-            source_group("${group_name}\\gen" FILES ${out_path})
-            if (NOT EXISTS ${out_path})
-                file(WRITE ${out_path} " ")
+            "- generator: ${generator}\n"
+            "  in: '${f_abs}'\n")
+        if ("${out_src}" STREQUAL "")
+            string(CONCAT yml_content ${yml_content} "  out_src: null\n")
+        else()
+            set(out_src_abs "${CMAKE_CURRENT_BINARY_DIR}/${CurDir}${out_src}")
+            list(APPEND CurSources ${out_src_abs})
+            source_group("${group_name}\\gen" FILES ${out_src_abs})
+            string(CONCAT yml_content ${yml_content} "  out_src: '${out_src_abs}'\n")
+            if (NOT EXISTS ${out_src_abs})
+                file(WRITE ${out_src_abs} " ")
             endif()
-        endforeach()
+        endif()
+        if ("${out_hdr}" STREQUAL "")
+            string(CONCAT yml_content ${yml_content} "  out_hdr: null\n")
+        else()
+            set(out_hdr_abs "${CMAKE_CURRENT_BINARY_DIR}/${CurDir}${out_hdr}")
+            list(APPEND CurSources ${out_hdr_abs})
+            source_group("${group_name}\\gen" FILES ${out_hdr_abs})
+            string(CONCAT yml_content ${yml_content} "  out_hdr: '${out_hdr_abs}'\n")
+            if (NOT EXISTS ${out_hdr_abs})
+                file(WRITE ${out_hdr_abs} " ")
+            endif()
+        endif()
         file(APPEND "${CMAKE_BINARY_DIR}/fips_codegen.yml" "${yml_content}")
         set(CurProjectHasCodeGen 1)
     endif()

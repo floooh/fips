@@ -205,39 +205,40 @@ macro(fips_choose_config)
 endmacro()
 
 #-------------------------------------------------------------------------------
+#   fips_get_groupname(group_name)
+#   Set group_name variable to the group name derived from CurDir.
+#
+macro(fips_get_groupname VAR)
+    if (CurDir)
+        # hack to strip the leading '/' from CurDir
+        set(_str "${CurDir}!")
+        string(REPLACE "/!" "" _str ${_str})
+        string(REPLACE / \\ ${VAR} ${_str})
+    else()
+        set(${VAR} "")
+    endif()
+endmacro()
+
+#-------------------------------------------------------------------------------
 #   fips_add_file()
 #   Private helper function to add a single file to the project, with
 #   additional handling for code generation files.
 #
-macro(fips_add_file in_file gen_ext gen_generator gen_files)
+macro(fips_add_file new_file)
 
     if (FipsAddFilesEnabled)
         # handle subdirectory
         if (CurDir)
-            set(cur_file "${CurDir}/${in_file}")
+            set(cur_file "${CurDir}${new_file}")
         else()
-            set(cur_file ${in_file})
+            set(cur_file ${new_file})
         endif()
         get_filename_component(f_ext ${cur_file} EXT)
         
         # determine source group name and
         # add to current source group
-        if (CurDir)
-            string(REPLACE / \\ group_name ${CurDir})
-        else()
-            set(group_name "")
-        endif()
-        
+        fips_get_groupname(group_name)
         source_group("${group_name}" FILES ${cur_file})
-
-        # handle code generation
-        if (${f_ext} STREQUAL ${gen_ext})
-            if (${f_ext} STREQUAL ".py")
-                fips_add_python_generator("${group_name}" ${cur_file})
-            else()
-                fips_add_file_generator("${group_name}" ${cur_file} ${gen_generator} "${gen_files}")
-            endif()
-        endif()
 
         # mark .m as .c file for older cmake versions (bug is fixed in cmake 3.1+)
         if (FIPS_OSX)
