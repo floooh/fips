@@ -11,6 +11,11 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **01-Feb-2015**: the code generation refactoring branch has been merged back into 
+the master branch, code generation is now controlled with the new **fips_generate()**
+cmake macro, see [Oryol engine](https://github.com/floooh/oryol) and 
+[code generation doc page](http://floooh.github.io/fips/codegen.html) for details!
+
 - **30-Jan-2015**: please note that the NaCl SDK setup script is currently broken with Python 2.7.9 (2.7.6 works), this is tracked in the following bug: https://code.google.com/p/chromium/issues/detail?id=452137  
 
 ### Progress
