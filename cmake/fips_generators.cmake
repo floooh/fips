@@ -49,7 +49,7 @@ endmacro()
 macro(fips_add_generator group_name in_generator in_file out_src out_hdr)
     if (FipsAddFilesEnabled)
         get_filename_component(f_abs ${CurDir}${in_file} ABSOLUTE)
-        get_filename_component(f_dir ${f_abs} DIRECTORY)
+        get_filename_component(f_dir ${f_abs} PATH)
         if ("${in_generator}" STREQUAL "")
             # special case: input file is the generator script
             set(generator ${f_abs})
