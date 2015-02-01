@@ -428,7 +428,7 @@ endmacro()
 #
 macro(fips_include_directories dir)
     foreach (cur_dir ${ARGV})
-        include_directories(${cur_dir} ${CMAKE_CURRENT_BINARY_DIR}/${cur_dir})
+        include_directories(${cur_dir})
     endforeach()
 endmacro()
 
