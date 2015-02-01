@@ -156,6 +156,51 @@ def configure(fips_dir, proj_dir, cfg_name) :
         log.error("No configs found for '{}'".format(cfg_name))
 
 #-------------------------------------------------------------------------------
+def make_clean(fips_dir, proj_dir, cfg_name) :
+    """perform a 'make clean' on the project
+
+    :param fips_dir:    absolute path of fips
+    :param proj_dir:    absolute path of project dir
+    :param cfg_name:    config name or pattern
+    """
+
+    proj_name = util.get_project_name_from_dir(proj_dir)
+    configs = config.load(fips_dir, proj_dir, cfg_name)
+    num_valid_configs = 0
+    if configs :
+        for cfg in configs :
+            config_valid, _ = config.check_config_valid(fips_dir, cfg, print_errors=True)
+            if config_valid :
+                log.colored(log.YELLOW, "=== cleaning: {}".format(cfg['name']))
+
+                build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+                result = False
+                if cfg['build_tool'] == make.name :
+                    result = make.run_clean(fips_dir, build_dir)
+                elif cfg['build_tool'] == ninja.name :
+                    result = ninja.run_clean(fips_dir, build_dir)
+                elif cfg['build_tool'] == xcodebuild.name :
+                    result = xcodebuild.run_clean(fips_dir, build_dir)
+                else :
+                    result = cmake.run_clean(fips_dir, build_dir)
+                    
+                if result :
+                    num_valid_configs += 1
+                else :
+                    log.error("Failed to clean config '{}' of project '{}'".format(cfg['name'], proj_name))
+            else :
+                log.error("Config '{}' not valid in this environment".format(cfg['name']))
+    else :
+        log.error("No valid configs found for '{}'".format(cfg_name))
+
+    if num_valid_configs != len(configs) :
+        log.error('{} out of {} configs failed!'.format(len(configs) - num_valid_configs, len(configs)))
+        return False      
+    else :
+        log.colored(log.GREEN, '{} configs cleaned'.format(num_valid_configs))
+        return True
+
+#-------------------------------------------------------------------------------
 def build(fips_dir, proj_dir, cfg_name, target=None) :
     """perform a build of config(s) in project
 

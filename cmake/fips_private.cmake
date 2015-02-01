@@ -10,16 +10,13 @@
 macro(fips_reset target)
     set(CurDir)
     set(CurSources)
-    set(CurPyFiles)
-    set(CurGenItems)
     set(CurDependencies)
     set(CurLinkLibs)
     set(CurFrameworks)
-    set(CurModuleName)
-    set(CurLibraryName)
-    set(CurAppName)
     set(CurAppType)
     set(CurImgFiles)
+    set(FipsAddFilesEnabled 1)
+    set(CurTargetName ${target})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -206,3 +203,58 @@ macro(fips_choose_config)
         endif()
     endif()
 endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_get_groupname(group_name)
+#   Set group_name variable to the group name derived from CurDir.
+#
+macro(fips_get_groupname VAR)
+    if (CurDir)
+        # hack to strip the leading '/' from CurDir
+        set(_str "${CurDir}!")
+        string(REPLACE "/!" "" _str ${_str})
+        string(REPLACE / \\ ${VAR} ${_str})
+    else()
+        set(${VAR} "")
+    endif()
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_add_file()
+#   Private helper function to add a single file to the project, with
+#   additional handling for code generation files.
+#
+macro(fips_add_file new_file)
+
+    if (FipsAddFilesEnabled)
+        # handle subdirectory
+        if (CurDir)
+            set(cur_file "${CurDir}${new_file}")
+        else()
+            set(cur_file ${new_file})
+        endif()
+        get_filename_component(f_ext ${cur_file} EXT)
+        
+        # determine source group name and
+        # add to current source group
+        fips_get_groupname(group_name)
+        source_group("${group_name}" FILES ${cur_file})
+
+        # mark .m as .c file for older cmake versions (bug is fixed in cmake 3.1+)
+        if (FIPS_OSX)
+            if (${f_ext} STREQUAL ".m")
+                set_source_files_properties(${cur_file} PROPERTIES LANGUAGE C)
+            endif()
+        endif()
+
+        # add to global tracker variables
+        list(APPEND CurSources ${cur_file})
+
+        # remove dups
+        if (CurSources)
+            list(REMOVE_DUPLICATES CurSources)
+        endif()
+    endif()
+endmacro()
+
+

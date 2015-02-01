@@ -6,6 +6,8 @@
 get_filename_component(FIPS_PROJECT_DIR "." ABSOLUTE)
 get_filename_component(FIPS_DEPLOY_DIR "../fips-deploy" ABSOLUTE)
 
+include(CMakeParseArguments)
+
 include("${FIPS_ROOT_DIR}/cmake/fips_private.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_unittests.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_android.cmake")
@@ -124,7 +126,7 @@ macro(fips_setup)
     # check whether python is installed
     find_program(PYTHON "python")
     if (NOT PYTHON)
-        message(WARNING "Python not found, code generation will be disabled!")
+        message(FATAL_ERROR "Python not found, required for code generation!")
     endif()
 
     # write empty target files (will be populated in the fips_end macros)
@@ -142,6 +144,7 @@ macro(fips_setup)
     endif()
     set(FIPS_IMPORT)
 
+    fips_begin_gen()
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -177,7 +180,6 @@ macro(fips_begin_module name)
         message("Module: name=" ${name})
     endif()
     fips_reset(${name})
-    set(CurModuleName ${name})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -188,26 +190,19 @@ macro(fips_end_module)
     
     # setup dependency tracker variables for this module, executable
     # targets use this to resolve their dependencies
-    set_property(GLOBAL PROPERTY ${CurModuleName}_deps ${CurDependencies})
-    set_property(GLOBAL PROPERTY ${CurModuleName}_libs ${CurLinkLibs})
-    set_property(GLOBAL PROPERTY ${CurModuleName}_frameworks ${CurFrameworks})
-
-    # handle generators (pre-target)
-    if (CurPyFiles)
-        fips_handle_py_files_pretarget("${CurPyFiles}")
-    endif()
+    set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
 
     # add library target
-    add_library(${CurModuleName} ${CurSources})
-    fips_apply_target_group(${CurModuleName})
+    add_library(${CurTargetName} ${CurSources})
+    fips_apply_target_group(${CurTargetName})
 
     # handle generators (post-target)
-    if (CurPyFiles)
-        fips_handle_py_files_posttarget(${CurModuleName} "${CurPyFiles}")
-    endif()
+    fips_handle_generators(${CurTargetName})
 
     # record target name and type in the fips_targets.yml file
-    fips_addto_targets_list(${CurModuleName} "module")
+    fips_addto_targets_list(${CurTargetName} "module")
 
 endmacro()
 
@@ -221,7 +216,6 @@ macro(fips_begin_lib name)
         message("Library: name=" ${name})
     endif()
     fips_reset(${name})
-    set(CurLibraryName ${name})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -230,11 +224,11 @@ endmacro()
 #
 macro(fips_end_lib)
     # add library target
-    add_library(${CurLibraryName} ${CurSources})
-    fips_apply_target_group(${CurLibraryName})
+    add_library(${CurTargetName} ${CurSources})
+    fips_apply_target_group(${CurTargetName})
     
     # record target name and type in the fips_targets.yml file
-    fips_addto_targets_list(${CurLibraryName} "lib")
+    fips_addto_targets_list(${CurTargetName} "lib")
 
 endmacro()
 
@@ -246,10 +240,9 @@ endmacro()
 macro(fips_begin_app name type)
     if (${type} STREQUAL "windowed" OR ${type} STREQUAL "cmdline")
         fips_reset(${name})
-        set(CurAppName ${name})
         set(CurAppType ${type})
         if (FIPS_CMAKE_VERBOSE)
-            message("App: name=" ${CurAppName} " type=" ${CurAppType})
+            message("App: name=" ${CurTargetName} " type=" ${CurAppType})
         endif()
     else()
         message(FATAL_ERROR "type must be \"windowed\" or \"cmdline\"!")
@@ -269,76 +262,69 @@ macro(fips_end_app)
 
     # setup dependency tracker variables for this module, executable
     # targets use this to resolve their dependencies
-    set_property(GLOBAL PROPERTY ${CurAppName}_deps ${CurDependencies})
-    set_property(GLOBAL PROPERTY ${CurAppName}_libs ${CurLinkLibs})
-    set_property(GLOBAL PROPERTY ${CurAppName}_frameworks ${CurFrameworks})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
 
     if (NOT CurSources)
-        message(FATAL_ERROR "No sources in target: ${CurAppName} !!!")
-    endif()
-
-    # handle generators (pre-target)
-    if (CurPyFiles)
-        fips_handle_py_files_pretarget("${CurPyFiles}")
+        message(FATAL_ERROR "No sources in target: ${CurTargetName} !!!")
     endif()
 
     # add executable target
     if (${CurAppType} STREQUAL "windowed")
         # a windowed application 
         if (FIPS_OSX OR FIPS_IOS)
-            add_executable(${CurAppName} MACOSX_BUNDLE ${CurSources})
-            fips_osx_add_target_properties(${CurAppName})
-            fips_copy_osx_dylib_files(${CurAppName} 1)
+            add_executable(${CurTargetName} MACOSX_BUNDLE ${CurSources})
+            fips_osx_add_target_properties(${CurTargetName})
+            fips_copy_osx_dylib_files(${CurTargetName} 1)
         elseif (FIPS_WIN32 OR FIPS_WIN64)
-            add_executable(${CurAppName} WIN32 ${CurSources})
+            add_executable(${CurTargetName} WIN32 ${CurSources})
         elseif (FIPS_ANDROID)
-            add_library(${CurAppName} SHARED ${CurSources})
+            add_library(${CurTargetName} SHARED ${CurSources})
         else()
-            add_executable(${CurAppName} ${CurSources})
+            add_executable(${CurTargetName} ${CurSources})
         endif()
     else()
         # a command line application
         if (FIPS_ANDROID)
-            add_library(${CurAppName} SHARED ${CurSources})
+            add_library(${CurTargetName} SHARED ${CurSources})
         else()
-            add_executable(${CurAppName} ${CurSources})
+            add_executable(${CurTargetName} ${CurSources})
         endif()
         if (FIPS_OSX OR FIPS_IOS)
-            fips_copy_osx_dylib_files(${CurAppName} 0)
+            fips_copy_osx_dylib_files(${CurTargetName} 0)
         endif()
     endif()
-    fips_apply_target_group(${CurAppName})
+    fips_apply_target_group(${CurTargetName})
 
     # android specific stuff
     if (FIPS_ANDROID)
-        fips_android_create_project(${CurAppName})
-        fips_android_postbuildstep(${CurAppName})
+        fips_android_create_project(${CurTargetName})
+        fips_android_postbuildstep(${CurTargetName})
     endif()
 
     # handle generators (post-target)
-    if (CurPyFiles)
-        fips_handle_py_files_posttarget(${CurAppName} "${CurPyFiles}")
-    endif()
+    fips_handle_generators(${CurTargetName})
 
     # PNaCl specific stuff
     if (FIPS_PNACL)
-        fips_pnacl_create_wrapper(${CurAppName})
-        fips_pnacl_post_buildsteps(${CurAppName})
+        fips_pnacl_create_wrapper(${CurTargetName})
+        fips_pnacl_post_buildsteps(${CurTargetName})
     endif()
 
     # add dependencies for target
-    fips_resolve_dependencies(${CurAppName})
-    fips_resolve_linklibs(${CurAppName})
+    fips_resolve_dependencies(${CurTargetName})
+    fips_resolve_linklibs(${CurTargetName})
     if (FIPS_OSX OR FIPS_IOS)
-        fips_osx_resolve_frameworks(${CurAppName})
+        fips_osx_resolve_frameworks(${CurTargetName})
     endif()
 
     # setup executable output directory and postfixes (_debug, etc...)
-    fips_exe_output_directory(${CurAppName})    
-    fips_config_postfixes_for_exe(${CurAppName})
+    fips_exe_output_directory(${CurTargetName})    
+    fips_config_postfixes_for_exe(${CurTargetName})
 
     # record target name and type in the fips_targets.yml file
-    fips_addto_targets_list(${CurAppName} "app")
+    fips_addto_targets_list(${CurTargetName} "app")
 
 endmacro()
 
@@ -370,60 +356,7 @@ macro(fips_dir dir)
     if (${dir} STREQUAL ".")
         set(CurDir)
     else()
-        set(CurDir ${dir})
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_add_file()
-#   Private helper function to add a single file to the project.
-#
-macro(fips_add_file in_file gen_ext generator)
-    # handle subdirectory
-    if (CurDir)
-        set(cur_file "${CurDir}/${in_file}")
-    else()
-        set(cur_file ${in_file})
-    endif()
-    get_filename_component(f_ext ${cur_file} EXT)
-    
-    # determine source group name and
-    # add to current source group
-    if (CurDir)
-        string(REPLACE / \\ group_name ${CurDir})
-    else()
-        set(group_name "")
-    endif()
-    
-    source_group("${group_name}" FILES ${cur_file})
-
-    # add generated source file
-    if (${f_ext} STREQUAL ${gen_ext})
-        get_filename_component(f_abs ${cur_file} ABSOLUTE)
-        if (${f_ext} STREQUAL ".py")
-            list(APPEND CurPyFiles ${f_abs})
-        else()
-            list(APPEND CurGenItems "${generator}#${f_abs}")
-        endif()
-        string(REPLACE .py .cc gen_src ${cur_file})
-        string(REPLACE .py .h gen_hdr ${cur_file})
-        list(APPEND CurSources ${gen_src} ${gen_hdr})
-        source_group("${group_name}" FILES ${gen_src} ${gen_hdr})
-    endif()
-
-    # mark .m as .c file for older cmake versions (bug is fixed in cmake 3.1+)
-    if (FIPS_OSX)
-        if (${f_ext} STREQUAL ".m")
-            set_source_files_properties(${cur_file} PROPERTIES LANGUAGE C)
-        endif()
-    endif()
-
-    # add to global tracker variables
-    list(APPEND CurSources ${cur_file})
-
-    # remove dups
-    if (CurSources)
-        list(REMOVE_DUPLICATES CurSources)
+        set(CurDir "${dir}/")
     endif()
 endmacro()
 
@@ -433,69 +366,52 @@ endmacro()
 #
 macro(fips_files files)
     foreach (cur_file ${ARGV})
-        fips_add_file(${cur_file} ".py" "NO_GENERATOR")
+        fips_add_file(${cur_file} ".py" "NO_GENERATOR" "NO_GENFILES")
     endforeach()
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_generate(generator file)
-#   Generic code generation, generator is a python script in 
-#   project/fips-generators (without the .py), and file 
-#   has a custom extensions which is handed as arg to the 
-#   code generator script.
+#   fips_generate(FROM input_file
+#       [TYPE generator_type]
+#       [SOURCE output_source]
+#       [HEADER output_header])
 #
-macro(fips_generate generator file)
-    get_filename_component(f_ext ${file} EXT)
-    fips_add_file(${cur_file} ${f_ext} ${generator}) 
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_sources(dirs ...)
-#   *** OBSOLETE ***
-#   Parse one or more directories for sources and add them to the current
-#   target.
+#   Generic one C/C++ source/header pair from an input definition file
+#   by running a python generator script.
 #
-macro(fips_sources dirs)
-    
-    message("fips_sources is obsolete, please us fips_files instead!")
-
-    foreach (dir ${ARGV})
-        # gather files
-        file(GLOB src ${dir}/*.cc ${dir}/*.cpp ${dir}/*.c ${dir}/*.m ${dir}/*.mm ${dir}/*.h ${dir}/*.hh)
-        file(GLOB pys ${dir}/*.py)
-        file(GLOB shds ${dir}/*.shd)
-        file(GLOB imgs ${dir}/*.png ${dir}/*.tga ${dir}/*.jpg)
-
-        # determine group folder name
-        string(REPLACE / \\ groupName ${dir})
-        if (${dir} STREQUAL .)
-            source_group("" FILES ${src} ${pys} ${shds} ${imgs})
-        else()
-            source_group(${groupName} FILES ${src} ${pys} ${shds} ${imgs})
-        endif()
-
-        # add generated source files
-        foreach(py ${pys})
-            string(REPLACE .py .cc pySrc ${py})
-            string(REPLACE .py .h pyHdr ${py})
-            list(APPEND CurSources ${pySrc} ${pyHdr})
-            if (${dir} STREQUAL .)
-                source_group("" FILES ${pySrc} ${pyHdr})
-            else()
-                source_group(${groupName} FILES ${pySrc} ${pyHdr})
-            endif()
-        endforeach()
-
-        # add to global tracker variables
-        list(APPEND CurSources ${src} ${pys} ${shds} ${imgs})
-        list(APPEND CurPyFiles ${pys})
-
-        # remove duplicate sources 
-        if (CurSources)
-            list(REMOVE_DUPLICATES CurSources)
-        endif()
-
-    endforeach()
+#   FROM:   name of an input file to be processed 
+#   TYPE:   the generator type, filename of a generator script with the .py
+#   SOURCE: name of generated source file
+#   HEADER: name of generated header file
+#
+#   If no TYPE is provided, the input_file must be a python script.
+#
+#   If both SOURCE and HEADER are omitted, it is assumed that the
+#   generator script generated a input_file.cc/input_file.h pair.
+#   Omitting one of SOURCE or HEADER means the generator script
+#   will only generate either the SOURCE or HEADER file.
+#
+macro(fips_generate)
+    set(options)
+    set(oneValueArgs FROM TYPE SOURCE HEADER)
+    set(multiValueArgs)
+    CMAKE_PARSE_ARGUMENTS(_fg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    if (_fg_UNPARSED_ARGUMENTS)
+        message(FATAL_ERROR "fips_generate(): called with invalid args '${_fg_UNPARSED_ARGUMENTS}'")
+    endif()
+    if (NOT _fg_FROM)
+        message(FATAL_ERROR "fips_generate(): FROM arg required")
+    endif()
+    if (NOT _fg_SOURCE AND NOT _fg_HEADER)
+        # if both no SOURCE and no HEADER provided, set both
+        # to input file plus .cc / .h extension
+        get_filename_component(f_ext ${_fg_FROM} EXT)
+        string(REPLACE ${f_ext} ".cc" _fg_SOURCE ${_fg_FROM})
+        string(REPLACE ${f_ext} ".h" _fg_HEADER ${_fg_FROM})
+    endif()
+    fips_get_groupname(group_name)
+    fips_add_file("${_fg_FROM}")
+    fips_add_generator("${group_name}" "${_fg_TYPE}" "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}")
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -503,5 +419,14 @@ endmacro()
 #
 macro(fips_add_subdirectory dir)
     add_subdirectory(${dir})
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_include_directories(dir)
+#
+macro(fips_include_directories dir)
+    foreach (cur_dir ${ARGV})
+        include_directories(${cur_dir} ${CMAKE_CURRENT_BINARY_DIR}/${cur_dir})
+    endforeach()
 endmacro()
 

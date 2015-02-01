@@ -78,6 +78,9 @@ def run_clean(fips_dir, build_dir) :
     :returns:           True if cmake returns successful    
     """
     cmdLine = ['cmake', '--build', '.', '--target', 'clean']
-    res = subprocess.call(args=cmdLine, cwd=build_dir)
-    return res == 0
+    try :
+        res = subprocess.call(args=cmdLine, cwd=build_dir)
+        return res == 0
+    except OSError :
+        return False
 

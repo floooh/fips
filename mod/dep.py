@@ -312,7 +312,7 @@ def write_imports_files(fips_dir, proj_dir, dry_run=False) :
                 os.remove(import_tmp_filename)
 
             # write the .fips-imports.py file (copy from template)
-            gen_search_paths = '"{}/generators",\n'.format(fips_dir)
+            gen_search_paths = '"{}","{}/generators",\n'.format(fips_dir, fips_dir)
             for imp_proj_name in deps :
                 gen_dir = util.get_project_dir(fips_dir, imp_proj_name) + '/fips-generators'
                 if os.path.isdir(gen_dir) :

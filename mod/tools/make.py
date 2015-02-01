@@ -43,8 +43,11 @@ def run_clean(fips_dir, build_dir) :
     :param build_dir:   directory where Makefile is located
     :returns:           True if make returned with success
     """
-    res = subprocess.call(['make', 'clean'], cwd=build_dir, shell=True)
-    return res == 0
+    try :
+        res = subprocess.call(['make', 'clean'], cwd=build_dir)
+        return res == 0
+    except OSError :
+        return False
 
 
     

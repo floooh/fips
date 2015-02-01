@@ -5,81 +5,101 @@
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
-#   fips_handle_py_files_pretarget(pyFiles)
-#   Adds a .cc and .h file for each .py generator file.
+#   Background Info
 #
-macro(fips_handle_py_files_pretarget pyFiles)
-    foreach(pyFile ${pyFiles})
-        string(REPLACE .py .cc src ${pyFile})
-        string(REPLACE .py .h hdr ${pyFile})
-        if (NOT EXISTS ${src})
-            file(WRITE ${src} " ")
-        endif()
-        if (NOT EXISTS ${hdr})
-            file(WRITE ${hdr} " ")
-        endif()
-    endforeach()    
+#   There are 2 types of code generation:
+#   (1) Just list a python file as source file, this file will be called
+#       during the build and is expected to build exactly one .cc and one .h
+#       file (this detail may change in the future).
+#   (2) Or use the fips_generate() macro which accepts the name of a generator
+#       python script (located under project-dir/fips-generators),
+#       one input file, and a one or multiple output files. The generator
+#       must produce the output files using the input file.
+#
+#   - all filenames handed to the generator scripts will be absolute paths
+#   - the generator script must not overwrite the output files if they
+#     are already uptodate to prevent triggering dependent targets
+#
+#   During a cmake run, one .yml file and one cmake custom target 
+#   will be generated per compile target which needs code generation, 
+#   the custom target will call a generated python file .fips-gen.py 
+#   in the project root (created during 'fips gen') which takes
+#   a generator.yml file as input and calls the listed generator, which 
+#   in turn write the generated source file (after making sure that they 
+#   are actually dirty). cmake will also setup a target dependency between
+#   the generator target and the actual compile target which depends on the
+#   generated source files.
+#
+
+#-------------------------------------------------------------------------------
+#   fips_begin_gen(target)
+#
+#   Called from fips_begin_module, fips_begin_lib, fips_begin_app to 
+#   clear the generator .yml file.
+#
+macro(fips_begin_gen)
+    file(REMOVE "${CMAKE_BINARY_DIR}/fips_codegen.yml")
+    set(CurProjectHasCodeGen)
+    set(CMAKE_INCLUDE_CURRENT_DIR ON)
 endmacro()
 
+#-------------------------------------------------------------------------------
+#   fips_add_generator()
+#   Add a code generator item to the current target.
+#
+macro(fips_add_generator group_name in_generator in_file out_src out_hdr)
+    if (FipsAddFilesEnabled)
+        get_filename_component(f_abs ${CurDir}${in_file} ABSOLUTE)
+        get_filename_component(f_dir ${f_abs} DIRECTORY)
+        if ("${in_generator}" STREQUAL "")
+            # special case: input file is the generator script
+            set(generator ${f_abs})
+        else()
+            # add .py extension to generator type
+            set(generator "${in_generator}.py")
+        endif()
+        set(yml_content 
+            "- generator: ${generator}\n"
+            "  in: '${f_abs}'\n")
+        if ("${out_src}" STREQUAL "")
+            string(CONCAT yml_content ${yml_content} "  out_src: null\n")
+        else()
+            set(out_src_abs "${CMAKE_CURRENT_BINARY_DIR}/${CurDir}${out_src}")
+            list(APPEND CurSources ${out_src_abs})
+            source_group("${group_name}\\gen" FILES ${out_src_abs})
+            string(CONCAT yml_content ${yml_content} "  out_src: '${out_src_abs}'\n")
+            if (NOT EXISTS ${out_src_abs})
+                file(WRITE ${out_src_abs} " ")
+            endif()
+        endif()
+        if ("${out_hdr}" STREQUAL "")
+            string(CONCAT yml_content ${yml_content} "  out_hdr: null\n")
+        else()
+            set(out_hdr_abs "${CMAKE_CURRENT_BINARY_DIR}/${CurDir}${out_hdr}")
+            list(APPEND CurSources ${out_hdr_abs})
+            source_group("${group_name}\\gen" FILES ${out_hdr_abs})
+            string(CONCAT yml_content ${yml_content} "  out_hdr: '${out_hdr_abs}'\n")
+            if (NOT EXISTS ${out_hdr_abs})
+                file(WRITE ${out_hdr_abs} " ")
+            endif()
+        endif()
+        file(APPEND "${CMAKE_BINARY_DIR}/fips_codegen.yml" "${yml_content}")
+        set(CurProjectHasCodeGen 1)
+    endif()
+endmacro()
+            
 #-------------------------------------------------------------------------------
 #   fips_handle_py_files_posttarget(target pyFiles)
 #   Create custom target for .py generator files.
 #
-macro(fips_handle_py_files_posttarget target pyFiles)
-    if (PYTHON)
-        # ...and add a custom target to build the sources
-        add_custom_target(${target}_py 
-            COMMAND ${PYTHON} ${FIPS_PROJECT_DIR}/.fips-gen.py ${pyFiles} 
-            WORKING_DIRECTORY ${FIPS_PROJECT_DIR}
-            COMMENT "Generating sources from ${pyFiles}...")
-        set_target_properties(${target}_py PROPERTIES FOLDER "Generators")
-        add_dependencies(${target} ${target}_py)
-    else()  
-        message("WARNING: Python not found, skipping python generators!")
+macro(fips_handle_generators target) 
+    if (CurProjectHasCodeGen)
+        if (NOT TARGET ALL_GENERATE)
+            add_custom_target(ALL_GENERATE
+                COMMAND ${PYTHON} ${FIPS_PROJECT_DIR}/.fips-gen.py ${CMAKE_BINARY_DIR}/fips_codegen.yml
+                WORKING_DIRECTORY ${FIPS_PROJECT_DIR})
+        endif()
+        add_dependencies(${target} ALL_GENERATE)
     endif()
 endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_handle_gen_items_pretarget(target genItems)
-#   Handle generic code generation items, each item is of the form
-#   'generator#file' where generator is a Python generator script under
-#   project-dir/fips-generators, and file is an input file for that 
-#   generator. This macro will create one .cc and one .h file per item
-#
-macro(fips_handle_items_pretarget target genItems)
-    foreach(item ${genItems})
-        STRING(REPLACE "#" ";" tokens ${item})
-        list(GET ${tokens} 0 generator)
-        list(GET ${tokens} 0 filename)
-        get_filename_component(fext ${filename} EXT)
-
-        # replace file extension with .cc / .h
-        string(REPLACE ${fext} .cc src ${filename})
-        string(REPLACE ${fext} .h hdr ${filename})
-        if (NOT EXISTS ${src})
-            file(WRITE ${src} " ")
-        endif()
-        if (NOT EXISTS ${hdr})
-            file(WRITE ${hdr} " ")
-        endif()
-    endforeach()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_handle_gen_items_posttarget(target genItems)
-#   Create custom target for generic code generation items.
-#
-macro(fips_handle_gen_items_posttarget target genItems)
-    if (PYTHON)
-        add_custom_target(${target}_gen
-            COMMAND ${PYTHON} ${FIPS_PROJECT_DIR}/.fips-gen.py ${genItems}
-            WORKING_DIRECTORY ${FIPS_PROJECT_DIR}
-            COMMENT "Generating source from ${genItems}...")
-        set_target_properties(${target}_gen PROPERTIES FOLDER "Generators")
-        add_dependencies(${target} ${target}_gen)
-    else()
-        message("WARNING: Python not found, skipping code generation!")
-    endif()
-endmacro()
-
 
