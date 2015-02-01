@@ -131,6 +131,9 @@ macro(fips_setup)
 
     # write empty target files (will be populated in the fips_end macros)
     fips_reset_targets_list()
+    
+    # initialize code generation
+    fips_begin_gen()
 
     # load project-local fips-include.cmake if exists
     if (EXISTS "${FIPS_PROJECT_DIR}/fips-include.cmake")
@@ -144,7 +147,6 @@ macro(fips_setup)
     endif()
     set(FIPS_IMPORT)
 
-    fips_begin_gen()
 endmacro()
 
 #-------------------------------------------------------------------------------
