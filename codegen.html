@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Code Generation</title>
+  <meta name="description" content="cmake-based high-level build system for multi-platform C/C++ projects
+">
+
+  <link rel="stylesheet" href="/fips/css/main.css">
+  <link rel="canonical" href="http://floooh.github.com/fips/codegen.html">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+    <!-- this is the 'fork me on github' label -->
+    <a href="https://github.com/floooh/fips"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+
+    <div class="site-title">
+        fips
+        <span class="site-subtitle">the friendly cmake wrapper</span>
+    </div>
+</header>
+
+
+
+
+    <ul class="navigation">
+    
+        
+        <li class="nav-item">
+            <a href="/fips/index.html">About Fips</a>
+        </li>
+        
+    
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/getstarted.html">Get Started</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/build.html">Build Projects</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/troubleshooting.html">Troubleshooting</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/crosscompiling.html">Cross-Compiling</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/cmakeguide.html">CMake Guide</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/imports.html">Imports</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/codegen.html">Code Generation</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
+            <a href="/fips/dirstruct.html">Directory Structure</a>
+        </li>
+        
+    
+</ul>
+
+
+
+    <div class="page-content">
+        <div>
+
+  <article>
+    <h1>Code Generation</h1>
+
+<p>Fips makes it easy to generate C/C++ source code at by running Python scripts 
+during the build process. Special care has been taken to make code generation flexible so
+that it is useful for many different scenarios. For instance here are 
+a few examples how the Oryol 3D engine uses code generation:</p>
+
+<ul>
+<li>generate code for serializable message protocols (similar to <a href="https://code.google.com/p/protobuf/">Google protobuf</a>)</li>
+<li>embed image files into header files and generate a sprite sheet library</li>
+<li>GLSL shader editing with IDE error integration (see <a href="http://flohofwoe.blogspot.de/2014/05/shader-compilation-and-ides.html">this blog post</a> and <a href="http://www.youtube.com/watch?v=Up9LFP5DMvw">video</a>)</li>
+</ul>
+
+<h3>Using Code Generation</h3>
+
+<p>The <strong>fips_generate</strong> cmake macro is used to tell fips how to generate C/C++ source code:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">input_file</span>
+              <span class="s">[TYPE</span> <span class="s">generator_type]</span>
+              <span class="s">[SOURCE</span> <span class="s">out_source_file]</span>
+              <span class="s">[HEADER</span> <span class="s">out_header_file]</span><span class="p">)</span></code></pre></div>
+
+<p>Where:</p>
+
+<ul>
+<li><strong>FROM</strong>: Defines an input data file which is handed to the Python generator script 
+as argument, the input file can be anything, for instance JSON, YAML, XML or GLSL. It is 
+up to the generator script to make sense of the input file.</li>
+<li><strong>TYPE</strong>: Defines the generator that should be used for code generation, this resolves
+to a Python module which is imported and run at build time</li>
+<li><strong>SOURCE</strong>: The filename of the generated source code file</li>
+<li><strong>HEADER</strong>: The filename of the generated header code file</li>
+</ul>
+
+<p>Let&#39;s go through a few examples:</p>
+
+<p>The most usual form to call fips_generate() is to provide only a FROM and TYPE
+argument:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">IOProtocol.yml</span> <span class="s">TYPE</span> <span class="s">MessageProtocol</span><span class="p">)</span></code></pre></div>
+
+<p>This means that the input file <em>IOProtocol.yml</em> is converted by the generator
+<em>MessageProtocol</em> into the output files <em>IOProtocol.cc</em> and <em>IOProtocol.h</em>.</p>
+
+<p>If both the <em>SOURCE</em> and <em>HEADER</em> args are <strong>not</strong> provided, fips will
+automatically generate one <em>.cc</em> source and one <em>.h</em> header file with the same base 
+name as the <em>FROM</em> file.</p>
+
+<p>To generate output files with different file extensions (or filenames), provide
+them explicitely with the <em>SOURCE</em> and <em>HEADER</em> args, e.g.:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">IOProtocol.yml</span>
+              <span class="s">TYPE</span> <span class="s">MessageProtocol</span>
+              <span class="s">SOURCE</span> <span class="s">IOProtocol.cpp</span>
+              <span class="s">HEADER</span> <span class="s">IOProtocol.hh</span><span class="p">)</span></code></pre></div>
+
+<p>Providing only <strong>one</strong> of <em>SOURCE</em> or <em>HEADER</em> means that the generator
+should only generate either a source file or a header file, but not both.
+This only works if the generator script knows that it should only write
+one source or one header file.</p>
+
+<p>The following example generates only a source file, but no header:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">MyFile.xml</span> <span class="s">TYPE</span> <span class="s">MySourceGenerator</span> <span class="s">SOURCE</span> <span class="s">MyFile.cc</span><span class="p">)</span></code></pre></div>
+
+<p>Likewise, this example only generates a header, but no source:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">MyFile.xml</span> <span class="s">TYPE</span> <span class="s">MyHeaderGenerator</span> <span class="s">HEADER</span> <span class="s">MyFile.h</span><span class="p">)</span></code></pre></div>
+
+<p>If the <em>TYPE</em> argument is omitted, the <em>FROM</em> argument must be
+a Python file in the project source tree which is directly called to
+create the output source files:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">spritesheet.py</span><span class="p">)</span></code></pre></div>
+
+<p>In this case, the Python script <em>spritesheet.py</em> in the current
+source code location will be called to generate the files
+<em>spritesheet.cc</em> and <em>spritesheet.h</em>.</p>
+
+<h3>Writing Generators</h3>
+
+<p>A <em>generator</em> is a Python script which is called to generate C/C++ files.</p>
+
+<p>Fips doesn&#39;t come with its own generators, instead it looks in the 
+<strong>fips-generators</strong> directory in the current project and imported projects
+for generator scripts.</p>
+
+<p>Let&#39;s check what generators Oryol has to offer:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; <span class="nb">cd </span>oryol/fips-generators
+&gt; ls *.py
+MessageProtocol.py Shader.py          SoundSheet.py      SpriteSheet.py</code></pre></div>
+
+<p>A generator script must contain a Python function called &#39;generator()&#39;:</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span> <span class="p">:</span>
+    <span class="o">...</span></code></pre></div>
+
+<p>Where:</p>
+
+<ul>
+<li><strong>input</strong>: is the absolute path to the input file (provided with the <em>FROM</em> cmake 
+argument of fips_generate())</li>
+<li><strong>out_src</strong>: is the absolute path to the output source file, or None (provided with the
+<em>SOURCE</em> cmake argument to fips_generate())</li>
+<li><strong>out_hdr</strong>: is the absolute path to the output header file, or None (provided with the
+<em>HEADER</em> cmake argument to fips_generate())</li>
+</ul>
+
+<h3>TODO:</h3>
+
+<p>Writing Generators:</p>
+
+<ul>
+<li>dirty check</li>
+<li>modification time</li>
+<li>version stamp</li>
+</ul>
+
+<p>Under the hood:</p>
+
+<ul>
+<li>the fips_generate.yml file
+...</li>
+</ul>
+
+  </article>
+
+</div>
+
+    </div>
+
+  </body>
+
+</html>
