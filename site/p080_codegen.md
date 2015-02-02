@@ -6,7 +6,7 @@ permalink: codegen.html
 
 # Code Generation
 
-Fips makes it easy to generate C/C++ source code at by running Python scripts 
+Fips makes it easy to generate C/C++ source code by running Python scripts 
 during the build process. Special care has been taken to make code generation flexible so
 that it is useful for many different scenarios. For instance here are 
 a few examples how the Oryol 3D engine uses code generation:
