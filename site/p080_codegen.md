@@ -124,16 +124,118 @@ _SOURCE_ cmake argument to fips_generate())
 * **out_hdr**: is the absolute path to the output header file, or None (provided with the
 _HEADER_ cmake argument to fips_generate())
 
-### TODO:
+### File Dirty Check
 
-Writing Generators:
+Generator scripts should not overwrite the target files if nothing has changed
+in the source file, otherwise they would trigger unnecessary recompiles higher 
+up the source code dependency chain.
 
-* dirty check
-* modification time
-* version stamp
+fips provides a simple helper function to perform 2 types of dirty checks:
 
-Under the hood:
+- check the file modification timestamps of input files against the 
+modification timestamps of the generated source code files
+- check a _generator version_ embedded in the first few lines of generated
+files
 
-* the fips_generate.yml file
-...
+The second _generator version_ check seems unusual, but this is very useful
+when the generator scripts themselves are updated. For every change in
+a generator script that influences the generated source code, the generator's
+version number should be increment. On the next build, all files generated
+by this generator script will be written because the generator version
+number doesn't match.
+
+Let's have a look at a very simple generator script:
+
+{% highlight python linenos %}
+{% raw %}
+"""fips imported code generator for testing"""
+
+Version = 2 
+
+import genutil as util
+
+#-------------------------------------------------------------------------------
+def generateHeader(hdrPath) :
+    with open(hdrPath, 'w') as f :
+        f.write("// #version:{}#\n".format(Version))
+        f.write("extern void test_func(void);\n")
+
+#-------------------------------------------------------------------------------
+def generateSource(srcPath) :
+    with open(srcPath, 'w') as f :
+        f.write("// #version:{}#\n".format(Version))
+        f.write("#include <stdio.h>\n")
+        f.write("void test_func() {{\n")
+        f.write('    printf("Hello from test_func!\\n");\n')
+        f.write('}\n')
+
+#-------------------------------------------------------------------------------
+def generate(input, out_src, out_hdr) :
+    if util.isDirty(Version, [input], [out_src, out_hdr]) :
+        generateHeader(out_hdr)
+        generateSource(out_src)
+
+{% endraw %}
+{% endhighlight %}
+
+Note the **Version = 2** statement in line 3, this is the 'generator version',
+bumping this number will mark all generated source files as dirty and cause
+all generated files to be overwritten regardless of their file modification time stamp.
+
+The generator entry point is the **generate()** function in line 23, the first
+line of this function checks whether the generator needs to run, first by checking
+the version stamp, then by checking the file modification times of the input
+file(s) and output files.
+
+Header and source file are then written by the **generateHeader()** and
+**generateSource()** functions.
+
+Note that both functions write a comment in the first line a magic version
+tag which looks like **#version:2#**. The **isDirty()** helper function will
+look in the first 4 text lines for this magic tag.
+
+The generated source files will look like this, first the header:
+
+{% highlight c %}
+{% raw %}
+// #version:2#
+extern void test_func(void);
+{% endraw %}
+{% endhighlight %}
+
+...and the source file:
+
+{% highlight c %}
+{% raw %}
+// #version:2#
+#include <stdio.h>
+void test_func() {
+    printf("Hello from test_func!\n");
+}
+{% endraw %}
+{% endhighlight %}
+
+The generator in this example doesn't actually use an input file since
+it generates the target files without any parameterization. This very special
+case only works with a Python script in the source tree which serves as 
+'input file' and calls the above generator 'hello_generator':
+
+{% highlight python %}
+import hello_generator as gen
+
+def generate(input, out_src, out_hdr) :
+    gen.generate(input, out_src, out_hdr)
+{% endhighlight %}
+
+The final missing piece is the CMakeLists.txt entry:
+
+{% highlight cmake %}
+fips_begin_module(dep2)
+    fips_generate(FROM hello.py)
+fips_end_module()
+{% endhighlight %}
+
+### Under the hood
+
+TODO! (fips_generate.yml, .fips-gen.py)
 
