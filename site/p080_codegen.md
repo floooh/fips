@@ -108,7 +108,7 @@ Let's check what generators Oryol has to offer:
 MessageProtocol.py Shader.py          SoundSheet.py      SpriteSheet.py
 {% endhighlight %}
 
-A generator script must contain a Python function called 'generator()':
+A generator script must contain a Python function called 'generate()':
 
 {% highlight python %}
 def generate(input, out_src, out_hdr) :
