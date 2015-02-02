@@ -206,22 +206,105 @@ argument of fips_generate())</li>
 <em>HEADER</em> cmake argument to fips_generate())</li>
 </ul>
 
-<h3>TODO:</h3>
+<h3>File Dirty Check</h3>
 
-<p>Writing Generators:</p>
+<p>Generator scripts should not overwrite the target files if nothing has changed
+in the source file, otherwise they would trigger unnecessary recompiles higher 
+up the source code dependency chain.</p>
 
-<ul>
-<li>dirty check</li>
-<li>modification time</li>
-<li>version stamp</li>
-</ul>
-
-<p>Under the hood:</p>
+<p>fips provides a simple helper function to perform 2 types of dirty checks:</p>
 
 <ul>
-<li>the fips_generate.yml file
-...</li>
+<li>check the file modification timestamps of input files against the 
+modification timestamps of the generated source code files</li>
+<li>check a <em>generator version</em> embedded in the first few lines of generated
+files</li>
 </ul>
+
+<p>The second <em>generator version</em> check seems unusual, but this is very useful
+when the generator scripts themselves are updated. For every change in
+a generator script that influences the generated source code, the generator&#39;s
+version number should be increment. On the next build, all files generated
+by this generator script will be written because the generator version
+number doesn&#39;t match.</p>
+
+<p>Let&#39;s have a look at a very simple generator script:</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="lineno"> 1</span> <span class="sd">&quot;&quot;&quot;fips imported code generator for testing&quot;&quot;&quot;</span>
+<span class="lineno"> 2</span> 
+<span class="lineno"> 3</span> <span class="n">Version</span> <span class="o">=</span> <span class="mi">2</span> 
+<span class="lineno"> 4</span> 
+<span class="lineno"> 5</span> <span class="kn">import</span> <span class="nn">genutil</span> <span class="kn">as</span> <span class="nn">util</span>
+<span class="lineno"> 6</span> 
+<span class="lineno"> 7</span> <span class="c">#-------------------------------------------------------------------------------</span>
+<span class="lineno"> 8</span> <span class="k">def</span> <span class="nf">generateHeader</span><span class="p">(</span><span class="n">hdrPath</span><span class="p">)</span> <span class="p">:</span>
+<span class="lineno"> 9</span>     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">hdrPath</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span> <span class="p">:</span>
+<span class="lineno">10</span>         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;// #version:{}#</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Version</span><span class="p">))</span>
+<span class="lineno">11</span>         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;extern void test_func(void);</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="lineno">12</span> 
+<span class="lineno">13</span> <span class="c">#-------------------------------------------------------------------------------</span>
+<span class="lineno">14</span> <span class="k">def</span> <span class="nf">generateSource</span><span class="p">(</span><span class="n">srcPath</span><span class="p">)</span> <span class="p">:</span>
+<span class="lineno">15</span>     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">srcPath</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span> <span class="p">:</span>
+<span class="lineno">16</span>         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;// #version:{}#</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Version</span><span class="p">))</span>
+<span class="lineno">17</span>         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;#include &lt;stdio.h&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="lineno">18</span>         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;void test_func() {{</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="lineno">19</span>         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;    printf(&quot;Hello from test_func!</span><span class="se">\\</span><span class="s">n&quot;);</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+<span class="lineno">20</span>         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;}</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+<span class="lineno">21</span> 
+<span class="lineno">22</span> <span class="c">#-------------------------------------------------------------------------------</span>
+<span class="lineno">23</span> <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span> <span class="p">:</span>
+<span class="lineno">24</span>     <span class="k">if</span> <span class="n">util</span><span class="o">.</span><span class="n">isDirty</span><span class="p">(</span><span class="n">Version</span><span class="p">,</span> <span class="p">[</span><span class="nb">input</span><span class="p">],</span> <span class="p">[</span><span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">])</span> <span class="p">:</span>
+<span class="lineno">25</span>         <span class="n">generateHeader</span><span class="p">(</span><span class="n">out_hdr</span><span class="p">)</span>
+<span class="lineno">26</span>         <span class="n">generateSource</span><span class="p">(</span><span class="n">out_src</span><span class="p">)</span></code></pre></div>
+
+<p>Note the <strong>Version = 2</strong> statement in line 3, this is the &#39;generator version&#39;,
+bumping this number will mark all generated source files as dirty and cause
+all generated files to be overwritten regardless of their file modification time stamp.</p>
+
+<p>The generator entry point is the <strong>generate()</strong> function in line 23, the first
+line of this function checks whether the generator needs to run, first by checking
+the version stamp, then by checking the file modification times of the input
+file(s) and output files.</p>
+
+<p>Header and source file are then written by the <strong>generateHeader()</strong> and
+<strong>generateSource()</strong> functions.</p>
+
+<p>Note that both functions write a comment in the first line a magic version
+tag which looks like <strong>#version:2#</strong>. The <strong>isDirty()</strong> helper function will
+look in the first 4 text lines for this magic tag.</p>
+
+<p>The generated source files will look like this, first the header:</p>
+
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// #version:2#</span>
+<span class="k">extern</span> <span class="kt">void</span> <span class="nf">test_func</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span></code></pre></div>
+
+<p>...and the source file:</p>
+
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// #version:2#</span>
+<span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="kt">void</span> <span class="nf">test_func</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello from test_func!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+
+<p>The generator in this example doesn&#39;t actually use an input file since
+it generates the target files without any parameterization. This very special
+case only works with a Python script in the source tree which serves as 
+&#39;input file&#39; and calls the above generator &#39;hello_generator&#39;:</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">hello_generator</span> <span class="kn">as</span> <span class="nn">gen</span>
+
+<span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span> <span class="p">:</span>
+    <span class="n">gen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span></code></pre></div>
+
+<p>The final missing piece is the CMakeLists.txt entry:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_begin_module</span><span class="p">(</span><span class="s">dep2</span><span class="p">)</span>
+    <span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">hello.py</span><span class="p">)</span>
+<span class="nb">fips_end_module</span><span class="p">()</span></code></pre></div>
+
+<h3>Under the hood</h3>
+
+<p>TODO! (fips_generate.yml, .fips-gen.py)</p>
 
   </article>
 
