@@ -201,7 +201,9 @@ macro(fips_end_module)
     fips_apply_target_group(${CurTargetName})
 
     # make sure dependencies are built first
-    add_dependencies(${CurTargetName} ${CurDependencies})
+    if (CurDependencies)
+        add_dependencies(${CurTargetName} ${CurDependencies})
+    endif()
 
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
