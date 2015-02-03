@@ -46,6 +46,11 @@ explorer.
 Include a child CMakeLists.txt file from a subdirectory. Use this instead
 of cmake's built-in add\_subdirectory() macro.
 
+#### fips\_include\_directories(dir ...)
+
+Define one or more header search paths. Use this instead of
+cmake's built-in include\_directories() macro.
+
 #### fips\_begin\_module(name)
 
 Begin defining a fips module. Modules are special high-level static link-libraries
@@ -60,6 +65,7 @@ After a fips\_begin\_module() the following fips macros are valid:
 
 * fips\_dir()
 * fips\_files()
+* fips\_generate()
 * fips\_deps()
 * fips\_end\_module()
 
@@ -77,6 +83,7 @@ After a fips\_begin\_lib() the following fips macros are valid:
 
 * fips\_dir()
 * fips\_files()
+* fips\_generate()
 * fips\_deps()
 * fips\_end\_lib()
 
@@ -95,6 +102,7 @@ After a fips\_begin\_app() the following fips macros are valid:
 
 * fips\_dir()
 * fips\_files()
+* fips\_generate()
 * fips\_deps()
 * fips\_end\_app()
 
@@ -133,6 +141,13 @@ library. Dependencies added to fips modules will be resolved recursively
 when linking apps. Fips will also take care of the dreaded linking order
 problem of GCC where symbols can't be resolved if the
 order of link libraries is wrong or in case of cyclic dependencies.
+
+#### fips\_generate(...)
+
+Defines a code-generation job. Code generation can be used to generate
+C/C++ source files at build time from other input files like JSON,
+XML, YAML, GLSL, ... Code generation is described in detail 
+[here](codegen.html)
 
 ### The fips-include.cmake File
 
