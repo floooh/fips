@@ -237,5 +237,43 @@ fips_end_module()
 
 ### Under the hood
 
-TODO! (fips_generate.yml, .fips-gen.py)
+This is what happens under the hood for code generation:
+
+**in './fips gen'**:
+
+A python file '.fips-gen.py' is created in the project root directory.
+This sets up the python module search path to all imported projects so that
+imported code-generator scripts can be found, and will be called during
+the build process to load and invoke the code generator scripts.
+
+**in fips_generate()**:
+
+- absolute filesystem paths for the FROM, SOURCE and HEADER files are derived
+- generate empty SOURCE and HEADER files in the same directory as the FROM
+file, if they don't exist yet (this is a cmake requirement, all source code
+files added to a build target must exist)
+- add the FROM, SOURCE and HEADER files to the current build target's file list
+- a YAML file will be populated with the information from all fips\_generate() 
+calls at ${CMAKE\_BINARY\_DIR}/fips\_codegen.yml (which is at 
+./fips-build/[proj-name]/[config-name]/fips\_codegen.yml)
+- set a global flag that the current project has code generation
+
+**in fips\_end\_xxx()**:
+
+- the global 'project has code generation' flag is set, generate a cmake 
+custom target named _ALL\_GENERATE_ which calls the generated '.fips-gen.py' script
+with the also generated fips_codegen.yml file as argument
+- add the ALL\_GENERATE custom build target as dependency to all build targets 
+with code generation
+
+**during builds**:
+
+- ALL\_GENERATE custom build target will run before any regular build target 
+which depends on generated code
+- the ALL\_GENERATE target runs the the python file '.fips-gen.py' from the 
+project root directory with the fips\_codegen.yml file as argument
+- '.fips-gen.py' loads the fips\_codegen.yml file, and imports and runs 
+code generator python scripts, which will generate the C/C++ source code files
+as needed
+
 
