@@ -139,6 +139,11 @@ explorer.</p>
 <p>Include a child CMakeLists.txt file from a subdirectory. Use this instead
 of cmake&#39;s built-in add_subdirectory() macro.</p>
 
+<h4>fips_include_directories(dir ...)</h4>
+
+<p>Define one or more header search paths. Use this instead of
+cmake&#39;s built-in include_directories() macro.</p>
+
 <h4>fips_begin_module(name)</h4>
 
 <p>Begin defining a fips module. Modules are special high-level static link-libraries
@@ -156,6 +161,7 @@ custom build targets to the build process</li>
 <ul>
 <li>fips_dir()</li>
 <li>fips_files()</li>
+<li>fips_generate()</li>
 <li>fips_deps()</li>
 <li>fips_end_module()</li>
 </ul>
@@ -175,6 +181,7 @@ code generation files.</p>
 <ul>
 <li>fips_dir()</li>
 <li>fips_files()</li>
+<li>fips_generate()</li>
 <li>fips_deps()</li>
 <li>fips_end_lib()</li>
 </ul>
@@ -195,6 +202,7 @@ or OSX (app bundle vs command line tool).</p>
 <ul>
 <li>fips_dir()</li>
 <li>fips_files()</li>
+<li>fips_generate()</li>
 <li>fips_deps()</li>
 <li>fips_end_app()</li>
 </ul>
@@ -236,6 +244,13 @@ library. Dependencies added to fips modules will be resolved recursively
 when linking apps. Fips will also take care of the dreaded linking order
 problem of GCC where symbols can&#39;t be resolved if the
 order of link libraries is wrong or in case of cyclic dependencies.</p>
+
+<h4>fips_generate(...)</h4>
+
+<p>Defines a code-generation job. Code generation can be used to generate
+C/C++ source files at build time from other input files like JSON,
+XML, YAML, GLSL, ... Code generation is described in detail 
+<a href="codegen.html">here</a></p>
 
 <h3>The fips-include.cmake File</h3>
 

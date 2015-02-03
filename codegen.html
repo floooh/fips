@@ -304,7 +304,50 @@ case only works with a Python script in the source tree which serves as
 
 <h3>Under the hood</h3>
 
-<p>TODO! (fips_generate.yml, .fips-gen.py)</p>
+<p>This is what happens under the hood for code generation:</p>
+
+<p><strong>in &#39;./fips gen&#39;</strong>:</p>
+
+<p>A python file &#39;.fips-gen.py&#39; is created in the project root directory.
+This sets up the python module search path to all imported projects so that
+imported code-generator scripts can be found, and will be called during
+the build process to load and invoke the code generator scripts.</p>
+
+<p><strong>in fips_generate()</strong>:</p>
+
+<ul>
+<li>absolute filesystem paths for the FROM, SOURCE and HEADER files are derived</li>
+<li>generate empty SOURCE and HEADER files in the same directory as the FROM
+file, if they don&#39;t exist yet (this is a cmake requirement, all source code
+files added to a build target must exist)</li>
+<li>add the FROM, SOURCE and HEADER files to the current build target&#39;s file list</li>
+<li>a YAML file will be populated with the information from all fips_generate() 
+calls at ${CMAKE_BINARY_DIR}/fips_codegen.yml (which is at 
+./fips-build/[proj-name]/[config-name]/fips_codegen.yml)</li>
+<li>set a global flag that the current project has code generation</li>
+</ul>
+
+<p><strong>in fips_end_xxx()</strong>:</p>
+
+<ul>
+<li>the global &#39;project has code generation&#39; flag is set, generate a cmake 
+custom target named <em>ALL_GENERATE</em> which calls the generated &#39;.fips-gen.py&#39; script
+with the also generated fips_codegen.yml file as argument</li>
+<li>add the ALL_GENERATE custom build target as dependency to all build targets 
+with code generation</li>
+</ul>
+
+<p><strong>during builds</strong>:</p>
+
+<ul>
+<li>ALL_GENERATE custom build target will run before any regular build target 
+which depends on generated code</li>
+<li>the ALL_GENERATE target runs the the python file &#39;.fips-gen.py&#39; from the 
+project root directory with the fips_codegen.yml file as argument</li>
+<li>&#39;.fips-gen.py&#39; loads the fips_codegen.yml file, and imports and runs 
+code generator python scripts, which will generate the C/C++ source code files
+as needed</li>
+</ul>
 
   </article>
 
