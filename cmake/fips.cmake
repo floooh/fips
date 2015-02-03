@@ -200,6 +200,9 @@ macro(fips_end_module)
     add_library(${CurTargetName} ${CurSources})
     fips_apply_target_group(${CurTargetName})
 
+    # make sure dependencies are built first
+    add_dependencies(${CurTargetName} ${CurDependencies})
+
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
