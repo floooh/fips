@@ -11,6 +11,8 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **05-Feb-2015**: the NaCl SDK setup bug has been fixed by the NaCl team, so './fips setup nacl' should now work also with the latest Python 2.7.9
+
 - **01-Feb-2015**: the code generation refactoring branch has been merged back into 
 the master branch, code generation is now controlled with the new **fips_generate()**
 cmake macro, see [Oryol engine](https://github.com/floooh/oryol) and 
