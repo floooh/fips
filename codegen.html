@@ -117,7 +117,8 @@ a few examples how the Oryol 3D engine uses code generation:</p>
 <div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">input_file</span>
               <span class="s">[TYPE</span> <span class="s">generator_type]</span>
               <span class="s">[SOURCE</span> <span class="s">out_source_file]</span>
-              <span class="s">[HEADER</span> <span class="s">out_header_file]</span><span class="p">)</span></code></pre></div>
+              <span class="s">[HEADER</span> <span class="s">out_header_file]</span>
+              <span class="s">[ARGS</span> <span class="s">args_as_yaml_string]</span><span class="p">)</span></code></pre></div>
 
 <p>Where:</p>
 
@@ -129,6 +130,8 @@ up to the generator script to make sense of the input file.</li>
 to a Python module which is imported and run at build time</li>
 <li><strong>SOURCE</strong>: The filename of the generated source code file</li>
 <li><strong>HEADER</strong>: The filename of the generated header code file</li>
+<li><strong>ARGS</strong>: An optional YAML formatted string defining additional arguments to the python
+generator script.</li>
 </ul>
 
 <p>Let&#39;s go through a few examples:</p>
@@ -176,6 +179,14 @@ create the output source files:</p>
 source code location will be called to generate the files
 <em>spritesheet.cc</em> and <em>spritesheet.h</em>.</p>
 
+<p>It is possible to provide additional arguments to the generator script
+in a YAML-formatted string:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">fs_metaballs.sc</span> 
+              <span class="s">TYPE</span> <span class="s">BgfxShaderEmbedded</span> 
+              <span class="s">HEADER</span> <span class="s">fs_metaballs.bin.h</span> 
+              <span class="s">ARGS</span> <span class="s2">&quot;{ type: fs, bla: blub }&quot;</span><span class="p">)</span></code></pre></div>
+
 <h3>Writing Generators</h3>
 
 <p>A <em>generator</em> is a Python script which is called to generate C/C++ files.</p>
@@ -190,9 +201,15 @@ for generator scripts.</p>
 &gt; ls *.py
 MessageProtocol.py Shader.py          SoundSheet.py      SpriteSheet.py</code></pre></div>
 
-<p>A generator script must contain a Python function called &#39;generate()&#39;:</p>
+<p>A generator script must contain a Python function called &#39;generate()&#39;,
+which can have the following forms (with or without args):</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span> <span class="p">:</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># this is called if fips_generate() didn&#39;t have an ARGS argument:</span>
+<span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span> <span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="c"># this is called if fips_generate() was called with ARGS:</span>
+<span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="p">:</span>
     <span class="o">...</span></code></pre></div>
 
 <p>Where:</p>
@@ -204,6 +221,8 @@ argument of fips_generate())</li>
 <em>SOURCE</em> cmake argument to fips_generate())</li>
 <li><strong>out_hdr</strong>: is the absolute path to the output header file, or None (provided with the
 <em>HEADER</em> cmake argument to fips_generate())</li>
+<li><strong>args</strong>: if present, this is a dictionary of key/value pairs defined in the
+<em>ARGS</em> cmake argument to fips_generate()</li>
 </ul>
 
 <h3>File Dirty Check</h3>
@@ -272,6 +291,11 @@ file(s) and output files.</p>
 <p>Note that both functions write a comment in the first line a magic version
 tag which looks like <strong>#version:2#</strong>. The <strong>isDirty()</strong> helper function will
 look in the first 4 text lines for this magic tag.</p>
+
+<blockquote>
+<p>NOTE: it is possible to provide &#39;None&#39; as version argument to genutil.isDirty(),
+in this case, no version check will be performed</p>
+</blockquote>
 
 <p>The generated source files will look like this, first the header:</p>
 
