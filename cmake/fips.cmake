@@ -381,7 +381,8 @@ endmacro()
 #   fips_generate(FROM input_file
 #       [TYPE generator_type]
 #       [SOURCE output_source]
-#       [HEADER output_header])
+#       [HEADER output_header]
+#       [ARGS args_in_yaml_format]
 #
 #   Generic one C/C++ source/header pair from an input definition file
 #   by running a python generator script.
@@ -390,6 +391,7 @@ endmacro()
 #   TYPE:   the generator type, filename of a generator script with the .py
 #   SOURCE: name of generated source file
 #   HEADER: name of generated header file
+#   ARGS:   optional key/value arguments handed to generator script as dict
 #
 #   If no TYPE is provided, the input_file must be a python script.
 #
@@ -400,7 +402,7 @@ endmacro()
 #
 macro(fips_generate)
     set(options)
-    set(oneValueArgs FROM TYPE SOURCE HEADER)
+    set(oneValueArgs FROM TYPE SOURCE HEADER ARGS)
     set(multiValueArgs)
     CMAKE_PARSE_ARGUMENTS(_fg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
     if (_fg_UNPARSED_ARGUMENTS)
@@ -418,7 +420,7 @@ macro(fips_generate)
     endif()
     fips_get_groupname(group_name)
     fips_add_file("${_fg_FROM}")
-    fips_add_generator("${group_name}" "${_fg_TYPE}" "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}")
+    fips_add_generator("${group_name}" "${_fg_TYPE}" "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}" "${_fg_ARGS}")
 endmacro()
 
 #-------------------------------------------------------------------------------

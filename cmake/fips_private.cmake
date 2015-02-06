@@ -213,7 +213,7 @@ macro(fips_get_groupname VAR)
         # hack to strip the leading '/' from CurDir
         set(_str "${CurDir}!")
         string(REPLACE "/!" "" _str ${_str})
-        string(REPLACE / \\ ${VAR} ${_str})
+        string(REPLACE / \\\\ ${VAR} ${_str})
     else()
         set(${VAR} "")
     endif()
