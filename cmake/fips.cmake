@@ -190,8 +190,7 @@ endmacro()
 #
 macro(fips_end_module)
     
-    # setup dependency tracker variables for this module, executable
-    # targets use this to resolve their dependencies
+    # record target dependencies
     set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
     set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
@@ -230,9 +229,23 @@ endmacro()
 #   End defining a static link library.
 #
 macro(fips_end_lib)
+    
+    # record target dependencies
+    set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
+    
     # add library target
     add_library(${CurTargetName} ${CurSources})
     fips_apply_target_group(${CurTargetName})
+    
+    # make sure dependencies are built first
+    if (CurDependencies)
+        add_dependencies(${CurTargetName} ${CurDependencies})
+    endif()
+    
+    # handle generators (post-target)
+    fips_handle_generators(${CurTargetName})
     
     # record target name and type in the fips_targets.yml file
     fips_addto_targets_list(${CurTargetName} "lib")
@@ -267,8 +280,7 @@ macro(fips_end_app)
         fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
     endif()
 
-    # setup dependency tracker variables for this module, executable
-    # targets use this to resolve their dependencies
+    # record target dependencies 
     set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
     set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
@@ -321,7 +333,6 @@ macro(fips_end_app)
 
     # add dependencies for target
     fips_resolve_dependencies(${CurTargetName})
-    fips_resolve_linklibs(${CurTargetName})
     if (FIPS_OSX OR FIPS_IOS)
         fips_osx_resolve_frameworks(${CurTargetName})
     endif()
@@ -337,7 +348,10 @@ endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_deps(deps ...)
-#   Add one or more dependencies to the current target.
+#   Add one or more dependencies to the current target. The dependencies
+#   must be cmake build targets defined with fips_begin/end_module()
+#   or fips_begin/end_lib(). Dependencies can also be added to fips modules
+#   or libs, they will then be resolved recursively in the app linking stage.
 #
 macro(fips_deps deps)
     foreach(dep ${ARGV})
@@ -347,7 +361,10 @@ endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_libs(libs ...)
-#   Add one or more link libraries to the current target.
+#   Add one or more static link library dependencies to the current target.
+#   The current target can also be a fips module or lib. Dependencies added
+#   with fips_libs() will be resolved recursively in the app linking stage
+#   (see fips_deps()).
 #
 macro(fips_libs libs)
     foreach(lib ${ARGV})
