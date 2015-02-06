@@ -23,7 +23,8 @@ The **fips_generate** cmake macro is used to tell fips how to generate C/C++ sou
 fips_generate(FROM input_file
               [TYPE generator_type]
               [SOURCE out_source_file]
-              [HEADER out_header_file])
+              [HEADER out_header_file]
+              [ARGS args_as_yaml_string])
 {% endhighlight %}
 
 
@@ -36,6 +37,8 @@ up to the generator script to make sense of the input file.
 to a Python module which is imported and run at build time
 * **SOURCE**: The filename of the generated source code file
 * **HEADER**: The filename of the generated header code file
+* **ARGS**: An optional YAML formatted string defining additional arguments to the python
+generator script.
 
 Let's go through a few examples:
 
@@ -92,6 +95,16 @@ In this case, the Python script _spritesheet.py_ in the current
 source code location will be called to generate the files
 _spritesheet.cc_ and _spritesheet.h_.
 
+It is possible to provide additional arguments to the generator script
+in a YAML-formatted string:
+
+{% highlight cmake %}
+fips_generate(FROM fs_metaballs.sc 
+              TYPE BgfxShaderEmbedded 
+              HEADER fs_metaballs.bin.h 
+              ARGS "{ type: fs, bla: blub }")
+{% endhighlight %}
+
 ### Writing Generators
 
 A _generator_ is a Python script which is called to generate C/C++ files.
@@ -108,10 +121,16 @@ Let's check what generators Oryol has to offer:
 MessageProtocol.py Shader.py          SoundSheet.py      SpriteSheet.py
 {% endhighlight %}
 
-A generator script must contain a Python function called 'generate()':
+A generator script must contain a Python function called 'generate()',
+which can have the following forms (with or without args):
 
 {% highlight python %}
+# this is called if fips_generate() didn't have an ARGS argument:
 def generate(input, out_src, out_hdr) :
+    ...
+
+# this is called if fips_generate() was called with ARGS:
+def generate(input, out_src, out_hdr, args) :
     ...
 {% endhighlight %}
 
@@ -123,6 +142,8 @@ argument of fips_generate())
 _SOURCE_ cmake argument to fips_generate())
 * **out_hdr**: is the absolute path to the output header file, or None (provided with the
 _HEADER_ cmake argument to fips_generate())
+* **args**: if present, this is a dictionary of key/value pairs defined in the
+_ARGS_ cmake argument to fips_generate()
 
 ### File Dirty Check
 
@@ -193,6 +214,9 @@ Header and source file are then written by the **generateHeader()** and
 Note that both functions write a comment in the first line a magic version
 tag which looks like **#version:2#**. The **isDirty()** helper function will
 look in the first 4 text lines for this magic tag.
+
+> NOTE: it is possible to provide 'None' as version argument to genutil.isDirty(),
+in this case, no version check will be performed
 
 The generated source files will look like this, first the header:
 

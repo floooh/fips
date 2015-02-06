@@ -52,9 +52,8 @@ will look and feel exactly the same like a completely local project.
 
 #### Code Generation
 
-Fips implements a simple yet powerful code generation mechanism via 
-Python. Any Python script that is added as 'source file' is run during the 
-build process and is expected to generate one C/C++ header/source pair.
+Fips implements a simple yet powerful code generation mechanism by calling
+Python 'generator scripts' during the build process.
 
 #### Extensible
 
