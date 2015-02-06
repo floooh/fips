@@ -67,6 +67,7 @@ After a fips\_begin\_module() the following fips macros are valid:
 * fips\_files()
 * fips\_generate()
 * fips\_deps()
+* fips\_libs()
 * fips\_end\_module()
 
 #### fips\_end\_module()
@@ -75,9 +76,14 @@ This finishes a fips\_begin\_module() block.
 
 #### fips\_begin\_lib(name)
 
-Begin defining a fips library. This is a simple static link library in C or C++
-which cannot have dependencies to other libs and cannot contain python
-code generation files.
+Begin defining a fips library. A fips library is a collection of source
+files that compile into a static link library. Fips libraries are normally 
+used to wrap 3rd-party code that would normally be linked as a pre-compiled
+static link library, but is instead compiled from source code into
+a fips project.
+
+> NOTE: currently, a fips library is equivalent to a fips module, this
+may change in the future though
 
 After a fips\_begin\_lib() the following fips macros are valid:
 
@@ -85,6 +91,7 @@ After a fips\_begin\_lib() the following fips macros are valid:
 * fips\_files()
 * fips\_generate()
 * fips\_deps()
+* fips\_libs()
 * fips\_end\_lib()
 
 #### fips\_end\_lib()
@@ -104,6 +111,7 @@ After a fips\_begin\_app() the following fips macros are valid:
 * fips\_files()
 * fips\_generate()
 * fips\_deps()
+* fips\_libs()
 * fips\_end\_app()
 
 #### fips\_end\_app()
@@ -117,6 +125,8 @@ This is only necessary if source files are located in subdirectories of the
 directory where the current CMakeLists.txt file is located. You don't need
 to provide a fips\_dir() statement for files in the same directory as 
 their CMakeLists.txt file.
+
+fips\_dir() must be called inside a module, lib, or app definition block.
 
 #### fips\_files(file ...)
 
@@ -133,14 +143,27 @@ The following file extensions are recognized by the build process:
 * **.h, .hh**:      C/C++/Obj-C headers
 * **.py**:          Python source code generator scripts
 
+fips\_files() must be called inside a module, lib, or app definition block.
+
 #### fips\_deps(dep ...)
 
-Add dependencies to the current app or module. This can be the name
-of another fips module or lib, or the name of an existing static link
-library. Dependencies added to fips modules will be resolved recursively
+Add module or lib dependencies to the current fips app, module or lib. A
+dependency must be the name of another fips module or lib defined
+with fips\_begin\_module() or fips\_begin\_lib(). Dependencies added to 
+fips modules will be resolved recursively
 when linking apps. Fips will also take care of the dreaded linking order
 problem of GCC where symbols can't be resolved if the
 order of link libraries is wrong or in case of cyclic dependencies.
+
+fips\_deps() must be called inside a module, lib, or app definition block.
+
+#### fips\_libs(libs ...)
+
+Add a static link library dependency to the current fips app, module or libs.
+This is similar to the fips\_deps() macro but is used to define a link
+dependency to an existing, precompiled static link library. 
+
+fips\_libs() must be called inside a module, lib, or app definition block.
 
 #### fips\_generate(...)
 
@@ -148,6 +171,8 @@ Defines a code-generation job. Code generation can be used to generate
 C/C++ source files at build time from other input files like JSON,
 XML, YAML, GLSL, ... Code generation is described in detail 
 [here](codegen.html)
+
+fips\_generate() must be called inside a module, lib, or app definition block.
 
 ### The fips-include.cmake File
 
