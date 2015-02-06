@@ -243,7 +243,7 @@ files</li>
 <p>The second <em>generator version</em> check seems unusual, but this is very useful
 when the generator scripts themselves are updated. For every change in
 a generator script that influences the generated source code, the generator&#39;s
-version number should be increment. On the next build, all files generated
+version number should be incremented. On the next build, all files generated
 by this generator script will be written because the generator version
 number doesn&#39;t match.</p>
 
@@ -288,8 +288,8 @@ file(s) and output files.</p>
 <p>Header and source file are then written by the <strong>generateHeader()</strong> and
 <strong>generateSource()</strong> functions.</p>
 
-<p>Note that both functions write a comment in the first line a magic version
-tag which looks like <strong>#version:2#</strong>. The <strong>isDirty()</strong> helper function will
+<p>Note that both functions write a magic version tag inside a C comment in the first
+line which looks like <strong>#version:2#</strong>. The <strong>isDirty()</strong> helper function will
 look in the first 4 text lines for this magic tag.</p>
 
 <blockquote>
