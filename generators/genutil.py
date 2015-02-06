@@ -61,10 +61,16 @@ def isDirty(version, inputs, outputs) :
     Check if code generation needs to run by comparing version stamp
     and time stamps of a number of source files, and generated
     source and header files.
+
+    :param version:     generator version number, or None
+    :param input:       a list of absolute input file paths
+    :param outputs:     a list of absolute output file paths
+    :returns:           True if at least one output file is 'dirty'
     '''
     for output in outputs :
-        if fileVersionDirty(output, version) :
-            return True
+        if version :
+            if fileVersionDirty(output, version) :
+                return True
         outputTime = os.path.getmtime(output)
         for input in inputs :
             inputTime = os.path.getmtime(input)
