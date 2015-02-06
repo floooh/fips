@@ -161,7 +161,7 @@ files
 The second _generator version_ check seems unusual, but this is very useful
 when the generator scripts themselves are updated. For every change in
 a generator script that influences the generated source code, the generator's
-version number should be increment. On the next build, all files generated
+version number should be incremented. On the next build, all files generated
 by this generator script will be written because the generator version
 number doesn't match.
 
@@ -211,8 +211,8 @@ file(s) and output files.
 Header and source file are then written by the **generateHeader()** and
 **generateSource()** functions.
 
-Note that both functions write a comment in the first line a magic version
-tag which looks like **#version:2#**. The **isDirty()** helper function will
+Note that both functions write a magic version tag inside a C comment in the first
+line which looks like **#version:2#**. The **isDirty()** helper function will
 look in the first 4 text lines for this magic tag.
 
 > NOTE: it is possible to provide 'None' as version argument to genutil.isDirty(),
