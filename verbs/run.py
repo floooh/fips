@@ -23,7 +23,9 @@ def run(fips_dir, proj_dir, args) :
     if len(args) > 1 :
         cfg_name = args[1]
     if target_name :
-        project.run(fips_dir, proj_dir, cfg_name, target_name, target_args)
+        target_cwd = util.lookup_target_cwd(proj_dir, target_name)
+        print(target_cwd)
+        project.run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd)
     else :
         log.error('no target provided')
 

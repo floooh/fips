@@ -122,6 +122,23 @@ def load_fips_yml(proj_dir) :
     return dic
 
 #-------------------------------------------------------------------------------
+def lookup_target_cwd(proj_dir, target) :
+    """lookup optional working directory for target from fips.yml,
+    return None if no cwd has been specified for this target in fips.yml
+
+    :param proj_dir:    absolute project directory
+    :param target:      target name
+    :returns:           working directory or None
+    """
+    target_cwd = None
+    dic = load_fips_yml(proj_dir)
+    if 'run' in dic :
+        if target in dic['run'] :
+            if 'cwd' in dic['run'][target] :
+                target_cwd = proj_dir + '/' + dic['run'][target]['cwd']
+    return target_cwd
+
+#-------------------------------------------------------------------------------
 def is_valid_project_dir(proj_dir) :
     """test if the provided directory is a valid fips project (has a
     fips.yml file)

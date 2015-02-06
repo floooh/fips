@@ -260,7 +260,7 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
         return True
 
 #-------------------------------------------------------------------------------
-def run(fips_dir, proj_dir, cfg_name, target_name, target_args) :
+def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
     """run a build target executable
 
     :param fips_dir:    absolute path of fips
@@ -268,6 +268,7 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args) :
     :param cfg_name:    config name or pattern
     :param target_name: the target name
     :param target_args: command line arguments for build target
+    :param target_cwd:  working directory or None
     """
 
     proj_name = util.get_project_name_from_dir(proj_dir)
@@ -281,6 +282,8 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args) :
 
             # find deploy dir where executables live
             deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
+            if not target_cwd :
+                target_cwd = deploy_dir
 
             cmd_line = []
             if cfg['platform'] in ['emscripten', 'pnacl'] : 
@@ -293,36 +296,34 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args) :
                     try :
                         subprocess.call(
                             ['open http://localhost:8000/{} ; python {}/mod/httpserver.py'.format(html_name, fips_dir)],
-                            cwd = deploy_dir, shell=True)
+                            cwd = target_cwd, shell=True)
                     except KeyboardInterrupt :
                         pass
                 elif util.get_host_platform() == 'win' :
                     try :
                         cmd = ['cmd /c start http://localhost:8000/{} && python {}/mod/httpserver.py'.format(html_name, fips_dir)]
-                        subprocess.call(cmd, cwd = deploy_dir, shell=True)
+                        subprocess.call(cmd, cwd = target_cwd, shell=True)
                     except KeyboardInterrupt :
                         pass
                 elif util.get_host_platform() == 'linux' :
                     try :
                         subprocess.call(
                             ['xdg-open http://localhost:8000/{}; python {}/mod/httpserver.py'.format(html_name, fips_dir)],
-                            cwd = deploy_dir, shell=True)
+                            cwd = target_cwd, shell=True)
                     except KeyboardInterrupt :
                         pass
                 else :
                     log.error("don't know how to start HTML app on this platform")
             elif os.path.isdir('{}/{}.app'.format(deploy_dir, target_name)) :
                 # special case: Mac app
-                cmd_line = ['open', '{}/{}.app'.format(deploy_dir, target_name)]
-                if target_args :
-                    cmd_line.append('--args')
+                cmd_line = [ '{}/{}.app/Contents/MacOS/{}'.format(deploy_dir, target_name, target_name) ]
             else :
                 cmd_line = [ '{}/{}'.format(deploy_dir, target_name) ]
             if cmd_line :
                 if target_args :
                     cmd_line.extend(target_args)
                 try:
-                    subprocess.call(args=cmd_line, cwd=deploy_dir)
+                    subprocess.call(args=cmd_line, cwd=target_cwd)
                 except OSError, e:
                     log.error("Failed to execute '{}' with '{}'".format(target_name, e.strerror))
     else :
