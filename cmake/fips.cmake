@@ -230,9 +230,21 @@ endmacro()
 #   End defining a static link library.
 #
 macro(fips_end_lib)
+
+    # setup dependency tracker variables for this module, executable
+    # targets use this to resolve their dependencies
+    set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
+
     # add library target
     add_library(${CurTargetName} ${CurSources})
     fips_apply_target_group(${CurTargetName})
+
+    # make sure dependencies are built first
+    if (CurDependencies)
+        add_dependencies(${CurTargetName} ${CurDependencies})
+    endif()
     
     # record target name and type in the fips_targets.yml file
     fips_addto_targets_list(${CurTargetName} "lib")
