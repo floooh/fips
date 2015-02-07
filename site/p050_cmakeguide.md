@@ -118,13 +118,56 @@ After a fips\_begin\_app() the following fips macros are valid:
 
 This finishes a fips\_begin\_app() block.
 
-#### fips\_dir(dir)
+#### fips\_dir(dir [GROUP ide_group])
 
 Defines a source code subdirectory for the following fips\_files() statements.
 This is only necessary if source files are located in subdirectories of the
 directory where the current CMakeLists.txt file is located. You don't need
 to provide a fips\_dir() statement for files in the same directory as 
 their CMakeLists.txt file.
+
+fips will automatically derive an IDE group folder name from the directory
+path, so that the directory structure is reflected in IDE file explorers.
+This behaviour can be overriden with the optional GROUP argument, and 
+an explicit group name (or path) can be defined.
+
+This is the default usage of fips\_dir, without explicitely overriding
+the IDE group name:
+
+{% highlight cmake %}
+fips_dir(android)
+{% endhighlight %}
+
+This would switch the 'current source directory' to a subdirectory named
+'android', and in IDEs these files will be grouped under a folder 'android'
+in the file explorer.
+
+To switch back to the root directory (where the CMakeLists.txt file is located),
+just pass a . as argument:
+
+{% highlight cmake %}
+fips_dir(.)
+{% endhighlight %}
+
+The following example groups files in a very deep directory hierarchy
+under a short group name "include":
+
+{% highlight cmake %}
+fips_dir(some/deep/dir/hierarchy/include GROUP "include")
+{% endhighlight %}
+
+A GROUP argument can also contain slashes to define a whole group path:
+
+{% highlight cmake %}
+fips_dir(some/deep/dir/hierarchy/include GROUP "engine/include")
+{% endhighlight %}
+
+Finally, to not put the files into any IDE group folder, pass a 
+"." as special GROUP argument:
+
+{% highlight cmake %}
+fips_dir(some/deep/dir/hierarchy/include GROUP ".")
+{% endhighlight %}
 
 fips\_dir() must be called inside a module, lib, or app definition block.
 
