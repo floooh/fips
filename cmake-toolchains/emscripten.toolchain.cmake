@@ -31,6 +31,9 @@ set(FIPS_PLATFORM_NAME "emsc")
 set(FIPS_EMSCRIPTEN 1)
 set(FIPS_POSIX 1)
 
+# tweakable options 
+option(FIPS_EMSCRIPTEN_USE_FS "Enable FS module on emscripten" OFF)
+
 # total memory is 128MB for main thread, and 16 MB for worker
 # NOTE: USE_MEMORY_INIT_FILE has/had problems that the script is already starting but the MEM file isn't loaded yet(?)
 # at least I'm having weird startup problems...
@@ -38,7 +41,11 @@ set(EMSCRIPTEN_TOTAL_MEMORY 134217728)
 set(EMSCRIPTEN_TOTAL_MEMORY_WORKER 16777216)
 set(EMSCRIPTEN_USE_MEMORY_INIT_FILE 1)
 set(EMSCRIPTEN_LTO_LEVEL 1)
-set(EMSCRIPTEN_NO_FILESYSTEM 1)
+if (FIPS_EMSCRIPTEN_USE_FS)
+    set(EMSCRIPTEN_NO_FILESYSTEM 0)
+else()
+    set(EMSCRIPTEN_NO_FILESYSTEM 1)
+endif()
 
 # disable closure for now, as long as ANGLE_instanced_array support is not fully supported in emscripten
 set(EMSCRIPTEN_USE_CLOSURE 0)
