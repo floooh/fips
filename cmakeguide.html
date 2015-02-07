@@ -221,13 +221,46 @@ or OSX (app bundle vs command line tool).</p>
 
 <p>This finishes a fips_begin_app() block.</p>
 
-<h4>fips_dir(dir)</h4>
+<h4>fips_dir(dir [GROUP ide_group])</h4>
 
 <p>Defines a source code subdirectory for the following fips_files() statements.
 This is only necessary if source files are located in subdirectories of the
 directory where the current CMakeLists.txt file is located. You don&#39;t need
 to provide a fips_dir() statement for files in the same directory as 
 their CMakeLists.txt file.</p>
+
+<p>fips will automatically derive an IDE group folder name from the directory
+path, so that the directory structure is reflected in IDE file explorers.
+This behaviour can be overriden with the optional GROUP argument, and 
+an explicit group name (or path) can be defined.</p>
+
+<p>This is the default usage of fips_dir, without explicitely overriding
+the IDE group name:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">android</span><span class="p">)</span></code></pre></div>
+
+<p>This would switch the &#39;current source directory&#39; to a subdirectory named
+&#39;android&#39;, and in IDEs these files will be grouped under a folder &#39;android&#39;
+in the file explorer.</p>
+
+<p>To switch back to the root directory (where the CMakeLists.txt file is located),
+just pass a . as argument:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">.</span><span class="p">)</span></code></pre></div>
+
+<p>The following example groups files in a very deep directory hierarchy
+under a short group name &quot;include&quot;:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&quot;include&quot;</span><span class="p">)</span></code></pre></div>
+
+<p>A GROUP argument can also contain slashes to define a whole group path:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&quot;engine/include&quot;</span><span class="p">)</span></code></pre></div>
+
+<p>Finally, to not put the files into any IDE group folder, pass a 
+&quot;.&quot; as special GROUP argument:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span></code></pre></div>
 
 <p>fips_dir() must be called inside a module, lib, or app definition block.</p>
 
