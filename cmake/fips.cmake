@@ -373,15 +373,43 @@ macro(fips_libs libs)
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_dir(dir)
+#   fips_dir(dir [GROUP ide_group])
 #   Enter a source code subdirectory.
 #
 macro(fips_dir dir)
+    # parse args
+    set(options)
+    set(oneValueArgs GROUP)
+    set(multiValueArgs)
+    CMAKE_PARSE_ARGUMENTS(_fd "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    if (_fg_UNPARSED_ARGUMENTS)
+        message(FATAL_ERROR "fips_dir(): called with invalid args '${_fg_UNPARSED_ARGUMENTS}'")
+    endif()
+
+    # assign CurDir global var
     if (${dir} STREQUAL ".")
         set(CurDir)
     else()
         set(CurDir "${dir}/")
     endif()
+
+    # assign CurGroup global var
+    if (_fd_GROUP)
+        # group is explicitely given as GROUP argument
+        set(CurGroup ${_fd_GROUP})
+        # special case 'no group' as GROUP "."
+        if (${CurGroup} STREQUAL ".")
+            set(CurGroup "")
+        endif()
+    elseif (${dir} STREQUAL ".")
+        set(CurGroup "")
+    else()
+        # otherwise derive from directory path
+        # hack to string the leading '/' from CurDir
+        set(CurGroup "${CurDir}")
+        string(REPLACE "/!" "" CurGroup "${CurGroup}")
+    endif()
+    string(REPLACE / \\\\ CurGroup "${CurGroup}")
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -435,9 +463,8 @@ macro(fips_generate)
         string(REPLACE ${f_ext} ".cc" _fg_SOURCE ${_fg_FROM})
         string(REPLACE ${f_ext} ".h" _fg_HEADER ${_fg_FROM})
     endif()
-    fips_get_groupname(group_name)
     fips_add_file("${_fg_FROM}")
-    fips_add_generator("${group_name}" "${_fg_TYPE}" "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}" "${_fg_ARGS}")
+    fips_add_generator("${_fg_TYPE}" "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}" "${_fg_ARGS}")
 endmacro()
 
 #-------------------------------------------------------------------------------

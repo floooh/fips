@@ -9,6 +9,7 @@
 #
 macro(fips_reset target)
     set(CurDir)
+    set(CurGroup "")
     set(CurSources)
     set(CurDependencies)
     set(CurLinkLibs)
@@ -183,21 +184,6 @@ macro(fips_choose_config)
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_get_groupname(group_name)
-#   Set group_name variable to the group name derived from CurDir.
-#
-macro(fips_get_groupname VAR)
-    if (CurDir)
-        # hack to strip the leading '/' from CurDir
-        set(_str "${CurDir}!")
-        string(REPLACE "/!" "" _str ${_str})
-        string(REPLACE / \\\\ ${VAR} ${_str})
-    else()
-        set(${VAR} "")
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
 #   fips_add_file()
 #   Private helper function to add a single file to the project, with
 #   additional handling for code generation files.
@@ -215,8 +201,7 @@ macro(fips_add_file new_file)
         
         # determine source group name and
         # add to current source group
-        fips_get_groupname(group_name)
-        source_group("${group_name}" FILES ${cur_file})
+        source_group("${CurGroup}" FILES ${cur_file})
 
         # mark .m as .c file for older cmake versions (bug is fixed in cmake 3.1+)
         if (FIPS_OSX)
