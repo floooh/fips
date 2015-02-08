@@ -83,13 +83,15 @@ macro(fips_setup)
     # detect compiler
     if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
         set(FIPS_CLANG 1)
-        message("Clang compiler detected")
+        message("C++ Compiler: Clang (FIPS_CLANG)")
     elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
         set(FIPS_GCC 1)
-        message("GCC compiler detected")
+        message("C++ Compiler: GCC (FIPS_GCC)")
     elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
         set(FIPS_MSVC 1)
-        message("VisualStudio compiler detected")
+        message("C++ Compiler: VStudio (FIPS_MSVC)")
+    else()
+        message("C++ Compiler: Unknown")
     endif()
 
     # set FIPS_CONFIG to default if not provided by command line
