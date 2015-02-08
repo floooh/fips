@@ -80,6 +80,18 @@ macro(fips_setup)
         set(FIPS_HOST_LINUX 1)
     endif()
 
+    # detect compiler
+    if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+        set(FIPS_CLANG 1)
+        message("Clang compiler detected")
+    elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+        set(FIPS_GCC 1)
+        message("GCC compiler detected")
+    elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+        set(FIPS_MSVC 1)
+        message("VisualStudio compiler detected")
+    endif()
+
     # set FIPS_CONFIG to default if not provided by command line
     # (this provides better compatibility with some IDEs not directly 
     # supported by cmake, like QtCreator or CLion

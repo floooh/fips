@@ -237,6 +237,9 @@ Fips defines a number of useful cmake variables:
 * **FIPS\_POSIX**: target platform is UNIX-ish (basically anything but Windows)
 * **FIPS\_WINDOWS**: target platform is Windows
 * **FIPS\_OSX**: target platform is OSX-ish (either OSX 10.x or iOS) 
+* **FIPS\_CLANG**: C++ compiler is clang
+* **FIPS\_GCC**: C++ compiler is GCC
+* **FIPS\_MSVC**: C++ compiler is Visual Studio compiler
 * **FIPS\_LINUX**: target platform is Linux
 * **FIPS\_MACOS**: target platform is OSX 10.x
 * **FIPS\_IOS**: target platform is iOS
