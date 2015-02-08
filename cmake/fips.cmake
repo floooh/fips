@@ -27,6 +27,7 @@ option(FIPS_EXCEPTIONS "Enable C++ exceptions" OFF)
 option(FIPS_ALLOCATOR_DEBUG "Enable allocator debugging code (slow)" OFF)
 option(FIPS_COMPILE_VERBOSE "Enable very verbose compilation" OFF)
 option(FIPS_USE_CCACHE "Enable ccache when building with gcc or clang" OFF)
+option(FIPS_PROFILING "Enable app profiling/tracing" OFF)
 
 # turn some dependent options on/off
 if (FIPS_UNITTESTS)
