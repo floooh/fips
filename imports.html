@@ -240,7 +240,7 @@ project <span class="s1">&#39;fips-hello-dep2&#39;</span> imports:
 Fips will only check whether a directory with the name of the dependency exists,
 but never run any git operations on the directory content.</p>
 
-<p>Fips can tell you however if an imported dependencies is uptodate (meaning: in
+<p>Fips can tell you however if an imported dependency is uptodate (meaning: in
 sync with its remote repository on github) with &#39;./fips diag imports&#39;:</p>
 
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips diag <span class="nv">imports</span>
@@ -251,7 +251,7 @@ git status of <span class="s1">&#39;fips-hello-dep2&#39;</span>:
   uptodate</code></pre></div>
 
 <p>&#39;./fips diag imports&#39; catches uncommitted changes, changes which are
-committed but not pushed, or if the remote repository is ahead of the 
+committed but not pushed, and whether the remote repository is ahead of the 
 local repository:</p>
 
 <div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">===</span> imports:
