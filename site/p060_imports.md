@@ -155,7 +155,7 @@ After a dependency is fetched, fips will never automatically touch it again.
 Fips will only check whether a directory with the name of the dependency exists,
 but never run any git operations on the directory content.
 
-Fips can tell you however if an imported dependencies is uptodate (meaning: in
+Fips can tell you however if an imported dependency is uptodate (meaning: in
 sync with its remote repository on github) with './fips diag imports':
 
 {% highlight bash %}
@@ -168,7 +168,7 @@ git status of 'fips-hello-dep2':
 {% endhighlight %}
 
 './fips diag imports' catches uncommitted changes, changes which are
-committed but not pushed, or if the remote repository is ahead of the 
+committed but not pushed, and whether the remote repository is ahead of the 
 local repository:
 
 {% highlight bash %}

@@ -88,7 +88,7 @@ after that it must be started manually.
 > NOTE: Android MIPS is not yet fully supported on Oryol!
 {% endhighlight %}
 
-Finally iOS: this works a bit diffently since iOS compiling and debugging
+Finally iOS: this works a bit differently since iOS compiling and debugging
 works best directly in Xcode. Instead of a command line build, we only 
 generate the Xcode project files, and then start Xcode:
 
