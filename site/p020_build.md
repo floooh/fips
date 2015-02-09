@@ -11,7 +11,7 @@ host platform, simply run './fips build' in its root directory:
 
 {% highlight bash %}
 > cd ~/fips-workspace
-> git clone https://github.com/fips-hello-world.git
+> git clone https://github.com/floooh/fips-hello-world.git
 > cd fips-hello-world
 > ./fips build
 ...
