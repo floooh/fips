@@ -17,4 +17,4 @@ fips-hello-dep2:    https://github.com/floooh/fips-hello-dep2.git
 fips-simpleai:      https://github.com/mgerhardy/fips-simpleai.git
 fips-bgfx:          https://github.com/floooh/fips-bgfx.git
 fips-remotery:      https://github.com/floooh/fips-remotery.git
-
+fips-accidentalnoise: https://github.com/mgerhardy/fips-accidentalnoise.git
