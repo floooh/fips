@@ -85,23 +85,17 @@ def uncompress(fips_dir, path) :
         # module cannot completely unpack the 
         # Android NDK tar.gz2 file (tested on OSX with python 2.7),
         # so fall back to command line tar
-        subprocess.call(args=['tar', '-xvf', path], cwd=get_sdk_dir(fips_dir))
+        subprocess.call('tar -xvf {}'.format(path), cwd=get_sdk_dir(fips_dir), shell=True)
 
 #-------------------------------------------------------------------------------
 def update_android_sdk(fips_dir, proj_dir) :
     # FIXME: hardcoded version numbers should be configurable
     if util.get_host_platform() == 'win' :
-        cmd = ['{}/tools/android.bat'.format(get_androidsdk_dir(fips_dir)),
-               'update','sdk',
-               '-f', '-u', '--all',
-               '--filter', 'tools,platform-tools,build-tools-19.1.0,android-19']
+        cmd = '{}/tools/android.bat update sdk -f -u --all --filter tools,platform-tools,build-tools-19.1.0,android-19'.format(get_androidsdk_dir(fips_dir))
     else :
-        cmd = ['sh', '{}/tools/android'.format(get_androidsdk_dir(fips_dir)),
-               'update','sdk',
-               '-f', '-u', '--all',
-               '--filter', 'tools,platform-tools,build-tools-19.1.0,android-19']
+        cmd = 'sh {}/tools/android update sdk -f -u --all --filter tools,platform-tools,build-tools-19.1.0,android-19'.format(get_androidsdk_dir(fips_dir))
     print cmd
-    subprocess.call(args=cmd, cwd=fips_dir)
+    subprocess.call(cmd, cwd=fips_dir, shell=True)
 
 #-------------------------------------------------------------------------------
 def setup(fips_dir, proj_dir) :

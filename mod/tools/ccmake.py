@@ -15,7 +15,7 @@ def check_exists(fips_dir) :
     :returns: True if ccmake is in the path
     """
     try:
-        out = subprocess.check_output(['ccmake', '--version'])
+        out = subprocess.check_output('ccmake --version', shell=True)
         return True
     except OSError:
         return False
@@ -27,8 +27,7 @@ def run(build_dir) :
     :param build_dir:   directory where ccmake should run
     :returns:           True if ccmake returns successful
     """
-    cmdLine = ['ccmake', '.']
-    res = subprocess.call(args=cmdLine, cwd=build_dir)
+    res = subprocess.call('ccmake .', cwd=build_dir, shell=True)
     return res == 0
 
 

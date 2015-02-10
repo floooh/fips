@@ -16,7 +16,7 @@ def check_exists(fips_dir=None) :
     :returns:   True if git is in the path
     """
     try :
-        subprocess.check_output(['git', '--version'])
+        subprocess.check_output('git --version', shell=True)
         return True
     except OSError:
         return False
@@ -32,11 +32,11 @@ def clone(url, branch, name, cwd) :
     :returns:       True if git returns successful
     """
     if check_exists() :
-        cmd = ['git', 'clone', '--recursive']
+        cmd = 'git clone --recursive'
         if branch :
-            cmd.extend(['--branch', branch, '--single-branch', '--depth', '10'])
-        cmd.extend([url, name])
-        res = subprocess.call(cmd, cwd=cwd)
+            cmd += ' --branch {} --single-branch --depth 10'.format(branch)
+        cmd += ' {} {}'.format(url, name)
+        res = subprocess.call(cmd, cwd=cwd, shell=True)
         return res == 0
     else :
         log.error("git not found, please run and fix './fips diag tools'")
@@ -52,7 +52,7 @@ def get_branches(proj_dir) :
     """
     branches = {}
     try:
-        output = subprocess.check_output(['git', 'branch', '-vv'], cwd=proj_dir)
+        output = subprocess.check_output('git branch -vv', cwd=proj_dir, shell=True)
         lines = output.splitlines()
         for line in lines :
             tokens = line[2:].split()
@@ -72,7 +72,7 @@ def has_uncommitted_files(proj_dir) :
     :returns:           True/False and output string
     """
     try :
-        output = subprocess.check_output(['git', 'status', '-s'], cwd=proj_dir)
+        output = subprocess.check_output('git status -s', cwd=proj_dir, shell=True)
         if len(output) > 0 :
             return True, output
         else :
@@ -91,7 +91,7 @@ def get_remote_rev(proj_dir, remote_branch) :
     """
     tokens = remote_branch.split('/')
     try :
-        output = subprocess.check_output(['git', 'ls-remote', tokens[0], tokens[1]], cwd=proj_dir)
+        output = subprocess.check_output('git ls-remote {} {}'.format(tokens[0], tokens[1]), cwd=proj_dir, shell=True)
         return output.split()[0]
     except subprocess.CalledProcessError :
         log.error("failed to call 'git ls-remote'")
@@ -106,7 +106,7 @@ def get_local_rev(proj_dir, local_branch) :
     :returns:               the revision string of the local branch head or None
     """
     try :
-        output = subprocess.check_output(['git', 'rev-parse', local_branch], cwd=proj_dir)
+        output = subprocess.check_output('git rev-parse {}'.format(local_branch), cwd=proj_dir, shell=True)
         return output.rstrip()
     except subprocess.CalledProcessError :
         log.error("failed to call 'git rev-parse'")

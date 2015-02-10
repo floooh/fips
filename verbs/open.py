@@ -38,11 +38,11 @@ def run(fips_dir, proj_dir, args) :
         if 'Xcode' in cfg['generator'] :
             # find the Xcode project
             proj = glob.glob(build_dir + '/*.xcodeproj')
-            subprocess.call(['open', proj[0]])
+            subprocess.call('open {}'.format(proj[0]), shell=True)
         elif 'Visual Studio' in cfg['generator'] :
             # find the VisualStudio project file
             proj = glob.glob(build_dir + '/*.sln')
-            subprocess.call(['cmd', '/c', 'start', proj[0]])
+            subprocess.call('cmd /c start {}'.format(proj[0]), shell=True)
         else :
             log.error("don't know how to open a '{}' project".format(cfg['generator']))
     else :

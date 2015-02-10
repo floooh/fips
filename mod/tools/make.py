@@ -29,7 +29,7 @@ def run_build(fips_dir, target, build_dir, num_jobs=1) :
     :param num_jobs:    number of jobs, default is 1
     :returns:           True if build was successful
     """
-    cmdLine = 'make', '-j{}'.format(num_jobs)
+    cmdLine = 'make -j{}'.format(num_jobs)
     if target is not None :
         cmdLine += ' ' + target;
     print(cmdLine)

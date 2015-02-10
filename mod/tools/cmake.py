@@ -19,7 +19,7 @@ def check_exists(fips_dir) :
     :returns:   True if cmake found and is the required version
     """
     try:
-        out = subprocess.check_output(['cmake', '--version'], universal_newlines=True)
+        out = subprocess.check_output('cmake --version', universal_newlines=True, shell=True)
         ver = out.split()[2].split('.')
         if int(ver[0]) > major or (int(ver[0]) == major and int(ver[1]) >= minor):
             return True
@@ -40,18 +40,18 @@ def run_gen(cfg, project_dir, build_dir, toolchain_path, defines) :
     :param toolchain:       toolchain path or None
     :returns:               True if cmake returned successful
     """
-    cmdLine = ['cmake', '-G', cfg['generator'], '-DCMAKE_BUILD_TYPE={}'.format(cfg['build_type'])]
+    cmdLine = 'cmake -G "{}" -DCMAKE_BUILD_TYPE={}'.format(cfg['generator'], cfg['build_type'])
     if toolchain_path is not None :
-        cmdLine.append('-DCMAKE_TOOLCHAIN_FILE={}'.format(toolchain_path))
-    cmdLine.append('-DFIPS_CONFIG={}'.format(cfg['name']))
+        cmdLine += ' -DCMAKE_TOOLCHAIN_FILE={}'.format(toolchain_path)
+    cmdLine += ' -DFIPS_CONFIG={}'.format(cfg['name'])
     if cfg['defines'] is not None :
         for key in cfg['defines'] :
-            cmdLine.append('-D{}={}'.format(key, cfg['defines'][key]))
+            cmdLine += ' -D{}={}'.format(key, cfg['defines'][key])
     for key in defines :
-        cmdLine.append('-D{}={}'.format(key, defines[key]))
-    cmdLine.append(project_dir)
+        cmdLine += ' -D{}={}'.format(key, defines[key])
+    cmdLine += ' ' + project_dir
     
-    res = subprocess.call(args=cmdLine, cwd=build_dir)
+    res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
     return res == 0
 
 #------------------------------------------------------------------------------
@@ -63,11 +63,11 @@ def run_build(fips_dir, target, build_type, build_dir) :
     :param build_dir:       path to the build directory
     :returns:               True if cmake returns successful
     """
-    cmdLine = ['cmake', '--build', '.', '--config', build_type]
+    cmdLine = 'cmake --build . --config {}'.format(build_type)
     if target :
-        cmdLine.extend(['--target', target])
+        cmdLine += ' --target {}'.format(target)
     print(cmdLine)
-    res = subprocess.call(args=cmdLine, cwd=build_dir)
+    res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
     return res == 0
 
 #------------------------------------------------------------------------------
@@ -77,9 +77,8 @@ def run_clean(fips_dir, build_dir) :
     :param build_dir:   path to the build directory
     :returns:           True if cmake returns successful    
     """
-    cmdLine = ['cmake', '--build', '.', '--target', 'clean']
     try :
-        res = subprocess.call(args=cmdLine, cwd=build_dir)
+        res = subprocess.call('cmake --build . --target clean', cwd=build_dir, shell=True)
         return res == 0
     except OSError :
         return False

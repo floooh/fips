@@ -71,7 +71,7 @@ def uncompress(src_path, dst_path, zip_dir_name) :
         with zipfile.ZipFile(src_path, 'r') as archive:
             archive.extractall(dst_path + '/' + zip_dir_name)
     elif '.tgz' or '.bz2' in path :
-        subprocess.call(args=['tar', '-xvf', src_path], cwd=dst_path)
+        subprocess.call('tar -xvf {}'.format(src_path), cwd=dst_path, shell=True)
 
 #-------------------------------------------------------------------------------
 def finish(sdk_dir) :
@@ -81,13 +81,13 @@ def finish(sdk_dir) :
     """
     if util.get_host_platform() == 'win' :
         # on Windows use a stable SDK version which doesn't require clang to be compiled
-        subprocess.call(args=['emsdk.bat', 'update'], cwd=sdk_dir, shell=True)
-        subprocess.call(args=['emsdk.bat', 'install', get_sdk_version()], cwd=sdk_dir, shell=True)
-        subprocess.call(args=['emsdk.bat', 'activate', '--embedded', get_sdk_version()], cwd=sdk_dir, shell=True)
+        subprocess.call(args='emsdk.bat update', cwd=sdk_dir, shell=True)
+        subprocess.call(args='emsdk.bat install {}'.format(get_sdk_version()), cwd=sdk_dir, shell=True)
+        subprocess.call(args='emsdk.bat activate --embedded {}'.format(et_sdk_version()), cwd=sdk_dir, shell=True)
     else :
-        subprocess.call(args=['./emsdk update'], cwd=sdk_dir, shell=True)
-        subprocess.call(args=['./emsdk install {}'.format(get_sdk_version())], cwd=sdk_dir, shell=True)
-        subprocess.call(args=['./emsdk activate --embedded {}'.format(get_sdk_version())], cwd=sdk_dir, shell=True)
+        subprocess.call(args='./emsdk update', cwd=sdk_dir, shell=True)
+        subprocess.call(args='./emsdk install {}'.format(get_sdk_version()), cwd=sdk_dir, shell=True)
+        subprocess.call(args='./emsdk activate --embedded {}'.format(get_sdk_version()), cwd=sdk_dir, shell=True)
 
 #-------------------------------------------------------------------------------
 def setup(fips_dir, proj_dir) :

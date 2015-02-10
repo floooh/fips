@@ -295,20 +295,20 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
                 if util.get_host_platform() == 'osx' :
                     try :
                         subprocess.call(
-                            ['open http://localhost:8000/{} ; python {}/mod/httpserver.py'.format(html_name, fips_dir)],
+                            'open http://localhost:8000/{} ; python {}/mod/httpserver.py'.format(html_name, fips_dir),
                             cwd = target_cwd, shell=True)
                     except KeyboardInterrupt :
                         pass
                 elif util.get_host_platform() == 'win' :
                     try :
-                        cmd = ['cmd /c start http://localhost:8000/{} && python {}/mod/httpserver.py'.format(html_name, fips_dir)]
+                        cmd = 'cmd /c start http://localhost:8000/{} && python {}/mod/httpserver.py'.format(html_name, fips_dir)
                         subprocess.call(cmd, cwd = target_cwd, shell=True)
                     except KeyboardInterrupt :
                         pass
                 elif util.get_host_platform() == 'linux' :
                     try :
                         subprocess.call(
-                            ['xdg-open http://localhost:8000/{}; python {}/mod/httpserver.py'.format(html_name, fips_dir)],
+                            'xdg-open http://localhost:8000/{}; python {}/mod/httpserver.py'.format(html_name, fips_dir),
                             cwd = target_cwd, shell=True)
                     except KeyboardInterrupt :
                         pass
@@ -316,14 +316,14 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
                     log.error("don't know how to start HTML app on this platform")
             elif os.path.isdir('{}/{}.app'.format(deploy_dir, target_name)) :
                 # special case: Mac app
-                cmd_line = [ '{}/{}.app/Contents/MacOS/{}'.format(deploy_dir, target_name, target_name) ]
+                cmd_line = '{}/{}.app/Contents/MacOS/{}'.format(deploy_dir, target_name, target_name)
             else :
-                cmd_line = [ '{}/{}'.format(deploy_dir, target_name) ]
+                cmd_line = '{}/{}'.format(deploy_dir, target_name) 
             if cmd_line :
                 if target_args :
                     cmd_line.extend(target_args)
                 try:
-                    subprocess.call(args=cmd_line, cwd=target_cwd)
+                    subprocess.call(args=cmd_line, cwd=target_cwd, shell=True)
                 except OSError, e:
                     log.error("Failed to execute '{}' with '{}'".format(target_name, e.strerror))
     else :

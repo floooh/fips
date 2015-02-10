@@ -9,7 +9,7 @@ not_found = "required for Android, on OSX run 'brew cask install java'"
 #------------------------------------------------------------------------------
 def check_exists(fips_dir) :
     try :
-        subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT)
+        subprocess.check_output('java -version', stderr=subprocess.STDOUT, shell=True)
         return True
     except OSError:
         return False

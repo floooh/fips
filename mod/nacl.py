@@ -46,8 +46,8 @@ def update_nacl_sdk(fips_dir) :
     """run the actual nacl_sdk update process"""
     nacl_sdk = '{}/naclsdk'.format(get_naclsdk_dir(fips_dir))
     os.chmod(nacl_sdk, 0o744)
-    cmd = [nacl_sdk, 'install', '--force', 'pepper_canary']
-    subprocess.call(cmd, cwd=get_naclsdk_dir(fips_dir))
+    cmd = '{} install --force pepper_canary'.format(nacl_sdk)
+    subprocess.call(cmd, cwd=get_naclsdk_dir(fips_dir), shell=True)
     
 #-------------------------------------------------------------------------------
 def setup(fips_dir, proj_dir) :

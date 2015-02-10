@@ -13,7 +13,7 @@ def check_exists(fips_dir) :
     :returns:   True if cmake-gui is in the path
     """
     try:
-        out = subprocess.check_output(['cmake-gui', '--version'])
+        out = subprocess.check_output('cmake-gui --version', shell=True)
         return True
     except OSError:
         return False;
@@ -25,7 +25,6 @@ def run(build_dir) :
     :params build_dir:  directory where cmake-generated build files are located
     :returns:           True if cmake-gui returns successful
     """
-    cmdLine = ['cmake-gui', '.']
-    res = subprocess.call(args=cmdLine, cwd=build_dir)
+    res = subprocess.call('cmake-gui .', cwd=build_dir, shell=True)
     return res == 0
     
