@@ -11,8 +11,6 @@ def check_exists(fips_dir) :
     try :
         subprocess.check_output('ant -version', stderr=subprocess.STDOUT, shell=True)
         return True
-    except OSError:
-        return False
-    except subprocess.CalledProcessError:
+    except (OSError, subprocess.CalledProcessError):
         return False
 

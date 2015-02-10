@@ -17,7 +17,7 @@ def check_exists(fips_dir) :
     try:
         out = subprocess.check_output('make --version', shell=True)
         return True
-    except OSError:
+    except (OSError, subprocess.CalledProcessError):
         return False;
 
 #-------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ def run_clean(fips_dir, build_dir) :
     try :
         res = subprocess.call('make clean', cwd=build_dir, shell=True)
         return res == 0
-    except OSError :
+    except (OSError, subprocess.CalledProcessError) :
         return False
 
 

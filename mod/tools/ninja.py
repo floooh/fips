@@ -42,7 +42,7 @@ def check_exists(fips_dir) :
     try:
         out = subprocess.check_output("{} --version".format(get_ninja_tool(fips_dir)), shell=True)
         return True
-    except OSError:
+    except (OSError, subprocess.CalledProcessError):
         return False;
 
 #-------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ def run_clean(fips_dir, build_dir) :
         cmdLine = '{} clean'.format(get_ninja_name())
         res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
         return res == 0
-    except OSError :
+    except (OSError, subprocess.CalledProcessError) :
         return False
 
 

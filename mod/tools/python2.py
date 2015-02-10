@@ -11,6 +11,6 @@ def check_exists(fips_dir) :
     try :
         subprocess.check_output('python2 --version', stderr=subprocess.STDOUT, shell=True)
         return True
-    except OSError:
+    except (OSError, subprocess.CalledProcessError) :
         return False
 

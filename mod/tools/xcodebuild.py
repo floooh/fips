@@ -15,7 +15,7 @@ def check_exists(fips_dir) :
     try :
         subprocess.check_output('xcodebuild -version', shell=True)
         return True
-    except OSError:
+    except (OSError, subprocess.CalledProcessError) :
         return False
 
 #------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ def run_clean(fips_dir, build_dir) :
     try :
         res = subprocess.call('xcodebuild clean', cwd=build_dir, shell=True)
         return res == 0
-    except OSError :
+    except (OSError, subprocess.CalledProcessError) :
         return False
 
     

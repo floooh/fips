@@ -18,7 +18,7 @@ def check_exists(fips_dir=None) :
     try :
         subprocess.check_output('git --version', shell=True)
         return True
-    except OSError:
+    except (OSError, subprocess.CalledProcessError) :
         return False
 
 #-------------------------------------------------------------------------------

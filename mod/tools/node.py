@@ -14,7 +14,7 @@ def check_exists(fips_dir) :
             log.warn("this doesn't look like a proper node.js 'node'")
             return False 
         return True
-    except OSError:
+    except (OSError, subprocess.CalledProcessError) :
         return False
 
 

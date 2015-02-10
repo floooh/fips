@@ -15,7 +15,7 @@ def check_exists(fips_dir) :
     try:
         out = subprocess.check_output('cmake-gui --version', shell=True)
         return True
-    except OSError:
+    except (OSError, subprocess.CalledProcessError) :
         return False;
         
 #-------------------------------------------------------------------------------

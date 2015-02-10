@@ -11,7 +11,7 @@ def check_exists(fips_dir) :
     try :
         subprocess.check_output('ccache --version', shell=True)
         return True
-    except OSError:
+    except (OSError, subprocess.CalledProcessError):
         return False
 
 

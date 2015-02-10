@@ -27,7 +27,7 @@ def check_exists(fips_dir) :
             log.info('{}NOTE{}: cmake must be at least version {}.{} (found: {}.{}.{})'.format(
                     log.RED, log.DEF, major, minor, ver[0],ver[1],ver[2]))
             return False
-    except OSError:
+    except (OSError, subprocess.CalledProcessError):
         return False
 
 #------------------------------------------------------------------------------
@@ -80,6 +80,6 @@ def run_clean(fips_dir, build_dir) :
     try :
         res = subprocess.call('cmake --build . --target clean', cwd=build_dir, shell=True)
         return res == 0
-    except OSError :
+    except (OSError, subprocess.CalledProcessError) :
         return False
 
