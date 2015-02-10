@@ -285,7 +285,6 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
             if not target_cwd :
                 target_cwd = deploy_dir
 
-            cmd_line = []
             if cfg['platform'] in ['emscripten', 'pnacl'] : 
                 # special case: emscripten app
                 if cfg['platform'] == 'emscripten' :
@@ -321,7 +320,7 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
                 cmd_line = '{}/{}'.format(deploy_dir, target_name) 
             if cmd_line :
                 if target_args :
-                    cmd_line.extend(target_args)
+                    cmd_line += ' ' + ' '.join(target_args)
                 try:
                     subprocess.call(args=cmd_line, cwd=target_cwd, shell=True)
                 except OSError, e:
