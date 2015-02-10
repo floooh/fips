@@ -40,7 +40,7 @@ def check_exists(fips_dir) :
     :returns: True if ninja is in the path
     """
     try:
-        out = subprocess.check_output([get_ninja_tool(fips_dir), '--version'])
+        out = subprocess.check_output("{} --version".format(get_ninja_tool(fips_dir)), shell=True)
         return True
     except OSError:
         return False;
@@ -57,7 +57,7 @@ def run_build(fips_dir, target, build_dir, num_jobs=1) :
     if not target :
         target = 'all'
     prepare_ninja_tool(fips_dir, build_dir)
-    cmdLine = ["{} -j {} {}".format(get_ninja_name(), num_jobs, target)]
+    cmdLine = "{} -j {} {}".format(get_ninja_name(), num_jobs, target)
     print(cmdLine)
     res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
     return res == 0
@@ -71,7 +71,7 @@ def run_clean(fips_dir, build_dir) :
     """
     prepare_ninja_tool(fips_dir, build_dir)
     try :
-        cmdLine = [ '{} clean'.format(get_ninja_name()) ]
+        cmdLine = '{} clean'.format(get_ninja_name())
         res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
         return res == 0
     except OSError :
