@@ -20,6 +20,30 @@ cmake macro, see [Oryol engine](https://github.com/floooh/oryol) and
 
 - **30-Jan-2015**: please note that the NaCl SDK setup script is currently broken with Python 2.7.9 (2.7.6 works), this is tracked in the following bug: https://code.google.com/p/chromium/issues/detail?id=452137  
 
+### List of Fipsified Projects:
+
+In no particular order:
+
+- **oryol**:                https://github.com/floooh/oryol.git
+- **gliml**:                https://github.com/floooh/gliml.git
+- **fips-glm**:             https://github.com/floooh/fips-glm.git
+- **fips-unittestpp**:      https://github.com/floooh/fips-unittestpp.git
+- **fips-zlib**:            https://github.com/floooh/fips-zlib.git
+- **fips-glfw**:            https://github.com/floooh/fips-glfw.git
+- **fips-libcurl**:         https://github.com/floooh/fips-libcurl.git
+- **fips-polyvox**:         https://github.com/mgerhardy/fips-polyvox.git
+- **fips-simpleai**:        https://github.com/mgerhardy/fips-simpleai.git
+- **fips-bgfx**:            https://github.com/floooh/fips-bgfx.git
+- **fips-remotery**:        https://github.com/floooh/fips-remotery.git
+- **fips-accidentalnoise**: https://github.com/mgerhardy/fips-accidentalnoise.git
+
+Test projects:
+
+**oryol-test-app**:     https://github.com/floooh/oryol-test-app.git
+**fips-hello-world**:   https://github.com/floooh/fips-hello-world.git
+**fips-hello-dep1**:    https://github.com/floooh/fips-hello-dep1.git
+**fips-hello-dep2**:    https://github.com/floooh/fips-hello-dep2.git
+
 ### Progress
 
 fips is currently heavily **work in progress**, everything may change or
