@@ -39,10 +39,10 @@ In no particular order:
 
 Test projects:
 
-**oryol-test-app**:     https://github.com/floooh/oryol-test-app.git
-**fips-hello-world**:   https://github.com/floooh/fips-hello-world.git
-**fips-hello-dep1**:    https://github.com/floooh/fips-hello-dep1.git
-**fips-hello-dep2**:    https://github.com/floooh/fips-hello-dep2.git
+- **oryol-test-app**:     https://github.com/floooh/oryol-test-app.git
+- **fips-hello-world**:   https://github.com/floooh/fips-hello-world.git
+- **fips-hello-dep1**:    https://github.com/floooh/fips-hello-dep1.git
+- **fips-hello-dep2**:    https://github.com/floooh/fips-hello-dep2.git
 
 ### Progress
 
