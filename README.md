@@ -36,6 +36,8 @@ In no particular order:
 - **fips-bgfx**:            https://github.com/floooh/fips-bgfx.git
 - **fips-remotery**:        https://github.com/floooh/fips-remotery.git
 - **fips-accidentalnoise**: https://github.com/mgerhardy/fips-accidentalnoise.git
+- **fips-enet**:            https://github.com/mgerhardy/fips-enet.git
+
 
 Test projects:
 
