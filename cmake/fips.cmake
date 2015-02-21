@@ -46,6 +46,12 @@ macro(fips_setup)
 
     message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
+    if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+        set(FIPS_DEBUG ON)
+    else()
+        set(FIPS_DEBUG OFF)
+    endif()
+
     if (FIPS_ROOT_DIR)
         message("FIPS_ROOT_DIR: ${FIPS_ROOT_DIR}")
     else()
