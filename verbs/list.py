@@ -90,7 +90,7 @@ def list_targets(fips_dir, proj_dir, args) :
         success, targets = project.get_target_list(fips_dir, proj_dir, cfg_name)
         if success :
             # split targets by type
-            for type in ['lib', 'module', 'app'] :
+            for type in ['lib', 'module', 'app', 'sharedlib'] :
                 type_targets = [tgt for tgt in targets if targets[tgt] == type]
                 log.colored(log.BLUE, '  {}:'.format(type))
                 for tgt in type_targets :

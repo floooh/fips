@@ -100,10 +100,10 @@ macro(fips_config_postfixes_for_exe target)
 endmacro(fips_config_postfixes_for_exe)
 
 #-------------------------------------------------------------------------------
-#   fips_exe_output_directory(target)
-#   Internal macro to set the output directory
+#   fips_output_directory(target)
+#   Internal macro to set the output directory for exes and sharedlibs
 #
-function(fips_exe_output_directory target)
+function(fips_config_output_directory target)
     if (NOT (FIPS_IOS OR FIPS_ANDROID))
         set(dir ${FIPS_DEPLOY_DIR}/${CMAKE_PROJECT_NAME}/${FIPS_CONFIG})
 
