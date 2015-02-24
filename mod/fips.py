@@ -48,6 +48,6 @@ def run(fips_path, proj_path, args) :
         elif verb_name in verb.verbs :
             verb.verbs[verb_name].run(fips_path, proj_path, verb_args)
         else :
-            log.error("unknown verb '{}'".format(verb))
+            log.error("unknown verb '{}'".format(verb_name))
 
 
