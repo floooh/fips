@@ -112,7 +112,7 @@ script:
     # test shared lib (in fips-hello-dep1)
     - cd ../fips-hello-dep1
     - python fips gen
-    - python build
+    - python fips build
 
 
 
