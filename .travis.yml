@@ -109,6 +109,10 @@ script:
     - python fips unset target
     - python fips unset jobs
     - python fips list settings
+    # test shared lib (in fips-hello-dep1)
+    - cd ../fips-hello-dep1
+    - python fips gen
+    - python build
 
 
 
