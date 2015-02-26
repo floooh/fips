@@ -3,6 +3,10 @@
 #   Main cmake header for fips, this must be included in the top-level
 #   CMakeLists.txt file of a fips project
 #-------------------------------------------------------------------------------
+if (${CMAKE_VERSION} VERSION_GREATER 3.0) 
+    cmake_policy(SET CMP0042 NEW)
+endif()
+
 get_filename_component(FIPS_PROJECT_DIR "." ABSOLUTE)
 get_filename_component(FIPS_DEPLOY_DIR "../fips-deploy" ABSOLUTE)
 
@@ -45,6 +49,12 @@ endif()
 macro(fips_setup)
 
     message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
+
+    if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+        set(FIPS_DEBUG ON)
+    else()
+        set(FIPS_DEBUG OFF)
+    endif()
 
     if (FIPS_ROOT_DIR)
         message("FIPS_ROOT_DIR: ${FIPS_ROOT_DIR}")
@@ -354,11 +364,63 @@ macro(fips_end_app)
     endif()
 
     # setup executable output directory and postfixes (_debug, etc...)
-    fips_exe_output_directory(${CurTargetName})    
+    fips_config_output_directory(${CurTargetName})    
     fips_config_postfixes_for_exe(${CurTargetName})
 
     # record target name and type in the fips_targets.yml file
     fips_addto_targets_list(${CurTargetName} "app")
+
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_begin_sharedlib(name)
+#   Begin a fips shared library.
+#
+macro(fips_begin_sharedlib name )
+    fips_reset(${name})
+    if (FIPS_CMAKE_VERBOSE)
+        message("Shared Lib: name=" ${CurTargetName})
+    endif()
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_end_sharedlib()
+#   End defining a shared library.
+#
+macro(fips_end_sharedlib)
+
+    # add standard frameworks and libs
+    if (FIPS_OSX) 
+        fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
+    endif()
+
+    # record target dependencies 
+    set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
+
+    if (NOT CurSources)
+        message(FATAL_ERROR "No sources in target: ${CurTargetName} !!!")
+    endif()
+
+    # add shared lib target
+    add_library(${CurTargetName} SHARED ${CurSources})
+    fips_apply_target_group(${CurTargetName})
+
+    # handle generators (post-target)
+    fips_handle_generators(${CurTargetName})
+
+    # add dependencies for target
+    fips_resolve_dependencies(${CurTargetName})
+    if (FIPS_OSX OR FIPS_IOS)
+        fips_osx_resolve_frameworks(${CurTargetName})
+    endif()
+
+    # setup executable output directory and postfixes (_debug, etc...)
+    fips_config_output_directory(${CurTargetName})    
+
+    # record target name and type in the fips_targets.yml file
+    fips_addto_targets_list(${CurTargetName} "sharedlib")
 
 endmacro()
 

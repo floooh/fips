@@ -297,20 +297,20 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
                             'open http://localhost:8000/{} ; python {}/mod/httpserver.py'.format(html_name, fips_dir),
                             cwd = target_cwd, shell=True)
                     except KeyboardInterrupt :
-                        pass
+                        return
                 elif util.get_host_platform() == 'win' :
                     try :
                         cmd = 'cmd /c start http://localhost:8000/{} && python {}/mod/httpserver.py'.format(html_name, fips_dir)
                         subprocess.call(cmd, cwd = target_cwd, shell=True)
                     except KeyboardInterrupt :
-                        pass
+                        return
                 elif util.get_host_platform() == 'linux' :
                     try :
                         subprocess.call(
                             'xdg-open http://localhost:8000/{}; python {}/mod/httpserver.py'.format(html_name, fips_dir),
                             cwd = target_cwd, shell=True)
                     except KeyboardInterrupt :
-                        pass
+                        return
                 else :
                     log.error("don't know how to start HTML app on this platform")
             elif os.path.isdir('{}/{}.app'.format(deploy_dir, target_name)) :
