@@ -200,6 +200,9 @@ order of link libraries is wrong or in case of cyclic dependencies.
 
 fips\_deps() must be called inside a module, lib, or app definition block.
 
+> NOTE: dependencies listed in fips\_deps() must have been defined before
+> in the CMakeLists.txt file hierarchy
+
 #### fips\_libs(libs ...)
 
 Add a static link library dependency to the current fips app, module or libs.
