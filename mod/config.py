@@ -9,12 +9,12 @@ from mod.tools import cmake, make, ninja, xcodebuild
 from mod import emscripten, nacl, android
 
 platforms = [
-    'osx', 
-    'linux', 
-    'win32', 
-    'win64', 
-    'emscripten', 
-    'pnacl', 
+    'osx',
+    'linux',
+    'win32',
+    'win64',
+    'emscripten',
+    'pnacl',
     'ios',
     'android'
 ]
@@ -25,7 +25,7 @@ native_platforms = [
     'linux',
     'win32',
     'win64'
-] 
+]
 
 # cross-compiling platforms
 cross_platforms = [
@@ -48,7 +48,7 @@ generators = [
     'Ninja',
     'Xcode',
     'Visual Studio 12',
-    'Visual Studio 12 Win64', 
+    'Visual Studio 12 Win64',
     'CodeBlocks - Ninja',
     'CodeBlocks - Unix Makefiles',
     'CodeLite - Ninja',
@@ -141,7 +141,7 @@ def get_toolchain_for_platform(fips_dir, plat) :
         return '{}/cmake-toolchains/{}.toolchain.cmake'.format(fips_dir, plat)
 
 #-------------------------------------------------------------------------------
-def exists(pattern, proj_dirs) : 
+def exists(pattern, proj_dirs) :
     """test if at least one matching config exists
 
     :param pattern:     config name pattern (e.g. 'linux-make-*')
@@ -209,7 +209,7 @@ def load(fips_dir, proj_dir, pattern) :
 
                 if 'defines' not in cfg :
                     cfg['defines'] = None
-                
+
                 configs.append(cfg)
             except yaml.error.YAMLError, e:
                 log.error('YML parse error: {}', e.message)
@@ -259,7 +259,7 @@ def check_config_valid(fips_dir, cfg, print_errors=False) :
         if field not in cfg :
             errors.append("missing field '{}' in '{}'".format(field, cfg['path']))
             valid = False
-    
+
     # check if the platform string is valid
     if not valid_platform(cfg['platform']) :
         errors.append("invalid platform name '{}' in '{}'".format(cfg['platform'], cfg['path']))
@@ -269,31 +269,31 @@ def check_config_valid(fips_dir, cfg, print_errors=False) :
     if cfg['platform'] not in target_platforms[util.get_host_platform()] :
         errors.append("'{}' is not a valid target platform for host '{}'".format(cfg['platform'], util.get_host_platform()))
         valid = False
+    else:
+        # check if the target platform SDK is installed
+        if not check_sdk(fips_dir, cfg['platform']) :
+            errors.append("platform sdk for '{}' not installed (see './fips help setup')".format(cfg['platform']))
+            valid = False
 
-    # check if the target platform SDK is installed
-    if not check_sdk(fips_dir, cfg['platform']) :
-        errors.append("platform sdk for '{}' not installed (see './fips help setup')".format(cfg['platform']))
-        valid = False
+        # check if the generator name is valid
+        if not valid_generator(cfg['generator']) :
+            errors.append("invalid generator name '{}' in '{}'".format(cfg['generator'], cfg['path']))
+            valid = False
 
-    # check if the generator name is valid
-    if not valid_generator(cfg['generator']) :
-        errors.append("invalid generator name '{}' in '{}'".format(cfg['generator'], cfg['path']))
-        valid = False
+        # check if build tool is valid
+        if not valid_build_tool(cfg['build_tool']) :
+            errors.append("invalid build_tool name '{}' in '{}'".format(cfg['build_tool'], cfg['path']))
+            valid = False
 
-    # check if build tool is valid
-    if not valid_build_tool(cfg['build_tool']) :
-        errors.append("invalid build_tool name '{}' in '{}'".format(cfg['build_tool'], cfg['path']))
-        valid = False
+        # check if the build tool can be found
+        if not check_build_tool(fips_dir, cfg['build_tool']) :
+            errors.append("build tool '{}' not found".format(cfg['build_tool']))
+            valid = False
 
-    # check if the build tool can be found
-    if not check_build_tool(fips_dir, cfg['build_tool']) :
-        errors.append("build tool '{}' not found".format(cfg['build_tool']))
-        valid = False
-
-    # check if build type is valid (Debug, Release, Profiling)
-    if not valid_build_type(cfg['build_type']) :
-        errors.append("invalid build_type '{}' in '{}'".format(cfg['build_type'], cfg['path']))
-        valid = False
+        # check if build type is valid (Debug, Release, Profiling)
+        if not valid_build_type(cfg['build_type']) :
+            errors.append("invalid build_type '{}' in '{}'".format(cfg['build_type'], cfg['path']))
+            valid = False
 
     if print_errors :
         for error in errors :
