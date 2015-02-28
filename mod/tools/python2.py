@@ -9,7 +9,7 @@ not_found = "required for emscripten, on OSX run 'brew install python'"
 #------------------------------------------------------------------------------
 def check_exists(fips_dir) :
     try :
-        subprocess.check_output('python2 --version', stderr=subprocess.STDOUT, shell=True)
+        subprocess.check_output(['python2', '--version'], stderr=subprocess.STDOUT)
         return True
     except (OSError, subprocess.CalledProcessError) :
         return False

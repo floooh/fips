@@ -16,7 +16,7 @@ def check_exists(fips_dir=None) :
     :returns:   True if git is in the path
     """
     try :
-        subprocess.check_output('git --version', shell=True)
+        subprocess.check_output(['git', '--version'])
         return True
     except (OSError, subprocess.CalledProcessError) :
         return False

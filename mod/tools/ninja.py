@@ -40,7 +40,7 @@ def check_exists(fips_dir) :
     :returns: True if ninja is in the path
     """
     try:
-        out = subprocess.check_output("{} --version".format(get_ninja_tool(fips_dir)), shell=True)
+        out = subprocess.check_output(['{}'.format(get_ninja_tool(fips_dir)), '--version'])
         return True
     except (OSError, subprocess.CalledProcessError):
         return False;

@@ -13,7 +13,7 @@ def check_exists(fips_dir) :
     :returns:   True if cmake-gui is in the path
     """
     try:
-        out = subprocess.check_output('cmake-gui --version', shell=True)
+        out = subprocess.check_output(['cmake-gui', '--version'])
         return True
     except (OSError, subprocess.CalledProcessError) :
         return False;
