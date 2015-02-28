@@ -15,7 +15,7 @@ def check_exists(fips_dir) :
     :returns: True if make tool is in path
     """
     try:
-        out = subprocess.check_output('make --version', shell=True)
+        out = subprocess.check_output(['make', '--version'])
         return True
     except (OSError, subprocess.CalledProcessError):
         return False;

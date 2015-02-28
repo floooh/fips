@@ -9,7 +9,7 @@ not_found = "used with './fips set ccache on'"
 #------------------------------------------------------------------------------
 def check_exists(fips_dir) :
     try :
-        subprocess.check_output('ccache --version', shell=True)
+        subprocess.check_output(['ccache', '--version'])
         return True
     except (OSError, subprocess.CalledProcessError):
         return False

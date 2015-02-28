@@ -13,7 +13,7 @@ def check_exists(fips_dir) :
     :returns:   True if xcodebuild is in the path
     """
     try :
-        subprocess.check_output('xcodebuild -version', shell=True)
+        subprocess.check_output(['xcodebuild', '-version'])
         return True
     except (OSError, subprocess.CalledProcessError) :
         return False

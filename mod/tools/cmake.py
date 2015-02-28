@@ -19,7 +19,7 @@ def check_exists(fips_dir) :
     :returns:   True if cmake found and is the required version
     """
     try:
-        out = subprocess.check_output('cmake --version', universal_newlines=True, shell=True)
+        out = subprocess.check_output(['cmake', '--version'], universal_newlines=True)
         ver = out.split()[2].split('.')
         if int(ver[0]) > major or (int(ver[0]) == major and int(ver[1]) >= minor):
             return True

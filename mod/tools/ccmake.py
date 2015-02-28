@@ -15,7 +15,7 @@ def check_exists(fips_dir) :
     :returns: True if ccmake is in the path
     """
     try:
-        out = subprocess.check_output('ccmake --version', shell=True)
+        out = subprocess.check_output(['ccmake', '--version'])
         return True
     except (OSError, subprocess.CalledProcessError):
         return False
