@@ -39,6 +39,7 @@ set(CMAKE_C_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib s
 # 	/Gm: enable minimal rebuild
 #	/EHsc: slim exception model
 #	/EHa: fat exception model
+#   /MP: use multiple cores
 #
 # DEBUG compiler flags:
 #	/Zi create debugging information PDB file
@@ -58,11 +59,11 @@ else()
     message("C++ exceptions are disabled")
     set(FIPS_VS_EXCEPTION_FLAGS "/EHsc")
 endif()
-set(CMAKE_CXX_FLAGS "${FIPS_VS_EXCEPTION_FLAGS} /WX /TP /DWIN32")
+set(CMAKE_CXX_FLAGS "${FIPS_VS_EXCEPTION_FLAGS} /MP /WX /TP /DWIN32")
 set(CMAKE_CXX_FLAGS_DEBUG "/Zi /Od /Oy- /MTd /D_DEBUG /DFIPS_DEBUG=1")
 set(CMAKE_CXX_FLAGS_RELEASE "/Ox /MT /DNDEBUG")
 
-set(CMAKE_C_FLAGS "/WX /TC /errorReport:queue /DWIN32")
+set(CMAKE_C_FLAGS "/MP /WX /TC /errorReport:queue /DWIN32")
 set(CMAKE_C_FLAGS_DEBUG "/Zi /Od /Oy- /MTd /D_DEBUG /DFIPS_DEBUG=1")
 set(CMAKE_C_FLAGS_RELEASE "/Ox /MT /DNDEBUG ")
 
