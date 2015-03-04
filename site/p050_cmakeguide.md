@@ -27,10 +27,11 @@ fips\_setup() without arguments, and provide the project name later
 with fips\_project(). It is also possible to define multi-project builds
 by calling fips\_project() multiple times.
 
-If a project imports apps or shared-libs as from other fips project,
+If a project imports apps or shared-libs from other fips project,
 fips\_setup() **MUST** be called with a PROJECT argument (otherwise
 the imported apps and shared-libs would be created under the default
-cmake project name 'Project'.
+cmake project name 'Project', since the import happened inside
+fips\_setup() before the first call to fips\_project()).
 
 #### fips\_finish()
 
