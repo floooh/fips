@@ -48,6 +48,22 @@ endif()
 #
 macro(fips_setup)
 
+    # check for optional main-project name, this is the preferred way to 
+    # define the project name, but we better be backward compatible
+    # it is still allowed to call fips_project() afterwards
+    #
+    # if a project imports Apps or SharedLibs, fips_setup MUST contain a PROJECT arg
+    set(options)
+    set(oneValueArgs PROJECT)
+    set(multiValueArgs)
+    CMAKE_PARSE_ARGUMENTS(_fs "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    if (_fs_UNPARSED_ARGUMENTS)
+        message(FATAL_ERROR "fips_setup(): called with invalid args '${_fg_UNPARSED_ARGUMENTS}'")
+    endif()
+    if (_fs_PROJECT)
+        project(${_fs_PROJECT})
+    endif()
+
     message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
     if (FIPS_ROOT_DIR)

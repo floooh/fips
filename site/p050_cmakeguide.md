@@ -15,11 +15,22 @@ magic.
 
 Fips provides the following cmake macros to describe a project structure:
 
-#### fips\_setup()
+#### fips\_setup(PROJECT proj_name)
 
 Initializes the fips build system in a cmake file hierarchy. Must be
 called once in the root CMakeLists.txt before any other fips cmake
 macros.
+
+The PROJECT argument is optional, and if provided, is the name of the
+main project. For backward compatibility, it is still possible to call
+fips\_setup() without arguments, and provide the project name later 
+with fips\_project(). It is also possible to define multi-project builds
+by calling fips\_project() multiple times.
+
+If a project imports apps or shared-libs as from other fips project,
+fips\_setup() **MUST** be called with a PROJECT argument (otherwise
+the imported apps and shared-libs would be created under the default
+cmake project name 'Project'.
 
 #### fips\_finish()
 
