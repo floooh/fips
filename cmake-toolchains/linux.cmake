@@ -5,6 +5,7 @@
 
 message("Target Platform: Linux")
 include(CheckFunctionExists)
+include(CheckLibraryExists)
 
 set(FIPS_PLATFORM Linux)
 set(FIPS_PLATFORM_NAME "linux")
