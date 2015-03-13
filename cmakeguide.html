@@ -79,6 +79,12 @@
     
         
         <li class="nav-item">
+            <a href="/fips/exports.html">Exports</a>
+        </li>
+        
+    
+        
+        <li class="nav-item">
             <a href="/fips/codegen.html">Code Generation</a>
         </li>
         
@@ -108,11 +114,23 @@ magic.</p>
 
 <p>Fips provides the following cmake macros to describe a project structure:</p>
 
-<h4>fips_setup()</h4>
+<h4>fips_setup(PROJECT proj_name)</h4>
 
 <p>Initializes the fips build system in a cmake file hierarchy. Must be
 called once in the root CMakeLists.txt before any other fips cmake
 macros.</p>
+
+<p>The PROJECT argument is optional, and if provided, is the name of the
+main project. For backward compatibility, it is still possible to call
+fips_setup() without arguments, and provide the project name later 
+with fips_project(). It is also possible to define multi-project builds
+by calling fips_project() multiple times.</p>
+
+<p>If a project imports apps or shared-libs from other fips project,
+fips_setup() <strong>MUST</strong> be called with a PROJECT argument (otherwise
+the imported apps and shared-libs would be created under the default
+cmake project name &#39;Project&#39;, since the import happened inside
+fips_setup() before the first call to fips_project()).</p>
 
 <h4>fips_finish()</h4>
 
