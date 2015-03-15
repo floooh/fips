@@ -4,6 +4,7 @@ run [target]
 run [target] [config]
 """
 
+import sys
 from mod import log, util, config, project, settings
 
 #-------------------------------------------------------------------------------
@@ -24,7 +25,8 @@ def run(fips_dir, proj_dir, args) :
         cfg_name = args[1]
     if target_name :
         target_cwd = util.lookup_target_cwd(proj_dir, target_name)
-        project.run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd)
+        retcode = project.run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd)
+        sys.exit(retcode)
     else :
         log.error('no target provided')
 
