@@ -27,7 +27,10 @@ def gdb(fips_dir, proj_dir, cfg_name, target=None) :
                 deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
                 log.colored(log.YELLOW, "=== gdb: {}".format(cfg['name']))
                 cmdLine = ['gdb', target]
-                subprocess.call(args = cmdLine, cwd = deploy_dir)
+                try: 
+                    subprocess.call(args = cmdLine, cwd = deploy_dir)
+                except OSError :
+                    log.error("Failed to execute gdb (not installed?)")
             else :
                 log.error("Config '{}' not valid in this environment".format(cfg['name']))
     else :
