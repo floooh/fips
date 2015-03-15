@@ -22,7 +22,9 @@ cmake macro, see [Oryol engine](https://github.com/floooh/oryol) and
 
 ### List of Fipsified Projects:
 
-In no particular order:
+In no particular order (this list may not always be uptodate,
+check the registry.yml file for the latest additions, also
+there may be fipsified projects that are not in the registry):
 
 - **oryol**:                https://github.com/floooh/oryol.git
 - **gliml**:                https://github.com/floooh/gliml.git
@@ -37,7 +39,11 @@ In no particular order:
 - **fips-remotery**:        https://github.com/floooh/fips-remotery.git
 - **fips-accidentalnoise**: https://github.com/mgerhardy/fips-accidentalnoise.git
 - **fips-enet**:            https://github.com/mgerhardy/fips-enet.git
-
+- **fips-vld**:             https://github.com/floooh/fips-vld.git
+- **fips-cjson**:           https://github.com/floooh/fips-cjson.git
+- **fips-sauce**:           https://github.com/mgerhardy/fips-sauce
+- **fips-googletest**:      https://github.com/mgerhardy/fips-googletest
+- **fips-freetype2**:       https://github.com/mgerhardy/fips-freetype2
 
 Test projects:
 
