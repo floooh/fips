@@ -33,12 +33,7 @@ def gdb(fips_dir, proj_dir, cfg_name, target=None) :
     else :
         log.error("No valid configs found for '{}'".format(cfg_name))
 
-    if num_valid_configs != len(configs) :
-        log.error('{} out of {} configs failed!'.format(len(configs) - num_valid_configs, len(configs)))
-        return False
-    else :
-        log.colored(log.GREEN, '{} configs built'.format(num_valid_configs))
-        return True
+    return True
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
