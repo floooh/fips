@@ -44,6 +44,7 @@ there may be fipsified projects that are not in the registry):
 - **fips-sauce**:           https://github.com/mgerhardy/fips-sauce
 - **fips-googletest**:      https://github.com/mgerhardy/fips-googletest
 - **fips-freetype2**:       https://github.com/mgerhardy/fips-freetype2
+- **fips-recast**:          https://github.com/fungos/fips-recast.git
 
 Test projects:
 
