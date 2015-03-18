@@ -94,7 +94,7 @@ def gen(fips_dir, proj_dir, cfg_name) :
     dep.fetch_imports(fips_dir, proj_dir)
     proj_name = util.get_project_name_from_dir(proj_dir)
     util.ensure_valid_project_dir(proj_dir)
-    dep.write_imports_files(fips_dir, proj_dir)
+    dep.gather_and_write_imports(fips_dir, proj_dir)
 
     # load the config(s)
     configs = config.load(fips_dir, proj_dir, cfg_name)
@@ -132,7 +132,7 @@ def configure(fips_dir, proj_dir, cfg_name) :
     dep.fetch_imports(fips_dir, proj_dir)
     proj_name = util.get_project_name_from_dir(proj_dir)
     util.ensure_valid_project_dir(proj_dir)
-    dep.write_imports_files(fips_dir, proj_dir)
+    dep.gather_and_write_imports(fips_dir, proj_dir)
 
     # load configs, if more then one, only use first one
     configs = config.load(fips_dir, proj_dir, cfg_name)
@@ -215,7 +215,7 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
     dep.fetch_imports(fips_dir, proj_dir)
     proj_name = util.get_project_name_from_dir(proj_dir)
     util.ensure_valid_project_dir(proj_dir)
-    dep.write_imports_files(fips_dir, proj_dir)
+    dep.gather_and_write_imports(fips_dir, proj_dir)
 
     # load the config(s)
     configs = config.load(fips_dir, proj_dir, cfg_name)
