@@ -92,7 +92,11 @@ def get_remote_rev(proj_dir, remote_branch) :
     tokens = remote_branch.split('/')
     try :
         output = subprocess.check_output('git ls-remote {} {}'.format(tokens[0], tokens[1]), cwd=proj_dir, shell=True)
-        return output.split()[0]
+        # can return an empty string if the remote branch doesn't exist
+        if output != '':
+            return output.split()[0]
+        else :
+            return None
     except subprocess.CalledProcessError :
         log.error("failed to call 'git ls-remote'")
         return None
@@ -143,15 +147,19 @@ def check_out_of_sync(proj_dir) :
     for local_branch in branches :
         remote_branch = branches[local_branch]
         remote_rev = get_remote_rev(proj_dir, remote_branch)
-        local_rev = get_local_rev(proj_dir, local_branch)
-        if remote_rev != local_rev :
-            out_of_sync = True
-            if not branches_out_of_sync:
-                # only show this once
-                log.warn("'{}' branches out of sync:".format(proj_dir))
-                branches_out_of_sync = True
-            log.info("  {}: {}".format(local_branch, local_rev))
-            log.info("  {}: {}".format(remote_branch, remote_rev))
+
+        # remote_rev can be None if the remote branch doesn't exists,
+        # this is not an error
+        if remote_rev :
+            local_rev = get_local_rev(proj_dir, local_branch)
+            if remote_rev != local_rev :
+                out_of_sync = True
+                if not branches_out_of_sync:
+                    # only show this once
+                    log.warn("'{}' branches out of sync:".format(proj_dir))
+                    branches_out_of_sync = True
+                log.info("  {}: {}".format(local_branch, local_rev))
+                log.info("  {}: {}".format(remote_branch, remote_rev))
                     
     return out_of_sync
 
