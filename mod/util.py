@@ -151,7 +151,6 @@ def is_valid_project_dir(proj_dir) :
             return False
         return True
     else :
-        log.warn("project dir '{}' does not exist".format(proj_dir))
         return False
 
 #-------------------------------------------------------------------------------
