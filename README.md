@@ -25,7 +25,7 @@ cmake macro, see [Oryol engine](https://github.com/floooh/oryol) and
 Libs and engines:
 
 - **[accidentalnoise](https://code.google.com/p/accidental-noise-library/)**: https://github.com/mgerhardy/fips-accidentalnoise
-- **[bgfx](https://github.com/bkaradzic/bgfx)**: https://github.com/floooh/fips-bgfx.git
+- **[bgfx](https://github.com/bkaradzic/bgfx)**: https://github.com/floooh/fips-bgfx
 - **[cjson](http://cjson.sourceforge.net/)**: https://github.com/floooh/fips-cjson
 - **[enet](https://github.com/lsalzman/enet)**: https://github.com/mgerhardy/fips-enet
 - **[freetype2](http://git.savannah.gnu.org/cgit/freetype/freetype2.git/)**: https://github.com/mgerhardy/fips-freetype2
