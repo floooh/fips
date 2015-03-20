@@ -36,7 +36,7 @@ Libs and engines:
 - **[googletest](https://code.google.com/p/googletest/)**: https://github.com/mgerhardy/fips-googletest
 - **[imgui](https://github.com/ocornut/imgui)**: https://github.com/fungos/fips-imgui
 - **[libcurl (precompiled)](http://curl.haxx.se/libcurl/)**: https://github.com/floooh/fips-libcurl
-- **[libnoise](https://github.com/qknight/libnoise**: https://github.com/mgerhardy/fips-libnoise
+- **[libnoise](https://github.com/qknight/libnoise)**: https://github.com/mgerhardy/fips-libnoise
 - **[nanovg](https://github.com/memononen/nanovg)**: https://github.com/fungos/fips-nanovg
 - **[oryol](http://floooh.github.io/oryol/)**: https://github.com/floooh/oryol
 - **[polyvox](https://bitbucket.org/volumesoffun/polyvox.git)**: https://github.com/mgerhardy/fips-polyvox
