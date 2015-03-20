@@ -47,6 +47,9 @@ there may be fipsified projects that are not in the registry):
 - **fips-recast**:          https://github.com/fungos/fips-recast.git
 - **fips-glew**:            https://github.com/fungos/fips-glew.git
 - **fips-nanovg**:          https://github.com/fungos/fips-nanovg.git
+- **fips-imgui**:           https://github.com/fungos/fips-imgui.git
+- **fips-turbobadger**:     https://github.com/fungos/fips-turbobadger.git
+- **fips-stb**:             https://github.com/fungos/fips-stb.git
 
 Test projects:
 
