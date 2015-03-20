@@ -22,34 +22,32 @@ cmake macro, see [Oryol engine](https://github.com/floooh/oryol) and
 
 ### List of Fipsified Projects:
 
-In no particular order (this list may not always be uptodate,
-check the registry.yml file for the latest additions, also
-there may be fipsified projects that are not in the registry):
+Libs and engines:
 
-- **oryol**:                https://github.com/floooh/oryol.git
-- **gliml**:                https://github.com/floooh/gliml.git
-- **fips-glm**:             https://github.com/floooh/fips-glm.git
-- **fips-unittestpp**:      https://github.com/floooh/fips-unittestpp.git
-- **fips-zlib**:            https://github.com/floooh/fips-zlib.git
-- **fips-glfw**:            https://github.com/floooh/fips-glfw.git
-- **fips-libcurl**:         https://github.com/floooh/fips-libcurl.git
-- **fips-polyvox**:         https://github.com/mgerhardy/fips-polyvox.git
-- **fips-simpleai**:        https://github.com/mgerhardy/fips-simpleai.git
-- **fips-bgfx**:            https://github.com/floooh/fips-bgfx.git
-- **fips-remotery**:        https://github.com/floooh/fips-remotery.git
-- **fips-accidentalnoise**: https://github.com/mgerhardy/fips-accidentalnoise.git
-- **fips-enet**:            https://github.com/mgerhardy/fips-enet.git
-- **fips-vld**:             https://github.com/floooh/fips-vld.git
-- **fips-cjson**:           https://github.com/floooh/fips-cjson.git
-- **fips-sauce**:           https://github.com/mgerhardy/fips-sauce
-- **fips-googletest**:      https://github.com/mgerhardy/fips-googletest
-- **fips-freetype2**:       https://github.com/mgerhardy/fips-freetype2
-- **fips-recast**:          https://github.com/fungos/fips-recast.git
-- **fips-glew**:            https://github.com/fungos/fips-glew.git
-- **fips-nanovg**:          https://github.com/fungos/fips-nanovg.git
-- **fips-imgui**:           https://github.com/fungos/fips-imgui.git
-- **fips-turbobadger**:     https://github.com/fungos/fips-turbobadger.git
-- **fips-stb**:             https://github.com/fungos/fips-stb.git
+- **[accidentalnoise](https://code.google.com/p/accidental-noise-library/)**: https://github.com/mgerhardy/fips-accidentalnoise
+- **[bgfx](https://github.com/bkaradzic/bgfx)**: https://github.com/floooh/fips-bgfx.git
+- **[cjson](http://cjson.sourceforge.net/)**: https://github.com/floooh/fips-cjson
+- **[enet](https://github.com/lsalzman/enet)**: https://github.com/mgerhardy/fips-enet
+- **[freetype2](http://git.savannah.gnu.org/cgit/freetype/freetype2.git/)**: https://github.com/mgerhardy/fips-freetype2
+- **[glew](https://github.com/nigels-com/glew)**: https://github.com/fungos/fips-glew
+- **[glfw](https://github.com/glfw/glfw)**: https://github.com/floooh/fips-glfw
+- **[gliml](https://github.com/floooh/gliml)**: https://github.com/floooh/gliml
+- **[glm](https://github.com/g-truc/glm)**: https://github.com/floooh/fips-glm
+- **[googletest](https://code.google.com/p/googletest/)**: https://github.com/mgerhardy/fips-googletest
+- **[imgui](https://github.com/ocornut/imgui)**: https://github.com/fungos/fips-imgui
+- **[libcurl (precompiled)](http://curl.haxx.se/libcurl/)**: https://github.com/floooh/fips-libcurl
+- **[nanovg](https://github.com/memononen/nanovg)**: https://github.com/fungos/fips-nanovg
+- **[oryol](http://floooh.github.io/oryol/)**: https://github.com/floooh/oryol
+- **[polyvox](https://bitbucket.org/volumesoffun/polyvox.git)**: https://github.com/mgerhardy/fips-polyvox
+- **[recastnavigation](https://github.com/memononen/recastnavigation)**: https://github.com/fungos/fips-recast
+- **[remotery](https://github.com/Celtoys/Remotery)**: https://github.com/floooh/fips-remotery
+- **[sauce](https://github.com/phs/sauce)**: https://github.com/mgerhardy/fips-sauce
+- **[simpleai](https://github.com/mgerhardy/simpleai)**: https://github.com/mgerhardy/fips-simpleai
+- **[stb](https://github.com/nothings/stb)**: https://github.com/fungos/fips-stb
+- **[turbobadger](https://github.com/fruxo/turbobadger)**: https://github.com/fungos/fips-turbobadger
+- **[unittestpp](https://github.com/unittest-cpp/unittest-cpp)**: https://github.com/floooh/fips-unittestpp
+- **[vld (precompiled)](https://github.com/KindDragon/vld)**: https://github.com/floooh/fips-vld
+- **[zlib](http://www.zlib.net/)**: https://github.com/floooh/fips-zlib
 
 Test projects:
 
