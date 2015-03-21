@@ -90,11 +90,12 @@ def list_targets(fips_dir, proj_dir, args) :
         success, targets = project.get_target_list(fips_dir, proj_dir, cfg_name)
         if success :
             # split targets by type
-            for type in ['lib', 'module', 'app', 'sharedlib'] :
+            for type in ['lib', 'module', 'sharedlib', 'app'] :
                 type_targets = [tgt for tgt in targets if targets[tgt] == type]
-                log.colored(log.BLUE, '  {}:'.format(type))
-                for tgt in type_targets :
-                    log.info('    ' + tgt)
+                if len(type_targets) > 0 :
+                    log.colored(log.BLUE, '  {}:'.format(type))
+                    for tgt in type_targets :
+                        log.info('    ' + tgt)
         else :
             log.info("  can't fetch project target list, please run 'fips gen' first!")  
     else :
@@ -111,38 +112,34 @@ def list_exports(fips_dir, proj_dir) :
         for dep_proj_name in result :
             cur_dep = result[dep_proj_name]
             log.colored(log.BLUE, "project '{}' exports:".format(dep_proj_name))
-
-            log.info("  modules:")
+            
             cur_modules = cur_dep['exports']['modules']
+            cur_hdrs = cur_dep['exports']['header-dirs']
+            cur_libs = cur_dep['exports']['lib-dirs']
+            cur_defs = cur_dep['exports']['defines']
+
+            if not (cur_modules or cur_hdrs or cur_libs or cur_defs) :
+                log.info("    nothing")
+
             if cur_modules :
+                log.info("  modules:")
                 for mod in cur_modules :
                     log.info("    {} => {}".format(mod, cur_modules[mod]))
-            else :
-                log.info("    none")
 
-            log.info("  header search dirs:")
-            cur_hdrs = cur_dep['exports']['header-dirs']
             if cur_hdrs :
+                log.info("  header search dirs:")
                 for hdr in cur_hdrs :
                     log.info("    {}".format(hdr))
-            else :
-                log.info("    none")
 
-            log.info("  lib search dirs:")
-            cur_libs = cur_dep['exports']['lib-dirs']
             if cur_libs :
+                log.info("  lib search dirs:")
                 for lib in cur_libs :
                     log.info("    {}".format(lib))
-            else :
-                log.info("    none")
 
-            log.info("  defines:")
-            cur_defs = cur_dep['exports']['defines']
             if cur_defs :
+                log.info("  defines:")
                 for define in cur_defs :
                     log.info("    {} => {}".format(define, cur_defs[define]))
-            else :
-                log.info("    none")
     else :
         log.info('  currently not in a valid project directory')
 

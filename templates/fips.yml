@@ -2,22 +2,25 @@
 # $project
 #
 ---
-# IMPORTS:
-# ========
-# imports:
-#    proj-name or git-url: [ dep1, dep2, dep3, ... ]
-#
-# EXPORTS:
-# ========
-# exports:
-#     header-dirs : [ dir, ... ]
-#     lib-dirs : [ dir, ... ]
-#     generator-dirs: [ dir, ... ]
-#     defines :
-#         def1 : value
-#         ...
-#     modules :
-#         dep1: src/dep1
-#         ...
-
+#   imports:
+#       PROJ-NAME:
+#           git: GIT-URL
+#           branch: OPTIONAL BRANCH OR TAG NAME
+#   exports:
+#       header-dirs:
+#           - RELATIVE HEADER SEARCH PATH
+#           - ...
+#       lib-dirs:
+#           - RELATIVE LIB SEARCH PATH
+#           - ...
+#       defines:
+#           KEY: VALUE (C preprocessor defines)
+#           ...: ...
+#       modules:
+#           NAME:   DIRECTORY WITH CMakeLists.txt of MODULE
+#           ...: ...
+#   run:
+#       TARGET-NAME:
+#           cwd:    WORKING DIRECTORY FOR 'fips run target'
+#       ...
 

@@ -94,7 +94,7 @@ def gen(fips_dir, proj_dir, cfg_name) :
     dep.fetch_imports(fips_dir, proj_dir)
     proj_name = util.get_project_name_from_dir(proj_dir)
     util.ensure_valid_project_dir(proj_dir)
-    dep.write_imports_files(fips_dir, proj_dir)
+    dep.gather_and_write_imports(fips_dir, proj_dir)
 
     # load the config(s)
     configs = config.load(fips_dir, proj_dir, cfg_name)
@@ -132,7 +132,7 @@ def configure(fips_dir, proj_dir, cfg_name) :
     dep.fetch_imports(fips_dir, proj_dir)
     proj_name = util.get_project_name_from_dir(proj_dir)
     util.ensure_valid_project_dir(proj_dir)
-    dep.write_imports_files(fips_dir, proj_dir)
+    dep.gather_and_write_imports(fips_dir, proj_dir)
 
     # load configs, if more then one, only use first one
     configs = config.load(fips_dir, proj_dir, cfg_name)
@@ -215,7 +215,7 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
     dep.fetch_imports(fips_dir, proj_dir)
     proj_name = util.get_project_name_from_dir(proj_dir)
     util.ensure_valid_project_dir(proj_dir)
-    dep.write_imports_files(fips_dir, proj_dir)
+    dep.gather_and_write_imports(fips_dir, proj_dir)
 
     # load the config(s)
     configs = config.load(fips_dir, proj_dir, cfg_name)
@@ -271,6 +271,7 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
     :param target_cwd:  working directory or None
     """
 
+    retcode = 10
     proj_name = util.get_project_name_from_dir(proj_dir)
     util.ensure_valid_project_dir(proj_dir)
     
@@ -297,20 +298,20 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
                             'open http://localhost:8000/{} ; python {}/mod/httpserver.py'.format(html_name, fips_dir),
                             cwd = target_cwd, shell=True)
                     except KeyboardInterrupt :
-                        return
+                        return 0
                 elif util.get_host_platform() == 'win' :
                     try :
                         cmd = 'cmd /c start http://localhost:8000/{} && python {}/mod/httpserver.py'.format(html_name, fips_dir)
                         subprocess.call(cmd, cwd = target_cwd, shell=True)
                     except KeyboardInterrupt :
-                        return
+                        return 0
                 elif util.get_host_platform() == 'linux' :
                     try :
                         subprocess.call(
                             'xdg-open http://localhost:8000/{}; python {}/mod/httpserver.py'.format(html_name, fips_dir),
                             cwd = target_cwd, shell=True)
                     except KeyboardInterrupt :
-                        return
+                        return 0
                 else :
                     log.error("don't know how to start HTML app on this platform")
             elif os.path.isdir('{}/{}.app'.format(deploy_dir, target_name)) :
@@ -322,11 +323,13 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
                 if target_args :
                     cmd_line += ' ' + ' '.join(target_args)
                 try:
-                    subprocess.call(args=cmd_line, cwd=target_cwd, shell=True)
+                    retcode = subprocess.call(args=cmd_line, cwd=target_cwd, shell=True)
                 except OSError, e:
                     log.error("Failed to execute '{}' with '{}'".format(target_name, e.strerror))
     else :
         log.error("No valid configs found for '{}'".format(cfg_name))
+
+    return retcode
 
 #-------------------------------------------------------------------------------
 def clean(fips_dir, proj_dir, cfg_name) :

@@ -8,6 +8,8 @@ fips-unittestpp:    https://github.com/floooh/fips-unittestpp.git
 fips-zlib:          https://github.com/floooh/fips-zlib.git
 fips-glfw:          https://github.com/floooh/fips-glfw.git
 fips-libcurl:       https://github.com/floooh/fips-libcurl.git
+fips-vld:           https://github.com/floooh/fips-vld.git
+fips-cjson:         https://github.com/floooh/fips-cjson.git
 
 oryol-test-app:     https://github.com/floooh/oryol-test-app.git
 
@@ -22,3 +24,12 @@ fips-bgfx:          https://github.com/floooh/fips-bgfx.git
 fips-remotery:      https://github.com/floooh/fips-remotery.git
 fips-accidentalnoise: https://github.com/mgerhardy/fips-accidentalnoise.git
 fips-googletest:    https://github.com/mgerhardy/fips-googletest
+fips-freetype2:     https://github.com/mgerhardy/fips-freetype2
+fips-libnoise:      https://github.com/mgerhardy/fips-libnoise
+fips-assimp:        https://github.com/mgerhardy/fips-assimp
+fips-recast:        https://github.com/fungos/fips-recast.git
+fips-glew:          https://github.com/fungos/fips-glew.git
+fips-nanovg:        https://github.com/fungos/fips-nanovg.git
+fips-imgui:         https://github.com/fungos/fips-imgui.git
+fips-turbobadger:   https://github.com/fungos/fips-turbobadger.git
+fips-stb:           https://github.com/fungos/fips-stb.git

@@ -4,7 +4,7 @@ import os.path
 import glob
 import yaml
 from collections import OrderedDict
-from mod import log, util
+from mod import log, util, dep
 from mod.tools import cmake, make, ninja, xcodebuild
 from mod import emscripten, nacl, android
 
@@ -154,6 +154,27 @@ def exists(pattern, proj_dirs) :
     return False
 
 #-------------------------------------------------------------------------------
+def get_config_dirs(fips_dir, proj_dir) :
+    """return list of config directories, including all imports
+
+    :param fips_dir: absolute fips directory
+    :param proj_dir: absolute project directory
+    :returns:        list of all directories with config files
+    """
+    dirs = [ fips_dir + '/configs' ]
+    if fips_dir != proj_dir :
+        success, result = dep.get_all_imports_exports(fips_dir, proj_dir)
+        if success :
+            for dep_proj_name in result :
+                dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
+                dep_configs_dir = dep_proj_dir + '/fips-configs'
+                if os.path.isdir(dep_configs_dir) :
+                    dirs.append(dep_configs_dir)
+        else :
+            log.warn("missing import directories, please run 'fips fetch'")
+    return dirs
+
+#-------------------------------------------------------------------------------
 def list(fips_dir, proj_dir, pattern) :
     """return { dir : [cfgname, ...] } in fips_dir/configs and
     proj_dir/fips-configs
@@ -163,11 +184,7 @@ def list(fips_dir, proj_dir, pattern) :
     :param pattern:     global pattern for config-name(s)
     :returns:           a map of matching configs per dir
     """
-    if fips_dir == proj_dir :
-        dirs = [ fips_dir + '/configs' ]
-    else :
-        dirs = [ fips_dir + '/configs', proj_dir + '/fips-configs' ]
-
+    dirs = get_config_dirs(fips_dir, proj_dir)
     res = OrderedDict()
     for curDir in dirs :
         res[curDir] = []
@@ -187,11 +204,7 @@ def load(fips_dir, proj_dir, pattern) :
     :param pattern:     config name pattern (e.g. 'linux-make-*')
     :returns:   an array of loaded config objects
     """
-    if fips_dir == proj_dir :
-        dirs = [ fips_dir + '/configs' ]
-    else :
-        dirs = [ fips_dir + '/configs', proj_dir + '/fips-configs' ]
-
+    dirs = get_config_dirs(fips_dir, proj_dir)
     configs = []
     for curDir in dirs :
         paths = glob.glob('{}/{}.yml'.format(curDir, pattern))
