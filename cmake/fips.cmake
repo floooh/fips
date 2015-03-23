@@ -37,8 +37,6 @@ option(FIPS_PROFILING "Enable app profiling/tracing" OFF)
 if (FIPS_UNITTESTS)
     enable_testing()
     set(FIPS_EXCEPTIONS ON CACHE BOOL "Enable C++ exceptions" FORCE)
-else()
-    set(FIPS_EXCEPTIONS OFF CACHE BOOL "Enable C++ exceptions" FORCE)
 endif()
 
 #-------------------------------------------------------------------------------
