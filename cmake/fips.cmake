@@ -227,6 +227,8 @@ macro(fips_end_module)
     # record target dependencies
     set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_debug ${CurLinkLibsDebug})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_release ${CurLinkLibsRelease})
     set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
 
     # add library target
@@ -267,6 +269,8 @@ macro(fips_end_lib)
     # record target dependencies
     set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_debug ${CurLinkLibsDebug})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_release ${CurLinkLibsRelease})
     set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
     
     # add library target
@@ -317,6 +321,8 @@ macro(fips_end_app)
     # record target dependencies 
     set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_debug ${CurLinkLibsDebug})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_release ${CurLinkLibsRelease})
     set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
 
     if (NOT CurSources)
@@ -405,6 +411,8 @@ macro(fips_end_sharedlib)
     # record target dependencies 
     set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_debug ${CurLinkLibsDebug})
+    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_release ${CurLinkLibsRelease})
     set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
 
     if (NOT CurSources)
@@ -455,6 +463,31 @@ endmacro()
 macro(fips_libs libs)
     foreach(lib ${ARGV})
         list(APPEND CurLinkLibs ${lib})
+    endforeach()
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_libs_debug(libs ...)
+#   Add one or more static link library that are only used in debug mode.
+#   This is sometimes necessary for precompiled visual studio libs (if they
+#   use STL code).
+#   NOTE: libraries with fips_libs_debug() have no recursive dependency
+#   resolution.
+#
+macro(fips_libs_debug libs)
+    foreach(lib ${ARGV})
+        list(APPEND CurLinkLibsDebug ${lib})
+    endforeach()
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_libs_release(libs ...)
+#   Same as fips_libs_debug(), but for release mode (or rather: all non-debug
+#   modes).
+#
+macro(fips_libs_release libs)
+    foreach(lib ${ARGV})
+        list(APPEND CurLinkLibsRelease ${lib})
     endforeach()
 endmacro()
 

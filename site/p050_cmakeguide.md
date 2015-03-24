@@ -223,6 +223,12 @@ dependency to an existing, precompiled static link library.
 
 fips\_libs() must be called inside a module, lib, or app definition block.
 
+#### fips\_libs\_debug(libs ...), fips\_libs\_release(libs ...)
+
+These are rarely needed special variants of **fips\_libs()** which add separate 
+static link libraries for debug and non-debug compilation modes. This is necessary
+on Visual Studio when trying to link libraries that contain STL code.
+
 #### fips\_generate(...)
 
 Defines a code-generation job. Code generation can be used to generate
