@@ -259,7 +259,7 @@ def gather_imports(fips_dir, proj_dir) :
                                 imp_mod, src_dir, imp_proj_name, imp_mod, unique_modules[imp_mod]))
                         unique_modules[imp_mod] = src_dir
 
-        # NOTE: reverse the imports in reversed order, so that for instance header paths
+        # NOTE: return the imports in reversed order, so that for instance header paths
         # are defined before the modules that need the header paths
         reverseImported = OrderedDict()
         for entry in reversed(imported) :
@@ -365,7 +365,7 @@ def write_imports(fips_dir, proj_dir, imported) :
 def gather_and_write_imports(fips_dir, proj_dir) :
     """first does and gather_imports, then a write_imports with the result"""
     imports = gather_imports(fips_dir, proj_dir)
-    if imports :
+    if imports is not None :
         write_imports(fips_dir, proj_dir, imports)
     else :
         log.error("project imports are incomplete, please run 'fips fetch'")
