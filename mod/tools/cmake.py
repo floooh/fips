@@ -49,7 +49,8 @@ def run_gen(cfg, project_dir, build_dir, toolchain_path, defines) :
             cmdLine += ' -D{}={}'.format(key, cfg['defines'][key])
     for key in defines :
         cmdLine += ' -D{}={}'.format(key, defines[key])
-    cmdLine += ' ' + project_dir
+    cmdLine += ' -B' + build_dir
+    cmdLine += ' -H' + project_dir
     
     res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
     return res == 0
