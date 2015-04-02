@@ -37,16 +37,16 @@
 #   Called from fips_begin_module, fips_begin_lib, fips_begin_app to 
 #   clear the generator .yml file.
 #
-macro(fips_begin_gen)
-    file(REMOVE "${CMAKE_BINARY_DIR}/fips_codegen.yml")
-    set(CurProjectHasCodeGen)
+macro(fips_begin_gen target)
+    file(REMOVE "${CMAKE_BINARY_DIR}/fips_codegen_${target}.yml")
+    set(CurProjectHasCodeGen${target})
 endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_add_generator()
 #   Add a code generator item to the current target.
 #
-macro(fips_add_generator in_generator in_file out_src out_hdr args)
+macro(fips_add_generator target in_generator in_file out_src out_hdr args)
     if (FipsAddFilesEnabled)
         get_filename_component(f_abs ${CurDir}${in_file} ABSOLUTE)
         get_filename_component(f_dir ${f_abs} PATH)
@@ -83,8 +83,8 @@ macro(fips_add_generator in_generator in_file out_src out_hdr args)
         if (NOT ${args} STREQUAL "")
             set(yml_content "${yml_content}  args: ${args}\n")
         endif()
-        file(APPEND "${CMAKE_BINARY_DIR}/fips_codegen.yml" "${yml_content}")
-        set(CurProjectHasCodeGen 1)
+        file(APPEND "${CMAKE_BINARY_DIR}/fips_codegen_${target}.yml" "${yml_content}")
+        set(CurProjectHasCodeGen${target} 1)
     endif()
 endmacro()
             
@@ -93,13 +93,17 @@ endmacro()
 #   Create custom target for .py generator files.
 #
 macro(fips_handle_generators target) 
-    if (CurProjectHasCodeGen)
-        if (NOT TARGET ALL_GENERATE)
-            add_custom_target(ALL_GENERATE
-                COMMAND ${PYTHON} ${FIPS_PROJECT_DIR}/.fips-gen.py ${CMAKE_BINARY_DIR}/fips_codegen.yml
+    if (CurProjectHasCodeGen${target})
+        if (NOT TARGET GENERATE_FOR_${target})
+            add_custom_target(GENERATE_FOR_${target}
+                COMMAND ${PYTHON} ${FIPS_PROJECT_DIR}/.fips-gen.py ${CMAKE_BINARY_DIR}/fips_codegen_${target}.yml
                 WORKING_DIRECTORY ${FIPS_PROJECT_DIR})
+
+            if (CurRequirements)
+                add_dependencies(GENERATE_FOR_${target} ${CurRequirements})
+            endif()
         endif()
-        add_dependencies(${target} ALL_GENERATE)
+        add_dependencies(${target} GENERATE_FOR_${target})
     endif()
 endmacro()
 

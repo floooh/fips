@@ -3,7 +3,7 @@
 #   Main cmake header for fips, this must be included in the top-level
 #   CMakeLists.txt file of a fips project
 #-------------------------------------------------------------------------------
-if (${CMAKE_VERSION} VERSION_GREATER 3.0) 
+if (${CMAKE_VERSION} VERSION_GREATER 3.0)
     cmake_policy(SET CMP0042 NEW)
 endif()
 
@@ -46,7 +46,7 @@ endif()
 #
 macro(fips_setup)
 
-    # check for optional main-project name, this is the preferred way to 
+    # check for optional main-project name, this is the preferred way to
     # define the project name, but we better be backward compatible
     # it is still allowed to call fips_project() afterwards
     #
@@ -92,7 +92,7 @@ macro(fips_setup)
         message("Host system: OSX")
     elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
         set(FIPS_HOST_LINUX 1)
-        message("Host system: Linux")         
+        message("Host system: Linux")
     else()
         message(WARNING "Host system not recognized, setting to 'Linux'")
         set(FIPS_HOST_LINUX 1)
@@ -114,7 +114,7 @@ macro(fips_setup)
     endif()
 
     # set FIPS_CONFIG to default if not provided by command line
-    # (this provides better compatibility with some IDEs not directly 
+    # (this provides better compatibility with some IDEs not directly
     # supported by cmake, like QtCreator or CLion
     if (NOT FIPS_CONFIG)
         message("FIPS_CONFIG not provided by command line, selecting default value")
@@ -165,9 +165,6 @@ macro(fips_setup)
 
     # write empty target files (will be populated in the fips_end macros)
     fips_reset_targets_list()
-    
-    # initialize code generation
-    fips_begin_gen()
 
     # load project-local fips-include.cmake if exists
     if (EXISTS "${FIPS_PROJECT_DIR}/fips-include.cmake")
@@ -192,7 +189,7 @@ endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_ide_group(group)
-#   Define the IDE group name for the following targets. 
+#   Define the IDE group name for the following targets.
 #
 macro(fips_ide_group group)
     set(FIPS_TARGET_GROUP ${group})
@@ -215,6 +212,7 @@ macro(fips_begin_module name)
     if (FIPS_CMAKE_VERBOSE)
         message("Module: name=" ${name})
     endif()
+    fips_begin_gen(${name})
     fips_reset(${name})
 endmacro()
 
@@ -223,7 +221,7 @@ endmacro()
 #   End defining an fips module, the interesting stuff happens here.
 #
 macro(fips_end_module)
-    
+
     # record target dependencies
     set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
@@ -242,6 +240,12 @@ macro(fips_end_module)
 
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
+
+    # make sure requirements are built before generators are run
+    if (CurRequirements)
+        add_dependencies(${CurTargetName} ${CurRequirements})
+        unset(CurRequirements)
+    endif()
 
     # record target name and type in the fips_targets.yml file
     fips_addto_targets_list(${CurTargetName} "module")
@@ -257,6 +261,7 @@ macro(fips_begin_lib name)
     if (FIPS_CMAKE_VERBOSE)
         message("Library: name=" ${name})
     endif()
+    fips_begin_gen(${name})
     fips_reset(${name})
 endmacro()
 
@@ -265,26 +270,32 @@ endmacro()
 #   End defining a static link library.
 #
 macro(fips_end_lib)
-    
+
     # record target dependencies
     set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs_debug ${CurLinkLibsDebug})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs_release ${CurLinkLibsRelease})
     set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
-    
+
     # add library target
     add_library(${CurTargetName} ${CurSources})
     fips_apply_target_group(${CurTargetName})
-    
+
     # make sure dependencies are built first
     if (CurDependencies)
         add_dependencies(${CurTargetName} ${CurDependencies})
     endif()
-    
+
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
-    
+
+    # make sure requirements are built before generators are run
+    if (CurRequirements)
+        add_dependencies(${CurTargetName} ${CurRequirements})
+        unset(CurRequirements)
+    endif()
+
     # record target name and type in the fips_targets.yml file
     fips_addto_targets_list(${CurTargetName} "lib")
 
@@ -297,6 +308,7 @@ endmacro()
 #
 macro(fips_begin_app name type)
     if (${type} STREQUAL "windowed" OR ${type} STREQUAL "cmdline")
+        fips_begin_gen(${name})
         fips_reset(${name})
         set(CurAppType ${type})
         if (FIPS_CMAKE_VERBOSE)
@@ -314,11 +326,11 @@ endmacro()
 macro(fips_end_app)
 
     # add standard frameworks and libs
-    if (FIPS_OSX) 
+    if (FIPS_OSX)
         fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
     endif()
 
-    # record target dependencies 
+    # record target dependencies
     set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs_debug ${CurLinkLibsDebug})
@@ -331,7 +343,7 @@ macro(fips_end_app)
 
     # add executable target
     if (${CurAppType} STREQUAL "windowed")
-        # a windowed application 
+        # a windowed application
         if (FIPS_OSX OR FIPS_IOS)
             add_executable(${CurTargetName} MACOSX_BUNDLE ${CurSources})
             fips_osx_add_target_properties(${CurTargetName})
@@ -365,6 +377,12 @@ macro(fips_end_app)
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
+    # make sure requirements are built before generators are run
+    if (CurRequirements)
+        add_dependencies(${CurTargetName} ${CurRequirements})
+        unset(CurRequirements)
+    endif()
+
     # PNaCl specific stuff
     if (FIPS_PNACL)
         fips_pnacl_create_wrapper(${CurTargetName})
@@ -378,19 +396,19 @@ macro(fips_end_app)
     endif()
 
     # setup executable output directory and postfixes (_debug, etc...)
-    fips_config_output_directory(${CurTargetName})    
+    fips_config_output_directory(${CurTargetName})
     fips_config_postfixes_for_exe(${CurTargetName})
 
     # record target name and type in the fips_targets.yml file
     fips_addto_targets_list(${CurTargetName} "app")
-
 endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_begin_sharedlib(name)
 #   Begin a fips shared library.
 #
-macro(fips_begin_sharedlib name )
+macro(fips_begin_sharedlib name)
+    fips_begin_gen(${name})
     fips_reset(${name})
     if (FIPS_CMAKE_VERBOSE)
         message("Shared Lib: name=" ${CurTargetName})
@@ -404,11 +422,11 @@ endmacro()
 macro(fips_end_sharedlib)
 
     # add standard frameworks and libs
-    if (FIPS_OSX) 
+    if (FIPS_OSX)
         fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
     endif()
 
-    # record target dependencies 
+    # record target dependencies
     set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
     set_property(GLOBAL PROPERTY ${CurTargetName}_libs_debug ${CurLinkLibsDebug})
@@ -426,6 +444,12 @@ macro(fips_end_sharedlib)
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
+    # make sure requirements are built before generators are run
+    if (CurRequirements)
+        add_dependencies(${CurTargetName} ${CurRequirements})
+        unset(CurRequirements)
+    endif()
+
     # add dependencies for target
     fips_resolve_dependencies(${CurTargetName})
     if (FIPS_OSX OR FIPS_IOS)
@@ -433,11 +457,26 @@ macro(fips_end_sharedlib)
     endif()
 
     # setup executable output directory and postfixes (_debug, etc...)
-    fips_config_output_directory(${CurTargetName})    
+    fips_config_output_directory(${CurTargetName})
 
     # record target name and type in the fips_targets.yml file
     fips_addto_targets_list(${CurTargetName} "sharedlib")
 
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_requires(target ...)
+#   Add one or more dependencies to the current target. The dependencies
+#   must be cmake build targets defined with fips_begin*/fips_end*().
+#   Requirements are targets needed to build the current target but aren't
+#   used on linking, they work just to define a build order required when
+#   building tools to use during compilation.
+#
+macro(fips_requires target)
+    foreach(target ${ARGV})
+        list(APPEND CurRequirements ${target})
+    endforeach()
+    list(REMOVE_DUPLICATES CurRequirements)
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -450,7 +489,7 @@ endmacro()
 macro(fips_deps deps)
     foreach(dep ${ARGV})
         list(APPEND CurDependencies ${dep})
-    endforeach()    
+    endforeach()
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -551,7 +590,7 @@ endmacro()
 #   Generic one C/C++ source/header pair from an input definition file
 #   by running a python generator script.
 #
-#   FROM:   name of an input file to be processed 
+#   FROM:   name of an input file to be processed
 #   TYPE:   the generator type, filename of a generator script with the .py
 #   SOURCE: name of generated source file
 #   HEADER: name of generated header file
@@ -583,7 +622,7 @@ macro(fips_generate)
         string(REPLACE ${f_ext} ".h" _fg_HEADER ${_fg_FROM})
     endif()
     fips_add_file("${_fg_FROM}")
-    fips_add_generator("${_fg_TYPE}" "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}" "${_fg_ARGS}")
+    fips_add_generator(${CurTargetName} "${_fg_TYPE}" "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}" "${_fg_ARGS}")
 endmacro()
 
 #-------------------------------------------------------------------------------
