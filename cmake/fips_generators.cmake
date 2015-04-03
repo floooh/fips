@@ -99,8 +99,8 @@ macro(fips_handle_generators target)
                 COMMAND ${PYTHON} ${FIPS_PROJECT_DIR}/.fips-gen.py ${CMAKE_BINARY_DIR}/fips_codegen_${target}.yml
                 WORKING_DIRECTORY ${FIPS_PROJECT_DIR})
 
-            if (CurRequirements)
-                add_dependencies(GENERATE_FOR_${target} ${CurRequirements})
+            if (CurTargetDependencies)
+                add_dependencies(GENERATE_FOR_${target} ${CurTargetDependencies})
             endif()
         endif()
         add_dependencies(${target} GENERATE_FOR_${target})

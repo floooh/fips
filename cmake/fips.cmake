@@ -241,10 +241,10 @@ macro(fips_end_module)
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
-    # make sure requirements are built before generators are run
-    if (CurRequirements)
-        add_dependencies(${CurTargetName} ${CurRequirements})
-        unset(CurRequirements)
+    # generators use target dependencies, so we clear after handling them
+    if (CurTargetDependencies)
+        add_dependencies(${CurTargetName} ${CurTargetDependencies})
+        unset(CurTargetDependencies)
     endif()
 
     # record target name and type in the fips_targets.yml file
@@ -290,10 +290,10 @@ macro(fips_end_lib)
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
-    # make sure requirements are built before generators are run
-    if (CurRequirements)
-        add_dependencies(${CurTargetName} ${CurRequirements})
-        unset(CurRequirements)
+    # generators use target dependencies, so we clear after handling them
+    if (CurTargetDependencies)
+        add_dependencies(${CurTargetName} ${CurTargetDependencies})
+        unset(CurTargetDependencies)
     endif()
 
     # record target name and type in the fips_targets.yml file
@@ -377,10 +377,10 @@ macro(fips_end_app)
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
-    # make sure requirements are built before generators are run
-    if (CurRequirements)
-        add_dependencies(${CurTargetName} ${CurRequirements})
-        unset(CurRequirements)
+    # generators use target dependencies, so we clear after handling them
+    if (CurTargetDependencies)
+        add_dependencies(${CurTargetName} ${CurTargetDependencies})
+        unset(CurTargetDependencies)
     endif()
 
     # PNaCl specific stuff
@@ -444,10 +444,10 @@ macro(fips_end_sharedlib)
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
-    # make sure requirements are built before generators are run
-    if (CurRequirements)
-        add_dependencies(${CurTargetName} ${CurRequirements})
-        unset(CurRequirements)
+    # generators use target dependencies, so we clear after handling them
+    if (CurTargetDependencies)
+        add_dependencies(${CurTargetName} ${CurTargetDependencies})
+        unset(CurTargetDependencies)
     endif()
 
     # add dependencies for target
@@ -462,21 +462,6 @@ macro(fips_end_sharedlib)
     # record target name and type in the fips_targets.yml file
     fips_addto_targets_list(${CurTargetName} "sharedlib")
 
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_requires(target ...)
-#   Add one or more dependencies to the current target. The dependencies
-#   must be cmake build targets defined with fips_begin*/fips_end*().
-#   Requirements are targets needed to build the current target but aren't
-#   used on linking, they work just to define a build order required when
-#   building tools to use during compilation.
-#
-macro(fips_requires target)
-    foreach(target ${ARGV})
-        list(APPEND CurRequirements ${target})
-    endforeach()
-    list(REMOVE_DUPLICATES CurRequirements)
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -586,15 +571,17 @@ endmacro()
 #       [SOURCE output_source]
 #       [HEADER output_header]
 #       [ARGS args_in_yaml_format]
+#       [REQUIRES target]
 #
 #   Generic one C/C++ source/header pair from an input definition file
 #   by running a python generator script.
 #
-#   FROM:   name of an input file to be processed
-#   TYPE:   the generator type, filename of a generator script with the .py
-#   SOURCE: name of generated source file
-#   HEADER: name of generated header file
-#   ARGS:   optional key/value arguments handed to generator script as dict
+#   FROM:     name of an input file to be processed
+#   TYPE:     the generator type, filename of a generator script with the .py
+#   SOURCE:   name of generated source file
+#   HEADER:   name of generated header file
+#   ARGS:     optional key/value arguments handed to generator script as dict
+#   REQUIRES: optional target required to exist or be built before generation
 #
 #   If no TYPE is provided, the input_file must be a python script.
 #
@@ -603,9 +590,13 @@ endmacro()
 #   Omitting one of SOURCE or HEADER means the generator script
 #   will only generate either the SOURCE or HEADER file.
 #
+#   NOTE: when using REQUIRES the target must exist to be considered, otherwise
+#   it will ignore the directive. The order on which the targets are defined
+#   is important, so define required targets BEFORE requiring generators.
+#
 macro(fips_generate)
     set(options)
-    set(oneValueArgs FROM TYPE SOURCE HEADER ARGS)
+    set(oneValueArgs FROM TYPE SOURCE HEADER ARGS REQUIRES)
     set(multiValueArgs)
     CMAKE_PARSE_ARGUMENTS(_fg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
     if (_fg_UNPARSED_ARGUMENTS)
@@ -620,6 +611,9 @@ macro(fips_generate)
         get_filename_component(f_ext ${_fg_FROM} EXT)
         string(REPLACE ${f_ext} ".cc" _fg_SOURCE ${_fg_FROM})
         string(REPLACE ${f_ext} ".h" _fg_HEADER ${_fg_FROM})
+    endif()
+    if (_fg_REQUIRES)
+        fips_add_target_dependency(${_fg_REQUIRES})
     endif()
     fips_add_file("${_fg_FROM}")
     fips_add_generator(${CurTargetName} "${_fg_TYPE}" "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}" "${_fg_ARGS}")
