@@ -107,3 +107,17 @@ macro(fips_handle_generators target)
     endif()
 endmacro()
 
+macro(fips_handle_generators target) 
+    if (CurProjectHasCodeGen)
+        if (NOT TARGET ALL_GENERATE)
+            add_custom_target(ALL_GENERATE
+                COMMAND ${PYTHON} ${FIPS_PROJECT_DIR}/.fips-gen.py ${CMAKE_BINARY_DIR}/fips_codegen.yml
+                WORKING_DIRECTORY ${FIPS_PROJECT_DIR})
+
+             if (CurTargetDependencies)
+                add_dependencies(ALL_GENERATE ${CurTargetDependencies})
+            endif()               
+        endif()
+        add_dependencies(${target} ALL_GENERATE)
+    endif()
+endmacro()
