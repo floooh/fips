@@ -166,6 +166,9 @@ macro(fips_setup)
     # write empty target files (will be populated in the fips_end macros)
     fips_reset_targets_list()
 
+    # initialize code generation
+    fips_begin_gen()
+
     # load project-local fips-include.cmake if exists
     if (EXISTS "${FIPS_PROJECT_DIR}/fips-include.cmake")
         include("${FIPS_PROJECT_DIR}/fips-include.cmake")
@@ -212,7 +215,6 @@ macro(fips_begin_module name)
     if (FIPS_CMAKE_VERBOSE)
         message("Module: name=" ${name})
     endif()
-    fips_begin_gen(${name})
     fips_reset(${name})
 endmacro()
 
@@ -261,7 +263,6 @@ macro(fips_begin_lib name)
     if (FIPS_CMAKE_VERBOSE)
         message("Library: name=" ${name})
     endif()
-    fips_begin_gen(${name})
     fips_reset(${name})
 endmacro()
 
@@ -308,7 +309,6 @@ endmacro()
 #
 macro(fips_begin_app name type)
     if (${type} STREQUAL "windowed" OR ${type} STREQUAL "cmdline")
-        fips_begin_gen(${name})
         fips_reset(${name})
         set(CurAppType ${type})
         if (FIPS_CMAKE_VERBOSE)
@@ -408,7 +408,6 @@ endmacro()
 #   Begin a fips shared library.
 #
 macro(fips_begin_sharedlib name)
-    fips_begin_gen(${name})
     fips_reset(${name})
     if (FIPS_CMAKE_VERBOSE)
         message("Shared Lib: name=" ${CurTargetName})

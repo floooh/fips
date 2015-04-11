@@ -37,9 +37,9 @@
 #   Called from fips_begin_module, fips_begin_lib, fips_begin_app to 
 #   clear the generator .yml file.
 #
-macro(fips_begin_gen target)
-    file(REMOVE "${CMAKE_BINARY_DIR}/fips_codegen_${target}.yml")
-    set(CurProjectHasCodeGen${target})
+macro(fips_begin_gen)
+    file(REMOVE "${CMAKE_BINARY_DIR}/fips_codegen.yml")
+    set(CurProjectHasCodeGen)
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -83,8 +83,8 @@ macro(fips_add_generator target in_generator in_file out_src out_hdr args)
         if (NOT ${args} STREQUAL "")
             set(yml_content "${yml_content}  args: ${args}\n")
         endif()
-        file(APPEND "${CMAKE_BINARY_DIR}/fips_codegen_${target}.yml" "${yml_content}")
-        set(CurProjectHasCodeGen${target} 1)
+        file(APPEND "${CMAKE_BINARY_DIR}/fips_codegen.yml" "${yml_content}")
+        set(CurProjectHasCodeGen 1)
     endif()
 endmacro()
             
@@ -92,21 +92,6 @@ endmacro()
 #   fips_handle_py_files_posttarget(target pyFiles)
 #   Create custom target for .py generator files.
 #
-macro(fips_handle_generators target) 
-    if (CurProjectHasCodeGen${target})
-        if (NOT TARGET GENERATE_FOR_${target})
-            add_custom_target(GENERATE_FOR_${target}
-                COMMAND ${PYTHON} ${FIPS_PROJECT_DIR}/.fips-gen.py ${CMAKE_BINARY_DIR}/fips_codegen_${target}.yml
-                WORKING_DIRECTORY ${FIPS_PROJECT_DIR})
-
-            if (CurTargetDependencies)
-                add_dependencies(GENERATE_FOR_${target} ${CurTargetDependencies})
-            endif()
-        endif()
-        add_dependencies(${target} GENERATE_FOR_${target})
-    endif()
-endmacro()
-
 macro(fips_handle_generators target) 
     if (CurProjectHasCodeGen)
         if (NOT TARGET ALL_GENERATE)
