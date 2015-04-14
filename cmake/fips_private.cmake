@@ -234,4 +234,21 @@ macro(fips_add_file new_file)
     endif()
 endmacro()
 
+#-------------------------------------------------------------------------------
+#   fips_add_target_dependency(target...)
+#   Add one or more dependencies to the current target. The dependencies
+#   must be cmake build targets defined with fips_begin*/fips_end*().
+#   Used to define a build order required when, for exemple, building tools to
+#   use during compilation of the current target.
+#
+macro(fips_add_target_dependency targets)
+    foreach(target ${ARGV})
+        if (TARGET ${target})
+            list(APPEND CurTargetDependencies ${target})
+        endif()
+    endforeach()
 
+    if (CurTargetDependencies)
+        list(REMOVE_DUPLICATES CurTargetDependencies)
+    endif()
+endmacro()

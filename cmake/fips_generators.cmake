@@ -46,7 +46,7 @@ endmacro()
 #   fips_add_generator()
 #   Add a code generator item to the current target.
 #
-macro(fips_add_generator in_generator in_file out_src out_hdr args)
+macro(fips_add_generator target in_generator in_file out_src out_hdr args)
     if (FipsAddFilesEnabled)
         get_filename_component(f_abs ${CurDir}${in_file} ABSOLUTE)
         get_filename_component(f_dir ${f_abs} PATH)
@@ -98,8 +98,11 @@ macro(fips_handle_generators target)
             add_custom_target(ALL_GENERATE
                 COMMAND ${PYTHON} ${FIPS_PROJECT_DIR}/.fips-gen.py ${CMAKE_BINARY_DIR}/fips_codegen.yml
                 WORKING_DIRECTORY ${FIPS_PROJECT_DIR})
+
+             if (CurTargetDependencies)
+                add_dependencies(ALL_GENERATE ${CurTargetDependencies})
+            endif()               
         endif()
         add_dependencies(${target} ALL_GENERATE)
     endif()
 endmacro()
-

@@ -279,7 +279,7 @@ def write_imports(fips_dir, proj_dir, imported) :
     :params proj_dir:   absolute path to current project
     :params imported:   the imports dictionary created with 'gather_imports'
     """
-    
+
     if imported :
         unique_hdrdirs = []
         unique_libdirs = []
@@ -351,15 +351,15 @@ def write_imports(fips_dir, proj_dir, imported) :
         else :
             os.remove(import_tmp_filename)
 
-        # write the .fips-imports.py file (copy from template)
-        gen_search_paths  = '"{}","{}/generators",\n'.format(fips_dir, fips_dir)
-        if os.path.isdir("{}/fips-generators".format(proj_dir)) :
-            gen_search_paths += '"{}","{}/fips-generators",\n'.format(proj_dir, proj_dir)
-        for imp_proj_name in imported :
-            gen_dir = util.get_project_dir(fips_dir, imp_proj_name) + '/fips-generators'
-            if os.path.isdir(gen_dir) :
-                gen_search_paths += '"' + gen_dir + '",\n' 
-        template.copy_template_file(fips_dir, proj_dir, '.fips-gen.py', { 'genpaths': gen_search_paths}, True)
+    # write the .fips-imports.py file (copy from template)
+    gen_search_paths  = '"{}","{}/generators",\n'.format(fips_dir, fips_dir)
+    if os.path.isdir("{}/fips-generators".format(proj_dir)) :
+        gen_search_paths += '"{}","{}/fips-generators",\n'.format(proj_dir, proj_dir)
+    for imp_proj_name in imported :
+        gen_dir = util.get_project_dir(fips_dir, imp_proj_name) + '/fips-generators'
+        if os.path.isdir(gen_dir) :
+            gen_search_paths += '"' + gen_dir + '",\n' 
+    template.copy_template_file(fips_dir, proj_dir, '.fips-gen.py', { 'genpaths': gen_search_paths}, True)
 
 #-------------------------------------------------------------------------------
 def gather_and_write_imports(fips_dir, proj_dir) :
