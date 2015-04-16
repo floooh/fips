@@ -96,7 +96,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 set(CMAKE_SYSTEM_INCLUDE_PATH "${NACL_TOOLCHAIN_ROOT}/usr/include")
 
 # compiler flags
-set(CMAKE_CXX_FLAGS "${FIPS_NACL_EXCEPTION_FLAGS} -std=c++11 -pthread -Wno-multichar -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-unused-volatile-lvalue -Wno-deprecated-writable-strings")
+set(CMAKE_CXX_FLAGS "${FIPS_NACL_EXCEPTION_FLAGS} -std=c++11 -pthread -Wno-multichar -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-unused-volatile-lvalue -Wno-deprecated-writable-strings -Wno-inconsistent-missing-override")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -D_DEBUG_ -D_DEBUG -DNACL_SDK_DEBUG -DFIPS_DEBUG=1")
 
