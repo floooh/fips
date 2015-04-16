@@ -1,0 +1,8 @@
+---
+platform: win64
+generator: Visual Studio 12
+build_tool: cmake
+build_type: Release
+defines:
+    CMAKE_SYSTEM_NAME: 'WindowsStore'
+    CMAKE_SYSTEM_VERSION: '8.1'
