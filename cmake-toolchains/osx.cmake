@@ -21,12 +21,22 @@ set(FIPS_OSX_STANDARD_FRAMEWORKS Foundation IOKit OpenGL Cocoa CoreVideo OpenAL)
 set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
 set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
 
+# exceptions on/off?
 if (FIPS_EXCEPTIONS)
     message("C++ exceptions are enabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_EXCEPTIONS "YES")
 else()
     message("C++ exceptions are disabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_EXCEPTIONS "NO")
+endif()
+
+# rtti on/off?
+if (FIPS_RTTI)
+    message("C++ RTTI is enabled")
+    set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_RTTI "YES")
+else()
+    message("C++ RTTI is disabled")
+    set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_RTTI "NO")
 endif()
 
 # compiler flags

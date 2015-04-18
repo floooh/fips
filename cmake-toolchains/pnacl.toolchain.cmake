@@ -35,6 +35,15 @@ else()
     set(FIPS_NACL_EXCEPTION_FLAGS "-fno-exceptions")
 endif()
 
+# RTTI on/off?
+if (FIPS_RTTI)
+    message("C++ RTTI is enabled")
+    set(FIPS_NACL_RTTI_FLAGS "")
+else()
+    message("C++ RTTI is disabled")
+    set(FIPS_NACL_RTTI_FLAGS "-fno-rtti")
+endif()
+
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_VERSION 1)
 set(COMPILING on)
@@ -96,7 +105,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 set(CMAKE_SYSTEM_INCLUDE_PATH "${NACL_TOOLCHAIN_ROOT}/usr/include")
 
 # compiler flags
-set(CMAKE_CXX_FLAGS "${FIPS_NACL_EXCEPTION_FLAGS} -std=c++11 -pthread -Wno-multichar -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-unused-volatile-lvalue -Wno-deprecated-writable-strings -Wno-inconsistent-missing-override")
+set(CMAKE_CXX_FLAGS "${FIPS_NACL_EXCEPTION_FLAGS} ${FIPS_NACL_RTTI_FLAGS} -std=c++11 -pthread -Wno-multichar -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-unused-volatile-lvalue -Wno-deprecated-writable-strings -Wno-inconsistent-missing-override")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -D_DEBUG_ -D_DEBUG -DNACL_SDK_DEBUG -DFIPS_DEBUG=1")
 

@@ -15,6 +15,7 @@ set(FIPS_POSIX 1)
 # define configuration types
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
+# exceptions on/off?
 if (FIPS_EXCEPTIONS)
     message("C++ exceptions are enabled")
     set(FIPS_LINUX_EXCEPTION_FLAGS "")
@@ -23,8 +24,17 @@ else()
     set(FIPS_LINUX_EXCEPTION_FLAGS "-fno-exceptions")
 endif()
 
+# RTTI on/off?
+if (FIPS_RTTI)
+    message("C++ RTTI is enabled")
+    set(FIPS_LINUX_RTTI_FLAGS "")
+else()
+    message("C++ RTTI is disabled")
+    set(FIPS_LINUX_RTTI_FLAGS "-fno-rtti")
+endif()
+
 # C++ flags
-set(CMAKE_CXX_FLAGS "${FIPS_LINUX_EXCEPTION_FLAGS} -std=c++11 -pthread -fno-strict-aliasing -Wno-multichar -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers")
+set(CMAKE_CXX_FLAGS "${FIPS_LINUX_EXCEPTION_FLAGS} ${FIPS_LINUX_RTTI_FLAGS} -std=c++11 -pthread -fno-strict-aliasing -Wno-multichar -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ftree-vectorize -msse3 -ffast-math -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1 -ggdb")
 

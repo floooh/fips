@@ -30,6 +30,15 @@ else()
     set(FIPS_ANDROID_EXCEPTION_FLAGS "-fno-exceptions")
 endif()
 
+# RTTI on/off?
+if (FIPS_RTTI)
+    message("C++ RTTI is enabled")
+    set(FIPS_ANDROID_RTTI_FLAGS "")
+else()
+    message("C++ RTTI is disabled")
+    set(FIPS_ANDROID_RTTI_FLAGS "-fno-rtti")
+endif()
+
 # tweakable values
 set(ANDROID_CPU "arm" CACHE STRING "Android NDK CPU architecture")
 set_property(CACHE ANDROID_CPU PROPERTY STRINGS arm x86 mips)
@@ -159,7 +168,7 @@ set(ANDROID_C_FLAGS "${FIPS_ANDROID_COMPILE_VERBOSE} ${ANDROID_NDK_ARCH_CFLAGS} 
 set(ANDROID_LD_FLAGS "-shared --sysroot=${ANDROID_NDK_SYSROOT} -L${ANDROID_NDK_STL_LIBRARYPATH} -no-canonical-prefixes ${ANDROID_NDK_ARCH_LDFLAGS} -Wl,--no-warn-mismatch -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now ${FIPS_ANDROID_LINK_VERBOSE}")
 
 # c++ compiler flags
-set(CMAKE_CXX_FLAGS "${ANDROID_C_FLAGS} -std=c++11 ${ANDROID_NDK_STL_CXXFLAGS} ${FIPS_ANDROID_EXCEPTION_FLAGS} ${ANDROID_NDK_CXX_WARN_FLAGS}")
+set(CMAKE_CXX_FLAGS "${ANDROID_C_FLAGS} -std=c++11 ${ANDROID_NDK_STL_CXXFLAGS} ${FIPS_ANDROID_EXCEPTION_FLAGS} ${FIPS_ANDROID_RTTI_FLAGS} ${ANDROID_NDK_CXX_WARN_FLAGS}")
 set(CMAKE_CXX_FLAGS_RELEASE "-Os -fomit-frame-pointer -funswitch-loops -finline-limit=300 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -fno-omit-frame-pointer -g -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 
