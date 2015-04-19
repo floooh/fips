@@ -25,22 +25,26 @@ set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
 if (FIPS_EXCEPTIONS)
     message("C++ exceptions are enabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_EXCEPTIONS "YES")
+    set(FIPS_OSX_EXCEPTION_FLAGS "")
 else()
     message("C++ exceptions are disabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_EXCEPTIONS "NO")
+    set(FIPS_OSX_EXCEPTION_FLAGS "-fno-exceptions")
 endif()
 
 # rtti on/off?
 if (FIPS_RTTI)
     message("C++ RTTI is enabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_RTTI "YES")
+    set(FIPS_OSX_RTTI_FLAGS "")
 else()
     message("C++ RTTI is disabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_RTTI "NO")
+    set(FIPS_OSX_RTTI_FLAGS "-fno-rtti")
 endif()
 
 # compiler flags
-set(CMAKE_CXX_FLAGS "-std=c++11 -fstrict-aliasing -Wno-multichar -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-unused-volatile-lvalue -Wno-deprecated-writable-strings")
+set(CMAKE_CXX_FLAGS "-std=c++11 ${FIPS_OSX_EXCEPTION_FLAGS} ${FIPS_OSX_RTTI_FLAGS} -fstrict-aliasing -Wno-multichar -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-unused-volatile-lvalue -Wno-deprecated-writable-strings")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1 -ggdb")
 
