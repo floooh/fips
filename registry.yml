@@ -27,6 +27,7 @@ fips-accidentalnoise: https://github.com/mgerhardy/fips-accidentalnoise.git
 fips-googletest:    https://github.com/mgerhardy/fips-googletest
 fips-freetype2:     https://github.com/mgerhardy/fips-freetype2
 fips-libnoise:      https://github.com/mgerhardy/fips-libnoise
+fips-lua:           https://github.com/mgerhardy/fips-lua
 fips-assimp:        https://github.com/fungos/fips-assimp
 fips-recast:        https://github.com/fungos/fips-recast.git
 fips-glew:          https://github.com/fungos/fips-glew.git
