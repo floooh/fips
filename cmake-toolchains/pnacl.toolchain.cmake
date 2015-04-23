@@ -73,7 +73,7 @@ message("NACL_INCLUDE: ${NACL_INCLUDE}")
 message("NACL_LIB: ${NACL_LIB}")
 
 # standard header and lib search paths
-include_directories(${NACL_INCLUDE})
+include_directories(${NACL_INCLUDE} ${NACL_INCLUDE}/pnacl)
 link_directories(${NACL_LIB})
 
 # disable compiler detection
