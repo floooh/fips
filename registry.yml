@@ -24,6 +24,7 @@ fips-sauce:         https://github.com/mgerhardy/fips-sauce
 fips-bgfx:          https://github.com/floooh/fips-bgfx.git
 fips-remotery:      https://github.com/floooh/fips-remotery.git
 fips-accidentalnoise: https://github.com/mgerhardy/fips-accidentalnoise.git
+fips-noisepp:       https://github.com/mgerhardy/fips-noisepp.git
 fips-googletest:    https://github.com/mgerhardy/fips-googletest
 fips-freetype2:     https://github.com/mgerhardy/fips-freetype2
 fips-libnoise:      https://github.com/mgerhardy/fips-libnoise
