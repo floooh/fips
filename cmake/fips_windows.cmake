@@ -10,7 +10,7 @@
 #
 macro(fips_vs_warning_level level)
     if (FIPS_MSVC)
-        set(CurCompileFlags "${CurCxxOptions} /W${level}")
+        set(CurCompileFlags "${CurCompileFlags} /W${level}")
     endif()
 endmacro()
 
@@ -21,7 +21,7 @@ endmacro()
 macro(fips_vs_disable_warnings warnings)
     if (FIPS_MSVC)
         foreach (warning ${ARGV})
-            set(CurCompileFlags "${CurCxxOptions} /wd${warning}")
+            set(CurCompileFlags "${CurCompileFlags} /wd${warning}")
         endforeach()
     endif()
 endmacro()
