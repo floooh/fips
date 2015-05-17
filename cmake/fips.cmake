@@ -14,6 +14,7 @@ include(CMakeParseArguments)
 
 include("${FIPS_ROOT_DIR}/cmake/fips_private.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_unittests.cmake")
+include("${FIPS_ROOT_DIR}/cmake/fips_windows.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_android.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_osx.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_pnacl.cmake")
@@ -236,6 +237,9 @@ macro(fips_end_module)
     add_library(${CurTargetName} ${CurSources})
     fips_apply_target_group(${CurTargetName})
 
+    # set platform- and target-specific compiler options
+    fips_vs_apply_options(${CurTargetName})
+
     # make sure dependencies are built first
     if (CurDependencies)
         add_dependencies(${CurTargetName} ${CurDependencies})
@@ -284,6 +288,9 @@ macro(fips_end_lib)
     add_library(${CurTargetName} ${CurSources})
     fips_apply_target_group(${CurTargetName})
 
+    # set platform- and target-specific compiler options
+    fips_vs_apply_options(${CurTargetName})
+    
     # make sure dependencies are built first
     if (CurDependencies)
         add_dependencies(${CurTargetName} ${CurDependencies})
@@ -369,6 +376,9 @@ macro(fips_end_app)
     endif()
     fips_apply_target_group(${CurTargetName})
 
+    # set platform- and target-specific compiler options
+    fips_vs_apply_options(${CurTargetName})
+
     # android specific stuff
     if (FIPS_ANDROID)
         fips_android_create_project(${CurTargetName})
@@ -440,6 +450,9 @@ macro(fips_end_sharedlib)
     # add shared lib target
     add_library(${CurTargetName} SHARED ${CurSources})
     fips_apply_target_group(${CurTargetName})
+
+    # set platform- and target-specific compiler options
+    fips_vs_apply_options(${CurTargetName})
 
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
