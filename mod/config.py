@@ -49,6 +49,8 @@ generators = [
     'Xcode',
     'Visual Studio 12',
     'Visual Studio 12 Win64', 
+    'Visual Studio 14',
+    'Visual Studio 14 Win64',
     'CodeBlocks - Ninja',
     'CodeBlocks - Unix Makefiles',
     'CodeLite - Ninja',
@@ -79,7 +81,7 @@ build_types = [
 default_config = {
     'osx':      'osx-xcode-debug',
     'linux':    'linux-make-debug',
-    'win':      'win64-vstudio-debug',
+    'win':      'win64-vs2013-debug',
 }
 
 #-------------------------------------------------------------------------------

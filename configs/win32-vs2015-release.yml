@@ -1,0 +1,5 @@
+---
+platform: win32
+generator: Visual Studio 14
+build_tool: cmake
+build_type: Release

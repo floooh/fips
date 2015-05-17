@@ -30,7 +30,7 @@ right for your host platform:
 > ./fips build linux-make-release
 ...
 # on Windows:
-> ./fips build win64-vstudio-release
+> ./fips build win64-vs2013-release
 ...
 > _
 {% endhighlight %}
@@ -55,10 +55,10 @@ from /Users/floh/projects/fips/configs:
   android-ninja-debug
   android-ninja-release
 ...
-  win32-vstudio-debug
-  win32-vstudio-release
-  win64-vstudio-debug
-  win64-vstudio-release
+  win32-vs2013-debug
+  win32-vs2013-release
+  win64-vs2013-debug
+  win64-vs2013-release
 > _
 {% endhighlight %}
 
@@ -105,8 +105,8 @@ debug version whenever './fips build' is run:
 > ./fips build
 ...
 # on Windows:
-> ./fips set config win64-vstudio-release 
-'config' set to 'win64-vstudio-release' in project 'fips-hello-world'
+> ./fips set config win64-vs2013-release 
+'config' set to 'win64-vs2013-release' in project 'fips-hello-world'
 > ./fips build
 ...
 > _
