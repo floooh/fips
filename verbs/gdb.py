@@ -26,7 +26,7 @@ def gdb(fips_dir, proj_dir, cfg_name, target=None, target_args=None) :
             if config_valid :
                 deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
                 log.colored(log.YELLOW, "=== gdb: {}".format(cfg['name']))
-                cmdLine = ['gdb', "--args", target]
+                cmdLine = ['gdb', "-ex", "run", "--args", target]
                 if target_args :
                     cmdLine.extend(target_args)
                 try:
