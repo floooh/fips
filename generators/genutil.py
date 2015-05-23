@@ -35,6 +35,16 @@ def fmtError(msg, terminate=True) :
         sys.exit(10)
 
 #-------------------------------------------------------------------------------
+def fmtWarning(msg) :
+    '''
+    Print an warning message formatted so that IDEs can parse them.
+    '''
+    if platform.system() == 'Windows' :
+        print '{}({}): warning: {}'.format(FilePath, LineNumber + 1, msg)
+    else :
+        print '{}:{}: warning: {}\n'.format(FilePath, LineNumber + 1, msg)
+
+#-------------------------------------------------------------------------------
 def fileVersionDirty(filePath, version) :
     '''
     Reads the first 4 lines of a file, checks whether there's an 
