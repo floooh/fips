@@ -92,6 +92,12 @@ macro(fips_add_generator target in_generator in_outofsource in_file out_src out_
             set(yml_content "${yml_content}  args: ${args}\n")
         endif()
         file(APPEND "${CMAKE_BINARY_DIR}/fips_codegen.yml" "${yml_content}")
+        
+        # if generated out-of-source, add the current build dir to
+        # the header search path, only for the current directory
+        if (${in_outofsource})
+            include_directories(${CMAKE_CURRENT_BINARY_DIR})
+        endif()
         set(CurProjectHasCodeGen 1)
     endif()
 endmacro()
