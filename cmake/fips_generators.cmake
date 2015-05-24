@@ -47,7 +47,6 @@ endmacro()
 #   Add a code generator item to the current target.
 #
 macro(fips_add_generator target in_generator in_outofsource in_file out_src out_hdr args)
-    message("fips_add_generator: '${target}' '${in_generator}' '${in_outofsource}' '${in_file}' '${out_src}' '${out_hdr}' '${args}'")
     if (FipsAddFilesEnabled)
         get_filename_component(f_abs ${CurDir}${in_file} ABSOLUTE)
         get_filename_component(f_dir ${f_abs} PATH)
