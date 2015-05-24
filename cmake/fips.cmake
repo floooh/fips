@@ -585,6 +585,7 @@ endmacro()
 #       [HEADER output_header]
 #       [ARGS args_in_yaml_format]
 #       [REQUIRES target]
+#       [OUT_OF_SOURCE]
 #
 #   Generic one C/C++ source/header pair from an input definition file
 #   by running a python generator script.
@@ -595,6 +596,8 @@ endmacro()
 #   HEADER:   name of generated header file
 #   ARGS:     optional key/value arguments handed to generator script as dict
 #   REQUIRES: optional target required to exist or be built before generation
+#   OUT_OF_SOURCE:  if present, put the generated sources into the build
+#                   directory, not the source code directory
 #
 #   If no TYPE is provided, the input_file must be a python script.
 #
@@ -608,7 +611,7 @@ endmacro()
 #   is important, so define required targets BEFORE requiring generators.
 #
 macro(fips_generate)
-    set(options)
+    set(options OUT_OF_SOURCE)
     set(oneValueArgs FROM TYPE SOURCE HEADER ARGS REQUIRES)
     set(multiValueArgs)
     CMAKE_PARSE_ARGUMENTS(_fg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -629,7 +632,7 @@ macro(fips_generate)
         fips_add_target_dependency(${_fg_REQUIRES})
     endif()
     fips_add_file("${_fg_FROM}")
-    fips_add_generator(${CurTargetName} "${_fg_TYPE}" "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}" "${_fg_ARGS}")
+    fips_add_generator(${CurTargetName} "${_fg_TYPE}" ${_fg_OUT_OF_SOURCE} "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}" "${_fg_ARGS}") 
 endmacro()
 
 #-------------------------------------------------------------------------------
