@@ -29,19 +29,15 @@ def processFile(attrs) :
         args = attrs['args']
     else :
         args = None
-    try :
-        path, script = os.path.split(absPyPath)
-        sys.path.insert(0, path)
-        moduleName, ext = os.path.splitext(script)
-        fp, pathname, description = imp.find_module(moduleName)
-        module = imp.load_module(moduleName, fp, pathname, description)
-        if args :
-            module.generate(input, out_src, out_hdr, args)
-        else :
-            module.generate(input, out_src, out_hdr)
-    except Exception as e:
-        log.error("Generator '{}' failed for file '{}' with '{}'".format(absPyPath, input, e))
-        raise e
+    path, script = os.path.split(absPyPath)
+    sys.path.insert(0, path)
+    moduleName, ext = os.path.splitext(script)
+    fp, pathname, description = imp.find_module(moduleName)
+    module = imp.load_module(moduleName, fp, pathname, description)
+    if args :
+        module.generate(input, out_src, out_hdr, args)
+    else :
+        module.generate(input, out_src, out_hdr)
 
 #=== entry point
 if len(sys.argv) == 2 :
