@@ -115,6 +115,7 @@ set(ANDROID_NDK_STL_ROOT "${ANDROID_NDK_ROOT}/sources/cxx-stl/${ANDROID_NDK_STL}
 set(ANDROID_NDK_STL_CXXFLAGS "-I${ANDROID_NDK_STL_ROOT}/include -I${ANDROID_NDK_STL_ROOT}/libs/${ANDROID_NDK_ABI}/include")
 set(ANDROID_NDK_STL_LIBRARYPATH "${ANDROID_NDK_STL_ROOT}/libs/${ANDROID_NDK_ABI}")
 set(ANDROID_NDK_STL_LDFLAGS "-lgnustl_static")
+set(ANDROID_NDK_INCLUDES "-I${ANDROID_NDK_ROOT}/${ANDROID_API}/${ANDROID_NDK_SYSROOT_DIR}/usr/include")
 
 set(ANDROID_NDK_GLOBAL_CFLAGS "-fPIC -fno-strict-aliasing -ffunction-sections -funwind-tables -fstack-protector -no-canonical-prefixes")
 set(ANDROID_NDK_CXX_WARN_FLAGS "-Wall -Wno-multichar -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual")
@@ -168,12 +169,12 @@ set(ANDROID_C_FLAGS "${FIPS_ANDROID_COMPILE_VERBOSE} ${ANDROID_NDK_ARCH_CFLAGS} 
 set(ANDROID_LD_FLAGS "-shared --sysroot=${ANDROID_NDK_SYSROOT} -L${ANDROID_NDK_STL_LIBRARYPATH} -no-canonical-prefixes ${ANDROID_NDK_ARCH_LDFLAGS} -Wl,--no-warn-mismatch -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now ${FIPS_ANDROID_LINK_VERBOSE}")
 
 # c++ compiler flags
-set(CMAKE_CXX_FLAGS "${ANDROID_C_FLAGS} -std=c++11 ${ANDROID_NDK_STL_CXXFLAGS} ${FIPS_ANDROID_EXCEPTION_FLAGS} ${FIPS_ANDROID_RTTI_FLAGS} ${ANDROID_NDK_CXX_WARN_FLAGS}")
+set(CMAKE_CXX_FLAGS "${ANDROID_C_FLAGS} -std=c++11 ${ANDROID_NDK_STL_CXXFLAGS} ${ANDROID_NDK_INCLUDES} ${FIPS_ANDROID_EXCEPTION_FLAGS} ${FIPS_ANDROID_RTTI_FLAGS} ${ANDROID_NDK_CXX_WARN_FLAGS}")
 set(CMAKE_CXX_FLAGS_RELEASE "-Os -fomit-frame-pointer -funswitch-loops -finline-limit=300 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -fno-omit-frame-pointer -g -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 
 # c compiler flags
-set(CMAKE_C_FLAGS "${ANDROID_C_FLAGS} ${ANDROID_NDK_C_WARN_FLAGS}")
+set(CMAKE_C_FLAGS "${ANDROID_C_FLAGS} ${ANDROID_NDK_C_WARN_FLAGS} ${ANDROID_NDK_INCLUDES}")
 set(CMAKE_C_FLAGS_RELEASE "-Os -fomit-frame-pointer -funswitch-loops -finline-limit=64 -DNDEBUG")
 set(CMAKE_C_FLAGS_DEBUG "-O0 -fno-omit-frame-pointer -g -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 
