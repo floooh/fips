@@ -124,6 +124,9 @@ macro(fips_setup)
     endif()
     message("FIPS_CONFIG: ${FIPS_CONFIG}")
 
+    # Eclipse: Disable linked resources because Eclipse may get confused by these linked resources
+    set(CMAKE_ECLIPSE_GENERATE_LINKED_RESOURCES OFF)
+
     # manually include "toolchain" files for non-crosscompiling scenarios
     if (NOT CMAKE_TOOLCHAIN_FILE)
         if (FIPS_HOST_WINDOWS)
