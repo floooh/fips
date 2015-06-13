@@ -15,15 +15,20 @@ message("Target Platform: emscripten")
 #   use the --em-config like the C/CXX compilers.
 #
 
-# emscripten SDK location
-# (FIXME: the emscripten SDK version should be a cmake option)
-# NOTE: on Windows, use the stable SDK, on other platforms, the bleeding-edge version
+# define emscripten SDK version
+# FIXME: I had trouble turning this into a proper emscripten option,
+# where cmake complained about an unknown compiler, thus: not an option atm
 if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
-    set(EMSC_EMSDK_DIRNAME "../fips-sdks/win/emsdk_portable/emscripten/1.27.0")
+    set(FIPS_EMSCRIPTEN_SDK_VERSION "1.27.0")
+else()
+    set(FIPS_EMSCRIPTEN_SDK_VERSION "incoming")
+endif()
+if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
+    set(EMSC_EMSDK_DIRNAME "../fips-sdks/win/emsdk_portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
 elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
-    set(EMSC_EMSDK_DIRNAME "../fips-sdks/osx/emsdk_portable/emscripten/incoming")
+    set(EMSC_EMSDK_DIRNAME "../fips-sdks/osx/emsdk_portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
 elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
-    set(EMSC_EMSDK_DIRNAME "../fips-sdks/linux/emsdk_portable/emscripten/incoming")
+    set(EMSC_EMSDK_DIRNAME "../fips-sdks/linux/emsdk_portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
 endif()
 
 set(FIPS_PLATFORM EMSCRIPTEN)

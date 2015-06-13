@@ -25,6 +25,7 @@ set(FIPS_POSIX 1)
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_VERSION 1)
 set(COMPILING on)
+set(CMAKE_CROSSCOMPILING TRUE)
 
 # exceptions on/off?
 if (FIPS_EXCEPTIONS)
@@ -43,11 +44,6 @@ else()
     message("C++ RTTI is disabled")
     set(FIPS_NACL_RTTI_FLAGS "-fno-rtti")
 endif()
-
-set(CMAKE_SYSTEM_NAME Linux)
-set(CMAKE_SYSTEM_VERSION 1)
-set(COMPILING on)
-set(CMAKE_CROSSCOMPILING TRUE)
 
 macro(find_nacl_sdk_root)
     get_filename_component(NACL_SDK_ROOT "${CMAKE_CURRENT_LIST_DIR}/../${NACL_SDK_DIRNAME}/${NACL_SDK_BUNDLE}" ABSOLUTE)
