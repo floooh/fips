@@ -15,7 +15,7 @@ set(FIPS_POSIX 1)
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
 # FIXME: define standard frame works that are always linked
-set(FIPS_OSX_STANDARD_FRAMEWORKS Foundation IOKit OpenGL Cocoa CoreVideo OpenAL)
+set(FIPS_OSX_STANDARD_FRAMEWORKS Foundation IOKit)
 
 # need to set some flags directly as Xcode attributes
 set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")

@@ -16,17 +16,28 @@ macro(fips_frameworks_osx frameworks)
 endmacro()
 
 #-------------------------------------------------------------------------------
+#   fips_osx_recurse_frameworks(input output)
+#
+macro(fips_osx_recurse_frameworks target output)
+    get_property(fws GLOBAL PROPERTY ${target}_frameworks)
+    foreach(fw ${fws})
+        list(APPEND ${output} ${fws})
+    endforeach()
+    get_property(deps GLOBAL PROPERTY ${target}_deps)
+    foreach(dep ${deps})
+        fips_osx_recurse_frameworks(${dep} ${output})
+    endforeach()
+endmacro()
+
+#-------------------------------------------------------------------------------
 #   fips_osx_resolve_frameworks(target)
 #   Recursively resolve dependencies of a target.
 #
 macro(fips_osx_resolve_frameworks target)
     set(resolvedFws)
-    get_property(input GLOBAL PROPERTY ${target}_frameworks)
-    foreach(fw ${input})
-        fips_osx_recurse_frameworks(${fw} resolvedFws)
-    endforeach()
+    fips_osx_recurse_frameworks(${target} resolvedFws)
     if (resolvedFws)
-       list(REMOVE_DUPLICATES resolvedFws)
+        list(REMOVE_DUPLICATES resolvedFws)
     endif()
     if (FIPS_CMAKE_VERBOSE)
         message("${target} Frameworks: ${resolvedFws}")
@@ -36,17 +47,6 @@ macro(fips_osx_resolve_frameworks target)
         find_library(found_framework ${fw})
         target_link_libraries(${target} ${found_framework})
         unset(found_framework CACHE)
-    endforeach()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_osx_recurse_frameworks(input output)
-#
-macro(fips_osx_recurse_frameworks input output)
-    list(APPEND ${output} ${input})
-    get_property(sub_input GLOBAL PROPERTY ${input}_frameworks)
-    foreach(fw ${sub_input})
-        fips_osx_recurse_frameworks(${fw} ${output})
     endforeach()
 endmacro()
 
