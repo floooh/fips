@@ -118,6 +118,23 @@ Cross-compiling build settings are defined in cmake toolchain files in:
 * fips/cmake-toolchains/ios.toolchain.cmake
 * fips/cmake-toolchains/pnacl.toolchain.cmake
 
+Fips projects can override these standard toolchain files, or define
+completely new toolchain files, by creating
+a directory named 'fips-toolchains' in the project root directory, and
+placing cmake toolchain files there.
+
+Fips will search for toolchain files in the following order:
+
+* first in the current project
+* then in imported projects
+* finally in the fips directory
+
+With this search order, fips projects can either override fips' standard
+toolchain files, or toolchain files provided by imported projects.
+
+Fips build configs can support completely new platforms by setting the
+**cmake-toolchain** attribute to the name of a custom toolchain file.
+
 For some target platforms, cmake generates additional files during the cmake run:
 
 On **Android**, a Java wrapper application directory and AndroidManifest.xml 
