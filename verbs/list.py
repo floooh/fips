@@ -3,7 +3,6 @@
 list all            -- list everything
 list build-tools    -- list supported build tools
 list build-types    -- list supported build types
-list platforms      -- list supported platform names
 list generators     -- list supported generator names
 list configs        -- list available configs
 list registry       -- list content of fips registry
@@ -28,13 +27,6 @@ def list_build_types() :
     log.colored(log.YELLOW, '=== build-types:')
     for type in config.build_types :
         log.info('{}'.format(type))
-
-#-------------------------------------------------------------------------------
-def list_platforms() :
-    """list supported platforms"""
-    log.colored(log.YELLOW, '=== platforms:')
-    for p in config.platforms :
-        log.info('{}'.format(p))
 
 #-------------------------------------------------------------------------------
 def list_generators() :
@@ -187,9 +179,6 @@ def run(fips_dir, proj_dir, args) :
     if noun in ['all', 'build-types'] :
         list_build_types()
         ok = True
-    if noun in ['all', 'platforms'] :
-        list_platforms()
-        ok = True
     if noun in ['all', 'generators'] :
         list_generators()
         ok = True
@@ -220,7 +209,6 @@ def help() :
              "fips list configs\n"
              "fips list build-tools\n"
              "fips list build-types\n"
-             "fips list platforms\n"
              "fips list generators\n"
              "fips list registry\n"
              "fips list settings\n"

@@ -76,6 +76,8 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
             ninja.prepare_ninja_tool(fips_dir, build_dir)
         log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
         toolchain_path = config.get_toolchain(fips_dir, proj_dir, cfg)
+        if toolchain_path :
+            log.info("Using Toolchain File: {}".format(toolchain_path))
         return cmake.run_gen(cfg, proj_dir, build_dir, toolchain_path, defines)
     else :
         return True
