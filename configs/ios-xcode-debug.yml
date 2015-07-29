@@ -3,3 +3,4 @@ platform: ios
 generator: Xcode
 build_tool: xcodebuild
 build_type: Debug
+cmake-toolchain: ios.toolchain.cmake

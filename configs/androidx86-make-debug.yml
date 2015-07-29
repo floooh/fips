@@ -3,6 +3,7 @@ platform: android
 generator: Unix Makefiles
 build_tool: make
 build_type: Debug
+cmake-toolchain: android.toolchain.cmake
 defines :
     ANDROID_CPU: x86
     ANDROID_API: android-19

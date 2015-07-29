@@ -3,3 +3,4 @@ platform: pnacl
 generator: Ninja 
 build_tool: ninja
 build_type: Debug
+cmake-toolchain: pnacl.toolchain.cmake

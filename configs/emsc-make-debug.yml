@@ -3,3 +3,4 @@ platform: emscripten
 generator: Unix Makefiles
 build_tool: make
 build_type: Debug
+cmake-toolchain: emscripten.toolchain.cmake

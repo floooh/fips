@@ -75,7 +75,7 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
         if cfg['build_tool'] == 'ninja' :
             ninja.prepare_ninja_tool(fips_dir, build_dir)
         log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
-        toolchain_path = config.get_toolchain_for_platform(fips_dir, cfg['platform'])
+        toolchain_path = config.get_toolchain(fips_dir, proj_dir, cfg)
         return cmake.run_gen(cfg, proj_dir, build_dir, toolchain_path, defines)
     else :
         return True
@@ -102,7 +102,7 @@ def gen(fips_dir, proj_dir, cfg_name) :
     if configs :
         for cfg in configs :
             # check if config is valid
-            config_valid, _ = config.check_config_valid(fips_dir, cfg, print_errors = True)
+            config_valid, _ = config.check_config_valid(fips_dir, proj_dir, cfg, print_errors = True)
             if config_valid :
                 if gen_project(fips_dir, proj_dir, cfg, True) :
                     num_valid_configs += 1
@@ -169,7 +169,7 @@ def make_clean(fips_dir, proj_dir, cfg_name) :
     num_valid_configs = 0
     if configs :
         for cfg in configs :
-            config_valid, _ = config.check_config_valid(fips_dir, cfg, print_errors=True)
+            config_valid, _ = config.check_config_valid(fips_dir, proj_dir, cfg, print_errors=True)
             if config_valid :
                 log.colored(log.YELLOW, "=== cleaning: {}".format(cfg['name']))
 
@@ -223,7 +223,7 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
     if configs :
         for cfg in configs :
             # check if config is valid
-            config_valid, _ = config.check_config_valid(fips_dir, cfg, print_errors=True)
+            config_valid, _ = config.check_config_valid(fips_dir, proj_dir, cfg, print_errors=True)
             if config_valid :
                 log.colored(log.YELLOW, "=== building: {}".format(cfg['name']))
 

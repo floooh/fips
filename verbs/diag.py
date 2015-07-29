@@ -44,7 +44,7 @@ def check_configs(fips_dir, proj_dir) :
     configs = config.load(fips_dir, proj_dir, '*')
     for cfg in configs :
         log.colored(log.BLUE, cfg['name'])
-        valid, errors = config.check_config_valid(fips_dir, cfg)
+        valid, errors = config.check_config_valid(fips_dir, proj_dir, cfg)
         if valid :
             log.colored(log.GREEN, '  ok')
         else :

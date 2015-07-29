@@ -129,18 +129,55 @@ def get_default_config() :
     return default_config[util.get_host_platform()]
 
 #-------------------------------------------------------------------------------
-def get_toolchain_for_platform(fips_dir, plat) :
-    """get the toolchain path location for a target platform, returns None
-    for 'native host platform
+def get_toolchain(fips_dir, proj_dir, cfg) :
+    """get the toolchain path location for a config, this first checks
+    for a 'cmake-toolchain' attribute, and if this does not exist, builds
+    a xxx.toolchain.cmake file from the platform name (only for cross-
+    compiling platforms). Toolchain files are searched in the
+    following locations:
+    - a fips-toolchains subdirectory in the project directory
+    - a fips-toolchains subdirectory in all imported projects
+    - finally in the cmake-toolchains subdirectory of the fips directory
 
     :param fips_dir:    absolute path to fips
     :param plat:        the target platform name
     :returns:           path to toolchain file or None for non-cross-compiling
     """
-    if plat in native_platforms :
-        return None
+
+    # ignore native target platforms
+    if 'platform' in cfg :
+        if cfg['platform'] in native_platforms :
+            return None
     else :
-        return '{}/cmake-toolchains/{}.toolchain.cmake'.format(fips_dir, plat)
+        log.error("config has no 'platform' attribute!'")
+
+    # build toolchain file name
+    toolchain = None
+    if 'cmake-toolchain' in cfg :
+        toolchain = cfg['cmake-toolchain']
+    else :
+        toolchain = '{}.toolchain.cmake'.format(cfg['platform'])
+    
+    # look for toolchain file in current project directory
+    toolchain_path = '{}/fips-toolchains/{}'.format(proj_dir, toolchain)
+    if os.path.isfile(toolchain_path) :
+        return toolchain_path
+    else :
+        # look for toolchain in all imported directories
+        _, imported_projs = dep.get_all_imports_exports(fips_dir, proj_dir)
+        for imported_proj_name in imported_projs :
+            imported_proj_dir = util.get_project_dir(fips_dir, imported_proj_name)
+            toolchain_path = '{}/fips-toolchains/{}'.format(imported_proj_dir, toolchain)
+            if os.path.isfile(toolchain_path) :
+                return toolchain_path
+        else :
+            # toolchain is not in current project or imported projects, 
+            # try the fips directory
+            toolchain_path = '{}/cmake-toolchains/{}'.format(fips_dir, toolchain)
+            if os.path.isfile(toolchain_path) :
+                return toolchain_path
+    # fallthrough: no toolchain file found
+    return None
 
 #-------------------------------------------------------------------------------
 def exists(pattern, proj_dirs) : 
@@ -257,7 +294,7 @@ def check_sdk(fips_dir, platform_name) :
         return True
 
 #-------------------------------------------------------------------------------
-def check_config_valid(fips_dir, cfg, print_errors=False) :
+def check_config_valid(fips_dir, proj_dir, cfg, print_errors=False) :
     """check if provided config is valid, and print errors if not
 
     :param cfg:     a loaded config object
@@ -309,6 +346,15 @@ def check_config_valid(fips_dir, cfg, print_errors=False) :
     if not valid_build_type(cfg['build_type']) :
         errors.append("invalid build_type '{}' in '{}'".format(cfg['build_type'], cfg['path']))
         valid = False
+
+    # check if the toolchain file can be found (if this is a crosscompiling toolchain)
+    if cfg['platform'] not in native_platforms :
+        toolchain_path = get_toolchain(fips_dir, proj_dir, cfg)
+        if toolchain_path :
+            log.info("  using toolchain: '{}'".format(toolchain_path))
+        if toolchain_path is None :
+            errors.append("toolchain file not found for config '{}'!".format(config['name']))
+            valid = False
 
     if print_errors :
         for error in errors :
