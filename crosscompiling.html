@@ -212,6 +212,25 @@ currently not supported</li>
 <li>fips/cmake-toolchains/pnacl.toolchain.cmake</li>
 </ul>
 
+<p>Fips projects can override these standard toolchain files, or define
+completely new toolchain files, by creating
+a directory named &#39;fips-toolchains&#39; in the project root directory, and
+placing cmake toolchain files there.</p>
+
+<p>Fips will search for toolchain files in the following order:</p>
+
+<ul>
+<li>first in the current project</li>
+<li>then in imported projects</li>
+<li>finally in the fips directory</li>
+</ul>
+
+<p>With this search order, fips projects can either override fips&#39; standard
+toolchain files, or toolchain files provided by imported projects.</p>
+
+<p>Fips build configs can support completely new platforms by setting the
+<strong>cmake-toolchain</strong> attribute to the name of a custom toolchain file.</p>
+
 <p>For some target platforms, cmake generates additional files during the cmake run:</p>
 
 <p>On <strong>Android</strong>, a Java wrapper application directory and AndroidManifest.xml 

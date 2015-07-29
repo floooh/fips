@@ -126,7 +126,7 @@ right for your host platform:</p>
 &gt; ./fips build linux-make-release
 ...
 <span class="c"># on Windows:</span>
-&gt; ./fips build win64-vstudio-release
+&gt; ./fips build win64-vs2013-release
 ...
 &gt; _</code></pre></div>
 
@@ -151,10 +151,10 @@ from /Users/floh/projects/fips/configs:
   android-ninja-debug
   android-ninja-release
 ...
-  win32-vstudio-debug
-  win32-vstudio-release
-  win64-vstudio-debug
-  win64-vstudio-release
+  win32-vs2013-debug
+  win32-vs2013-release
+  win64-vs2013-debug
+  win64-vs2013-release
 &gt; _</code></pre></div>
 
 <p>There are dozens of build configs, but not all are supported on every
@@ -197,8 +197,8 @@ debug version whenever &#39;./fips build&#39; is run:</p>
 &gt; ./fips build
 ...
 <span class="c"># on Windows:</span>
-&gt; ./fips <span class="nb">set </span>config win64-vstudio-release 
-<span class="s1">&#39;config&#39;</span> <span class="nb">set </span>to <span class="s1">&#39;win64-vstudio-release&#39;</span> in project <span class="s1">&#39;fips-hello-world&#39;</span>
+&gt; ./fips <span class="nb">set </span>config win64-vs2013-release 
+<span class="s1">&#39;config&#39;</span> <span class="nb">set </span>to <span class="s1">&#39;win64-vs2013-release&#39;</span> in project <span class="s1">&#39;fips-hello-world&#39;</span>
 &gt; ./fips build
 ...
 &gt; _</code></pre></div>
