@@ -44,7 +44,7 @@ set(CMAKE_C_FLAGS_RELEASE "-O3 -ftree-vectorize -msse3 -ffast-math -DNDEBUG")
 set(CMAKE_C_FLAGS_DEBUG "-O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1 -ggdb")
 
 # exe linker flags
-set(CMAKE_EXE_LINKER_FLAGS "-pthread -dead_strip -lpthread -lrt")
+set(CMAKE_EXE_LINKER_FLAGS "-pthread -dead_strip -lpthread")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "")
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "")
 if (FIPS_GCC)
@@ -55,6 +55,10 @@ if (FIPS_GCC)
             set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -latomic")
         endif()
     endif()
+endif()
+check_library_exists(rt clock_gettime "time.h" FOUND_CLOCK_GETTIME)
+if (FOUND_CLOCK_GETTIME)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lrt")
 endif()
 
 # update cache variables for cmake gui
