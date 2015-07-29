@@ -11,6 +11,10 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **29-Jul-2015**: cross-compiling is now more flexible
+    * cross-compile target platform names are no longer hardwired, fips projects can now add define their own cross-compile platforms
+    * fips projects can now provide their own cmake-toolchain files or override the standard toolchain files
+
 - **05-Feb-2015**: the NaCl SDK setup bug has been fixed by the NaCl team, so './fips setup nacl' should now work also with the latest Python 2.7.9
 
 - **01-Feb-2015**: the code generation refactoring branch has been merged back into 
