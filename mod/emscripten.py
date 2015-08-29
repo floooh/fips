@@ -8,13 +8,13 @@ import subprocess
 from mod import log, util
 
 archives = {
-    'win': 'emsdk-1.27.0-portable-64bit.zip',
+    'win': 'emsdk-1.34.1-portable-64bit.zip',
     'osx': 'emsdk-portable.tar.gz',
     'linux': 'emsdk-portable.tar.gz'
 }
 
 urls = {
-    'win':      'http://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-1.27.0-portable-64bit.zip',
+    'win':      'http://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-1.34.1-portable-64bit.zip',
     'osx' :     'http://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz',
     'linux' :   'http://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz'
 }
@@ -23,7 +23,7 @@ urls = {
 # be set in the emscripten.toolchain.cmake file!
 sdk_version = {
     # on Windows, use a stable SDK version which has a pre-compiled clang
-    'win': 'sdk-1.27.0-64bit',
+    'win': 'sdk-1.34.1-64bit',
     # on Linux and OSX, use the bleeding-edge SDK version
     'osx': 'sdk-incoming-64bit',
     'linux': 'sdk-incoming-64bit'
