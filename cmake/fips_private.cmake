@@ -44,58 +44,30 @@ macro(fips_setup_link_directories)
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_recurse_deps(input output)
-#
-macro(fips_recurse_deps input output)
-    list(APPEND ${output} ${input})
-    get_property(sub_deps GLOBAL PROPERTY ${input}_deps)
-    foreach(dep ${sub_deps})
-        fips_recurse_deps(${dep} ${output})
-    endforeach()
-    get_property(sub_libs GLOBAL PROPERTY ${input}_libs)
-    foreach(lib ${sub_libs})
-        fips_recurse_deps(${lib} ${output})
-    endforeach()
-endmacro()
-
-#-------------------------------------------------------------------------------
 #   fips_resolve_dependencies(target)
-#   Recursively resolve dependencies of a target.
+#   Add all required dependencies to a target
 #
 macro(fips_resolve_dependencies target)
-    set(resolvedDeps)
-    get_property(deps GLOBAL PROPERTY ${target}_deps)
-    foreach(dep ${deps})
-        fips_recurse_deps(${dep} resolvedDeps)
-    endforeach()
-    get_property(libs GLOBAL PROPERTY ${target}_libs)
-    foreach(lib ${libs})
-        fips_recurse_deps(${lib} resolvedDeps)
-    endforeach()
-    if (resolvedDeps)
-       list(REMOVE_DUPLICATES resolvedDeps)
+    if (CurDependencies)
+        target_link_libraries(${CurTargetName} ${CurDependencies})
     endif()
-    get_property(libs_debug GLOBAL PROPERTY ${target}_libs_debug)
-    get_property(libs_release GLOBAL PROPERTY ${target}_libs_release)
-    if (FIPS_CMAKE_VERBOSE)
-        message("${target} Dependencies: ${resolvedDeps}")
-        message("${target} Debug Libs: ${libs_debug}")
-        message("${target} Release Libs: ${libs_release}")
+    if (CurLinkLibs)
+        target_link_libraries(${CurTargetName} ${CurLinkLibs})
     endif()
-    # NOTE: this little hack fixes the dependency-order problem
-    # when linking with the GCC toolchain
-    if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR FIPS_EMSCRIPTEN)
-        set(resolvedDeps ${resolvedDeps} ${resolvedDeps} ${resolvedDeps})
-        set(libs_debug ${libs_debug} ${libs_debug} ${libs_debug})
-        set(libs_release ${libs_release} ${libs_release} ${libs_release})
-    endif()
-    target_link_libraries(${target} ${resolvedDeps})
-    foreach (lib_debug ${libs_debug})
+    foreach (lib_debug ${CurLinkLibsDebug})
         target_link_libraries(${target} debug ${lib_debug})
     endforeach()
-    foreach (lib_release ${libs_release})
+    foreach (lib_release ${CurLinkLibsRelease})
         target_link_libraries(${target} optimized ${lib_release})
     endforeach()
+    if (FIPS_IOS OR FIPS_OSX)
+        foreach (fw ${CurFrameworks})
+            unset(found_framework CACHE)
+            find_library(found_framework ${fw})
+            target_link_libraries(${target} ${found_framework})
+            unset(found_framework CACHE)
+        endforeach()
+    endif()
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -239,7 +211,7 @@ endmacro()
 #   fips_add_target_dependency(target...)
 #   Add one or more dependencies to the current target. The dependencies
 #   must be cmake build targets defined with fips_begin*/fips_end*().
-#   Used to define a build order required when, for exemple, building tools to
+#   Used to define a build order required when, for example, building tools to
 #   use during compilation of the current target.
 #
 macro(fips_add_target_dependency targets)
@@ -248,7 +220,6 @@ macro(fips_add_target_dependency targets)
             list(APPEND CurTargetDependencies ${target})
         endif()
     endforeach()
-
     if (CurTargetDependencies)
         list(REMOVE_DUPLICATES CurTargetDependencies)
     endif()

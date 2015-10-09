@@ -192,7 +192,7 @@ endmacro()
 #   fips_finish()
 #
 macro(fips_finish)
-    # FIXME!
+    # nothing to do, reserved for future use
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -229,13 +229,6 @@ endmacro()
 #
 macro(fips_end_module)
 
-    # record target dependencies
-    set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_debug ${CurLinkLibsDebug})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_release ${CurLinkLibsRelease})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
-
     # add library target
     add_library(${CurTargetName} ${CurSources})
     fips_apply_target_group(${CurTargetName})
@@ -243,19 +236,11 @@ macro(fips_end_module)
     # set platform- and target-specific compiler options
     fips_vs_apply_options(${CurTargetName})
 
-    # make sure dependencies are built first
-    if (CurDependencies)
-        add_dependencies(${CurTargetName} ${CurDependencies})
-    endif()
+    # add dependencies
+    fips_resolve_dependencies(${CurTargetName})
 
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
-
-    # generators use target dependencies, so we clear after handling them
-    if (CurTargetDependencies)
-        add_dependencies(${CurTargetName} ${CurTargetDependencies})
-        unset(CurTargetDependencies)
-    endif()
 
     # record target name and type in the fips_targets.yml file
     fips_addto_targets_list(${CurTargetName} "module")
@@ -280,13 +265,6 @@ endmacro()
 #
 macro(fips_end_lib)
 
-    # record target dependencies
-    set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_debug ${CurLinkLibsDebug})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_release ${CurLinkLibsRelease})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
-
     # add library target
     add_library(${CurTargetName} ${CurSources})
     fips_apply_target_group(${CurTargetName})
@@ -294,19 +272,11 @@ macro(fips_end_lib)
     # set platform- and target-specific compiler options
     fips_vs_apply_options(${CurTargetName})
     
-    # make sure dependencies are built first
-    if (CurDependencies)
-        add_dependencies(${CurTargetName} ${CurDependencies})
-    endif()
+    # add dependencies
+    fips_resolve_dependencies(${CurTargetName})
 
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
-
-    # generators use target dependencies, so we clear after handling them
-    if (CurTargetDependencies)
-        add_dependencies(${CurTargetName} ${CurTargetDependencies})
-        unset(CurTargetDependencies)
-    endif()
 
     # record target name and type in the fips_targets.yml file
     fips_addto_targets_list(${CurTargetName} "lib")
@@ -340,13 +310,6 @@ macro(fips_end_app)
     if (FIPS_OSX)
         fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
     endif()
-
-    # record target dependencies
-    set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_debug ${CurLinkLibsDebug})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_release ${CurLinkLibsRelease})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
 
     if (NOT CurSources)
         message(FATAL_ERROR "No sources in target: ${CurTargetName} !!!")
@@ -391,22 +354,13 @@ macro(fips_end_app)
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
-    # generators use target dependencies, so we clear after handling them
-    if (CurTargetDependencies)
-        add_dependencies(${CurTargetName} ${CurTargetDependencies})
-        unset(CurTargetDependencies)
-    endif()
+    # add dependencies
+    fips_resolve_dependencies(${CurTargetName})
 
     # PNaCl specific stuff
     if (FIPS_PNACL)
         fips_pnacl_create_wrapper(${CurTargetName})
         fips_pnacl_post_buildsteps(${CurTargetName})
-    endif()
-
-    # add dependencies for target
-    fips_resolve_dependencies(${CurTargetName})
-    if (FIPS_OSX OR FIPS_IOS)
-        fips_osx_resolve_frameworks(${CurTargetName})
     endif()
 
     # setup executable output directory and postfixes (_debug, etc...)
@@ -439,13 +393,6 @@ macro(fips_end_sharedlib)
         fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
     endif()
 
-    # record target dependencies
-    set_property(GLOBAL PROPERTY ${CurTargetName}_deps ${CurDependencies})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_libs ${CurLinkLibs})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_debug ${CurLinkLibsDebug})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_libs_release ${CurLinkLibsRelease})
-    set_property(GLOBAL PROPERTY ${CurTargetName}_frameworks ${CurFrameworks})
-
     if (NOT CurSources)
         message(FATAL_ERROR "No sources in target: ${CurTargetName} !!!")
     endif()
@@ -460,17 +407,8 @@ macro(fips_end_sharedlib)
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
-    # generators use target dependencies, so we clear after handling them
-    if (CurTargetDependencies)
-        add_dependencies(${CurTargetName} ${CurTargetDependencies})
-        unset(CurTargetDependencies)
-    endif()
-
-    # add dependencies for target
+    # add dependencies
     fips_resolve_dependencies(${CurTargetName})
-    if (FIPS_OSX OR FIPS_IOS)
-        fips_osx_resolve_frameworks(${CurTargetName})
-    endif()
 
     # setup executable output directory and postfixes (_debug, etc...)
     fips_config_output_directory(${CurTargetName})
