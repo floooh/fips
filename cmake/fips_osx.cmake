@@ -92,6 +92,11 @@ macro(fips_osx_generate_plist_file target)
             "      <string>armv7</string>\n"
             "      <string>accelerometer</string>\n"
             "    </array>\n"
+            "    <key>NSAppTransportSecurity</key>\n"
+            "    <dict>\n"
+            "      <key>NSAllowsArbitraryLoads</key>\n"
+            "      <true/>\n"
+	        "    </dict>\n"
             "  </dict>\n"
             "</plist>\n")
     elseif (FIPS_MACOS)
