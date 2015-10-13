@@ -318,12 +318,17 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
                     log.error("don't know how to start HTML app on this platform")
             elif cfg['platform'] == 'android' :
                 try :
+                    adb_path = android.get_adb_path(fips_dir)
                     # Android: first install the apk...
-                    cmd = '{} install {}/{}-debug.apk'.format(android.get_adb_path(fips_dir), deploy_dir, target_name)
+                    cmd = '{} install -r {}/{}-debug.apk'.format(adb_path, deploy_dir, target_name)
+                    subprocess.call(cmd, shell=True)
+                    # ...then start the apk
+                    cmd = '{} shell am start -n com.fips.{}/android.app.NativeActivity'.format(adb_path, target_name)
                     subprocess.call(cmd, shell=True)
                     # ...then run adb logcat
-                    cmd = '{} logcat'.format(android.get_adb_path(fips_dir))
+                    cmd = '{} logcat'.format(adb_path)
                     subprocess.call(cmd, shell=True)
+                    return 0
                 except KeyboardInterrupt :
                     return 0
 

@@ -16,7 +16,7 @@ macro(fips_android_create_project target)
                         --path ${CMAKE_CURRENT_BINARY_DIR}/android
                         --target ${ANDROID_API}
                         --name ${target}
-                        --package com.oryol.${target}
+                        --package com.fips.${target}
                         --activity DummyActivity
                         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
     endif()
@@ -30,7 +30,7 @@ macro(fips_android_create_project target)
     # override AndroidManifest.xml 
     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/android/AndroidManifest.xml
         "<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n"
-        "  package=\"com.oryol.${target}\"\n"
+        "  package=\"com.fips.${target}\"\n"
         "  android:versionCode=\"1\"\n"
         "  android:versionName=\"1.0\">\n"
         "  <uses-sdk android:minSdkVersion=\"11\" android:targetSdkVersion=\"19\"/>\n"
