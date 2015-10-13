@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import yaml
 
-from mod import log, util, config, dep, template, settings
+from mod import log, util, config, dep, template, settings, android
 from mod.tools import git, cmake, make, ninja, xcodebuild, ccmake, cmake_gui
 
 #-------------------------------------------------------------------------------
@@ -316,6 +316,17 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
                         return 0
                 else :
                     log.error("don't know how to start HTML app on this platform")
+            elif cfg['platform'] == 'android' :
+                try :
+                    # Android: first install the apk...
+                    cmd = '{} install {}/{}-debug.apk'.format(android.get_adb_path(fips_dir), deploy_dir, target_name)
+                    subprocess.call(cmd, shell=True)
+                    # ...then run adb logcat
+                    cmd = '{} logcat'.format(android.get_adb_path(fips_dir))
+                    subprocess.call(cmd, shell=True)
+                except KeyboardInterrupt :
+                    return 0
+
             elif os.path.isdir('{}/{}.app'.format(deploy_dir, target_name)) :
                 # special case: Mac app
                 cmd_line = '{}/{}.app/Contents/MacOS/{}'.format(deploy_dir, target_name, target_name)

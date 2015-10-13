@@ -68,7 +68,7 @@ def get_androidndk_archive_path(fips_dir) :
 
 #-------------------------------------------------------------------------------
 def get_adb_path(fips_dir) :
-    return get_androidsdk_dir() + '/platform-tools/adb'
+    return get_androidsdk_dir(fips_dir) + '/platform-tools/adb'
 
 #-------------------------------------------------------------------------------
 def ensure_sdk_dirs(fips_dir) :
