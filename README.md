@@ -11,20 +11,39 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
-- **10-Oct-2015**: I committed a simplification for nested dependency resolution yesterday (turns out cmake does this on its own with 'target_link_libraries'), however this may introduce some link-order problems in existing projects when using GCC or emscripten. If your project no longer links because of this, and you think that fixing the depedency order in the CMakeLists.txt files is too big a hassle and fips should take care of this, please simply open a ticket, and I'll try to find a solution in fips. I haven't made up my mind about this either yet, the few cases in Oryol were easy to fix, but larger projects may be more tricky to fix.
+- **13-Oct-2015**: 'fips run' has learned to run Android apps, after building
+  your project with one of the Android build configs, simply do a 
+  'fips run [target]' like on the other platforms. This will (re-)install
+  the app, launch it, and then run 'adb logcat' (simply hit Ctrl-C when done)
+
+- **10-Oct-2015**: I committed a simplification for nested dependency
+  resolution yesterday (turns out cmake does this on its own with
+  'target_link_libraries'), however this may introduce some link-order problems
+  in existing projects when using GCC or emscripten. If your project no longer
+  links because of this, and you think that fixing the depedency order in the
+  CMakeLists.txt files is too big a hassle and fips should take care of this,
+  please simply open a ticket, and I'll try to find a solution in fips. I
+  haven't made up my mind about this either yet, the few cases in Oryol were
+  easy to fix, but larger projects may be more tricky to fix.
 
 - **29-Jul-2015**: cross-compiling is now more flexible
-    * cross-compile target platform names are no longer hardwired, fips projects can now add define their own cross-compile platforms
-    * fips projects can now provide their own cmake-toolchain files or override the standard toolchain files
+    * cross-compile target platform names are no longer hardwired, fips
+      projects can now add define their own cross-compile platforms
+    * fips projects can now provide their own cmake-toolchain files or override
+      the standard toolchain files
 
-- **05-Feb-2015**: the NaCl SDK setup bug has been fixed by the NaCl team, so './fips setup nacl' should now work also with the latest Python 2.7.9
+- **05-Feb-2015**: the NaCl SDK setup bug has been fixed by the NaCl team, so
+  './fips setup nacl' should now work also with the latest Python 2.7.9
 
-- **01-Feb-2015**: the code generation refactoring branch has been merged back into 
-the master branch, code generation is now controlled with the new **fips_generate()**
-cmake macro, see [Oryol engine](https://github.com/floooh/oryol) and 
-[code generation doc page](http://floooh.github.io/fips/codegen.html) for details!
+- **01-Feb-2015**: the code generation refactoring branch has been merged back
+  into the master branch, code generation is now controlled with the new
+  **fips_generate()** cmake macro, see [Oryol
+  engine](https://github.com/floooh/oryol) and [code generation doc
+  page](http://floooh.github.io/fips/codegen.html) for details!
 
-- **30-Jan-2015**: please note that the NaCl SDK setup script is currently broken with Python 2.7.9 (2.7.6 works), this is tracked in the following bug: https://code.google.com/p/chromium/issues/detail?id=452137  
+- **30-Jan-2015**: please note that the NaCl SDK setup script is currently
+  broken with Python 2.7.9 (2.7.6 works), this is tracked in the following bug:
+  https://code.google.com/p/chromium/issues/detail?id=452137  
 
 ### List of Fipsified Projects:
 
