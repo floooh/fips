@@ -1,7 +1,9 @@
 """wrapper for cmake tool"""
 import subprocess
+import platform
 
 from mod import log
+from mod.tools import ninja
 
 name = 'cmake'
 platforms = ['linux', 'osx', 'win']
@@ -31,7 +33,7 @@ def check_exists(fips_dir) :
         return False
 
 #------------------------------------------------------------------------------
-def run_gen(cfg, project_dir, build_dir, toolchain_path, defines) :
+def run_gen(cfg, fips_dir, project_dir, build_dir, toolchain_path, defines) :
     """run cmake tool to generate build files
     
     :param cfg:             a fips config object
@@ -41,6 +43,8 @@ def run_gen(cfg, project_dir, build_dir, toolchain_path, defines) :
     :returns:               True if cmake returned successful
     """
     cmdLine = 'cmake -G "{}" -DCMAKE_BUILD_TYPE={}'.format(cfg['generator'], cfg['build_type'])
+    if cfg['build_tool'] == 'ninja' and platform.system() == 'Windows':
+        cmdLine += ' -DCMAKE_MAKE_PROGRAM={}'.format(ninja.get_ninja_tool(fips_dir)) 
     if toolchain_path is not None :
         cmdLine += ' -DCMAKE_TOOLCHAIN_FILE={}'.format(toolchain_path)
     cmdLine += ' -DFIPS_CONFIG={}'.format(cfg['name'])

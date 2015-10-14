@@ -78,7 +78,7 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
         toolchain_path = config.get_toolchain(fips_dir, proj_dir, cfg)
         if toolchain_path :
             log.info("Using Toolchain File: {}".format(toolchain_path))
-        return cmake.run_gen(cfg, proj_dir, build_dir, toolchain_path, defines)
+        return cmake.run_gen(cfg, fips_dir, proj_dir, build_dir, toolchain_path, defines)
     else :
         return True
 
