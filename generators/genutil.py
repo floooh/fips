@@ -5,6 +5,7 @@ import platform
 
 FilePath = ''
 LineNumber = 0
+Env = {}
 
 #-------------------------------------------------------------------------------
 def error(msg) :
@@ -87,4 +88,20 @@ def isDirty(version, inputs, outputs) :
             if inputTime > outputTime :
                 return True
     return False
+
+#-------------------------------------------------------------------------------
+def setEnv(dic) :
+    '''
+    Set the 'environemnt' (key/value pairs accessible by getEnv(key)
+    '''
+    global Env
+    Env = dic
+
+#-------------------------------------------------------------------------------
+def getEnv(key) :
+    '''
+    Return an 'environment variable' value.
+    '''
+    global Env
+    return Env[key]
 

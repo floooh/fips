@@ -18,6 +18,7 @@ for path in gen_paths :
 # yaml module is under the fips directory
 import yaml
 from mod import log
+import genutil
 
 def processFile(attrs) :
     # dynamically load (and execute) the generator module
@@ -29,6 +30,11 @@ def processFile(attrs) :
         args = attrs['args']
     else :
         args = None
+    if 'env' in attrs :
+        env = attrs['env']
+    else :
+        env = None
+    genutil.setEnv(env)
     path, script = os.path.split(absPyPath)
     sys.path.insert(0, path)
     moduleName, ext = os.path.splitext(script)

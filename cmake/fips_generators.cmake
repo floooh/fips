@@ -91,6 +91,11 @@ macro(fips_add_generator target in_generator in_outofsource in_file out_src out_
         if (NOT ${args} STREQUAL "")
             set(yml_content "${yml_content}  args: ${args}\n")
         endif()
+
+        # write 'environment'
+        set(yml_content "${yml_content}  env:\n")
+        set(yml_content "${yml_content}    target_platform: '${FIPS_PLATFORM_NAME}'\n")
+
         file(APPEND "${CMAKE_BINARY_DIR}/fips_codegen.yml" "${yml_content}")
         
         # if generated out-of-source, add the current build dir to
