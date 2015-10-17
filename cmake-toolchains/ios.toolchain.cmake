@@ -23,7 +23,7 @@ set(CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos;-iphonesimulator")
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
 # define standard frame works that are always linked
-set(FIPS_OSX_STANDARD_FRAMEWORKS Foundation OpenGLES UIKit GLKit QuartzCore OpenAL CoreMotion)
+set(FIPS_OSX_STANDARD_FRAMEWORKS Foundation UIKit QuartzCore)
 
 # ARC on/off?
 option(FIPS_IOS_USE_ARC "Enable/disable Automatic Reference Counting" OFF)
