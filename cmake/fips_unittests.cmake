@@ -41,14 +41,9 @@ macro(fips_end_unittest)
         set(main_path ${CMAKE_CURRENT_BINARY_DIR}/${CurTargetName}_main.cc)
         file(WRITE ${main_path}
             "// machine generated, do not edit\n"
-            "#include \"Pre.h\"\n"
-            "#include \"Core/Core.h\"\n"
             "#include \"UnitTest++/src/UnitTest++.h\"\n"
             "int main(void) {\n"
-            "    Oryol::Core::Setup();\n"
-            "    int res = UnitTest::RunAllTests();\n"
-            "    Oryol::Core::Discard();\n"
-            "    return res;\n"
+            "    return UnitTest::RunAllTests();\n"
             "}\n"
         )
 
