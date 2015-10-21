@@ -187,13 +187,13 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 set(CMAKE_SYSTEM_INCLUDE_PATH "${EMSCRIPTEN_ROOT_PATH}/system/include")
 
 # c++ compiler flags
-set(CMAKE_CXX_FLAGS "${EMSCRIPTEN_CONFIG_OPTION} ${EMSCRIPTEN_CACHE_OPTION} ${EMSCRIPTEN_TRACING_OPTION} -std=c++11 -stdlib=libc++ ${FIPS_EMSC_EXCEPTION_FLAGS} ${FIPS_EMSC_RTTI_FLAGS} -fstrict-aliasing -Wall -Wno-warn-absolute-paths -Wno-multichar -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue -Wno-inconsistent-missing-override")
+set(CMAKE_CXX_FLAGS "${EMSCRIPTEN_CONFIG_OPTION} ${EMSCRIPTEN_CACHE_OPTION} ${EMSCRIPTEN_TRACING_OPTION} -std=c++11 -stdlib=libc++ ${FIPS_EMSC_EXCEPTION_FLAGS} ${FIPS_EMSC_RTTI_FLAGS} -fstrict-aliasing -Wall -Wno-multichar -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue -Wno-inconsistent-missing-override")
 set(CMAKE_CXX_FLAGS_RELEASE "${EMSCRIPTEN_OPT} -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "${EMSCRIPTEN_OPT} -g -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 set(CMAKE_CXX_FLAGS_PROFILING "${EMSCRIPTEN_OPT} --profiling")
 
 # c compiler flags
-set(CMAKE_C_FLAGS "${EMSCRIPTEN_CONFIG_OPTION} ${EMSCRIPTEN_CACHE_OPTION} ${EMSCRIPTEN_TRACING_OPTION} -fstrict-aliasing -Wall -Wno-warn-absolute-paths -Wextra -Wno-multichar -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue")
+set(CMAKE_C_FLAGS "${EMSCRIPTEN_CONFIG_OPTION} ${EMSCRIPTEN_CACHE_OPTION} ${EMSCRIPTEN_TRACING_OPTION} -fstrict-aliasing -Wall -Wextra -Wno-multichar -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue")
 set(CMAKE_C_FLAGS_RELEASE "${EMSCRIPTEN_OPT} -DNDEBUG")
 set(CMAKE_C_FLAGS_DEBUG "${EMSCRIPTEN_OPT} -g -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 set(CMAKE_C_FLAGS_PROFILING "${EMSCRIPTEN_OPT} --profiling")
