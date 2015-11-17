@@ -34,6 +34,7 @@ option(FIPS_ALLOCATOR_DEBUG "Enable allocator debugging code (slow)" OFF)
 option(FIPS_COMPILE_VERBOSE "Enable very verbose compilation" OFF)
 option(FIPS_USE_CCACHE "Enable ccache when building with gcc or clang" OFF)
 option(FIPS_PROFILING "Enable app profiling/tracing" OFF)
+option(FIPS_OSX_UNIVERSAL "Enable generation of universal binaries on OS X" OFF)
 
 # turn some dependent options on/off
 if (FIPS_UNITTESTS)

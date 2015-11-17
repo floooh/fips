@@ -14,6 +14,10 @@ set(FIPS_POSIX 1)
 # define configuration types
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
+if (FIPS_OSX_UNIVERSAL)
+    set(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
+endif()
+
 # FIXME: define standard frame works that are always linked
 set(FIPS_OSX_STANDARD_FRAMEWORKS Foundation IOKit)
 
