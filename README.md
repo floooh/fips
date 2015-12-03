@@ -11,6 +11,15 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **03-Dec-2015**: I have added a new 'no\_auto\_import' policy/feature for
+  advanced uses which allows to manually select modules from imported 
+  projects. This is more work but can provide a cleaner project layout
+  if only a few modules from imported projects are needed. See the
+  documentation web page for details (http://floooh.github.io/fips/imports.html, 
+  search for 'Selectively importing modules'). The default behaviour should
+  be exactly as before. If anything is broken in your project, please
+  don't hesitate to write a ticket :)
+
 - **13-Oct-2015**: 'fips run' has learned to run Android apps, after building
   your project with one of the Android build configs, simply do a 
   'fips run [target]' like on the other platforms. This will (re-)install
