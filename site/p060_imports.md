@@ -223,11 +223,11 @@ Detailed information of how these exports are defined can be found on the
 ### Selectively importing modules
 
 By default, fips imports all modules of an imported project. Sometimes this
-is overkill when only a few modules from a project is needed. In this case, 
-the module 'auto-import' can be switched off in the importing project's
-fips.yml file using the 'no_auto_import' policy. Here is an example
-fips.yml file which imports a complex project and activates the
-no_auto_import policy:
+is overkill when only a few modules from a project are needed. This automatic
+import of modules into a build project can be switched off in the importing 
+project's fips.yml file using the 'no\_auto\_import' policy. Here is an example
+fips.yml file which imports a complex dependency and activates the
+no\_auto\_import policy:
 
 ```yaml
 ---
@@ -238,19 +238,18 @@ imports:
         git: https://github.com/floooh/oryol.git
 ```
 
-Not automatically importing modules means they must be imported manually
-in the root CMakeLists.txt file. For this, fips has created a cmake import
-function for each module called **fips\_import\_PROJECT\_MODULE()**,
-where PROJECT is the project name, and MODULE is the module name
-that should be imported. Any '-' character in the module or project
-name must be replaced with an '\_' (underscore) character (cmake doesn't
-accept '-' in function names).
+Not automatically importing modules means that imported modules must be listed
+manually in the root CMakeLists.txt file. For this, fips has created a cmake
+import function for each module called **fips\_import\_PROJECT\_MODULE()**,
+where PROJECT is the project name, and MODULE is the module name that should be
+imported. Any '-' character in the module or project name must be replaced with
+an '\_' (underscore) character (cmake doesn't accept '-' in function names).
 
 Manually importing modules can be a lot of trial and error, because the 
 entire dependency chain must be manually imported, it's either all 
-or nothing with the 'no_auto_import' policy.
+or nothing with the 'no\_auto\_import' policy.
 
-Here's a segment from a project's root CMakeLists.txt file with 'no_auto_import'
+Here's a segment from a project's root CMakeLists.txt file with 'no\_auto\_import'
 enabled as an example:
 
 ```cmake
