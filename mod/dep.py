@@ -71,6 +71,31 @@ def get_exports(proj_dir) :
     return exports
 
 #-------------------------------------------------------------------------------
+def get_policy(proj_dir, policy) :
+    """checks whether a policy is defined in the projects fips.yml
+    and returns its bool value, or the default if not defined.
+
+    :param proj_dir:    the project directory
+    :param policy:      the policy string name
+    :returns:           true/false
+    """
+    def_policies = {
+        'no_auto_import': False
+    }
+    if util.is_valid_project_dir(proj_dir) :
+        dic = util.load_fips_yml(proj_dir)
+        if 'policies' in dic and type(dic['policies']) is dict:
+            if policy in dic['policies'] :
+                return dic['policies'][policy]
+    # not found, return default
+    if policy in def_policies :
+        return def_policies[policy]
+    else :
+        # unknown policy, return None
+        log.error("unknown policy name: '{}'".format(policy))
+        return None
+
+#-------------------------------------------------------------------------------
 def _rec_get_all_imports_exports(fips_dir, proj_dir, result) :
     """recursively get all imported projects, their exported and
     imported modules in a dictionary object:
@@ -329,15 +354,30 @@ def write_imports(fips_dir, proj_dir, imported) :
                         else :
                             f.write('add_definitions(-D{}={})\n'.format(define, value))
 
-                # add modules
+                # add import modules
                 if len(imported[imp_proj_name]['modules']) > 0 :
-                    f.write('fips_ide_group("Imports")\n')
+                    import_functions = []
+
+                    # first add all module import functions
                     for module in imported[imp_proj_name]['modules'] :
                         module_path = imported[imp_proj_name]['modules'][module]
                         if module not in unique_modules :
                             unique_modules[module] = module_path
-                            f.write('add_subdirectory("{}" "{}")\n'.format(module, module_path))
-                    f.write('fips_ide_group("")\n')
+                            import_func = 'fips_import_{}'.format(module_path).replace('-','_')
+                            import_functions.append(import_func)
+                            f.write('macro({})\n'.format(import_func))
+                            f.write('    set(FIPS_IMPORT 1)\n')
+                            f.write('    add_subdirectory("{}" "{}")\n'.format(module, module_path))
+                            f.write('    set(FIPS_IMPORT)\n')
+                            f.write('endmacro()\n')
+
+                    # if auto-import is enabled, also actually import all modules
+                    f.write('if (FIPS_AUTO_IMPORT)\n')
+                    f.write('    fips_ide_group("Imports")\n')
+                    for import_func in import_functions :
+                        f.write('    {}()\n'.format(import_func))
+                    f.write('    fips_ide_group("")\n')
+                    f.write('endif()\n')
 
         # check content of old and new file, only replace if changed
         imports_dirty = True

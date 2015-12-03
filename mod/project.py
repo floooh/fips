@@ -65,6 +65,7 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
     defines = {}
     defines['FIPS_USE_CCACHE'] = 'ON' if settings.get(proj_dir, 'ccache') else 'OFF'
+    defines['FIPS_AUTO_IMPORT'] = 'OFF' if dep.get_policy(proj_dir, 'no_auto_import') else 'ON'
     do_it = force
     if not os.path.isdir(build_dir) :
         os.makedirs(build_dir)

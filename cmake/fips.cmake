@@ -36,6 +36,7 @@ option(FIPS_USE_CCACHE "Enable ccache when building with gcc or clang" OFF)
 option(FIPS_PROFILING "Enable app profiling/tracing" OFF)
 option(FIPS_OSX_UNIVERSAL "Enable generation of universal binaries on OS X" OFF)
 option(FIPS_LINUX_MACH32 "Enable 32-bit code generation on 64-bit Linux host" OFF)
+option(FIPS_AUTO_IMPORT "Automatically include all modules from imports" ON)
 
 # turn some dependent options on/off
 if (FIPS_UNITTESTS)
@@ -83,6 +84,7 @@ macro(fips_setup)
     else()
         message(FATAL_ERROR "Must specify absolute FIPS_DEPLOY_DIR before calling fips_setup()!")
     endif()
+    message("FIPS_AUTO_IMPORT: ${FIPS_AUTO_IMPORT}")
 
     # set host system variables
     set (FIPS_HOST_WINDOWS 0)
@@ -182,11 +184,9 @@ macro(fips_setup)
     endif()
 
     # load generated .fips-imports.cmake if exists
-    set(FIPS_IMPORT 1)
     if (EXISTS "${FIPS_PROJECT_DIR}/.fips-imports.cmake")
         include("${FIPS_PROJECT_DIR}/.fips-imports.cmake")
     endif()
-    set(FIPS_IMPORT)
 
 endmacro()
 
