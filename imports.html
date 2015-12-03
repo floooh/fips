@@ -309,11 +309,11 @@ project</li>
 <h3>Selectively importing modules</h3>
 
 <p>By default, fips imports all modules of an imported project. Sometimes this
-is overkill when only a few modules from a project is needed. In this case, 
-the module &#39;auto-import&#39; can be switched off in the importing project&#39;s
-fips.yml file using the &#39;no<em>auto</em>import&#39; policy. Here is an example
-fips.yml file which imports a complex project and activates the
-no<em>auto</em>import policy:</p>
+is overkill when only a few modules from a project are needed. This automatic
+import of modules into a build project can be switched off in the importing 
+project&#39;s fips.yml file using the &#39;no_auto_import&#39; policy. Here is an example
+fips.yml file which imports a complex dependency and activates the
+no_auto_import policy:</p>
 <div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
 <span class="l-Scalar-Plain">policies</span><span class="p-Indicator">:</span>
     <span class="l-Scalar-Plain">no_auto_import</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
@@ -321,19 +321,18 @@ no<em>auto</em>import policy:</p>
     <span class="l-Scalar-Plain">oryol</span><span class="p-Indicator">:</span>
         <span class="l-Scalar-Plain">git</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">https://github.com/floooh/oryol.git</span>
 </code></pre></div>
-<p>Not automatically importing modules means they must be imported manually
-in the root CMakeLists.txt file. For this, fips has created a cmake import
-function for each module called <strong>fips_import_PROJECT_MODULE()</strong>,
-where PROJECT is the project name, and MODULE is the module name
-that should be imported. Any &#39;-&#39; character in the module or project
-name must be replaced with an &#39;_&#39; (underscore) character (cmake doesn&#39;t
-accept &#39;-&#39; in function names).</p>
+<p>Not automatically importing modules means that imported modules must be listed
+manually in the root CMakeLists.txt file. For this, fips has created a cmake
+import function for each module called <strong>fips_import_PROJECT_MODULE()</strong>,
+where PROJECT is the project name, and MODULE is the module name that should be
+imported. Any &#39;-&#39; character in the module or project name must be replaced with
+an &#39;_&#39; (underscore) character (cmake doesn&#39;t accept &#39;-&#39; in function names).</p>
 
 <p>Manually importing modules can be a lot of trial and error, because the 
 entire dependency chain must be manually imported, it&#39;s either all 
-or nothing with the &#39;no<em>auto</em>import&#39; policy.</p>
+or nothing with the &#39;no_auto_import&#39; policy.</p>
 
-<p>Here&#39;s a segment from a project&#39;s root CMakeLists.txt file with &#39;no<em>auto</em>import&#39;
+<p>Here&#39;s a segment from a project&#39;s root CMakeLists.txt file with &#39;no_auto_import&#39;
 enabled as an example:</p>
 <div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_setup</span><span class="p">()</span>
 <span class="nb">fips_project</span><span class="p">(</span><span class="s">yakc</span><span class="p">)</span>
