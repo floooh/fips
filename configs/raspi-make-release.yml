@@ -1,0 +1,8 @@
+---
+platform: linux 
+generator: Unix Makefiles
+build_tool: make
+build_type: Release
+defines:
+    FIPS_RASPBERRYPI: ON
+

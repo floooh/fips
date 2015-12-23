@@ -142,6 +142,7 @@ macro(fips_setup)
         endif()
     endif()
     message("FIPS_PLATFORM: " ${FIPS_PLATFORM})
+    message("FIPS_PLATFORM_NAME: ${FIPS_PLATFORM_NAME}")
 
     # enable ccache??
     if (FIPS_USE_CCACHE)

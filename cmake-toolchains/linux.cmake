@@ -7,10 +7,18 @@ message("Target Platform: Linux")
 include(CheckFunctionExists)
 include(CheckLibraryExists)
 
+# Raspbian Linux flavour
+option(FIPS_RASPBERRYPI "Set to true if compiling for the Raspberry Pi" OFF)
+
 set(FIPS_PLATFORM Linux)
-set(FIPS_PLATFORM_NAME "linux")
+if (FIPS_RASPBERRYPI) 
+    set(FIPS_PLATFORM_NAME "linuxraspbian")
+else()
+    set(FIPS_PLATFORM_NAME "linux")
+endif()
 set(FIPS_LINUX 1)
 set(FIPS_POSIX 1)
+
 
 # define configuration types
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
