@@ -50,7 +50,11 @@ def run_gen(cfg, fips_dir, project_dir, build_dir, toolchain_path, defines) :
     cmdLine += ' -DFIPS_CONFIG={}'.format(cfg['name'])
     if cfg['defines'] is not None :
         for key in cfg['defines'] :
-            cmdLine += ' -D{}={}'.format(key, 'ON' if cfg['defines'][key] else 'OFF')
+            val = cfg['defines'][key]
+            if type(val) is bool :
+                cmdLine += ' -D{}={}'.format(key, 'ON' if val else 'OFF')
+            else :
+                cmdLine += ' -D{}={}'.format(key, val)
     for key in defines :
         cmdLine += ' -D{}={}'.format(key, defines[key])
     cmdLine += ' -B' + build_dir
