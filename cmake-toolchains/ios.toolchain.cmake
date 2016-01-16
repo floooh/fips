@@ -15,7 +15,7 @@ include(CMakeForceCompiler)
 CMAKE_FORCE_C_COMPILER(gcc GNU)
 CMAKE_FORCE_CXX_COMPILER(g++ GNU)
 
-set(CMAKE_OSX_ARCHITECTURES "armv7")
+set(CMAKE_OSX_ARCHITECTURES "arm64")
 set(CMAKE_OSX_SYSROOT "iphoneos")
 set(CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos;-iphonesimulator")
 
