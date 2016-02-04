@@ -87,7 +87,7 @@ or Mercurial.
 
 ### Importing specific versions
 
-It is possible to specify a git branch or tag name when defining an import
+It is possible to specify a git branch, tag name or revision when defining an import
 in fips.yml. This is usually a good idea for complex real-world projects 
 since it prevents that a build suddenly breaks because an external dependency
 has had an update that breaks existing code:
@@ -98,12 +98,13 @@ imports:
     my-awesome-lib:
         git: https://github.com/floooh/my-awesome-lib.git
         branch: version-0.0.1
+    my-other-awesome-lib:
+        git: https://github.com/floooh/my-other-awesome-lib.git
+        rev: 00f1a6d3
 {% endhighlight %}
 
 The 'branch:' item can either be a branch or tag name.
-
-> NOTE: it is currently not possible to pin the import version to a random
-git revision that isn't tagged
+The 'rev:' item should be a valid commit SHA1 reference.
 
 ### Fetching imports
 

@@ -187,7 +187,12 @@ def _rec_fetch_imports(fips_dir, proj_dir, handled) :
                     git_url = imports[dep_proj_name]['git']
                     git_branch = imports[dep_proj_name]['branch']
                     if git.clone(git_url, git_branch, dep_proj_name, ws_dir) :
-                        dep_ok = True
+                        if 'rev' in imports[dep_proj_name]  :
+                            git_commit = imports[dep_proj_name]['rev']
+                            log.colored(log.YELLOW, "=== revision: '{}':".format(git_commit))
+                            dep_ok = git.checkout(dep_proj_dir, git_commit)
+                        else :
+                            dep_ok = True
                     else :
                         log.error('failed to git clone {} into {}'.format(git_url, dep_proj_dir))
                 else :
