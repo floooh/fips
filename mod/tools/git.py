@@ -9,6 +9,9 @@ platforms = ['linux', 'osx', 'win']
 optional = False
 not_found = "git not found in path, can't happen(?)"
 
+# default git clone depth
+clone_depth = 10
+
 #-------------------------------------------------------------------------------
 def check_exists(fips_dir=None) :
     """test if git is in the path
@@ -22,11 +25,12 @@ def check_exists(fips_dir=None) :
         return False
 
 #-------------------------------------------------------------------------------
-def clone(url, branch, name, cwd) :
+def clone(url, branch, depth, name, cwd) :
     """git clone a remote git repo
     
     :param url:     the git url to clone from
     :param branch:  branch name (can be None)
+    :param depth:   how deep to clone
     :param name:    the directory name to clone into
     :param cwd:     the directory where to run git
     :returns:       True if git returns successful
@@ -34,7 +38,9 @@ def clone(url, branch, name, cwd) :
     if check_exists() :
         cmd = 'git clone --recursive'
         if branch :
-            cmd += ' --branch {} --single-branch --depth 10'.format(branch)
+            cmd += ' --branch {} --single-branch'.format(branch)
+        if depth :
+            cmd += ' --depth {}'.format(depth)
         cmd += ' {} {}'.format(url, name)
         res = subprocess.call(cmd, cwd=cwd, shell=True)
         return res == 0
@@ -63,6 +69,21 @@ def get_branches(proj_dir) :
     except subprocess.CalledProcessError :
         log.error("failed to call 'git branch -vv'")
     return branches;
+
+#-------------------------------------------------------------------------------
+def checkout(proj_dir, revision) :
+    """checkout a specific revision hash of a repository
+
+    :param proj_dir:    a git repo dir
+    :param revision:    SHA1 hash of the commit
+    :returns:           True if git returns successful
+    """
+    try :
+        output = subprocess.check_output('git checkout {}'.format(revision), cwd=proj_dir, shell=True)
+        return output.split(':')[0] != 'error'
+    except subprocess.CalledProcessError :
+        log.error("failed to call 'git checkout'")
+        return None
 
 #-------------------------------------------------------------------------------
 def has_uncommitted_files(proj_dir) :
@@ -115,7 +136,7 @@ def get_local_rev(proj_dir, local_branch) :
     except subprocess.CalledProcessError :
         log.error("failed to call 'git rev-parse'")
         return None
-    
+
 #-------------------------------------------------------------------------------
 def check_out_of_sync(proj_dir) :
     """check through all branches of the git repo in proj_dir and
