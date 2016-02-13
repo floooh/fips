@@ -65,6 +65,21 @@ def get_branches(proj_dir) :
     return branches;
 
 #-------------------------------------------------------------------------------
+def checkout(proj_dir, revision) :
+    """checkout a specific revision hash of a repository
+
+    :param proj_dir:    a git repo dir
+    :param revision:    SHA1 hash of the commit
+    :returns:           True if git returns successful
+    """
+    try :
+        output = subprocess.check_output('git checkout {}'.format(revision), cwd=proj_dir, shell=True)
+        return output.split(':')[0] != 'error'
+    except subprocess.CalledProcessError :
+        log.error("failed to call 'git checkout'")
+        return None
+
+#-------------------------------------------------------------------------------
 def has_uncommitted_files(proj_dir) :
     """check whether a git repo has uncommitted files
 
@@ -115,7 +130,7 @@ def get_local_rev(proj_dir, local_branch) :
     except subprocess.CalledProcessError :
         log.error("failed to call 'git rev-parse'")
         return None
-    
+
 #-------------------------------------------------------------------------------
 def check_out_of_sync(proj_dir) :
     """check through all branches of the git repo in proj_dir and
