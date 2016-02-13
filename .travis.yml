@@ -109,10 +109,8 @@ script:
     - python fips unset jobs
     - python fips list settings
     # test shared lib (in fips-hello-dep1)
-    # FIXME: shared libs don't compile yet on Linux
-    # - cd ../fips-hello-dep1
-    # - python fips gen
-    # - python fips build
+    - python fips gen
+    - python fips build
 
 
 
