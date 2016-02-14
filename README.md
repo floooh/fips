@@ -14,7 +14,7 @@ http://floooh.github.io/fips/index.html
 - **14-Feb-2016**: fips can now import dependencies pinned to a specific git
   revision (previously only by tag or branch name). Many thanks to fungos
   (https://github.com/fungos) for implementing this! Here's how a specific
-  revision is specific in the fips.yml file:
+  revision is specified in the fips.yml file:
 ```
   imports:
     fips-hello-dep3:
