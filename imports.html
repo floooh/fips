@@ -182,7 +182,7 @@ or Mercurial.</p>
 
 <h3>Importing specific versions</h3>
 
-<p>It is possible to specify a git branch or tag name when defining an import
+<p>It is possible to specify a git branch, tag name or revision when defining an import
 in fips.yml. This is usually a good idea for complex real-world projects 
 since it prevents that a build suddenly breaks because an external dependency
 has had an update that breaks existing code:</p>
@@ -191,14 +191,13 @@ has had an update that breaks existing code:</p>
 <span class="l-Scalar-Plain">imports</span><span class="p-Indicator">:</span>
     <span class="l-Scalar-Plain">my-awesome-lib</span><span class="p-Indicator">:</span>
         <span class="l-Scalar-Plain">git</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">https://github.com/floooh/my-awesome-lib.git</span>
-        <span class="l-Scalar-Plain">branch</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-0.0.1</span></code></pre></div>
+        <span class="l-Scalar-Plain">branch</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-0.0.1</span>
+    <span class="l-Scalar-Plain">my-other-awesome-lib</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">git</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">https://github.com/floooh/my-other-awesome-lib.git</span>
+        <span class="l-Scalar-Plain">rev</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">00f1a6d3</span></code></pre></div>
 
-<p>The &#39;branch:&#39; item can either be a branch or tag name.</p>
-
-<blockquote>
-<p>NOTE: it is currently not possible to pin the import version to a random
-git revision that isn&#39;t tagged</p>
-</blockquote>
+<p>The &#39;branch:&#39; item can either be a branch or tag name.
+The &#39;rev:&#39; item should be a valid commit SHA1 reference.</p>
 
 <h3>Fetching imports</h3>
 
