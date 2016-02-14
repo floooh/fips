@@ -11,6 +11,16 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **14-Feb-2016**: fips can now import dependencies pinned to a specific git
+  revision (previously only by tag or branch name). Many thanks to fungos
+  (https://github.com/fungos) for implementing this! Here's how a specific
+  revision is specific in the fips.yml file:
+    ```
+    imports:
+        fips-hello-dep3:
+            git:    https://github.com/fungos/fips-hello-dep3.git
+            rev:    191f59f0
+    ```
 - **03-Dec-2015**: I have added a new 'no\_auto\_import' policy/feature for
   advanced uses which allows to manually select modules from imported 
   projects. This is more work but can provide a cleaner project layout
