@@ -46,7 +46,7 @@ def clone(fips_dir, url) :
     if not os.path.isdir(proj_dir) :
         git_url = util.get_giturl_from_url(url)
         git_branch = util.get_gitbranch_from_url(url)
-        if git.clone(git_url, git_branch, proj_name, ws_dir) :
+        if git.clone(git_url, git_branch, git.clone_depth, proj_name, ws_dir) :
             # fetch imports
             dep.fetch_imports(fips_dir, proj_dir)
             return True

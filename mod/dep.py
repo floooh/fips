@@ -184,10 +184,22 @@ def _rec_fetch_imports(fips_dir, proj_dir, handled) :
                 dep_ok = False
                 if not os.path.isdir(dep_proj_dir) :
                     # directory did not exist, do a fresh git clone
-                    git_url = imports[dep_proj_name]['git']
-                    git_branch = imports[dep_proj_name]['branch']
-                    if git.clone(git_url, git_branch, dep_proj_name, ws_dir) :
-                        dep_ok = True
+                    dep = imports[dep_proj_name]
+                    git_commit = None if 'rev' not in dep else dep['rev']
+                    if git_commit :
+                        if 'depth' in dep :
+                            # when using rev, we may not want depth because the revision may not be reachable
+                            log.colored(log.YELLOW, "=== 'depth' was ignored because parameter 'rev' is specified.")
+                        dep['depth'] = None
+                    git_depth = git.clone_depth if not git_commit and 'depth' not in dep else dep['depth']
+                    git_url = dep['git']
+                    git_branch = dep['branch']
+                    if git.clone(git_url, git_branch, git_depth, dep_proj_name, ws_dir) :
+                        if git_commit :
+                            log.colored(log.YELLOW, "=== revision: '{}':".format(git_commit))
+                            dep_ok = git.checkout(dep_proj_dir, git_commit)
+                        else :
+                            dep_ok = True
                     else :
                         log.error('failed to git clone {} into {}'.format(git_url, dep_proj_dir))
                 else :
