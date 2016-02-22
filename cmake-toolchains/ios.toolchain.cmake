@@ -11,9 +11,20 @@ set(FIPS_IOS 1)
 set(FIPS_OSX 1)
 set(FIPS_POSIX 1)
 
+# NOTE I'm not sure if those 2 are necessary, it worked for me
+# without, but not for others
+# See:
+# - https://github.com/floooh/fips/pull/112
+# - https://cmake.org/Bug/view.php?id=15329
+set(CMAKE_MACOSX_BUNDLE YES)
+set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
+
+set(CMAKE_SYSTEM_NAME Darwin)
 include(CMakeForceCompiler)
-CMAKE_FORCE_C_COMPILER(gcc GNU)
-CMAKE_FORCE_CXX_COMPILER(g++ GNU)
+CMAKE_FORCE_C_COMPILER(/usr/bin/clang Clang)
+CMAKE_FORCE_CXX_COMPILER(/usr/bin/clang++ Clang)
+set(CMAKE_CXX_COMPILER_WORKS TRUE)
+set(CMAKE_C_COMPILER_WORKS TRUE)
 
 set(CMAKE_OSX_ARCHITECTURES "arm64")
 set(CMAKE_OSX_SYSROOT "iphoneos")
