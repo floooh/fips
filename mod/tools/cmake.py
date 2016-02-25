@@ -42,7 +42,10 @@ def run_gen(cfg, fips_dir, project_dir, build_dir, toolchain_path, defines) :
     :param toolchain:       toolchain path or None
     :returns:               True if cmake returned successful
     """
-    cmdLine = 'cmake -G "{}" -DCMAKE_BUILD_TYPE={}'.format(cfg['generator'], cfg['build_type'])
+    cmdLine = 'cmake'
+    if cfg['generator'] != 'Default' :
+        cmdLine += ' -G "{}"'.format(cfg['generator'])
+    cmdLine += ' -DCMAKE_BUILD_TYPE={}'.format(cfg['build_type'])
     if cfg['build_tool'] == 'ninja' and platform.system() == 'Windows':
         cmdLine += ' -DCMAKE_MAKE_PROGRAM={}'.format(ninja.get_ninja_tool(fips_dir)) 
     if toolchain_path is not None :

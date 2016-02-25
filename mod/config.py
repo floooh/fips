@@ -18,6 +18,7 @@ native_platforms = [
 
 # supported cmake generators
 generators = [
+    'Default',
     'Unix Makefiles',
     'Ninja',
     'Xcode',
@@ -216,17 +217,16 @@ def load(fips_dir, proj_dir, pattern) :
             try :
                 with open(path, 'r') as f :
                     cfg = yaml.load(f)
-
                 folder, fname = os.path.split(path)
 
                 # patch path, folder, and name
                 cfg['path'] = path
                 cfg['folder'] = folder
                 cfg['name'] = os.path.splitext(fname)[0]
-
+                if 'generator' not in cfg :
+                    cfg['generator'] = 'Default'
                 if 'defines' not in cfg :
                     cfg['defines'] = None
-                
                 configs.append(cfg)
             except yaml.error.YAMLError, e:
                 log.error('YML parse error: {}', e.message)
