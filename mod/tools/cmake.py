@@ -45,6 +45,10 @@ def run_gen(cfg, fips_dir, project_dir, build_dir, toolchain_path, defines) :
     cmdLine = 'cmake'
     if cfg['generator'] != 'Default' :
         cmdLine += ' -G "{}"'.format(cfg['generator'])
+    if cfg['generator-platform'] :
+        cmdLine += ' -A "{}"'.format(cfg['generator-platform'])
+    if cfg['generator-toolset'] :
+        cmdLine += ' -T "{}"'.format(cfg['generator-toolset'])
     cmdLine += ' -DCMAKE_BUILD_TYPE={}'.format(cfg['build_type'])
     if cfg['build_tool'] == 'ninja' and platform.system() == 'Windows':
         cmdLine += ' -DCMAKE_MAKE_PROGRAM={}'.format(ninja.get_ninja_tool(fips_dir)) 

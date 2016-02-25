@@ -56,7 +56,7 @@ build_types = [
 default_config = {
     'osx':      'osx-xcode-debug',
     'linux':    'linux-make-debug',
-    'win':      'win64-vs2013-debug',
+    'win':      'win64-vstudio-debug',
 }
 
 #-------------------------------------------------------------------------------
@@ -225,6 +225,10 @@ def load(fips_dir, proj_dir, pattern) :
                 cfg['name'] = os.path.splitext(fname)[0]
                 if 'generator' not in cfg :
                     cfg['generator'] = 'Default'
+                if 'generator-platform' not in cfg :
+                    cfg['generator-platform'] = None
+                if 'generator-toolset' not in cfg :
+                    cfg['generator-toolset'] = None
                 if 'defines' not in cfg :
                     cfg['defines'] = None
                 configs.append(cfg)
