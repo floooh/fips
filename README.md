@@ -11,6 +11,19 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **26-Feb-2016**: cmake generator definition in fips build config files
+is now more flexible by exposing the cmake -A (generator platform) 
+and -T options (generator toolset), there's now also a 'Default' generator
+which lets cmake select the 'best' build file generator for the platform. All this
+together simplifies the version situation with Visual Studio on Windows. 
+Previously, the build config win64-vs2013-debug was used as default config.
+When only VS2015 is installed, generating build files had failed, unless
+the build config win64-vs2015-debug was selected manually. Now there's
+a new generic default config called **win64-vstudio-debug**. This lets
+cmake pick whatever VStudio version is installed. Of course it is still
+possible to pick a specific Visual Studio version with the 'old' build
+configs \*-vs2013-\* and \*-vs2015-\*.
+
 - **14-Feb-2016**: fips can now import dependencies pinned to a specific git
   revision (previously only by tag or branch name). Many thanks to fungos
   (https://github.com/fungos) for implementing this! Here's how a specific
