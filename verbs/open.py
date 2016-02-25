@@ -38,7 +38,7 @@ def run(fips_dir, proj_dir, args) :
         # try to open as Xcode project
         proj = glob.glob(build_dir + '/*.xcodeproj')
         if proj :
-            subprocess.call('open {}'.format(proj[0], shell=True))
+            subprocess.call('open {}'.format(proj[0]), shell=True)
         else :
             # try to open as VS project
             proj = glob.glob(build_dir + '/*.sln')
