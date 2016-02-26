@@ -523,15 +523,115 @@ macro(fips_files files)
 endmacro()
 
 #-------------------------------------------------------------------------------
+#   fips_files_ex(path [globbing expressions ...]
+#       [EXCEPT globbing expressions ...]
+#       [GROUP ide_group]
+#       [NO_RECURSE])
+#
+#   Add files from a path to the current target by using globbing expression.
+#   It also creates and IDE group.
+#
+#   EXCEPT:   globbing expressions on files to exclude
+#   GROUP:    the same as fips_dir GROUP, used for grouping files in a project
+#   NO_RECURSE: do not use GLOB_RECURSE on globbing expressions
+#
+#   Note: fips_dir is used internally, so the current dir will change and you
+#   will be able to more operation on this dir as fips_files().
+#
+macro(fips_files_ex path)
+    set(options NO_RECURSE)
+    set(oneValueArgs GROUP)
+    set(multiValueArgs EXCEPT)
+    CMAKE_PARSE_ARGUMENTS(_fd "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    if (_fg_UNPARSED_ARGUMENTS)
+        message(FATAL_ERROR "fips_files_ex(): called with invalid args '${_fg_UNPARSED_ARGUMENTS}'")
+    endif()
+
+    if (NOT _bs_GROUP)
+        set(_bs_GROUP ".")
+    else()
+        #message(STATUS "Group: found ${_bs_GROUP}")
+    endif()
+
+    set(path "./${path}/")
+    file(TO_CMAKE_PATH ${path} path)
+    #message(STATUS "Path: ${path} - ${CMAKE_CURRENT_SOURCE_DIR}/${path}")
+
+    set(ARG_LIST ${ARGV})
+    list(REMOVE_AT ARG_LIST 0)
+    #message(STATUS "ARGS: ${ARG_LIST}")
+
+    set(_fd_FILE_LIST "")
+    foreach (_fd_glob_expr ${ARG_LIST})
+        #message(STATUS "Glob: ${path}/${_fd_glob_expr}")
+        if (_fd_NO_RECURSE)
+            file(GLOB _fd_TMP RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/${path} "${path}/${_fd_glob_expr}")
+            #message(STATUS ${_fd_TMP})
+        else()
+            file(GLOB_RECURSE _fd_TMP RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/${path} "${path}/${_fd_glob_expr}")
+            #message(STATUS ${_fd_TMP})
+        endif()
+        list(APPEND _fd_FILE_LIST ${_fd_TMP})
+    endforeach()
+    #message(STATUS "${_fd_FILE_LIST}")
+
+    if (_fd_EXCEPT)
+        set(_fd_EXCEPT_FILE_LIST "")
+        foreach (_fd_glob_expr ${_fd_EXCEPT})
+            #message(STATUS "Except Glob: ${path}/${_fd_glob_expr}")
+            if (_fd_NO_RECURSE)
+                file(GLOB _fd_TMP RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/${path} "${path}/${_fd_glob_expr}")
+                #message(STATUS ${_fd_TMP})
+            else()
+                file(GLOB_RECURSE _fd_TMP RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/${path} "${path}/${_fd_glob_expr}")
+                #message(STATUS ${_fd_TMP})
+            endif()
+            list(APPEND _fd_EXCEPT_FILE_LIST ${_fd_TMP})
+        endforeach()
+        #message(STATUS "Remove: ${_fd_EXCEPT_FILE_LIST}")
+        list(LENGTH _fd_EXCEPT_FILE_LIST _has_files)
+        if (_has_files)
+            list(REMOVE_ITEM _fd_FILE_LIST ${_fd_EXCEPT_FILE_LIST})
+        endif()
+    endif()
+    #message(STATUS "Result: ${_fd_FILE_LIST}")
+
+    fips_dir(${path} GROUP ${_fd_GROUP})
+    fips_files(${_fd_FILE_LIST})
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_src(path [globbing expressions ...]
+#       [EXCEPT globbing expressions ...]
+#       [GROUP ide_group]
+#       [NO_RECURSE])
+#
+#   Enter a source code subdirectory and collect C/C++ source and header files
+#   (*.c, *.cc, *.cpp, *.h, *.hh, *.hpp)
+#   Note that Objective-C aren't automatically considered, for these files use
+#   fips_files() or fips_files_ex().
+#
+#   EXCEPT:   globbing expressions on files to exclude
+#   GROUP:    the same as fips_dir GROUP, used for grouping files in a project
+#   NO_RECURSE: do not use GLOB_RECURSE on globbing expressions
+#
+#   Note: fips_dir is used internally, so the current dir will change and you
+#   will be able to more operation on this dir as fips_files().
+#
+macro(fips_src path)
+    fips_files_ex(${path} *.c *.cc *.cpp *.h *.hh *.hpp ${ARGV})
+endmacro()
+
+#-------------------------------------------------------------------------------
 #   fips_generate(FROM input_file
 #       [TYPE generator_type]
 #       [SOURCE output_source]
 #       [HEADER output_header]
 #       [ARGS args_in_yaml_format]
 #       [REQUIRES target]
-#       [OUT_OF_SOURCE]
+#       [OUT_OF_SOURCE])
 #
-#   Generic one C/C++ source/header pair from an input definition file
+#   Generate one C/C++ source/header pair from an input definition file
 #   by running a python generator script.
 #
 #   FROM:     name of an input file to be processed
