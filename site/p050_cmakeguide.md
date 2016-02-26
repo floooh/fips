@@ -200,6 +200,47 @@ The following file extensions are recognized by the build process:
 
 fips\_files() must be called inside a module, lib, or app definition block.
 
+#### fips\_files\_ex(dir glob... [EXCEPT glob...] [GROUP ide_group] [NO_RECURSE])
+
+Like fips\_dir(), but will also do a fips\_files() with files found in a directory
+that match an expression fro the glob expression list excluding any file that
+is in the `EXCEPT` glob expression list. You can use `NO_RECURSE` so it will not
+search files in subdirectories. 
+
+To add all files contained in a folder but excluding some types to the group 
+"everything":
+
+{% highlight cmake %}
+fips_files_ex(src/ *.* EXCEPT *.rc *.txt GROUP "everything")
+{% endhighlight %}
+
+Or, if you do want only Objective-C sources for example:
+
+{% highlight cmake %}
+fips_files_ex(src/ *.m *.mm GROUP "ObjC")
+{% endhighlight %}
+
+Note: You should avoid using this as CMake will not be able to detect when files
+are added or removed to the filesystem and consequently will not be able to 
+reconfigure the project. A good use of this is if it can help porting libraries 
+to fips.
+
+fips\_files\_ex() must be called inside a module, lib, or app definition block.
+
+#### fips\_src(dir glob... [EXCEPT glob...] [GROUP ide_group] [NO_RECURSE])
+
+Same as fips\_files\_ex() but with a default list of expressions valid for C/C++
+projects: *.c *.cc *.cpp *.h *.hh *.hpp
+
+So you can easily add any C/C++ sources from the directory "src/" to the project
+as simply as:
+
+{% highlight cmake %}
+fips_src(src)
+{% endhighlight %}
+
+fips\_src() must be called inside a module, lib, or app definition block.
+
 #### fips\_deps(dep ...)
 
 Add module or lib dependencies to the current fips app, module or lib. A
