@@ -130,7 +130,7 @@ After a fips\_begin\_app() the following fips macros are valid:
 
 This finishes a fips\_begin\_app() block.
 
-#### fips\_dir(dir [GROUP ide_group])
+#### fips\_dir(dir [GROUP ide\_group])
 
 Defines a source code subdirectory for the following fips\_files() statements.
 This is only necessary if source files are located in subdirectories of the
@@ -200,7 +200,7 @@ The following file extensions are recognized by the build process:
 
 fips\_files() must be called inside a module, lib, or app definition block.
 
-#### fips\_files\_ex(dir glob... [EXCEPT glob...] [GROUP ide_group] [NO_RECURSE])
+#### fips\_files\_ex(dir glob... \[EXCEPT glob...\] \[GROUP ide\_group\] \[NO\_RECURSE\])
 
 Like fips\_dir(), but will also do a fips\_files() with files found in a directory
 that match an expression fro the glob expression list excluding any file that
@@ -227,7 +227,7 @@ to fips.
 
 fips\_files\_ex() must be called inside a module, lib, or app definition block.
 
-#### fips\_src(dir glob... [EXCEPT glob...] [GROUP ide_group] [NO_RECURSE])
+#### fips\_src(dir glob... \[EXCEPT glob...\] \[GROUP ide\_group\] \[NO\_RECURSE\])
 
 Same as fips\_files\_ex() but with a default list of expressions valid for C/C++
 projects: *.c *.cc *.cpp *.h *.hh *.hpp
