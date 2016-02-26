@@ -301,6 +301,41 @@ files with file extensions that cmake doesn&#39;t know how to build.</p>
 
 <p>fips_files() must be called inside a module, lib, or app definition block.</p>
 
+<h4>fips_files_ex(dir glob... [EXCEPT glob...] [GROUP ide_group] [NO_RECURSE])</h4>
+
+<p>Like fips_dir(), but will also do a fips_files() with files found in a directory
+that match an expression fro the glob expression list excluding any file that
+is in the <code>EXCEPT</code> glob expression list. You can use <code>NO_RECURSE</code> so it will not
+search files in subdirectories. </p>
+
+<p>To add all files contained in a folder but excluding some types to the group 
+&quot;everything&quot;:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_files_ex</span><span class="p">(</span><span class="s">src/</span> <span class="s">*.*</span> <span class="s">EXCEPT</span> <span class="s">*.rc</span> <span class="s">*.txt</span> <span class="s">GROUP</span> <span class="s2">&quot;everything&quot;</span><span class="p">)</span></code></pre></div>
+
+<p>Or, if you do want only Objective-C sources for example:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_files_ex</span><span class="p">(</span><span class="s">src/</span> <span class="s">*.m</span> <span class="s">*.mm</span> <span class="s">GROUP</span> <span class="s2">&quot;ObjC&quot;</span><span class="p">)</span></code></pre></div>
+
+<p>Note: You should avoid using this as CMake will not be able to detect when files
+are added or removed to the filesystem and consequently will not be able to 
+reconfigure the project. A good use of this is if it can help porting libraries 
+to fips.</p>
+
+<p>fips_files_ex() must be called inside a module, lib, or app definition block.</p>
+
+<h4>fips_src(dir glob... [EXCEPT glob...] [GROUP ide_group] [NO_RECURSE])</h4>
+
+<p>Same as fips_files_ex() but with a default list of expressions valid for C/C++
+projects: *.c *.cc *.cpp *.h *.hh *.hpp</p>
+
+<p>So you can easily add any C/C++ sources from the directory &quot;src/&quot; to the project
+as simply as:</p>
+
+<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_src</span><span class="p">(</span><span class="s">src</span><span class="p">)</span></code></pre></div>
+
+<p>fips_src() must be called inside a module, lib, or app definition block.</p>
+
 <h4>fips_deps(dep ...)</h4>
 
 <p>Add module or lib dependencies to the current fips app, module or lib. A
