@@ -203,7 +203,7 @@ fips\_files() must be called inside a module, lib, or app definition block.
 #### fips\_files\_ex(dir glob... \[EXCEPT glob...\] \[GROUP ide\_group\] \[NO\_RECURSE\])
 
 Like fips\_dir(), but will also do a fips\_files() with files found in a directory
-that match an expression fro the glob expression list excluding any file that
+that match an expression from the glob expression list excluding any file that
 is in the `EXCEPT` glob expression list. You can use `NO_RECURSE` so it will not
 search files in subdirectories. 
 
