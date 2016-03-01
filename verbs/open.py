@@ -21,7 +21,7 @@ def run(fips_dir, proj_dir, args) :
         cfg_name = args[0]
     if not cfg_name :
         cfg_name = settings.get(proj_dir, 'config')
-        
+
     # check the cmake generator of this config
     configs = config.load(fips_dir, proj_dir, cfg_name)
     if configs :
@@ -34,18 +34,25 @@ def run(fips_dir, proj_dir, args) :
         if not os.path.isdir(build_dir) :
             log.warn("build dir not found, generating...")
             project.gen(fips_dir, proj_dir, cfg['name'])
-        
+
         # try to open as Xcode project
         proj = glob.glob(build_dir + '/*.xcodeproj')
         if proj :
-            subprocess.call('open {}'.format(proj[0]), shell=True)
-        else :
-            # try to open as VS project
-            proj = glob.glob(build_dir + '/*.sln')
-            if proj :
-                subprocess.call('cmd /c start {}'.format(proj[0]), shell=True)
-            else :
-                log.error("don't know how to open a '{}' project".format(cfg['generator']))
+            subprocess.call('open "{}"'.format(proj[0]), shell=True)
+            return
+        # try to open as VS project
+        proj = glob.glob(build_dir + '/*.sln')
+        if proj :
+            subprocess.call('cmd /c start {}'.format(proj[0]), shell=True)
+            return
+        # try to open as eclipse project
+        proj = glob.glob(build_dir + '/.cproject')
+        if proj :
+            subprocess.call('eclipse -nosplash --launcher.timeout 60 -application org.eclipse.cdt.managedbuilder.core.headlessbuild -import "{}"'.format(build_dir), shell=True)
+            subprocess.call('eclipse', shell=True)
+            return
+
+        log.error("don't know how to open a '{}' project in {}".format(cfg['generator'], build_dir))
     else :
         log.error("config '{}' not found".format(cfg_name))
 
