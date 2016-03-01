@@ -129,7 +129,12 @@ macro(fips_setup)
     message("FIPS_CONFIG: ${FIPS_CONFIG}")
 
     # Eclipse: Disable linked resources because Eclipse may get confused by these linked resources
-    set(CMAKE_ECLIPSE_GENERATE_LINKED_RESOURCES OFF)
+    if (${CMAKE_GENERATOR} MATCHES "Eclipse CDT4")
+        set(CMAKE_ECLIPSE_GENERATE_LINKED_RESOURCES OFF)
+        set(CMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT ON)
+        set(CMAKE_ECLIPSE_VERSION "4.3" CACHE STRING "Eclipse version")
+        set(CMAKE_CXX_COMPILER_ARG1 "-std=c++11" CACHE STRING "C++ version for Eclipse")
+    endif()
 
     # manually include "toolchain" files for non-crosscompiling scenarios
     if (NOT CMAKE_TOOLCHAIN_FILE)
