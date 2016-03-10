@@ -94,7 +94,7 @@ def update_android_sdk(fips_dir, proj_dir) :
         cmd = '{}/tools/android.bat update sdk -f -u --all --filter tools,platform-tools,build-tools-19.1.0,android-19'.format(get_androidsdk_dir(fips_dir))
     else :
         cmd = 'sh {}/tools/android update sdk -f -u --all --filter tools,platform-tools,build-tools-19.1.0,android-19'.format(get_androidsdk_dir(fips_dir))
-    print cmd
+    print(cmd)
     subprocess.call(cmd, cwd=fips_dir, shell=True)
 
 #-------------------------------------------------------------------------------

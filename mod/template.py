@@ -3,7 +3,7 @@
 import os
 from string import Template
 
-import log, util
+from mod import log, util
 
 #-------------------------------------------------------------------------------
 def write_git_ignore(proj_dir, entries) :

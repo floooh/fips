@@ -343,7 +343,7 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
                     cmd_line += ' ' + ' '.join(target_args)
                 try:
                     retcode = subprocess.call(args=cmd_line, cwd=target_cwd, shell=True)
-                except OSError, e:
+                except OSError as e:
                     log.error("Failed to execute '{}' with '{}'".format(target_name, e.strerror))
     else :
         log.error("No valid configs found for '{}'".format(cfg_name))
