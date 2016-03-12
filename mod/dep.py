@@ -249,7 +249,7 @@ def gather_imports(fips_dir, proj_dir) :
             imports = deps[proj_name]['imports']
             exports = deps[proj_name]['exports']
             # for each imported project:
-            for imp_proj_name in imports :
+            for imp_proj_name in sorted(imports) :
                 
                 imported[imp_proj_name] = {}
                 imported[imp_proj_name]['modules'] = OrderedDict()
