@@ -232,7 +232,7 @@ def load(fips_dir, proj_dir, pattern) :
                 if 'defines' not in cfg :
                     cfg['defines'] = None
                 configs.append(cfg)
-            except yaml.error.YAMLError, e:
+            except yaml.error.YAMLError as e:
                 log.error('YML parse error: {}', e.message)
     return configs
 

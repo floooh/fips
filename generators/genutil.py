@@ -12,7 +12,7 @@ def error(msg) :
     '''
     Just print a simple error message and return with error code 10.
     '''
-    print "ERROR: {}".format(msg)
+    print("ERROR: {}".format(msg))
     sys.exit(10)
 
 #-------------------------------------------------------------------------------
@@ -29,9 +29,9 @@ def fmtError(msg, terminate=True) :
     and return with error code 10.
     '''
     if platform.system() == 'Windows' :
-        print '{}({}): error: {}'.format(FilePath, LineNumber + 1, msg)
+        print('{}({}): error: {}'.format(FilePath, LineNumber + 1, msg))
     else :
-        print '{}:{}: error: {}\n'.format(FilePath, LineNumber + 1, msg)
+        print('{}:{}: error: {}\n'.format(FilePath, LineNumber + 1, msg))
     if terminate:
         sys.exit(10)
 
@@ -41,9 +41,9 @@ def fmtWarning(msg) :
     Print an warning message formatted so that IDEs can parse them.
     '''
     if platform.system() == 'Windows' :
-        print '{}({}): warning: {}'.format(FilePath, LineNumber + 1, msg)
+        print('{}({}): warning: {}'.format(FilePath, LineNumber + 1, msg))
     else :
-        print '{}:{}: warning: {}\n'.format(FilePath, LineNumber + 1, msg)
+        print('{}:{}: warning: {}\n'.format(FilePath, LineNumber + 1, msg))
 
 #-------------------------------------------------------------------------------
 def fileVersionDirty(filePath, version) :
