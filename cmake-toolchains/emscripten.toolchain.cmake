@@ -31,6 +31,24 @@ elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
     set(EMSC_EMSDK_DIRNAME "../fips-sdks/linux/emsdk_portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
 endif()
 
+# find the emscripten SDK and set the "EMSC_HAS_LOCAL_CONFIG" variable
+macro(find_emscripten_sdk)
+    # first check for the official EMSDK, this does not allow to override
+    # the location of the .emscripten config file
+    get_filename_component(EMSCRIPTEN_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}/../${EMSC_EMSDK_DIRNAME}" ABSOLUTE)
+    if (EXISTS "${EMSCRIPTEN_ROOT_PATH}/emcc")
+        message("Emscripten SDK found (emsdk): ${EMSCRIPTEN_ROOT_PATH}")
+    else()
+        message(FATAL_ERROR "Could not find emscripten SDK! Please run 'fips setup emscripten'!")
+    endif()
+endmacro()
+
+# find the emscripten SDK
+find_emscripten_sdk()
+
+# Normalize, convert Windows backslashes to forward slashes or CMake will crash.
+get_filename_component(EMSCRIPTEN_ROOT_PATH "${EMSCRIPTEN_ROOT_PATH}" ABSOLUTE)
+
 set(FIPS_PLATFORM EMSCRIPTEN)
 set(FIPS_PLATFORM_NAME "emsc")
 set(FIPS_EMSCRIPTEN 1)
@@ -47,6 +65,7 @@ set(FIPS_EMSCRIPTEN_LTO_LEVEL 1 CACHE STRING "emscripten: Link-time-optimization
 set(FIPS_EMSCRIPTEN_OUTLINING_LIMIT 60000 CACHE STRING "emscripten: outlining limit")
 set(FIPS_EMSCRIPTEN_MEM_INIT_METHOD 1 CACHE STRING "emscripten: how to represent initial memory content (0..2)")
 set(FIPS_EMSCRIPTEN_EXPORTED_FUNCTIONS "['_main','_enter_fullscreen','_enter_soft_fullscreen']" CACHE STRING "emscripten: exported C function names")
+set(FIPS_EMSCRIPTEN_SHELL_HTML "${EMSCRIPTEN_ROOT_PATH}/src/shell_minimal.html" CACHE STRING "emscripten: path to shell html file")
 
 # memory-init-method also needs the --memory-init-file option
 if (${FIPS_EMSCRIPTEN_MEM_INIT_METHOD} STREQUAL 1)
@@ -123,6 +142,9 @@ else()
     set(EMSCRIPTEN_WASM_FLAGS "")
 endif()
 
+# shell.html file
+set(EMSCRIPTEN_SHELL_FLAGS "--shell-file ${FIPS_EMSCRIPTEN_SHELL_HTML}")
+
 message("FIPS_EMSCRIPTEN_TOTAL_MEMORY: ${FIPS_EMSCRIPTEN_TOTAL_MEMORY}")
 message("FIPS_EMSCRIPTEN_LTO_LEVEL: ${FIPS_EMSCRIPTEN_LTO_LEVEL}")
 message("FIPS_EMSCRIPTEN_OUTLINING_LIMIT: ${FIPS_EMSCRIPTEN_OUTLINING_LIMIT}")
@@ -130,6 +152,7 @@ message("FIPS_EMSCRIPTEN_MEM_INIT_METHOD: ${FIPS_EMSCRIPTEN_MEM_INIT_METHOD}")
 message("FIPS_EMSCRIPTEN_USE_WASM: ${FIPS_EMSCRIPTEN_USE_WASM}")
 message("FIPS_EMSCRIPTEN_USE_WASM_ASMJS: ${FIPS_EMSCRIPTEN_USE_WASM_ASMJS}")
 message("FIPS_EMSCRIPTEN_EXPORTED_FUNCTIONS: ${FIPS_EMSCRIPTEN_EXPORTED_FUNCTIONS}")
+message("FIPS_EMSCRIPTEN_SHELL_HTML: ${FIPS_EMSCRIPTEN_SHELL_HTML}")
 message("EMSCRIPTEN_TOTAL_MEMORY_WORKER: ${EMSCRIPTEN_TOTAL_MEMORY_WORKER}")
 message("EMSCRIPTEN_USE_CLOSURE: ${EMSCRIPTEN_USE_CLOSURE}")
 message("EMSCRIPTEN_ASSERTIONS: ${EMSCRIPTEN_ASSERTIONS}")
@@ -143,24 +166,6 @@ set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_VERSION 1)
 set(COMPILING on)
 set(CMAKE_CROSSCOMPILING TRUE)
-
-# find the emscripten SDK and set the "EMSC_HAS_LOCAL_CONFIG" variable
-macro(find_emscripten_sdk)
-    # first check for the official EMSDK, this does not allow to override
-    # the location of the .emscripten config file
-    get_filename_component(EMSCRIPTEN_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}/../${EMSC_EMSDK_DIRNAME}" ABSOLUTE)
-    if (EXISTS "${EMSCRIPTEN_ROOT_PATH}/emcc")
-        message("Emscripten SDK found (emsdk): ${EMSCRIPTEN_ROOT_PATH}")
-    else()
-        message(FATAL_ERROR "Could not find emscripten SDK! Please run 'fips setup emscripten'!")
-    endif()
-endmacro()
-
-# find the emscripten SDK
-find_emscripten_sdk()
-
-# Normalize, convert Windows backslashes to forward slashes or CMake will crash.
-get_filename_component(EMSCRIPTEN_ROOT_PATH "${EMSCRIPTEN_ROOT_PATH}" ABSOLUTE)
 
 # Find the .emscripten file and cache, this is either setup locally in the
 # emscripten SDK (this is the preferred way and used by 'fips setup emscripten',
@@ -230,7 +235,7 @@ set(CMAKE_C_FLAGS_DEBUG "${EMSCRIPTEN_OPT} -g -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1"
 set(CMAKE_C_FLAGS_PROFILING "${EMSCRIPTEN_OPT} -DNDEBUG --profiling")
 
 # linker flags
-set(CMAKE_EXE_LINKER_FLAGS "${EMSCRIPTEN_CONFIG_OPTION} ${EMSCRIPTEN_CACHE_OPTION} ${EMSCRIPTEN_TRACING_OPTION} --memory-init-file ${EMSCRIPTEN_MEMORY_INIT_FLAG} -s MEM_INIT_METHOD=${FIPS_EMSCRIPTEN_MEM_INIT_METHOD} -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s TOTAL_MEMORY=${FIPS_EMSCRIPTEN_TOTAL_MEMORY} -s EXPORTED_FUNCTIONS=\"${FIPS_EMSCRIPTEN_EXPORTED_FUNCTIONS}\" -s DISABLE_EXCEPTION_CATCHING=${EMSCRIPTEN_DISABLE_EXCEPTION_CATCHING} -s NO_FILESYSTEM=${EMSCRIPTEN_NO_FILESYSTEM} -s ELIMINATE_DUPLICATE_FUNCTIONS=${EMSCRIPTEN_DFE} -s ELIMINATE_DUPLICATE_FUNCTIONS_DUMP_EQUIVALENT_FUNCTIONS=${EMSCRIPTEN_DFE_DUMP} -s SAFE_HEAP=${EMSCRIPTEN_SAFE_HEAP} -s NO_EXIT_RUNTIME=1 ${EMSCRIPTEN_WASM_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "${EMSCRIPTEN_CONFIG_OPTION} ${EMSCRIPTEN_CACHE_OPTION} ${EMSCRIPTEN_TRACING_OPTION} --memory-init-file ${EMSCRIPTEN_MEMORY_INIT_FLAG} -s MEM_INIT_METHOD=${FIPS_EMSCRIPTEN_MEM_INIT_METHOD} -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s TOTAL_MEMORY=${FIPS_EMSCRIPTEN_TOTAL_MEMORY} -s EXPORTED_FUNCTIONS=\"${FIPS_EMSCRIPTEN_EXPORTED_FUNCTIONS}\" -s DISABLE_EXCEPTION_CATCHING=${EMSCRIPTEN_DISABLE_EXCEPTION_CATCHING} -s NO_FILESYSTEM=${EMSCRIPTEN_NO_FILESYSTEM} -s ELIMINATE_DUPLICATE_FUNCTIONS=${EMSCRIPTEN_DFE} -s ELIMINATE_DUPLICATE_FUNCTIONS_DUMP_EQUIVALENT_FUNCTIONS=${EMSCRIPTEN_DFE_DUMP} -s SAFE_HEAP=${EMSCRIPTEN_SAFE_HEAP} -s NO_EXIT_RUNTIME=1 ${EMSCRIPTEN_WASM_FLAGS} ${EMSCRIPTEN_SHELL_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${EMSCRIPTEN_OPT} --llvm-lto ${FIPS_EMSCRIPTEN_LTO_LEVEL} -s VERBOSE=${EMSCRIPTEN_BUILD_VERBOSE} -s ASSERTIONS=${EMSCRIPTEN_ASSERTIONS} -s OUTLINING_LIMIT=${FIPS_EMSCRIPTEN_OUTLINING_LIMIT} --closure ${EMSCRIPTEN_USE_CLOSURE}")
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${EMSCRIPTEN_OPT} -g -s VERBOSE=${EMSCRIPTEN_BUILD_VERBOSE}")
 set(CMAKE_EXE_LINKER_FLAGS_PROFILING "--profiling ${EMSCRIPTEN_OPT} --llvm-lto ${FIPS_EMSCRIPTEN_LTO_LEVEL} -s VERBOSE=${EMSCRIPTEN_BUILD_VERBOSE} -s ASSERTIONS=${EMSCRIPTEN_ASSERTIONS} -s OUTLINING_LIMIT=${FIPS_EMSCRIPTEN_OUTLINING_LIMIT}")
