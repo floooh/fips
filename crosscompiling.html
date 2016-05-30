@@ -122,9 +122,9 @@ other target platforms are supported on all 3 host platforms (OSX, Linux, Window
 <p>Fips provides simple commands to setup the SDKs for Android, emscripten and
 PNaCl:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips setup emscripten
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips setup emscripten
 &gt; ./fips setup nacl
-&gt; ./fips setup android</code></pre></div>
+&gt; ./fips setup android</code></pre></figure>
 
 <p>This will download, unpack and setup the respective SDKs into a directory
 <em>fips-sdks</em> next to the fips directory.</p>
@@ -136,8 +136,8 @@ PNaCl:</p>
 <p>You should also run &#39;fips diag tools&#39; to make sure that all required
 tools are in the path:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips diag tools
-...</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips diag tools
+...</code></pre></figure>
 
 <h3>Testing cross-compilation</h3>
 
@@ -145,15 +145,15 @@ tools are in the path:</p>
 PNaCl this is a bit non-trivial (e.g. the canonical C &#39;Hello World&#39; doesn&#39;t
 work). Let&#39;s use the Oryol 3D engine for testing:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips clone oryol
-&gt; <span class="nb">cd</span> ../oryol</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips clone oryol
+&gt; <span class="nb">cd</span> ../oryol</code></pre></figure>
 
 <p>First let&#39;s try whether <strong>emscripten</strong> compilation works:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">set </span>config emsc-make-release
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">set </span>config emsc-make-release
 &gt; ./fips build
 ...
-&gt; ./fips run Triangle</code></pre></div>
+&gt; ./fips run Triangle</code></pre></figure>
 
 <p>The last command should open the default web browser and a local http server.
 It may be necessary to refresh the page in case the http server needs too long
@@ -161,10 +161,10 @@ to start.</p>
 
 <p>Cross-compiling to <strong>PNaCl</strong> is just as easy, just use a different config:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">set </span>config pnacl-make-release
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">set </span>config pnacl-make-release
 &gt; ./fips build
 ...
-&gt; ./fips run Triangle</code></pre></div>
+&gt; ./fips run Triangle</code></pre></figure>
 
 <p>Same for <strong>Android</strong>, note that Android provides 3 types of config, one for each
 CPU type. &#39;Running&#39; an Android will only deploy the application to the device,
@@ -174,19 +174,19 @@ after that it must be started manually.</p>
 <p>NOTE: &#39;./fips run&#39; for Android is not implemented yet</p>
 </blockquote>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips build android-make-release
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips build android-make-release
 &gt; ./fips build androidx86-make-release
 &gt; ./fips build androidmips-make-release
 
-&gt; NOTE: Android MIPS is not yet fully supported on Oryol!</code></pre></div>
+&gt; NOTE: Android MIPS is not yet fully supported on Oryol!</code></pre></figure>
 
 <p>Finally iOS: this works a bit differently since iOS compiling and debugging
 works best directly in Xcode. Instead of a command line build, we only 
 generate the Xcode project files, and then start Xcode:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">set </span>config ios-xcode-debug
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">set </span>config ios-xcode-debug
 &gt; ./fips gen
-&gt; ./fips open</code></pre></div>
+&gt; ./fips open</code></pre></figure>
 
 <p>Once in Xcode, the samples can be compiled and debugged either in the simulator
 or on a real device (provided Xcode is properly setup for iOS development).</p>

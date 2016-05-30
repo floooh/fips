@@ -255,7 +255,7 @@ an explicit group name (or path) can be defined.</p>
 <p>This is the default usage of fips_dir, without explicitely overriding
 the IDE group name:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">android</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">android</span><span class="p">)</span></code></pre></figure>
 
 <p>This would switch the &#39;current source directory&#39; to a subdirectory named
 &#39;android&#39;, and in IDEs these files will be grouped under a folder &#39;android&#39;
@@ -264,21 +264,21 @@ in the file explorer.</p>
 <p>To switch back to the root directory (where the CMakeLists.txt file is located),
 just pass a . as argument:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">.</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">.</span><span class="p">)</span></code></pre></figure>
 
 <p>The following example groups files in a very deep directory hierarchy
 under a short group name &quot;include&quot;:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&quot;include&quot;</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&quot;include&quot;</span><span class="p">)</span></code></pre></figure>
 
 <p>A GROUP argument can also contain slashes to define a whole group path:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&quot;engine/include&quot;</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&quot;engine/include&quot;</span><span class="p">)</span></code></pre></figure>
 
 <p>Finally, to not put the files into any IDE group folder, pass a 
 &quot;.&quot; as special GROUP argument:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span></code></pre></figure>
 
 <p>fips_dir() must be called inside a module, lib, or app definition block.</p>
 
@@ -304,18 +304,18 @@ files with file extensions that cmake doesn&#39;t know how to build.</p>
 <h4>fips_files_ex(dir glob... [EXCEPT glob...] [GROUP ide_group] [NO_RECURSE])</h4>
 
 <p>Like fips_dir(), but will also do a fips_files() with files found in a directory
-that match an expression fro the glob expression list excluding any file that
+that match an expression from the glob expression list excluding any file that
 is in the <code>EXCEPT</code> glob expression list. You can use <code>NO_RECURSE</code> so it will not
 search files in subdirectories. </p>
 
 <p>To add all files contained in a folder but excluding some types to the group 
 &quot;everything&quot;:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_files_ex</span><span class="p">(</span><span class="s">src/</span> <span class="s">*.*</span> <span class="s">EXCEPT</span> <span class="s">*.rc</span> <span class="s">*.txt</span> <span class="s">GROUP</span> <span class="s2">&quot;everything&quot;</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_files_ex</span><span class="p">(</span><span class="s">src/</span> <span class="s">*.*</span> <span class="s">EXCEPT</span> <span class="s">*.rc</span> <span class="s">*.txt</span> <span class="s">GROUP</span> <span class="s2">&quot;everything&quot;</span><span class="p">)</span></code></pre></figure>
 
 <p>Or, if you do want only Objective-C sources for example:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_files_ex</span><span class="p">(</span><span class="s">src/</span> <span class="s">*.m</span> <span class="s">*.mm</span> <span class="s">GROUP</span> <span class="s2">&quot;ObjC&quot;</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_files_ex</span><span class="p">(</span><span class="s">src/</span> <span class="s">*.m</span> <span class="s">*.mm</span> <span class="s">GROUP</span> <span class="s2">&quot;ObjC&quot;</span><span class="p">)</span></code></pre></figure>
 
 <p>Note: You should avoid using this as CMake will not be able to detect when files
 are added or removed to the filesystem and consequently will not be able to 
@@ -332,7 +332,7 @@ projects: *.c *.cc *.cpp *.h *.hh *.hpp</p>
 <p>So you can easily add any C/C++ sources from the directory &quot;src/&quot; to the project
 as simply as:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_src</span><span class="p">(</span><span class="s">src</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_src</span><span class="p">(</span><span class="s">src</span><span class="p">)</span></code></pre></figure>
 
 <p>fips_src() must be called inside a module, lib, or app definition block.</p>
 
@@ -427,21 +427,21 @@ file included in the Oryol 3D engine for a complex example.</p>
 a build config YAML file, for instance the following config file
 sets the FIPS_UNITTESTS and FIPS_UNITTESTS_HEADLESS options to ON:</p>
 
-<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
 <span class="l-Scalar-Plain">platform</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">emscripten</span> 
 <span class="l-Scalar-Plain">generator</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Ninja</span> 
 <span class="l-Scalar-Plain">build_tool</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ninja</span>
 <span class="l-Scalar-Plain">build_type</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Debug</span>
 <span class="l-Scalar-Plain">defines</span><span class="p-Indicator">:</span>
     <span class="l-Scalar-Plain">FIPS_UNITTESTS</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ON</span>
-    <span class="l-Scalar-Plain">FIPS_UNITTESTS_HEADLESS</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ON</span></code></pre></div>
+    <span class="l-Scalar-Plain">FIPS_UNITTESTS_HEADLESS</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ON</span></code></pre></figure>
 
 <h3>CMakeLists.txt Samples</h3>
 
 <p>Here&#39;s a very simple root CMakeLists.txt file from the <em>fips-hello-world</em>
 sample project:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8</span><span class="p">)</span>
 
 <span class="c"># include the fips main cmake file</span>
 <span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FIPS_ROOT_DIR</span> <span class="s2">&quot;../fips&quot;</span> <span class="s">ABSOLUTE</span><span class="p">)</span>
@@ -450,19 +450,19 @@ sample project:</p>
 <span class="nb">fips_setup</span><span class="p">()</span>
 <span class="nb">fips_project</span><span class="p">(</span><span class="s">fips-hello-world</span><span class="p">)</span>
 <span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">src</span><span class="p">)</span>
-<span class="nb">fips_finish</span><span class="p">()</span></code></pre></div>
+<span class="nb">fips_finish</span><span class="p">()</span></code></pre></figure>
 
 <p>The <em>src</em> subdirectory contains the CMakeLists.txt file which defines
 the actual appliction:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_begin_app</span><span class="p">(</span><span class="s">hello</span> <span class="s">cmdline</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_begin_app</span><span class="p">(</span><span class="s">hello</span> <span class="s">cmdline</span><span class="p">)</span>
     <span class="nb">fips_files</span><span class="p">(</span><span class="s">hello.cc</span><span class="p">)</span>
     <span class="nb">fips_deps</span><span class="p">(</span><span class="s">dep1</span><span class="p">)</span>
-<span class="nb">fips_end_app</span><span class="p">()</span></code></pre></div>
+<span class="nb">fips_end_app</span><span class="p">()</span></code></pre></figure>
 
 <p>This is a more complex root CMakeLists.txt file from the Oryol 3D engine:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="c">#----------------------------------------------------------</span>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="c">#----------------------------------------------------------</span>
 <span class="c">#   oryol cmake root file</span>
 <span class="c">#</span>
 <span class="c">#   See BUILD.md for details how to build oryol.</span>
@@ -489,13 +489,13 @@ the actual appliction:</p>
    <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s">Samples</span><span class="p">)</span>
    <span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Samples</span><span class="p">)</span>
 <span class="nb">endif</span><span class="p">()</span>
-<span class="nb">fips_finish</span><span class="p">()</span></code></pre></div>
+<span class="nb">fips_finish</span><span class="p">()</span></code></pre></figure>
 
 <p>Next a sample which defines a code module with platform-specific source
 code in subdirectories, and towards the end some dependencies to other
 fips modules:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="c">#----------------------------------------------------------</span>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="c">#----------------------------------------------------------</span>
 <span class="c">#   oryol Input module</span>
 <span class="c">#----------------------------------------------------------</span>
 <span class="nb">fips_begin_module</span><span class="p">(</span><span class="s">Input</span><span class="p">)</span>
@@ -548,12 +548,12 @@ fips modules:</p>
         <span class="nb">fips_deps</span><span class="p">(</span><span class="s">glfw3</span><span class="p">)</span>
     <span class="nb">endif</span><span class="p">()</span>
     <span class="nb">fips_deps</span><span class="p">(</span><span class="s">Core</span> <span class="s">Gfx</span> <span class="s">Time</span><span class="p">)</span>
-<span class="nb">fips_end_module</span><span class="p">()</span></code></pre></div>
+<span class="nb">fips_end_module</span><span class="p">()</span></code></pre></figure>
 
 <p>Finally an example how to wrap a simple C library with a few custom
 C preprocessor defines:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_begin_lib</span><span class="p">(</span><span class="s">zlib</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_begin_lib</span><span class="p">(</span><span class="s">zlib</span><span class="p">)</span>
     <span class="nb">fips_files</span><span class="p">(</span>
         <span class="s">adler32.c</span>
         <span class="s">compress.c</span>
@@ -573,7 +573,7 @@ C preprocessor defines:</p>
     <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_NO_FSEEKO</span><span class="p">)</span>
     <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_CRT_SECURE_NO_DEPRECATE</span><span class="p">)</span>
     <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_CRT_NONSTDC_NO_DEPRECATE</span><span class="p">)</span>
-<span class="nb">fips_end_lib</span><span class="p">(</span><span class="s">zlib</span><span class="p">)</span></code></pre></div>
+<span class="nb">fips_end_lib</span><span class="p">(</span><span class="s">zlib</span><span class="p">)</span></code></pre></figure>
 
   </article>
 

@@ -114,7 +114,7 @@ resets a project into a clean starting state.</p>
 <p>&#39;./fips diag&#39; runs a number of diagnostic tests and provides useful
 error output:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">help </span>diag
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">help </span>diag
 fips diag
 fips diag all
 fips diag fips
@@ -122,13 +122,13 @@ fips diag tools
 fips diag configs
 fips diag imports
     run diagnostics and check <span class="k">for</span> errors
-&gt; _</code></pre></div>
+&gt; _</code></pre></figure>
 
 <p>&#39;./fips diag tools&#39; tests whether additional 3rd party tools are present, 
 and if not found, explains whether the tools are required or optional,
 and what they are needed for.</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips diag <span class="nv">tools</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips diag <span class="nv">tools</span>
 <span class="o">===</span> tools:
 git:    found
 cmake:  found
@@ -139,21 +139,21 @@ xcodebuild: found
 java:   found
 ant:    found
 python2:    found
-&gt; _</code></pre></div>
+&gt; _</code></pre></figure>
 
 <p>&#39;./fips diag fips&#39; simply checks whether fips itself is up-to-date. If 
 not, simply run a &#39;git pull&#39; from within the fips directory to get the
 latest version.</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">===</span> fips:
-  uptodate</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">===</span> fips:
+  uptodate</code></pre></figure>
 
 <p>&#39;./fips diag configs&#39; goes through all existing build config files, checks
 if their content is valid, and whether all required prerequisites are met
 in the current environment to build them (e.g. wether the required build
 tools exist and cross-platform SDKs have been installed):</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips diag <span class="nv">configs</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips diag <span class="nv">configs</span>
 <span class="o">===</span> configs:
 ...
 ios-xcode-debug
@@ -165,7 +165,7 @@ linux-make-debug
 linux-make-release
   <span class="s1">&#39;linux&#39;</span> is not a valid target platform <span class="k">for</span> host <span class="s1">&#39;osx&#39;</span>
 ...
-&gt; _</code></pre></div>
+&gt; _</code></pre></figure>
 
   </article>
 

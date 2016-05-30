@@ -120,11 +120,11 @@ a few examples how the Oryol 3D engine uses code generation:</p>
 
 <p>The <strong>fips_generate</strong> cmake macro is used to tell fips how to generate C/C++ source code:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">input_file</span>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">input_file</span>
               <span class="s">[TYPE</span> <span class="s">generator_type]</span>
               <span class="s">[SOURCE</span> <span class="s">out_source_file]</span>
               <span class="s">[HEADER</span> <span class="s">out_header_file]</span>
-              <span class="s">[ARGS</span> <span class="s">args_as_yaml_string]</span><span class="p">)</span></code></pre></div>
+              <span class="s">[ARGS</span> <span class="s">args_as_yaml_string]</span><span class="p">)</span></code></pre></figure>
 
 <p>Where:</p>
 
@@ -145,7 +145,7 @@ generator script.</li>
 <p>The most usual form to call fips_generate() is to provide only a FROM and TYPE
 argument:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">IOProtocol.yml</span> <span class="s">TYPE</span> <span class="s">MessageProtocol</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">IOProtocol.yml</span> <span class="s">TYPE</span> <span class="s">MessageProtocol</span><span class="p">)</span></code></pre></figure>
 
 <p>This means that the input file <em>IOProtocol.yml</em> is converted by the generator
 <em>MessageProtocol</em> into the output files <em>IOProtocol.cc</em> and <em>IOProtocol.h</em>.</p>
@@ -157,10 +157,10 @@ name as the <em>FROM</em> file.</p>
 <p>To generate output files with different file extensions (or filenames), provide
 them explicitely with the <em>SOURCE</em> and <em>HEADER</em> args, e.g.:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">IOProtocol.yml</span>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">IOProtocol.yml</span>
               <span class="s">TYPE</span> <span class="s">MessageProtocol</span>
               <span class="s">SOURCE</span> <span class="s">IOProtocol.cpp</span>
-              <span class="s">HEADER</span> <span class="s">IOProtocol.hh</span><span class="p">)</span></code></pre></div>
+              <span class="s">HEADER</span> <span class="s">IOProtocol.hh</span><span class="p">)</span></code></pre></figure>
 
 <p>Providing only <strong>one</strong> of <em>SOURCE</em> or <em>HEADER</em> means that the generator
 should only generate either a source file or a header file, but not both.
@@ -169,17 +169,17 @@ one source or one header file.</p>
 
 <p>The following example generates only a source file, but no header:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">MyFile.xml</span> <span class="s">TYPE</span> <span class="s">MySourceGenerator</span> <span class="s">SOURCE</span> <span class="s">MyFile.cc</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">MyFile.xml</span> <span class="s">TYPE</span> <span class="s">MySourceGenerator</span> <span class="s">SOURCE</span> <span class="s">MyFile.cc</span><span class="p">)</span></code></pre></figure>
 
 <p>Likewise, this example only generates a header, but no source:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">MyFile.xml</span> <span class="s">TYPE</span> <span class="s">MyHeaderGenerator</span> <span class="s">HEADER</span> <span class="s">MyFile.h</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">MyFile.xml</span> <span class="s">TYPE</span> <span class="s">MyHeaderGenerator</span> <span class="s">HEADER</span> <span class="s">MyFile.h</span><span class="p">)</span></code></pre></figure>
 
 <p>If the <em>TYPE</em> argument is omitted, the <em>FROM</em> argument must be
 a Python file in the project source tree which is directly called to
 create the output source files:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">spritesheet.py</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">spritesheet.py</span><span class="p">)</span></code></pre></figure>
 
 <p>In this case, the Python script <em>spritesheet.py</em> in the current
 source code location will be called to generate the files
@@ -188,10 +188,10 @@ source code location will be called to generate the files
 <p>It is possible to provide additional arguments to the generator script
 in a YAML-formatted string:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">fs_metaballs.sc</span> 
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">fs_metaballs.sc</span> 
               <span class="s">TYPE</span> <span class="s">BgfxShaderEmbedded</span> 
               <span class="s">HEADER</span> <span class="s">fs_metaballs.bin.h</span> 
-              <span class="s">ARGS</span> <span class="s2">&quot;{ type: fs, bla: blub }&quot;</span><span class="p">)</span></code></pre></div>
+              <span class="s">ARGS</span> <span class="s2">&quot;{ type: fs, bla: blub }&quot;</span><span class="p">)</span></code></pre></figure>
 
 <h3>Writing Generators</h3>
 
@@ -203,20 +203,20 @@ for generator scripts.</p>
 
 <p>Let&#39;s check what generators Oryol has to offer:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; <span class="nb">cd </span>oryol/fips-generators
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; <span class="nb">cd </span>oryol/fips-generators
 &gt; ls *.py
-MessageProtocol.py Shader.py          SoundSheet.py      SpriteSheet.py</code></pre></div>
+MessageProtocol.py Shader.py          SoundSheet.py      SpriteSheet.py</code></pre></figure>
 
 <p>A generator script must contain a Python function called &#39;generate()&#39;,
 which can have the following forms (with or without args):</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># this is called if fips_generate() didn&#39;t have an ARGS argument:</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># this is called if fips_generate() didn&#39;t have an ARGS argument:</span>
 <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span> <span class="p">:</span>
     <span class="o">...</span>
 
 <span class="c"># this is called if fips_generate() was called with ARGS:</span>
 <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="p">:</span>
-    <span class="o">...</span></code></pre></div>
+    <span class="o">...</span></code></pre></figure>
 
 <p>Where:</p>
 
@@ -255,7 +255,7 @@ number doesn&#39;t match.</p>
 
 <p>Let&#39;s have a look at a very simple generator script:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="lineno"> 1</span> <span class="sd">&quot;&quot;&quot;fips imported code generator for testing&quot;&quot;&quot;</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="lineno"> 1</span> <span class="sd">&quot;&quot;&quot;fips imported code generator for testing&quot;&quot;&quot;</span>
 <span class="lineno"> 2</span> 
 <span class="lineno"> 3</span> <span class="n">Version</span> <span class="o">=</span> <span class="mi">2</span> 
 <span class="lineno"> 4</span> 
@@ -280,7 +280,7 @@ number doesn&#39;t match.</p>
 <span class="lineno">23</span> <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span> <span class="p">:</span>
 <span class="lineno">24</span>     <span class="k">if</span> <span class="n">util</span><span class="o">.</span><span class="n">isDirty</span><span class="p">(</span><span class="n">Version</span><span class="p">,</span> <span class="p">[</span><span class="nb">input</span><span class="p">],</span> <span class="p">[</span><span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">])</span> <span class="p">:</span>
 <span class="lineno">25</span>         <span class="n">generateHeader</span><span class="p">(</span><span class="n">out_hdr</span><span class="p">)</span>
-<span class="lineno">26</span>         <span class="n">generateSource</span><span class="p">(</span><span class="n">out_src</span><span class="p">)</span></code></pre></div>
+<span class="lineno">26</span>         <span class="n">generateSource</span><span class="p">(</span><span class="n">out_src</span><span class="p">)</span></code></pre></figure>
 
 <p>Note the <strong>Version = 2</strong> statement in line 3, this is the &#39;generator version&#39;,
 bumping this number will mark all generated source files as dirty and cause
@@ -305,32 +305,32 @@ in this case, no version check will be performed</p>
 
 <p>The generated source files will look like this, first the header:</p>
 
-<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// #version:2#</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="nf">test_func</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// #version:2#</span>
+<span class="k">extern</span> <span class="kt">void</span> <span class="nf">test_func</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span></code></pre></figure>
 
 <p>...and the source file:</p>
 
-<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// #version:2#</span>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// #version:2#</span>
 <span class="cp">#include &lt;stdio.h&gt;</span>
 <span class="kt">void</span> <span class="nf">test_func</span><span class="p">()</span> <span class="p">{</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello from test_func!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>The generator in this example doesn&#39;t actually use an input file since
 it generates the target files without any parameterization. This very special
 case only works with a Python script in the source tree which serves as 
 &#39;input file&#39; and calls the above generator &#39;hello_generator&#39;:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">hello_generator</span> <span class="kn">as</span> <span class="nn">gen</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">hello_generator</span> <span class="kn">as</span> <span class="nn">gen</span>
 
 <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span> <span class="p">:</span>
-    <span class="n">gen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span></code></pre></div>
+    <span class="n">gen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span></code></pre></figure>
 
 <p>The final missing piece is the CMakeLists.txt entry:</p>
 
-<div class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_begin_module</span><span class="p">(</span><span class="s">dep2</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">fips_begin_module</span><span class="p">(</span><span class="s">dep2</span><span class="p">)</span>
     <span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">hello.py</span><span class="p">)</span>
-<span class="nb">fips_end_module</span><span class="p">()</span></code></pre></div>
+<span class="nb">fips_end_module</span><span class="p">()</span></code></pre></figure>
 
 <h3>Under the hood</h3>
 
