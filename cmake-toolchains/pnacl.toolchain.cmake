@@ -72,11 +72,6 @@ message("NACL_LIB: ${NACL_LIB}")
 include_directories(${NACL_INCLUDE} ${NACL_INCLUDE}/pnacl)
 link_directories(${NACL_LIB})
 
-# disable compiler detection
-include(CMakeForceCompiler)
-CMAKE_FORCE_C_COMPILER("${CMAKE_C_COMPILER}" GNU)
-CMAKE_FORCE_CXX_COMPILER("${CMAKE_CXX_COMPILER}" GNU)
-
 # define configurations
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
@@ -85,6 +80,7 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "-lppapi_gles2 -lppapi_cpp -lppapi -lpthread")
 set(CMAKE_C_STANDARD_LIBRARIES "lppapi_gles2 -lppapi -lpthread")
 
 # specify cross-compilers
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 set(CMAKE_C_COMPILER "${NACL_BIN}/pnacl-clang" CACHE PATH "gcc" FORCE)
 set(CMAKE_CXX_COMPILER "${NACL_BIN}/pnacl-clang++" CACHE PATH "g++" FORCE)
 set(CMAKE_AR "${NACL_BIN}/pnacl-ar" CACHE PATH "archive" FORCE)

@@ -199,10 +199,6 @@ else()
     set(EMCC_SUFFIX "")
 endif()
 
-include(CMakeForceCompiler)
-CMAKE_FORCE_C_COMPILER("${CMAKE_C_COMPILER}" Clang)
-CMAKE_FORCE_CXX_COMPILER("${CMAKE_CXX_COMPILER}" Clang)
-
 # define configurations
 set(CMAKE_CONFIGURATION_TYPES Debug Release Profiling)
 
