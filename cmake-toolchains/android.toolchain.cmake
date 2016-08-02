@@ -5,8 +5,6 @@
 #   subdirectory as created by './fips setup android'
 #-------------------------------------------------------------------------------
 
-message("Target Platform: Android")
-
 set(FIPS_PLATFORM ANDROID)
 set(FIPS_PLATFORM_NAME "android")
 set(FIPS_ANDROID 1)
@@ -23,19 +21,15 @@ endif()
 
 # exceptions on/off?
 if (FIPS_EXCEPTIONS)
-    message("C++ exceptions are enabled")
     set(FIPS_ANDROID_EXCEPTION_FLAGS "")
 else()
-    message("C++ exceptions are disabled")
     set(FIPS_ANDROID_EXCEPTION_FLAGS "-fno-exceptions")
 endif()
 
 # RTTI on/off?
 if (FIPS_RTTI)
-    message("C++ RTTI is enabled")
     set(FIPS_ANDROID_RTTI_FLAGS "")
 else()
-    message("C++ RTTI is disabled")
     set(FIPS_ANDROID_RTTI_FLAGS "-fno-rtti")
 endif()
 
@@ -44,8 +38,8 @@ set(ANDROID_CPU "arm" CACHE STRING "Android NDK CPU architecture")
 set_property(CACHE ANDROID_CPU PROPERTY STRINGS arm x86 mips)
 set(ANDROID_API "android-19" CACHE STRING "Android platform version")
 
-message("Android CPU arch: ${ANDROID_CPU}")
-message("Android platform: ${ANDROID_API}")
+# message("Android CPU arch: ${ANDROID_CPU}")
+# message("Android platform: ${ANDROID_API}")
 
 if (${ANDROID_CPU} STREQUAL "arm")
     set(ANDROID_NDK_ABI_EXT "arm-linux-androideabi")
@@ -126,22 +120,12 @@ set(CMAKE_SYSTEM_VERSION 1)
 set(COMPILING ON)
 SET(CMAKE_SKIP_RPATH ON)
 set(CMAKE_CROSSCOMPILING TRUE)
-set(CMAKE_C_COMPILER_WORKS 1)
-set(CMAKE_CXX_COMPILER_WORKS 1)
-set(CMAKE_SKIP_COMPATIBILITY_TESTS 1)
 
 # find the ant tool
 find_program(ANDROID_ANT "ant")
-if (ANDROID_ANT)
-    message("ant tool found")
-else()
+if (NOT ANDROID_ANT)
     message(FATAL_ERROR "ant tool NOT FOUND (must be in path)!")
 endif()
-
-# disable compiler detection
-include(CMakeForceCompiler)
-CMAKE_FORCE_C_COMPILER("${CMAKE_C_COMPILER}" GNU)
-CMAKE_FORCE_CXX_COMPILER("${CMAKE_CXX_COMPILER}" GNU)
 
 # define configurations
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
@@ -151,6 +135,7 @@ set(CMAKE_C_STANDARD_LIBRARIES "-landroid -llog -lc -l${ANDROID_NDK_CMATHLIB} -l
 set(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_C_STANDARD_LIBRARIES} ${ANDROID_NDK_STL_LDFLAGS}")
 
 # specify cross-compilers
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 set(CMAKE_C_COMPILER "${ANDROID_NDK_TOOLCHAIN_BIN}/${ANDROID_NDK_GCC_PREFIX}-gcc${ANDROID_NDK_EXE_EXT}" CACHE PATH "gcc" FORCE)
 set(CMAKE_CXX_COMPILER "${ANDROID_NDK_TOOLCHAIN_BIN}/${ANDROID_NDK_GCC_PREFIX}-g++${ANDROID_NDK_EXE_EXT}" CACHE PATH "g++" FORCE)
 set(CMAKE_AR "${ANDROID_NDK_TOOLCHAIN_BIN}/${ANDROID_NDK_GCC_PREFIX}-ar${ANDROID_NDK_EXE_EXT}" CACHE PATH "archive" FORCE)

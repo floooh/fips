@@ -3,8 +3,6 @@
 #	Fips cmake settings file for OSX target platform.
 #-------------------------------------------------------------------------------
 
-message("Target Platform: OSX")
-
 set(FIPS_PLATFORM OSX)
 set(FIPS_PLATFORM_NAME "osx")
 set(FIPS_MACOS 1)
@@ -35,22 +33,18 @@ set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
 
 # exceptions on/off?
 if (FIPS_EXCEPTIONS)
-    message("C++ exceptions are enabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_EXCEPTIONS "YES")
     set(FIPS_OSX_EXCEPTION_FLAGS "")
 else()
-    message("C++ exceptions are disabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_EXCEPTIONS "NO")
     set(FIPS_OSX_EXCEPTION_FLAGS "-fno-exceptions")
 endif()
 
 # rtti on/off?
 if (FIPS_RTTI)
-    message("C++ RTTI is enabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_RTTI "YES")
     set(FIPS_OSX_RTTI_FLAGS "")
 else()
-    message("C++ RTTI is disabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_RTTI "NO")
     set(FIPS_OSX_RTTI_FLAGS "-fno-rtti")
 endif()

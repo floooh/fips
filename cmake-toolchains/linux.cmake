@@ -3,7 +3,6 @@
 #   Fips cmake settings file for Linux target platform.
 #-------------------------------------------------------------------------------
 
-message("Target Platform: Linux")
 include(CheckFunctionExists)
 include(CheckLibraryExists)
 
@@ -19,25 +18,20 @@ endif()
 set(FIPS_LINUX 1)
 set(FIPS_POSIX 1)
 
-
 # define configuration types
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
 # exceptions on/off?
 if (FIPS_EXCEPTIONS)
-    message("C++ exceptions are enabled")
     set(FIPS_LINUX_EXCEPTION_FLAGS "")
 else()
-    message("C++ exceptions are disabled")
     set(FIPS_LINUX_EXCEPTION_FLAGS "-fno-exceptions")
 endif()
 
 # RTTI on/off?
 if (FIPS_RTTI)
-    message("C++ RTTI is enabled")
     set(FIPS_LINUX_RTTI_FLAGS "")
 else()
-    message("C++ RTTI is disabled")
     set(FIPS_LINUX_RTTI_FLAGS "-fno-rtti")
 endif()
 

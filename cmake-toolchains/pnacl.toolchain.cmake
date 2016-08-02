@@ -3,8 +3,6 @@
 #   Fips cmake toolchain file for cross-compiling to PNaCl.
 #-------------------------------------------------------------------------------
 
-message("Target Platform: PNaCl")
-
 set(NACL_SDK_BUNDLE "pepper_canary")
 if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
     set(NACL_SDK_DIRNAME "../fips-sdks/win/nacl_sdk")
@@ -29,19 +27,15 @@ set(CMAKE_CROSSCOMPILING TRUE)
 
 # exceptions on/off?
 if (FIPS_EXCEPTIONS)
-    message("C++ exceptions are enabled")
     set(FIPS_NACL_EXCEPTION_FLAGS "")
 else()
-    message("C++ exceptions are disabled")
     set(FIPS_NACL_EXCEPTION_FLAGS "-fno-exceptions")
 endif()
 
 # RTTI on/off?
 if (FIPS_RTTI)
-    message("C++ RTTI is enabled")
     set(FIPS_NACL_RTTI_FLAGS "")
 else()
-    message("C++ RTTI is disabled")
     set(FIPS_NACL_RTTI_FLAGS "-fno-rtti")
 endif()
 
@@ -50,7 +44,6 @@ macro(find_nacl_sdk_root)
     if (NOT EXISTS "${NACL_SDK_ROOT}/README")
         message(FATAL_ERROR "Could not find NaCl SDK at ${NACL_SDK_DIRNAME}/${NACL_SDK_BUNDLE}! Please run 'fips setup nacl'!")
     else()
-        message("NaCl SDK found: ${NACL_SDK_ROOT}")
         set(NACL_SDK_ROOT ${NACL_SDK_ROOT} CACHE STRING "NaCl SDK location.")
     endif()
 endmacro()
@@ -63,10 +56,6 @@ set(NACL_TOOLCHAIN_ROOT "${NACL_SDK_ROOT}/toolchain/${NACL_TOOLCHAIN_DIRNAME}")
 set(NACL_BIN "${NACL_TOOLCHAIN_ROOT}/bin")
 set(NACL_INCLUDE "${NACL_SDK_ROOT}/include")
 set(NACL_LIB "${NACL_SDK_ROOT}/lib/pnacl/Release")
-
-message("NACL_BIN: ${NACL_BIN}")
-message("NACL_INCLUDE: ${NACL_INCLUDE}")
-message("NACL_LIB: ${NACL_LIB}")
 
 # standard header and lib search paths
 include_directories(${NACL_INCLUDE} ${NACL_INCLUDE}/pnacl)

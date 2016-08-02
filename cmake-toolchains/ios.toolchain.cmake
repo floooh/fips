@@ -3,8 +3,6 @@
 #	Fips cmake toolchain file for cross-compiling to iOS from OSX.
 #-------------------------------------------------------------------------------
 
-message("Target Platform: iOS")
-
 set(FIPS_PLATFORM IOS)
 set(FIPS_PLATFORM_NAME "ios")
 set(FIPS_IOS 1)
@@ -20,12 +18,6 @@ set(CMAKE_MACOSX_BUNDLE YES)
 set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
 
 set(CMAKE_SYSTEM_NAME Darwin)
-include(CMakeForceCompiler)
-CMAKE_FORCE_C_COMPILER(/usr/bin/clang Clang)
-CMAKE_FORCE_CXX_COMPILER(/usr/bin/clang++ Clang)
-set(CMAKE_CXX_COMPILER_WORKS TRUE)
-set(CMAKE_C_COMPILER_WORKS TRUE)
-
 set(CMAKE_OSX_ARCHITECTURES "arm64")
 set(CMAKE_OSX_SYSROOT "iphoneos")
 set(CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos;-iphonesimulator")
@@ -50,19 +42,15 @@ set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
 
 # exceptions on/off?
 if (FIPS_EXCEPTIONS)
-    message("C++ exceptions are enabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_EXCEPTIONS "YES")
 else()
-    message("C++ exceptions are disabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_EXCEPTIONS "NO")
 endif()
 
 # rtti on/off?
 if (FIPS_RTTI)
-    message("C++ RTTI is enabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_RTTI "YES")
 else()
-    message("C++ RTTI is disabled")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_ENABLE_CPP_RTTI "NO")
 endif()
 
