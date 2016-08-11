@@ -18,6 +18,13 @@ else()
     set(FIPS_WINDOWS_PLATFORM_NAME "x86")
 endif()
 
+if (${CMAKE_SYSTEM_NAME} STREQUAL "WindowsStore")
+    message("Building for UWP")
+    set(FIPS_UWP 1)
+else()
+    set(FIPS_UWP 0)
+endif()
+
 # define configuration types
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
@@ -56,12 +63,30 @@ else()
     set(FIPS_VS_EXCEPTION_FLAGS "/EHsc")
 endif()
 set(CMAKE_CXX_FLAGS "${FIPS_VS_EXCEPTION_FLAGS} /MP /WX /TP /DWIN32")
-set(CMAKE_CXX_FLAGS_DEBUG "/Zi /Od /Oy- /MTd /D_DEBUG /DFIPS_DEBUG=1")
-set(CMAKE_CXX_FLAGS_RELEASE "/Ox /MT /DNDEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "/Zi /Od /Oy- /D_DEBUG /DFIPS_DEBUG=1")
+set(CMAKE_CXX_FLAGS_RELEASE "/Ox /DNDEBUG")
+if (FIPS_UWP)
+    # must link runtime as DLLs
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+else()
+    # on Win32, link runtime statically 
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+endif()
 
 set(CMAKE_C_FLAGS "/MP /WX /TC /errorReport:queue /DWIN32")
-set(CMAKE_C_FLAGS_DEBUG "/Zi /Od /Oy- /MTd /D_DEBUG /DFIPS_DEBUG=1")
-set(CMAKE_C_FLAGS_RELEASE "/Ox /MT /DNDEBUG ")
+set(CMAKE_C_FLAGS_DEBUG "/Zi /Od /Oy- /D_DEBUG /DFIPS_DEBUG=1")
+set(CMAKE_C_FLAGS_RELEASE "/Ox /DNDEBUG ")
+if (FIPS_UWP)
+    # must link runtime as DLLs
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MDd")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MD")
+else()
+    # on Win32, link runtime statically 
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MTd")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MT")
+endif()
 
 # define exe linker flags
 set(CMAKE_EXE_LINKER_FLAGS "/STACK:5000000 /machine:${FIPS_WINDOWS_PLATFORM_NAME}")
