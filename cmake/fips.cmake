@@ -106,10 +106,10 @@ macro(fips_setup)
 
     # detect compiler
     message("CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
-    if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+    if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
         set(FIPS_CLANG 1)
         message("Detected C++ Compiler: Clang (FIPS_CLANG)")
-    elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+    elseif (${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
         set(FIPS_GCC 1)
         message("Detected C++ Compiler: GCC (FIPS_GCC)")
     elseif (MSVC)
