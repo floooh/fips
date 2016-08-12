@@ -29,15 +29,19 @@ endif()
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
 # define the standard link libraries
-set(CMAKE_CXX_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib dbghelp.lib wsock32.lib ws2_32.lib rpcrt4.lib wininet.lib")
-set(CMAKE_C_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib dbghelp.lib wsock32.lib ws2_32.lib rpcrt4.lib wininet.lib")
+if (FIPS_UWP)
+    set(CMAKE_CXX_STANDARD_LIBRARIES "WindowsApp.lib")
+    set(CMAKE_C_STANDARD_LIBRARIES "WindowsApp.lib")
+else()
+    set(CMAKE_CXX_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib dbghelp.lib wsock32.lib ws2_32.lib rpcrt4.lib wininet.lib")
+    set(CMAKE_C_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib dbghelp.lib wsock32.lib ws2_32.lib rpcrt4.lib wininet.lib")
+endif()
 
 # define compiler and linker flags
 
 # GENERIC compiler flags:
 # 	/WX treat warnings as errors
 # 	/GF eliminate duplicate strings
-# 	/arch:SSE2 generate code for SSE2
 # 	/TP treat files as C++ source
 #	/TC treat files as C source
 # 	/fp:fast create fast (not precise) floating point code
@@ -67,8 +71,8 @@ set(CMAKE_CXX_FLAGS_DEBUG "/Zi /Od /Oy- /D_DEBUG /DFIPS_DEBUG=1")
 set(CMAKE_CXX_FLAGS_RELEASE "/Ox /DNDEBUG")
 if (FIPS_UWP)
     # must link runtime as DLLs
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd /ZW")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD /ZW")
 else()
     # on Win32, link runtime statically 
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
@@ -80,8 +84,8 @@ set(CMAKE_C_FLAGS_DEBUG "/Zi /Od /Oy- /D_DEBUG /DFIPS_DEBUG=1")
 set(CMAKE_C_FLAGS_RELEASE "/Ox /DNDEBUG ")
 if (FIPS_UWP)
     # must link runtime as DLLs
-    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MDd")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MD")
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MDd /ZW")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MD /ZW")
 else()
     # on Win32, link runtime statically 
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MTd")
@@ -89,7 +93,9 @@ else()
 endif()
 
 # define exe linker flags
-set(CMAKE_EXE_LINKER_FLAGS "/STACK:5000000 /machine:${FIPS_WINDOWS_PLATFORM_NAME}")
+if (NOT FIPS_UWP)
+    set(CMAKE_EXE_LINKER_FLAGS "/STACK:5000000 /machine:${FIPS_WINDOWS_PLATFORM_NAME}")
+endif()
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/DEBUG")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "")
 
