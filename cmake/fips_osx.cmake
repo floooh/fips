@@ -144,7 +144,7 @@ endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_osx_add_target_properties(target)
-#   Setup setup special target properties for OSX/iOS.
+#   Setup special target properties for OSX/iOS.
 #
 macro(fips_osx_add_target_properties target)
     if (FIPS_IOS OR FIPS_OSX)
