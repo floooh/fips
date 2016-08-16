@@ -93,7 +93,9 @@ else()
 endif()
 
 # define exe linker flags
-if (NOT FIPS_UWP)
+if (FIPS_UWP)
+    set(CMAKE_EXE_LINKER_FLAGS "/MANIFEST:NO /DEBUG:FASTLINK /WINMD")
+else()
     set(CMAKE_EXE_LINKER_FLAGS "/STACK:5000000 /machine:${FIPS_WINDOWS_PLATFORM_NAME}")
 endif()
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/DEBUG")
