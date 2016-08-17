@@ -58,7 +58,7 @@ def get_branches(proj_dir) :
     """
     branches = {}
     try:
-        output = subprocess.check_output('git branch -vv', cwd=proj_dir, shell=True)
+        output = subprocess.check_output('git branch -vv', cwd=proj_dir, shell=True).decode("utf-8")
         lines = output.splitlines()
         for line in lines :
             tokens = line[2:].split()
