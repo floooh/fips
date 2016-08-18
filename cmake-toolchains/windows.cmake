@@ -101,6 +101,13 @@ endif()
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/DEBUG")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "")
 
+if (FIPS_UWP)
+    # 4264: UWP-specific static linking warnings
+    set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} /ignore:4264")
+endif()
+# 4221: warning on empty object files
+set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} /ignore:4221")
+
 # update cache variables for cmake gui
 set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}" CACHE STRING "Config Type" FORCE)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING "Generic C++ Compiler Flags" FORCE)
