@@ -201,6 +201,9 @@ def get_host_platform() :
 
     :returns: platform name (osx, linux, win)
     """
+    plat = platform.system()
+    if "CYGWIN_NT" in plat:
+        return host_platforms['Linux']
     return host_platforms[platform.system()]
 
 
