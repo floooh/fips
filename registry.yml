@@ -38,3 +38,4 @@ fips-imgui:         https://github.com/fungos/fips-imgui.git
 fips-turbobadger:   https://github.com/fungos/fips-turbobadger.git
 fips-stb:           https://github.com/fungos/fips-stb.git
 fips-oui:           https://github.com/fungos/fips-oui.git
+fips-nlohmann-json: https://github.com/sgerbino/fips-nlohmann-json.git
