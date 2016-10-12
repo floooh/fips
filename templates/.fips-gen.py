@@ -43,7 +43,7 @@ def processFile(attrs) :
     if args :
         module.generate(input, out_src, out_hdr, args)
     else :
-        module.generate(input, out_src, out_hdr)
+        module.generate(input, out_src, out_hdr, None)
 
 #=== entry point
 if len(sys.argv) == 2 :
