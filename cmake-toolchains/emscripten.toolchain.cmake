@@ -17,7 +17,7 @@
 # FIXME: I had trouble turning this into a proper emscripten option,
 # where cmake complained about an unknown compiler, thus: not an option atm
 if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
-    set(FIPS_EMSCRIPTEN_SDK_VERSION "1.34.1")
+    set(FIPS_EMSCRIPTEN_SDK_VERSION "1.35.0")
 else()
     set(FIPS_EMSCRIPTEN_SDK_VERSION "incoming")
 endif()
