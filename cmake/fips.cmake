@@ -613,8 +613,12 @@ macro(fips_files_ex path)
     endif()
     #message(STATUS "Result: ${_fd_FILE_LIST}")
 
-    fips_dir(${path} GROUP ${_fd_GROUP})
-    fips_files(${_fd_FILE_LIST})
+    if (_fd_FILE_LIST)
+        fips_dir(${path} GROUP ${_fd_GROUP})
+        fips_files(${_fd_FILE_LIST})
+    else()
+        message(WARNING "Empty file list for path '${path}' (maybe path doesn't exist?)")
+    endif()
 endmacro()
 
 #-------------------------------------------------------------------------------
