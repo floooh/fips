@@ -14,13 +14,7 @@
 #
 
 # define emscripten SDK version
-# FIXME: I had trouble turning this into a proper emscripten option,
-# where cmake complained about an unknown compiler, thus: not an option atm
-if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
-    set(FIPS_EMSCRIPTEN_SDK_VERSION "1.35.0")
-else()
-    set(FIPS_EMSCRIPTEN_SDK_VERSION "incoming")
-endif()
+set(FIPS_EMSCRIPTEN_SDK_VERSION "incoming")
 if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
     set(EMSC_EMSDK_DIRNAME "../fips-sdks/win/emsdk_portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
 elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")

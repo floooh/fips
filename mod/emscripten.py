@@ -7,10 +7,8 @@ import subprocess
 
 from mod import log, util
 
-WinVersion = '1.35.0'
-
 archives = {
-    'win': 'emsdk-{}-portable-64bit.zip'.format(WinVersion),
+    'win': 'emsdk-1.35.0-portable-64bit.zip',
     'osx': 'emsdk-portable.tar.gz',
     'linux': 'emsdk-portable.tar.gz'
 }
@@ -24,9 +22,7 @@ urls = {
 # define SDK version, note that the right version must also
 # be set in the emscripten.toolchain.cmake file!
 sdk_version = {
-    # on Windows, use a stable SDK version which has a pre-compiled clang
-    'win': 'sdk-{}-64bit'.format(WinVersion),
-    # on Linux and OSX, use the bleeding-edge SDK version
+    'win': 'sdk-incoming-64bit',
     'osx': 'sdk-incoming-64bit',
     'linux': 'sdk-incoming-64bit'
 }
