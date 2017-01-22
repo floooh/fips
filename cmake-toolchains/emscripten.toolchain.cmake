@@ -35,9 +35,11 @@ endmacro()
 
 # find the emscripten SDK
 find_emscripten_sdk()
+set(EMSCRIPTEN_LLVM_ROOT "${EMSCRIPTEN_ROOT_PATH}/../../clang/fastcomp/build_${FIPS_EMSCRIPTEN_SDK_VERSION}_64/bin")
 
 # Normalize, convert Windows backslashes to forward slashes or CMake will crash.
 get_filename_component(EMSCRIPTEN_ROOT_PATH "${EMSCRIPTEN_ROOT_PATH}" ABSOLUTE)
+get_filename_component(EMSCRIPTEN_LLVM_ROOT "${EMSCRIPTEN_LLVM_ROOT}" ABSOLUTE)
 
 set(FIPS_PLATFORM EMSCRIPTEN)
 set(FIPS_PLATFORM_NAME "emsc")
@@ -145,7 +147,8 @@ else()
 endif()
 if (EXISTS "${EMSCRIPTEN_DOT_FILE}")
     set(EMSC_COMMON_FLAGS "${EMSC_COMMON_FLAGS} --em-config ${EMSCRIPTEN_DOT_FILE} --cache ${EMSCRIPTEN_CACHE}")
-    set(EMSC_AR_FLAGS "${EMSC_AR_FLAGS} --em-config ${EMSCRIPTEN_DOT_FILE}")
+    # FIXME: if calling llvm-ar directory works everywhere, the following line can be removed
+    #    set(EMSC_AR_FLAGS "${EMSC_AR_FLAGS} --em-config ${EMSCRIPTEN_DOT_FILE}")
 else()
     # no sdk-embedded config found, use the default (~/.emscripten and ~/.emscripten_cache)
     message(WARNING "Using global emscripten config and cache in '~'!")
@@ -164,9 +167,9 @@ set(CMAKE_CONFIGURATION_TYPES Debug Release Profiling)
 # specify cross-compilers
 set(CMAKE_C_COMPILER "${EMSCRIPTEN_ROOT_PATH}/emcc${EMCC_SUFFIX}" CACHE PATH "gcc" FORCE)
 set(CMAKE_CXX_COMPILER "${EMSCRIPTEN_ROOT_PATH}/em++${EMCC_SUFFIX}" CACHE PATH "g++" FORCE)
-set(CMAKE_AR "${EMSCRIPTEN_ROOT_PATH}/emar${EMCC_SUFFIX}" CACHE PATH "archive" FORCE)
+set(CMAKE_AR "${EMSCRIPTEN_LLVM_ROOT}/llvm-ar" CACHE PATH "archive" FORCE)
 set(CMAKE_LINKER "${EMSCRIPTEN_ROOT_PATH}/emcc${EMCC_SUFFIX}" CACHE PATH "linker" FORCE)
-set(CMAKE_RANLIB "${EMSCRIPTEN_ROOT_PATH}/emranlib${EMCC_SUFFIX}" CACHE PATH "ranlib" FORCE)
+set(CMAKE_RANLIB "${EMSCRIPTEN_LLVM_ROOT}/llvm-ranlib" CACHE PATH "ranlib" FORCE)
 
 # only search for libraries and includes in the toolchain
 set(CMAKE_FIND_ROOT_PATH ${EMSCRIPTEN_ROOT_PATH})
