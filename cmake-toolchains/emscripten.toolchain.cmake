@@ -132,6 +132,7 @@ set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_VERSION 1)
 set(COMPILING on)
 set(CMAKE_CROSSCOMPILING TRUE)
+set(CMAKE_SYSTEM_PROCESSOR x86)
 
 # Find the .emscripten file and cache, this is either setup locally in the
 # emscripten SDK (this is the preferred way and used by 'fips setup emscripten',
@@ -179,6 +180,39 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 set(CMAKE_SYSTEM_INCLUDE_PATH "${EMSCRIPTEN_ROOT_PATH}/system/include")
+
+set(CMAKE_C_USE_RESPONSE_FILE_FOR_LIBRARIES 1)
+set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_LIBRARIES 1)
+set(CMAKE_C_USE_RESPONSE_FILE_FOR_OBJECTS 1)
+set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_OBJECTS 1)
+set(CMAKE_C_USE_RESPONSE_FILE_FOR_INCLUDES 1)
+set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_INCLUDES 1)
+
+set(CMAKE_C_RESPONSE_FILE_LINK_FLAG "@")
+set(CMAKE_CXX_RESPONSE_FILE_LINK_FLAG "@")
+
+set(CMAKE_C_CREATE_STATIC_LIBRARY "<CMAKE_AR> rc <TARGET> <LINK_FLAGS> <OBJECTS>")
+set(CMAKE_CXX_CREATE_STATIC_LIBRARY "<CMAKE_AR> rc <TARGET> <LINK_FLAGS> <OBJECTS>")
+
+set(CMAKE_SKIP_COMPATIBILITY_TESTS 1)
+set(CMAKE_SIZEOF_CHAR 1)
+set(CMAKE_SIZEOF_UNSIGNED_SHORT 2)
+set(CMAKE_SIZEOF_SHORT 2)
+set(CMAKE_SIZEOF_INT 4)
+set(CMAKE_SIZEOF_UNSIGNED_LONG 4)
+set(CMAKE_SIZEOF_UNSIGNED_INT 4)
+set(CMAKE_SIZEOF_LONG 4)
+set(CMAKE_SIZEOF_VOID_P 4)
+set(CMAKE_SIZEOF_FLOAT 4)
+set(CMAKE_SIZEOF_DOUBLE 8)
+set(CMAKE_C_SIZEOF_DATA_PTR 4)
+set(CMAKE_CXX_SIZEOF_DATA_PTR 4)
+set(CMAKE_HAVE_LIMITS_H 1)
+set(CMAKE_HAVE_UNISTD_H 1)
+set(CMAKE_HAVE_PTHREAD_H 1)
+set(CMAKE_HAVE_SYS_PRCTL_H 1)
+set(CMAKE_WORDS_BIGENDIAN 0)
+set(CMAKE_DL_LIBS)
 
 # c++ compiler flags
 set(CMAKE_CXX_FLAGS "${EMSC_COMMON_FLAGS} ${EMSC_CXX_FLAGS} -std=c++11 -stdlib=libc++ -fstrict-aliasing -Wall -Wno-multichar -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue -Wno-inconsistent-missing-override -Wno-warn-absolute-paths -Wno-expansion-to-defined")
