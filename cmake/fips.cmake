@@ -136,6 +136,8 @@ macro(fips_setup)
         fips_choose_config()
     endif()
     message("FIPS_CONFIG: ${FIPS_CONFIG}")
+    get_filename_component(FIPS_PROJECT_DEPLOY_DIR "${FIPS_DEPLOY_DIR}/${CMAKE_PROJECT_NAME}/${FIPS_CONFIG}" ABSOLUTE)
+    message("FIPS_PROJECT_DEPLOY_DIR: ${FIPS_PROJECT_DEPLOY_DIR}")
 
     # Eclipse: Disable linked resources because Eclipse may get confused by these linked resources
     if (${CMAKE_GENERATOR} MATCHES "Eclipse CDT4")
