@@ -52,23 +52,18 @@ def fileVersionDirty(filePath, version) :
     $$version:X statemenet in it, returns False if the version
     number in the file is equal to the arg version.
     '''
-    if os.path.isfile(filePath):
-        f = open(filePath, 'r')
-        for i in range(0,4) :
-            line = f.readline()
-            startIndex = line.find('#version:')
-            if startIndex != -1 :
-                endIndex = line.find('#', startIndex + 9)
-                if endIndex != -1 :
-                    versionNumber = line[startIndex + 9 : endIndex]
-                    if int(versionNumber) == version :
-                        return False
-            else:
-                # file exists but no version tag, this might be a binary file,
-                # return 'not dirty', and only use time stamp
-                return False
+    f = open(filePath, 'r')
+    for i in range(0,4) :
+        line = f.readline()
+        startIndex = line.find('#version:')
+        if startIndex != -1 :
+            endIndex = line.find('#', startIndex + 9)
+            if endIndex != -1 :
+                versionNumber = line[startIndex + 9 : endIndex]
+                if int(versionNumber) == version :
+                    return False
 
-    # fallthrough: file does not exist, or version tag exists but doesn't match
+    # fallthrough: no version or version doesn't match
     return True
 
 #-------------------------------------------------------------------------------
