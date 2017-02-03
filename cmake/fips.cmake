@@ -67,6 +67,9 @@ macro(fips_setup)
     endif()
     if (_fs_PROJECT)
         project(${_fs_PROJECT})
+        message("=== fips_setup(PROJECT ${_fs_PROJECT})")
+    else()
+        message("=== fips_setup()")
     endif()
 
     message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
@@ -231,7 +234,12 @@ endmacro()
 #   Starts a new project.
 #
 macro(fips_project proj)
+    message("=== fips_project(${proj})")
     project(${proj})
+    get_filename_component(FIPS_PROJECT_BUILD_DIR "${FIPS_BUILD_DIR}/${CMAKE_PROJECT_NAME}/${FIPS_CONFIG}" ABSOLUTE)
+    message("FIPS_PROJECT_BUILD_DIR: ${FIPS_PROJECT_BUILD_DIR}")
+    get_filename_component(FIPS_PROJECT_DEPLOY_DIR "${FIPS_DEPLOY_DIR}/${CMAKE_PROJECT_NAME}/${FIPS_CONFIG}" ABSOLUTE)
+    message("FIPS_PROJECT_DEPLOY_DIR: ${FIPS_PROJECT_DEPLOY_DIR}")    
 endmacro()
 
 #-------------------------------------------------------------------------------
