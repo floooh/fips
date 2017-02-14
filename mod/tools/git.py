@@ -13,7 +13,7 @@ not_found = "git not found in path, can't happen(?)"
 clone_depth = 10
 
 #-------------------------------------------------------------------------------
-def check_exists(fips_dir=None) :
+def check_exists() :
     """test if git is in the path
     
     :returns:   True if git is in the path
@@ -22,6 +22,13 @@ def check_exists(fips_dir=None) :
         subprocess.check_output(['git', '--version'])
         return True
     except (OSError, subprocess.CalledProcessError) :
+        return False
+
+#-------------------------------------------------------------------------------
+def check_exists_with_error():
+    """checks if git exists, and if not throws a fatal error"""
+    if not check_exists():
+        log.error("git not found, please run and fix './fips diag tools'")
         return False
 
 #-------------------------------------------------------------------------------
@@ -35,17 +42,48 @@ def clone(url, branch, depth, name, cwd) :
     :param cwd:     the directory where to run git
     :returns:       True if git returns successful
     """
-    if check_exists() :
-        cmd = 'git clone --recursive'
-        if branch :
-            cmd += ' --branch {} --single-branch'.format(branch)
-        if depth :
-            cmd += ' --depth {}'.format(depth)
-        cmd += ' {} {}'.format(url, name)
-        res = subprocess.call(cmd, cwd=cwd, shell=True)
-        return res == 0
-    else :
-        log.error("git not found, please run and fix './fips diag tools'")
+    check_exists_with_error()
+    cmd = 'git clone --recursive'
+    if branch :
+        cmd += ' --branch {} --single-branch'.format(branch)
+    if depth :
+        cmd += ' --depth {}'.format(depth)
+    cmd += ' {} {}'.format(url, name)
+    res = subprocess.call(cmd, cwd=cwd, shell=True)
+    return res == 0
+
+#-------------------------------------------------------------------------------
+def has_local_changes(proj_dir):
+    """checks if a git repo has uncommitted or unpushed changes (basically
+    anything which would make a git pull unsafe"""
+    check_exists_with_error()
+    output = subprocess.check_output('git status --porcelain', 
+            cwd=proj_dir, shell=True).decode("utf-8")
+    if output:
+        return True
+    # get current branch name
+    cur_branch = subprocess.check_output('git rev-parse --abbrev-ref HEAD', 
+            cwd=proj_dir, shell=True).decode("utf-8")
+    cur_branch = cur_branch.strip()
+    output = subprocess.check_output('git log origin/{}..{} --oneline'.format(cur_branch, cur_branch),
+            cwd=proj_dir, shell=True).decode("utf-8")
+    if output:
+        return True
+
+#-------------------------------------------------------------------------------
+def update(proj_dir):
+    """runs a git pull --rebase && git submodule update --recursive on the
+    provided git repo, but only if the repo has noi 
+
+    :param proj_dir:    a git repo dir
+    """
+    check_exists_with_error()
+    if not has_local_changes(proj_dir):
+        subprocess.call('git pull', cwd=proj_dir, shell=True)
+        subprocess.call('git submodule update --recursive', cwd=proj_dir, shell=True)
+        return True
+    else:
+        log.warn('skipping {}, uncommitted or unpushed changes!')
         return False
 
 #-------------------------------------------------------------------------------
@@ -147,9 +185,7 @@ def check_out_of_sync(proj_dir) :
     :param proj_dir:    a git repo directory
     :returns:           array with branch names that are out-of-sync
     """
-    if not check_exists() :
-        log.error("git not found, please run and fix './fips diag tools'")
-        return False
+    check_exists_with_error()
 
     out_of_sync = False
 
@@ -187,9 +223,7 @@ def check_out_of_sync(proj_dir) :
 #-------------------------------------------------------------------------------
 def check_branch_out_of_sync(proj_dir, branch) :
     """check if a single branch is out of sync with remote repo"""
-    if not check_exists() :
-        log.error("git not found, please run and fix './fips diag tools'")
-        return False
+    check_exists_with_error()
 
     out_of_sync = False
     remote_branches = get_branches(proj_dir)

@@ -61,6 +61,15 @@ def check_imports(fips_dir, proj_dir) :
         log.warn('currently not in a project directory')
 
 #-------------------------------------------------------------------------------
+def check_local_changes(fips_dir, proj_dir) :
+    """check if any imports have local, uncommitted changes"""
+    log.colored(log.YELLOW, '=== local changes:')
+    if util.is_valid_project_dir(proj_dir):
+        dep.check_local_changes(fips_dir, proj_dir)
+    else:
+        log.warn('currently not in a project directory')
+
+#-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
     """run diagnostics
 
@@ -77,6 +86,9 @@ def run(fips_dir, proj_dir, args) :
         ok = True
     if noun in ['all', 'imports'] :
         check_imports(fips_dir, proj_dir)
+        ok = True
+    if noun in ['all', 'local-changes'] :
+        check_local_changes(fips_dir, proj_dir)
         ok = True
     if noun in ['all', 'tools'] :
         check_tools(fips_dir)
@@ -97,6 +109,7 @@ def help() :
              "fips diag tools\n"
              "fips diag configs\n"
              "fips diag imports\n"
+             "fips diag local-changes\n"
              + log.DEF +
              "    run diagnostics and check for errors")
 

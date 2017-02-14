@@ -454,3 +454,75 @@ def check_imports(fips_dir, proj_dir) :
     # gather imports, this will dump warnings
     gather_imports(fips_dir, proj_dir)
 
+#-------------------------------------------------------------------------------
+def check_local_changes(fips_dir, proj_dir) :
+    """this is a variation of check_imports which just checks for local
+    (uncommitted or unpushed) changes.
+
+    :param fips_dir: absolute fips directory
+    :param proj_dir: absolute project directory
+    :returns:   True if checks were valid
+    """
+    success, imported_projects = get_all_imports_exports(fips_dir, proj_dir)
+    num_imports = 0
+    for imp_proj_name in imported_projects :
+        imp_proj_dir = util.get_project_dir(fips_dir, imp_proj_name)
+
+        # don't git-check the top-level project directory
+        if imp_proj_dir != proj_dir :
+            num_imports += 1
+            log.info("checking '{}':".format(imp_proj_name))
+            if os.path.isdir(imp_proj_dir) :
+                if git.has_local_changes(imp_proj_dir) :
+                    log.warn("  '{}' has local changes (uncommitted and/or unpushed)".format(imp_proj_dir))
+                else :
+                    log.colored(log.GREEN, '  no local changes')
+            else :
+                log.warn("  '{}' does not exist, please run 'fips fetch'".format(imp_proj_dir))
+    if success and num_imports == 0 :
+        log.info('  none')
+
+#-------------------------------------------------------------------------------
+def _rec_update_imports(fips_dir, proj_dir, handled) :
+    """same as _rec_fetch_imports() but for updating the imported projects
+    """
+    ws_dir = util.get_workspace_dir(fips_dir)
+    proj_name = util.get_project_name_from_dir(proj_dir)
+    if proj_name not in handled :
+        handled.append(proj_name)
+        imports = get_imports(fips_dir, proj_dir)
+        for dep in imports:
+            dep_proj_name = dep
+            if dep not in handled:
+                dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
+                log.colored(log.YELLOW, "=== dependency: '{}':".format(dep_proj_name))
+                dep_ok = False
+                if os.path.isdir(dep_proj_dir) :
+                    # directory did not exist, do a fresh git clone
+                    dep = imports[dep_proj_name]
+                    git_commit = None if 'rev' not in dep else dep['rev']
+                    if git.has_local_changes(dep_proj_dir) :
+                        log.warn("  '{}' has local changes, skipping...".format(dep_proj_dir))
+                    else :
+                        log.colored(log.BLUE, "  updating '{}'...".format(dep_proj_dir))
+                        git.update(dep_proj_dir)
+                        if git_commit:
+                            log.colored(log.YELLOW, "=== revision: '{}':".format(git_commit))
+                            dep_ok = git.checkout(dep_proj_dir, git_commit)
+                else :
+                    log.warn("  '{}' does not exist, please run 'fips fetch'".format(dep_proj_dir))
+                # recuse
+                if dep_ok :
+                    handled = _rec_update_imports(fips_dir, dep_proj_dir, handled)
+    # done, return the new handled array
+    return handled
+
+#-------------------------------------------------------------------------------
+def update_imports(fips_dir, proj_dir):
+    """runs git.update on each import (only if the import has no local changes)
+
+    :param fips_dir: absolute fips directory
+    :param proj_dir: absolute project directory
+    :returns:   True if checks were valid
+    """
+    _rec_update_imports(fips_dir, proj_dir, [])
