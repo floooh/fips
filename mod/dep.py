@@ -509,6 +509,8 @@ def _rec_update_imports(fips_dir, proj_dir, handled) :
                         if git_commit:
                             log.colored(log.YELLOW, "=== revision: '{}':".format(git_commit))
                             dep_ok = git.checkout(dep_proj_dir, git_commit)
+                        else:
+                            dep_ok = True
                 else :
                     log.warn("  '{}' does not exist, please run 'fips fetch'".format(dep_proj_dir))
                 # recuse
