@@ -13,7 +13,7 @@ not_found = "git not found in path, can't happen(?)"
 clone_depth = 10
 
 #-------------------------------------------------------------------------------
-def check_exists() :
+def check_exists(fips_dir) :
     """test if git is in the path
     
     :returns:   True if git is in the path
@@ -27,7 +27,7 @@ def check_exists() :
 #-------------------------------------------------------------------------------
 def check_exists_with_error():
     """checks if git exists, and if not throws a fatal error"""
-    if not check_exists():
+    if not check_exists(fips_dir):
         log.error("git not found, please run and fix './fips diag tools'")
         return False
 
