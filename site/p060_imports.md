@@ -150,13 +150,23 @@ project 'fips-hello-dep2' imports:
     nothing
 {% endhighlight %}
 
-### Updating external dependencies
+### Updating imports
 
-After a dependency is fetched, fips will never automatically touch it again.
-Fips will only check whether a directory with the name of the dependency exists,
-but never run any git operations on the directory content.
+Imports can be updated with './fips update', updating means, a 'git pull' and
+'git submodule update --recursive' will be run on each import, but **only 
+if the git repository has no local changes** (uncommitted or unpushed changes),
+otherwise the update for this repo will be skipped (this behaviour prevents 
+any unwanted merge commits that could happen in this case during the git pull).
 
-Fips can tell you however if an imported dependency is uptodate (meaning: in
+Imports with a pinned revision will work as expected. First the usual update
+procedure will happen, then a 'git checkout [rev]' to go to the right
+revision.
+
+On its own, fips will never automatically update an import, it must always be
+manually invoked by running './fips update'. Also note that the toplevel
+directory will not be updated, only the imports.
+
+Fips can tell you if an imported dependency is uptodate (meaning: in
 sync with its remote repository on github) with './fips diag imports':
 
 {% highlight bash %}
@@ -194,6 +204,10 @@ git status of 'fips-hello-dep2':
   uptodate
 {% endhighlight %}
 
+There's also a less detailed (but faster) diag option which only checks for
+uncommitted or unpushed changes (basically the same check that './fips update'
+performs to decide whether it is safe to perform a 'git pull'. To check
+the list of imports for local changes, simply call './fips diag local-changes'.
 
 ### What's imported
 
