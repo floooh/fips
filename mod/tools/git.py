@@ -53,6 +53,42 @@ def clone(url, branch, depth, name, cwd) :
     return res == 0
 
 #-------------------------------------------------------------------------------
+def add(proj_dir):
+    """runs a 'git add .' in the provided git repo
+
+    :param proj_dir:    path to a git repo
+    """
+    check_exists_with_error()
+    try:
+        subprocess.call('git add .', cwd=cwd, shell=True)
+    except subprocess.CalledProcessError :
+        log.error("failed to call 'git add .'")
+
+#-------------------------------------------------------------------------------
+def commit(proj_dir, msg):
+    """runs a 'git commit -m msg' in the provided git repo
+
+    :param proj_dir:    path to a git repo
+    """
+    check_exists_with_error()
+    try:
+        subprocess.call('git commit -m "{}"'.format(msg), cwd=cwd, shell=True)
+    except subprocess.CalledProcessError:
+        log.error('failed to call \'git commit -m "{}"\''.format(msg))
+
+#-------------------------------------------------------------------------------
+def push(proj_dir):
+    """runs a 'git push' in the provided git repo
+    
+    :param proj_dir:    path to git repo
+    """
+    check_exists_with_error()
+    try:
+        subprocess.call('git push', cwd=cwd, shell=True)
+    except subprocess.CalledProcessError:
+        log.error("failed to call 'git push'\n")
+
+#-------------------------------------------------------------------------------
 def has_local_changes(proj_dir):
     """checks if a git repo has uncommitted or unpushed changes (basically
     anything which would make a git pull unsafe"""
@@ -71,16 +107,26 @@ def has_local_changes(proj_dir):
         return True
 
 #-------------------------------------------------------------------------------
+def update_submodule(proj_dir):
+    """runs a 'git submodule update --recursive' on the provided git repo,
+    unconditionally (it will *not* check for local changes)
+
+    :param proj_dir:    a git repo dir
+    """
+    check_exists_with_error()
+    subprocess.call('git submodule update --recursive', cwd=proj_dir, shell=True)
+
+#-------------------------------------------------------------------------------
 def update(proj_dir):
     """runs a git pull --rebase && git submodule update --recursive on the
-    provided git repo, but only if the repo has noi 
+    provided git repo, but only if the repo has no local changes
 
     :param proj_dir:    a git repo dir
     """
     check_exists_with_error()
     if not has_local_changes(proj_dir):
         subprocess.call('git pull', cwd=proj_dir, shell=True)
-        subprocess.call('git submodule update --recursive', cwd=proj_dir, shell=True)
+        update_submodule(proj_dir)
         return True
     else:
         log.warn('skipping {}, uncommitted or unpushed changes!')
