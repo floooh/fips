@@ -129,7 +129,7 @@ def update(proj_dir):
         update_submodule(proj_dir)
         return True
     else:
-        log.warn('skipping {}, uncommitted or unpushed changes!')
+        log.warn('skipping {}, uncommitted or unpushed changes!'.format(proj_dir))
         return False
 
 #-------------------------------------------------------------------------------
