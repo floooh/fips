@@ -53,12 +53,14 @@ def clone(url, branch, depth, name, cwd) :
     return res == 0
 
 #-------------------------------------------------------------------------------
-def add(proj_dir):
+def add(proj_dir, update=False):
     """runs a 'git add .' in the provided git repo
 
     :param proj_dir:    path to a git repo
+    :update:    if True, will run 'git add -u'
     """
     check_exists_with_error()
+    cmd = 'git add ' + '-u' if update else '.'
     try:
         subprocess.check_call('git add .', cwd=proj_dir, shell=True)
     except subprocess.CalledProcessError as e:
