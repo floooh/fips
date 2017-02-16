@@ -60,9 +60,9 @@ def add(proj_dir):
     """
     check_exists_with_error()
     try:
-        subprocess.call('git add .', cwd=cwd, shell=True)
-    except subprocess.CalledProcessError :
-        log.error("failed to call 'git add .'")
+        subprocess.check_call('git add .', cwd=proj_dir, shell=True)
+    except subprocess.CalledProcessError as e:
+        log.error("'git add .' failed with '{}'".format(e.returncode))
 
 #-------------------------------------------------------------------------------
 def commit(proj_dir, msg):
@@ -72,9 +72,9 @@ def commit(proj_dir, msg):
     """
     check_exists_with_error()
     try:
-        subprocess.call('git commit -m "{}"'.format(msg), cwd=cwd, shell=True)
-    except subprocess.CalledProcessError:
-        log.error('failed to call \'git commit -m "{}"\''.format(msg))
+        subprocess.check_call('git commit -m "{}"'.format(msg), cwd=proj_dir, shell=True)
+    except subprocess.CalledProcessError as e:
+        log.error("'git commit' failed with '{}'".format(e.returncode))
 
 #-------------------------------------------------------------------------------
 def push(proj_dir):
@@ -84,9 +84,9 @@ def push(proj_dir):
     """
     check_exists_with_error()
     try:
-        subprocess.call('git push', cwd=cwd, shell=True)
-    except subprocess.CalledProcessError:
-        log.error("failed to call 'git push'\n")
+        res = subprocess.check_call('git push', cwd=proj_dir, shell=True)
+    except subprocess.CalledProcessError as e:
+        log.error("'git push' failed with '{}'".format(e.returncode))
 
 #-------------------------------------------------------------------------------
 def has_local_changes(proj_dir):
