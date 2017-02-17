@@ -61,7 +61,7 @@ def run_gen(cfg, fips_dir, project_dir, build_dir, toolchain_path, defines) :
             if type(val) is bool :
                 cmdLine += ' -D{}={}'.format(key, 'ON' if val else 'OFF')
             else :
-                cmdLine += ' -D{}={}'.format(key, val)
+                cmdLine += ' -D{}="{}"'.format(key, val)
     for key in defines :
         cmdLine += ' -D{}={}'.format(key, defines[key])
     cmdLine += ' -B' + build_dir
