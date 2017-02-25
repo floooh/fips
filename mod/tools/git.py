@@ -166,6 +166,7 @@ def checkout(proj_dir, revision) :
     """
     try :
         output = subprocess.check_output('git checkout {}'.format(revision), cwd=proj_dir, shell=True)
+        update_submodule(proj_dir)
         return output.split(':')[0] != 'error'
     except subprocess.CalledProcessError :
         log.error("failed to call 'git checkout'")
