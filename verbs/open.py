@@ -35,6 +35,10 @@ def run(fips_dir, proj_dir, args) :
             log.warn("build dir not found, generating...")
             project.gen(fips_dir, proj_dir, cfg['name'])
 
+        # first check if this is a VSCode project
+        if cfg['build_tool'] == 'vscode_cmake':
+            subprocess.call('code .', cwd=proj_dir, shell=True)
+            return
         # try to open as Xcode project
         proj = glob.glob(build_dir + '/*.xcodeproj')
         if proj :

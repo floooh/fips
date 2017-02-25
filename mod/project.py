@@ -6,7 +6,7 @@ import subprocess
 import yaml
 
 from mod import log, util, config, dep, template, settings, android
-from mod.tools import git, cmake, make, ninja, xcodebuild, ccmake, cmake_gui
+from mod.tools import git, cmake, make, ninja, xcodebuild, ccmake, cmake_gui, vscode
 
 #-------------------------------------------------------------------------------
 def init(fips_dir, proj_name) :
@@ -73,13 +73,16 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
     if do_it :
         # if Ninja build tool and on Windows, need to copy 
         # the precompiled ninja.exe to the build dir
-        if cfg['build_tool'] == 'ninja' :
-            ninja.prepare_ninja_tool(fips_dir, build_dir)
         log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
         toolchain_path = config.get_toolchain(fips_dir, proj_dir, cfg)
         if toolchain_path :
             log.info("Using Toolchain File: {}".format(toolchain_path))
-        return cmake.run_gen(cfg, fips_dir, proj_dir, build_dir, toolchain_path, defines)
+        if cfg['build_tool'] == 'ninja' :
+            ninja.prepare_ninja_tool(fips_dir, build_dir)
+        cmake_result = cmake.run_gen(cfg, fips_dir, proj_dir, build_dir, toolchain_path, defines)
+        if cfg['build_tool'] == 'vscode_cmake':
+            vscode.write_workspace_settings(fips_dir, proj_dir, cfg, toolchain_path, defines)
+        return cmake_result
     else :
         return True
 
@@ -386,19 +389,9 @@ def get_target_list(fips_dir, proj_dir, cfg_name) :
     :param cfg_name:        the config name
     :returns:   (success, targets)
     """
-    proj_name = util.get_project_name_from_dir(proj_dir)
     configs = config.load(fips_dir, proj_dir, cfg_name)
     if configs :
-        cfg = configs[0]
-        build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
-        targets_path = build_dir + '/fips_targets.yml'
-        if os.path.isfile(targets_path) :
-            targets = []
-            with open(targets_path) as f :
-                targets = yaml.load(f)
-            return True, targets
-        else :
-            return False, []
+        return util.get_cfg_target_list(fips_dir, proj_dir, configs[0])
     else :
         log.error("No valid configs found for '{}'".format(cfg_name))
 

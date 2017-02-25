@@ -207,3 +207,16 @@ def get_host_platform() :
     return host_platforms[platform.system()]
 
 
+#-------------------------------------------------------------------------------
+def get_cfg_target_list(fips_dir, proj_dir, cfg):
+    proj_name = get_project_name_from_dir(proj_dir)
+    build_dir = get_build_dir(fips_dir, proj_name, cfg)
+    targets_path = build_dir + '/fips_targets.yml'
+    if os.path.isfile(targets_path) :
+        targets = []
+        with open(targets_path) as f :
+            targets = yaml.load(f)
+        return True, targets
+    else :
+        return False, []
+
