@@ -11,7 +11,7 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
-- **25-Feb-2017**: what happened in the last months:
+- **25-Feb-2017**: what happened in the last year:
   - python3 compatibility contributed by Levente Polyak (thanks!)
   - various Eclipse fixes contributed by Martin Gerhardy (thanks!)
   - Windows: Cygwin support contributed by Fungos, many thanks! also 
