@@ -11,6 +11,48 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **25-Feb-2017**: what happened in the last months:
+  - python3 compatibility contributed by Levente Polyak (thanks!)
+  - various Eclipse fixes contributed by Martin Gerhardy (thanks!)
+  - Windows: Cygwin support contributed by Fungos, many thanks! also 
+    for the many smaller fixes :)
+  - new verb './fips update' updates all dependencies (unless
+    they have uncommitted or unpushed changes)
+  - new helper functions git.add, git.commit and git.push,
+    these are not exposed as fips verbs, but are useful
+    for writing your own verbs (e.g. build automation scripts)
+  - emscripten: removed the FIPS\_EMSCRIPTEN\_EXPORTED\_FUNCTIONS
+    cmake options, this is better done by directly annotating
+    exported functions with EMSCRIPTEN_KEEPALIVE (or soon
+    [EMSCRIPTEN_EXPORT](https://github.com/kripken/emscripten/pull/4977))
+  - a new predefined cmake variable FIPS\_BUILD\_DIR, this points
+    to the build root directory (../fips\_build)
+  - two new predefined cmake variables FIPS\_PROJECT_\BUILD\_DIR
+    and FIPS\_PROJECT\_DEPLOY\_DIR, these are useful to pass
+    as arguments to code generator scripts
+  - emscripten: use linker response files when using the UNIX
+    Makefiles generator to workaround command line length limit 
+    on Windows
+  - emscripten: on Windows, use the the Emscripten SDK incoming
+    branch (requires LLVM compilation, but behaviour is now the
+    same as on OSX and Linux)
+  - fips\_files\_ex() and related cmake functions now warn if 
+    the globbed file list is empty, previously this generated
+    a rather cryptic cmake syntax error message
+  - emscripten: added support for WebAssembly (toolchain flags 
+    and build configs)
+  - emscripten: added a config option FIPS\_EMSCRIPTEN\_USE\_WEBGL2
+  - emscripten: added new cmake options 
+    FIPS\_EMSCRIPTEN\_USE\_CPU\_PROFILER and 
+    FIPS\_EMSCRIPTEN\_USE\_MEMORY\_PROFILER (these generate a build
+    with emscripten's built-in cpu and memory profilers)
+  - emscripten: added a FIPS\_EMSCRIPTEN\_USE\_SAFE\_HEAP cmake option
+  - emscripten: use the smaller 'shell\_minimal.html' file instead
+    of the original file which has a big SVG logo in it
+  - emscripten: use the -s NO\_EXIT\_RUNTIME which slightly 
+    reduces code size 
+  - Windows UWP support (not on daily use though)
+
 - **26-Feb-2016**: cmake generator definition in fips build config files
 is now more flexible by exposing the cmake -A (generator platform) 
 and -T options (generator toolset), there's now also a 'Default' generator
