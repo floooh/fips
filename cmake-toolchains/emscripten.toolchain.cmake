@@ -59,7 +59,6 @@ set(FIPS_EMSCRIPTEN_TOTAL_MEMORY 134217728 CACHE STRING "emscripten: total heap 
 set(FIPS_EMSCRIPTEN_LTO_LEVEL 1 CACHE STRING "emscripten: Link-time-optimization level (0..3)")
 set(FIPS_EMSCRIPTEN_OUTLINING_LIMIT 60000 CACHE STRING "emscripten: outlining limit")
 set(FIPS_EMSCRIPTEN_MEM_INIT_METHOD 1 CACHE STRING "emscripten: how to represent initial memory content (0..2)")
-set(FIPS_EMSCRIPTEN_EXPORTED_FUNCTIONS "['_main','_enter_fullscreen','_enter_soft_fullscreen','_emsc_pass_data','_emsc_put_msg']" CACHE STRING "emscripten: exported C function names")
 set(FIPS_EMSCRIPTEN_SHELL_HTML "${EMSCRIPTEN_ROOT_PATH}/src/shell_minimal.html" CACHE STRING "emscripten: path to shell html file")
 set(EMSCRIPTEN_TOTAL_MEMORY_WORKER 16777216)
 
@@ -73,7 +72,6 @@ set(EMSC_AR_FLAGS)
 set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} --memory-init-file ${FIPS_EMSCRIPTEN_MEM_INIT_METHOD}")
 set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s TOTAL_MEMORY=${FIPS_EMSCRIPTEN_TOTAL_MEMORY}")
 set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s ERROR_ON_UNDEFINED_SYMBOLS=1")
-set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s EXPORTED_FUNCTIONS=\"${FIPS_EMSCRIPTEN_EXPORTED_FUNCTIONS}\"")
 set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s NO_EXIT_RUNTIME=1")
 
 if (FIPS_PROFILING)
