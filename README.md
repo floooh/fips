@@ -27,7 +27,7 @@ http://floooh.github.io/fips/index.html
     [EMSCRIPTEN_EXPORT](https://github.com/kripken/emscripten/pull/4977))
   - a new predefined cmake variable FIPS\_BUILD\_DIR, this points
     to the build root directory (../fips\_build)
-  - two new predefined cmake variables FIPS\_PROJECT_\BUILD\_DIR
+  - two new predefined cmake variables FIPS\_PROJECT\_BUILD\_DIR
     and FIPS\_PROJECT\_DEPLOY\_DIR, these are useful to pass
     as arguments to code generator scripts
   - emscripten: use linker response files when using the UNIX
@@ -51,7 +51,7 @@ http://floooh.github.io/fips/index.html
     of the original file which has a big SVG logo in it
   - emscripten: use the -s NO\_EXIT\_RUNTIME which slightly 
     reduces code size 
-  - Windows UWP support (not on daily use though)
+  - Windows UWP support (not in daily use though)
 
 - **26-Feb-2016**: cmake generator definition in fips build config files
 is now more flexible by exposing the cmake -A (generator platform) 
