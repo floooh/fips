@@ -21,6 +21,21 @@ def check_exists(fips_dir) :
         return False
 
 #------------------------------------------------------------------------------
+def write_problem_matcher(f):
+    f.write('\t\t\t"problemMatcher": {\n')
+    f.write('\t\t\t\t"owner": "cpp",\n')
+    f.write('\t\t\t\t"fileLocation": ["absolute"],\n')
+    f.write('\t\t\t\t"pattern": {\n')
+    f.write('\t\t\t\t\t"regexp": "^(.*):(\\\\d+):(\\\\d+):\\\\s+(warning|error):\\\\s+(.*)$",\n')
+    f.write('\t\t\t\t\t"file": 1,\n')
+    f.write('\t\t\t\t\t"line": 2,\n')
+    f.write('\t\t\t\t\t"column": 3,\n')
+    f.write('\t\t\t\t\t"severity": 4,\n')
+    f.write('\t\t\t\t\t"message": 5\n')
+    f.write('\t\t\t\t}\n')
+    f.write('\t\t\t}\n')
+
+#------------------------------------------------------------------------------
 def write_workspace_settings(fips_dir, proj_dir, cfg, toolchain_path, defines):
     """write a new VSCode workspace settings file with 
     config settings for the VSCode cmake tools extension.
@@ -39,34 +54,24 @@ def write_workspace_settings(fips_dir, proj_dir, cfg, toolchain_path, defines):
         f.write('\t"version": "0.1.0",\n')
         f.write('\t"command": "./fips",\n')
         f.write('\t"isShellCommand": true,\n')
-        f.write('\t"showOutput": "always",\n')
+        f.write('\t"showOutput": "silent",\n')
         f.write('\t"suppressTaskName": true,\n')
 
-        # write gcc/clang problem matcher
-        f.write('\t"problemMatcher": {\n')
-        f.write('\t\t"fileLocation": ["absolute"],\n')
-        f.write('\t\t"pattern": {\n')
-        f.write('\t\t\t"regexp": "^(.*):(\\\\d+):(\\\\d+):\\\\s+(warning|error):\\\\s+(.*)$",\n')
-        f.write('\t\t\t"file": 1,\n')
-        f.write('\t\t\t"line": 2,\n')
-        f.write('\t\t\t"column": 3,\n')
-        f.write('\t\t\t"severity": 4,\n')
-        f.write('\t\t\t"message": 5\n')
-        f.write('\t\t}\n')
-        f.write('\t},\n')
 
         f.write('\t"tasks": [\n')
         for tgt_name,tgt_type in targets.iteritems():
             f.write('\t\t{\n')
             f.write('\t\t\t"taskName": "{}",\n'.format(tgt_name))
-            f.write('\t\t\t"args": ["make", "{}"]\n'.format(tgt_name))
+            f.write('\t\t\t"args": ["make", "{}"],\n'.format(tgt_name))
+            write_problem_matcher(f)
             f.write('\t\t},\n')
 
         # make ALL task
         f.write('\t\t{\n')
         f.write('\t\t\t"isBuildCommand": true,\n')
         f.write('\t\t\t"taskName": "ALL",\n')
-        f.write('\t\t\t"args": ["build"]\n')
+        f.write('\t\t\t"args": ["build"],\n')
+        write_problem_matcher(f)
         f.write('\t\t},\n')
 
         # make clean task
