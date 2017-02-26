@@ -1,8 +1,10 @@
 """wrapper for cmake tool"""
 import subprocess
+from subprocess import PIPE
 import platform
+import json
 
-from mod import log
+from mod import log,util
 from mod.tools import ninja
 
 name = 'cmake'
@@ -99,4 +101,61 @@ def run_clean(fips_dir, build_dir) :
         return res == 0
     except (OSError, subprocess.CalledProcessError) :
         return False
+
+#------------------------------------------------------------------------------
+def get_codemodel(fips_dir, proj_dir, cfg):
+    """start a cmake server and query the codemodel information
+    from it, return this as a decoded JSON dictionary object.
+    """
+    proj_name = util.get_project_name_from_dir(proj_dir)
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+    out_path = build_dir + '/fips_cmake_server_output.json'
+
+    cmd = ['cmake', '-E', 'server', '--experimental', '--debug']
+    try :
+        result = None
+        f = open(out_path, 'w')
+        p = subprocess.Popen(cmd, cwd=build_dir, stdout=f, stdin=PIPE, stderr=PIPE)
+        # build the message, first a handshake must be sent, then the actual msg
+        payload = '[== "CMake Server" ==[\n{{'\
+              '"cookie:":"fips",'\
+              '"type":"handshake",'\
+              '"protocolVersion":{{"major":1}},'\
+              '"sourceDirectory":"{}",'\
+              '"buildDirectory":"{}",'\
+              '"generator":"{}"'\
+              '}}\n]== "CMake Server" ==]\n'\
+              '[== "CMake Server" ==[\n{{'\
+              '"type":"configure"'\
+              '}}\n]== "CMake Server" ==]\n'\
+              '[== "CMake Server" ==[\n{{'\
+              '"type":"compute"'\
+              '}}\n]== "CMake Server" ==]\n'\
+              '[== "CMake Server" ==[\n{{'\
+              '"type":"codemodel"'\
+              '}}\n]== "CMake Server" ==]\n'.format(proj_dir, build_dir, cfg['generator'])
+        p.communicate(input=payload)
+        f.close()
+
+        # parse the output file
+        is_payload = False
+        with open(out_path, 'r') as f:
+            for line in f:
+                if is_payload:
+                    content = json.loads(line)
+                    if 'inReplyTo' in content:
+                        if content['inReplyTo'] == 'codemodel':
+                            result = content
+                            break
+                    is_payload = False
+                elif line == '[== "CMake Server" ==[\n':
+                    # next line is payload
+                    is_payload = True
+        return result
+    except OSError as e:
+        log.error("failed to start cmake server with '{}'".format(e.message))
+        return None
+    except subprocess.CalledProcessError as e:
+        log.error("cmake-server failed with '{}'".format(e.message))
+        return None
 
