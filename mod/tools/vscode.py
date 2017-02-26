@@ -1,6 +1,7 @@
 '''VSCode helper functions'''
 import subprocess
 import os
+import json
 from mod import util
 from mod.tools import cmake
 
@@ -22,21 +23,6 @@ def check_exists(fips_dir) :
         return False
 
 #------------------------------------------------------------------------------
-def write_problem_matcher(f):
-    f.write('\t\t\t"problemMatcher": {\n')
-    f.write('\t\t\t\t"owner": "cpp",\n')
-    f.write('\t\t\t\t"fileLocation": ["absolute"],\n')
-    f.write('\t\t\t\t"pattern": {\n')
-    f.write('\t\t\t\t\t"regexp": "^(.*):(\\\\d+):(\\\\d+):\\\\s+(warning|error):\\\\s+(.*)$",\n')
-    f.write('\t\t\t\t\t"file": 1,\n')
-    f.write('\t\t\t\t\t"line": 2,\n')
-    f.write('\t\t\t\t\t"column": 3,\n')
-    f.write('\t\t\t\t\t"severity": 4,\n')
-    f.write('\t\t\t\t\t"message": 5\n')
-    f.write('\t\t\t\t}\n')
-    f.write('\t\t\t}\n')
-
-#------------------------------------------------------------------------------
 def extract_targets(codemodel, types):
     '''returns a set of unique target names from the cmake codemodel dump
 
@@ -56,6 +42,39 @@ def extract_targets(codemodel, types):
     return set(result)
 
 #------------------------------------------------------------------------------
+def extract_include_paths(codemodel):
+    '''returns a set of unique include paths from the cmake codemodel dump
+
+    :param codemodel: result of cmake.get_codemodel()
+    :returns: list of unique include paths
+    '''
+    result = []
+    for config in codemodel['configurations']:
+        for project in config['projects']:
+            for tgt in project['targets']:
+                if 'fileGroups' in tgt:
+                    for fg in tgt['fileGroups']:
+                        if 'includePath' in fg:
+                            for ip in fg['includePath']:
+                                result.append(ip['path'])
+    return set(result)
+
+#------------------------------------------------------------------------------
+def problem_matcher():
+    return {
+        'owner': 'cpp',
+        'fileLocation': 'absolute',
+        'pattern': {
+            'regexp': '^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$',
+            'file': 1,
+            'line': 2,
+            'column': 3,
+            'severity': 4,
+            'message': 5
+        }
+    }
+
+#------------------------------------------------------------------------------
 def write_workspace_settings(fips_dir, proj_dir, cfg, toolchain_path, defines):
     """write a new VSCode workspace settings file with 
     config settings for the VSCode cmake tools extension.
@@ -67,56 +86,79 @@ def write_workspace_settings(fips_dir, proj_dir, cfg, toolchain_path, defines):
     codemodel = cmake.get_codemodel(fips_dir, proj_dir, cfg)
     all_targets = extract_targets(codemodel, None)
     exe_targets = extract_targets(codemodel, ['EXECUTABLE'])
+    inc_paths = extract_include_paths(codemodel)
     if not os.path.isdir(vscode_dir):
         os.makedirs(vscode_dir)
 
     # write a tasks.json file
+    tasks = {
+        'version':  '0.1.0',
+        'command':  './fips',
+        'isShellCommand':   True,
+        'showOutput': 'silent',
+        'suppressTaskName': True,
+        'echoCommand': True,
+        'tasks': []
+    }
+    for tgt in all_targets:
+        tasks['tasks'].append({
+            'taskName': tgt,
+            'args': ['make', tgt],
+            'problemMatcher': problem_matcher(),
+        })
+    tasks['tasks'].append({
+        'isBuildCommand': True,
+        'taskName': 'ALL',
+        'args': ['build'],
+        'problemMatcher': problem_matcher()
+    })
     with open(vscode_dir + '/tasks.json', 'w') as f:
-        f.write('{\n')
-        f.write('\t"version": "0.1.0",\n')
-        f.write('\t"command": "./fips",\n')
-        f.write('\t"isShellCommand": true,\n')
-        f.write('\t"showOutput": "silent",\n')
-        f.write('\t"suppressTaskName": true,\n')
-        f.write('\t"tasks": [\n')
-        for tgt in all_targets:
-            f.write('\t\t{\n')
-            f.write('\t\t\t"taskName": "{}",\n'.format(tgt))
-            f.write('\t\t\t"args": ["make", "{}"],\n'.format(tgt))
-            write_problem_matcher(f)
-            f.write('\t\t},\n')
-
-        # make ALL task
-        f.write('\t\t{\n')
-        f.write('\t\t\t"isBuildCommand": true,\n')
-        f.write('\t\t\t"taskName": "ALL",\n')
-        f.write('\t\t\t"args": ["build"],\n')
-        write_problem_matcher(f)
-        f.write('\t\t}\n')
-        f.write('\t],\n')
-        f.write('\t"echoCommand": true\n')
-        f.write('}\n')
+        json.dump(tasks, f, indent=1, separators=(',',':'))
 
     # write a launch.json with 1 config per build target
+    launch = {
+        'version': '0.2.0',
+        'configurations': []
+    }
+    for tgt in exe_targets:
+        path = deploy_dir + '/' + tgt
+        if os.path.isdir(path + '.app'):
+            path += '.app'
+        c = {
+            'type': 'lldb',
+            'request': 'launch',
+            'name': tgt,
+            'program': path
+        }
+        launch['configurations'].append(c)
+
     with open(vscode_dir + '/launch.json', 'w') as f:
-        first = True
-        f.write('{\n')
-        f.write('\t"version": "0.2.0",\n')
-        f.write('\t"configurations": [\n')
-        for tgt in exe_targets:
-            if first:
-                first = False
-            else:
-                f.write('\t,\n')
-            f.write('\t\t{\n')
-            f.write('\t\t\t"type": "lldb",\n')
-            f.write('\t\t\t"request": "launch",\n')
-            f.write('\t\t\t"name": "{}",\n'.format(tgt))
-            path = deploy_dir + '/' + tgt
-            if os.path.isdir(path + '.app'):
-                # special case MacOS
-                path += '.app'
-            f.write('\t\t\t"program": "{}"\n'.format(path))
-            f.write('\t\t}\n')
-        f.write('\t]')
-        f.write('}\n')
+        json.dump(launch, f, indent=1, separators=(',',':'))
+
+    # write a c_cpp_properties.json file with header-search paths
+    props = {
+        'configurations': []
+    }
+    for config_name in ['Mac','Linux','Win32']:
+        c = {
+            'name': config_name,
+            'browse': {
+                'limitSymbolsToIncludeHeaders': True,
+                'databaseFilename': ''
+            }
+        }
+        if config_name in ['Mac', 'Linux']:
+            c['includePath'] = [
+                '/usr/include',
+                '/usr/local/include'
+            ]
+        else:
+            c['includePath'] = [
+                # FIXME
+                'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*'
+            ]
+        for inc_path in inc_paths:
+            c['includePath'].append(inc_path)
+        props['configurations'].append(c)
+    with open(vscode_dir + '/c_cpp_properties.json', 'w') as f:
+        json.dump(props, f, indent=1, separators=(',',':'))
