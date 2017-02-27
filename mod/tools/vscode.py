@@ -122,13 +122,43 @@ def write_workspace_settings(fips_dir, proj_dir, cfg, toolchain_path, defines):
     }
     for tgt in exe_targets:
         path = deploy_dir + '/' + tgt
-        if os.path.isdir(path + '.app'):
-            path += '.app'
+        cwd = os.path.dirname(path)
+        osx_path = path + '.app/Contents/MacOS/' + tgt
+        osx_cwd = os.path.dirname(osx_path)
+        if os.path.isdir(osx_cwd):
+            path = osx_path
+            cwd = osx_cwd
         c = {
-            'type': 'lldb',
-            'request': 'launch',
             'name': tgt,
-            'program': path
+            'type': 'cppdbg',
+            'request': 'launch',
+            'program': path,
+            'stopAtEntry': True,
+            'cwd': cwd,
+            'externalConsole': False,
+            'linux': {
+                'MIMode': 'gdb',
+                'setupCommands': [
+                    {
+                        'description': 'Enable pretty-printing for gdb',
+                        'text': '--enable-pretty-printing',
+                        'ignoreFailures': True
+                    }
+                ]
+            },
+            'osx': {
+                'MIMode': 'lldb'
+            },
+            'windows': {
+                'MIMode': 'gdb',
+                'setupCommands': [
+                    {
+                        'description': 'Enable pretty-printing for gdb',
+                        'text': '--enable-pretty-printing',
+                        'ignoreFailures': True
+                    }
+                ]
+            }
         }
         launch['configurations'].append(c)
 
