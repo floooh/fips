@@ -162,6 +162,26 @@ def write_workspace_settings(fips_dir, proj_dir, cfg, toolchain_path, defines):
         }
         launch['configurations'].append(c)
 
+    # add a python code-generator debug config
+    c = {
+        'name': 'fips codegen',
+        'type': 'python',
+        'request': 'launch',
+        'stopOnEntry': True,
+        'pythonPath': '${config.python.pythonPath}',
+        'program': '.fips-gen.py',
+        'args': [ build_dir + '/fips_codegen.yml' ],
+        "cwd": proj_dir,
+        "debugOptions": [
+            "WaitOnAbnormalExit",
+            "WaitOnNormalExit",
+            "RedirectOutput"
+        ]
+    }
+    launch['configurations'].append(c)
+
+    # TODO: add entries for local fips verbs?
+
     with open(vscode_dir + '/launch.json', 'w') as f:
         json.dump(launch, f, indent=1, separators=(',',':'))
 
