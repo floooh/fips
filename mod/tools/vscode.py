@@ -76,8 +76,9 @@ def problem_matcher():
 
 #------------------------------------------------------------------------------
 def write_workspace_settings(fips_dir, proj_dir, cfg, toolchain_path, defines):
-    """write a new VSCode workspace settings file with 
-    config settings for the VSCode cmake tools extension.
+    """parse the cmake-server output file, extract 
+    build targets and header search paths, and write
+    VSCode config files to .vscode directory
     """
     vscode_dir = proj_dir + '/.vscode'
     proj_name = util.get_project_name_from_dir(proj_dir)
