@@ -12,12 +12,8 @@ platforms = ['linux', 'osx', 'win']
 optional = False
 not_found = 'please install cmake 2.8 or newer'
 
-# required version
-major = 2
-minor = 8
-
 #------------------------------------------------------------------------------
-def check_exists(fips_dir) :
+def check_exists(fips_dir, major=2, minor=8) :
     """test if cmake is in the path and has the required version
     
     :returns:   True if cmake found and is the required version

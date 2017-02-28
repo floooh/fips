@@ -9,6 +9,7 @@ import glob
 import subprocess
 
 from mod import log, util, settings, config, project
+from mod.tools import vscode
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
@@ -37,7 +38,7 @@ def run(fips_dir, proj_dir, args) :
 
         # first check if this is a VSCode project
         if cfg['build_tool'] == 'vscode_cmake':
-            subprocess.call('code .', cwd=proj_dir, shell=True)
+            vscode.run(proj_dir)
             return
         # try to open as Xcode project
         proj = glob.glob(build_dir + '/*.xcodeproj')

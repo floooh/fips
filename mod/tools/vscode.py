@@ -2,7 +2,7 @@
 import subprocess
 import os
 import json
-from mod import util
+from mod import util,log
 from mod.tools import cmake
 
 name = 'vscode'
@@ -16,11 +16,28 @@ def check_exists(fips_dir) :
     
     :returns:   True if code is in the path
     """
-    try :
+    try:
         subprocess.check_output(['code', '-version'])
         return True
-    except (OSError, subprocess.CalledProcessError) :
+    except (OSError, subprocess.CalledProcessError):
+        pass
+    try:
+        # umake on Ubuntu has VSCode as visual-studio-code
+        subprocess.check_output(['visual-studio-code', '-version'])
+        return True
+    except (OSError, subprocess.CalledProcessError):
         return False
+
+#------------------------------------------------------------------------------
+def run(proj_dir):
+    try:
+        subprocess.call('code .', cwd=proj_dir, shell=True)
+    except OSError:
+        pass
+    try:
+        subprocess.call('visual-studio-code .', cwd=proj_dir, shell=True)
+    except OSError:
+        log.error("Failed to run Visual Studio Code as 'code' or 'visual-studio-code'")
 
 #------------------------------------------------------------------------------
 def extract_targets(codemodel, types):
@@ -80,6 +97,9 @@ def write_workspace_settings(fips_dir, proj_dir, cfg, toolchain_path, defines):
     build targets and header search paths, and write
     VSCode config files to .vscode directory
     """
+    # first make sure that cmake is new enough to have cmake-server mode
+    if not cmake.check_exists(fips_dir, 3, 7):
+        log.error("cmake must be at least version 3.7 for VSCode support!")
     vscode_dir = proj_dir + '/.vscode'
     proj_name = util.get_project_name_from_dir(proj_dir)
     deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
