@@ -130,7 +130,7 @@ def get_codemodel(fips_dir, proj_dir, cfg):
               '[== "CMake Server" ==[\n{{'\
               '"type":"codemodel"'\
               '}}\n]== "CMake Server" ==]\n'.format(proj_dir, build_dir, cfg['generator'])
-        p.communicate(input=payload)
+        p.communicate(input=str.encode(payload))
         f.close()
 
         # parse the output file
