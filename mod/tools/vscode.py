@@ -16,7 +16,7 @@ def check_exists(fips_dir) :
     :returns:   True if code is in the path
     """
     try:
-        subprocess.check_output(['code', '-version'])
+        subprocess.check_output(['code', '-version'], shell=True)
         return True
     except (OSError, subprocess.CalledProcessError):
         return False
