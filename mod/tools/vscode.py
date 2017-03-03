@@ -13,17 +13,10 @@ not_found = 'used as IDE with vscode configs'
 #------------------------------------------------------------------------------
 def check_exists(fips_dir) :
     """test if 'code' is in the path
-    
     :returns:   True if code is in the path
     """
     try:
         subprocess.check_output(['code', '-version'])
-        return True
-    except (OSError, subprocess.CalledProcessError):
-        pass
-    try:
-        # umake on Ubuntu has VSCode as visual-studio-code
-        subprocess.check_output(['visual-studio-code', '-version'])
         return True
     except (OSError, subprocess.CalledProcessError):
         return False
@@ -33,11 +26,7 @@ def run(proj_dir):
     try:
         subprocess.call('code .', cwd=proj_dir, shell=True)
     except OSError:
-        pass
-    try:
-        subprocess.call('visual-studio-code .', cwd=proj_dir, shell=True)
-    except OSError:
-        log.error("Failed to run Visual Studio Code as 'code' or 'visual-studio-code'")
+        log.error("Failed to run Visual Studio Code as 'code'") 
 
 #------------------------------------------------------------------------------
 def extract_targets(codemodel, types):
