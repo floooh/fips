@@ -130,44 +130,48 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
     }
     for tgt in exe_targets:
         path = deploy_dir + '/' + tgt
+        if util.get_host_platform() == 'win':
+            path += '.exe'
         cwd = os.path.dirname(path)
         osx_path = path + '.app/Contents/MacOS/' + tgt
         osx_cwd = os.path.dirname(osx_path)
         if os.path.isdir(osx_cwd):
             path = osx_path
             cwd = osx_cwd
-        c = {
-            'name': tgt,
-            'type': 'cppdbg',
-            'request': 'launch',
-            'program': path,
-            'stopAtEntry': True,
-            'cwd': cwd,
-            'externalConsole': False,
-            'linux': {
-                'MIMode': 'gdb',
-                'setupCommands': [
-                    {
-                        'description': 'Enable pretty-printing for gdb',
-                        'text': '--enable-pretty-printing',
-                        'ignoreFailures': True
-                    }
-                ]
-            },
-            'osx': {
-                'MIMode': 'lldb'
-            },
-            'windows': {
-                'MIMode': 'gdb',
-                'setupCommands': [
-                    {
-                        'description': 'Enable pretty-printing for gdb',
-                        'text': '--enable-pretty-printing',
-                        'ignoreFailures': True
-                    }
-                ]
+        if util.get_host_platform() == 'win':
+            c = {
+                'name': tgt,
+                'type': 'cppvsdbg',
+                'request': 'launch',
+                'program': path,
+                'stopAtEntry': True,
+                'cwd': cwd,
+                'environment': [],
+                'externalConsole': False
             }
-        }
+        else:
+            c = {
+                'name': tgt,
+                'type': 'cppdbg',
+                'request': 'launch',
+                'program': path,
+                'stopAtEntry': True,
+                'cwd': cwd,
+                'externalConsole': False,
+                'linux': {
+                    'MIMode': 'gdb',
+                    'setupCommands': [
+                        {
+                            'description': 'Enable pretty-printing for gdb',
+                            'text': '--enable-pretty-printing',
+                            'ignoreFailures': True
+                        }
+                    ]
+                },
+                'osx': {
+                    'MIMode': 'lldb'
+                }
+            }
         launch['configurations'].append(c)
 
     # add a python code-generator debug config
