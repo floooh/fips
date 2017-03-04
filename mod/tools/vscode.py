@@ -60,18 +60,23 @@ def read_cmake_headerdirs(fips_dir, proj_dir, cfg):
 
 #------------------------------------------------------------------------------
 def problem_matcher():
-    return {
-        'owner': 'cpp',
-        'fileLocation': 'absolute',
-        'pattern': {
-            'regexp': '^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$',
-            'file': 1,
-            'line': 2,
-            'column': 3,
-            'severity': 4,
-            'message': 5
+    # FIXME: an actual compiler identification would be better here!
+    if util.get_host_platform() == 'win':
+        # assume that Windows is always the Visual Studio compiler
+        return "$msCompile"
+    else:
+        return {
+            'owner': 'cpp',
+            'fileLocation': 'absolute',
+            'pattern': {
+                'regexp': '^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$',
+                'file': 1,
+                'line': 2,
+                'column': 3,
+                'severity': 4,
+                'message': 5
+            }
         }
-    }
 
 #------------------------------------------------------------------------------
 def write_workspace_settings(fips_dir, proj_dir, cfg):
@@ -88,10 +93,15 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
     all_targets = read_cmake_targets(fips_dir, proj_dir, cfg, None)
     inc_paths = read_cmake_headerdirs(fips_dir, proj_dir, cfg)
 
+    if util.get_host_platform() == 'win':
+        fips_cmd = 'fips'
+    else:
+        fips_cmd = './fips'
+
     # write a tasks.json file
     tasks = {
         'version':  '0.1.0',
-        'command':  './fips',
+        'command':  fips_cmd,
         'isShellCommand':   True,
         'showOutput': 'silent',
         'suppressTaskName': True,
