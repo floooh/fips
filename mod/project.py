@@ -81,7 +81,7 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
             ninja.prepare_ninja_tool(fips_dir, build_dir)
         cmake_result = cmake.run_gen(cfg, fips_dir, proj_dir, build_dir, toolchain_path, defines)
         if cfg['build_tool'] == 'vscode_cmake':
-            vscode.write_workspace_settings(fips_dir, proj_dir, cfg, toolchain_path, defines)
+            vscode.write_workspace_settings(fips_dir, proj_dir, cfg)
         return cmake_result
     else :
         return True

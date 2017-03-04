@@ -1,6 +1,7 @@
 '''VSCode helper functions'''
 import subprocess
 import os
+import yaml
 import json
 from mod import util,log
 from mod.tools import cmake
@@ -29,40 +30,32 @@ def run(proj_dir):
         log.error("Failed to run Visual Studio Code as 'code'") 
 
 #------------------------------------------------------------------------------
-def extract_targets(codemodel, types):
-    '''returns a set of unique target names from the cmake codemodel dump
-
-    :param codemodel: result of cmake.get_codemodel()
-    :param types: None: return all target types, or a string array of types
-    :returns: list of unique targets
+def read_cmake_targets(fips_dir, proj_dir, cfg, types):
+    '''Reads the fips_targets.yml file which was created during
+    "fips gen", and extract targets matching the target
+    types in the types array, or if types is None, all targets.
     '''
-    result = []
-    for config in codemodel['configurations']:
-        for project in config['projects']:
-            for tgt in project['targets']:
-                if types:
-                    if tgt['type'] in types:
-                        result.append(tgt['name'])
-                else:
-                    result.append(tgt['name'])
-    return set(result)
+    success, targets = util.get_cfg_target_list(fips_dir, proj_dir, cfg)
+    if success:
+        if types:
+            matching_targets = [tgt for tgt in targets if targets[tgt] in types]
+        else:
+            matching_targets = targets.keys()
+        return matching_targets
+    else:
+        log.error('Failed to read fips_targets.yml from build dir')
+        return None
 
 #------------------------------------------------------------------------------
-def extract_include_paths(codemodel):
-    '''returns a set of unique include paths from the cmake codemodel dump
-
-    :param codemodel: result of cmake.get_codemodel()
-    :returns: list of unique include paths
+def read_cmake_headerdirs(fips_dir, proj_dir, cfg):
+    '''reads the fips_headerdirs.yml file which was created during
+    "fips gen" and returns a list of unique header search paths
     '''
     result = []
-    for config in codemodel['configurations']:
-        for project in config['projects']:
-            for tgt in project['targets']:
-                if 'fileGroups' in tgt:
-                    for fg in tgt['fileGroups']:
-                        if 'includePath' in fg:
-                            for ip in fg['includePath']:
-                                result.append(ip['path'])
+    success, dirs = util.get_cfg_headersdirs_by_target(fips_dir, proj_dir, cfg)
+    if success:
+        for _,dirs in dirs.iteritems():
+            result.extend(dirs)
     return set(result)
 
 #------------------------------------------------------------------------------
@@ -81,24 +74,19 @@ def problem_matcher():
     }
 
 #------------------------------------------------------------------------------
-def write_workspace_settings(fips_dir, proj_dir, cfg, toolchain_path, defines):
-    """parse the cmake-server output file, extract 
-    build targets and header search paths, and write
-    VSCode config files to .vscode directory
-    """
-    # first make sure that cmake is new enough to have cmake-server mode
-    if not cmake.check_exists(fips_dir, 3, 7):
-        log.error("cmake must be at least version 3.7 for VSCode support!")
-    vscode_dir = proj_dir + '/.vscode'
+def write_workspace_settings(fips_dir, proj_dir, cfg):
+    '''write the VSCode launch.json, tasks.json and
+    c_cpp_properties.json files from cmake output files
+    '''
     proj_name = util.get_project_name_from_dir(proj_dir)
     deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
-    codemodel = cmake.get_codemodel(fips_dir, proj_dir, cfg)
-    all_targets = extract_targets(codemodel, None)
-    exe_targets = extract_targets(codemodel, ['EXECUTABLE'])
-    inc_paths = extract_include_paths(codemodel)
+    vscode_dir = proj_dir + '/.vscode'
     if not os.path.isdir(vscode_dir):
         os.makedirs(vscode_dir)
+    exe_targets = read_cmake_targets(fips_dir, proj_dir, cfg, ['app'])
+    all_targets = read_cmake_targets(fips_dir, proj_dir, cfg, None)
+    inc_paths = read_cmake_headerdirs(fips_dir, proj_dir, cfg)
 
     # write a tasks.json file
     tasks = {

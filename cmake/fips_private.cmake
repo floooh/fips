@@ -126,22 +126,22 @@ function(fips_addto_targets_list target type)
 endfunction()
 
 #-------------------------------------------------------------------------------
-#   fips_reset_headers_list
-#   Clears the fips_headers.yml file which keeps track of header search path.
+#   fips_reset_headerdirs_list
+#   Clears the fips_headerdirs.yml file which keeps track of header search path.
 #
-function(fips_reset_headers_list)
-    file(WRITE "${CMAKE_BINARY_DIR}/fips_headers.yml" "---\n")
+function(fips_reset_headerdirs_list)
+    file(WRITE "${CMAKE_BINARY_DIR}/fips_headerdirs.yml" "---\n")
 endfunction()
 
 #-------------------------------------------------------------------------------
-#   fips_addto_headers_list(target)
-#   Adds the target's header search path to the fips_headers.yml file.
+#   fips_addto_headerdirs_list(target)
+#   Adds the target's header search path to the fips_headerdirs.yml file.
 #
-function(fips_addto_headers_list target)
+function(fips_addto_headerdirs_list target)
     get_target_property(hdrs ${target} INCLUDE_DIRECTORIES)
-    file(APPEND "${CMAKE_BINARY_DIR}/fips_headers.yml" "${target}:\n")
+    file(APPEND "${CMAKE_BINARY_DIR}/fips_headerdirs.yml" "${target}:\n")
     foreach(hdr ${hdrs})
-        file(APPEND "${CMAKE_BINARY_DIR}/fips_headers.yml" "    - \"${hdr}\"\n")
+        file(APPEND "${CMAKE_BINARY_DIR}/fips_headerdirs.yml" "    - \"${hdr}\"\n")
     endforeach()
 endfunction()
 
