@@ -54,7 +54,7 @@ def read_cmake_headerdirs(fips_dir, proj_dir, cfg):
     result = []
     success, dirs = util.get_cfg_headersdirs_by_target(fips_dir, proj_dir, cfg)
     if success:
-        for _,dirs in dirs.iteritems():
+        for _,dirs in dirs.items():
             result.extend(dirs)
     return set(result)
 
