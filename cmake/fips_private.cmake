@@ -126,6 +126,26 @@ function(fips_addto_targets_list target type)
 endfunction()
 
 #-------------------------------------------------------------------------------
+#   fips_reset_headers_list
+#   Clears the fips_headers.yml file which keeps track of header search path.
+#
+function(fips_reset_headers_list)
+    file(WRITE "${CMAKE_BINARY_DIR}/fips_headers.yml" "---\n")
+endfunction()
+
+#-------------------------------------------------------------------------------
+#   fips_addto_headers_list(target)
+#   Adds the target's header search path to the fips_headers.yml file.
+#
+function(fips_addto_headers_list target)
+    get_target_property(hdrs ${target} INCLUDE_DIRECTORIES)
+    file(APPEND "${CMAKE_BINARY_DIR}/fips_headers.yml" "${target}:\n")
+    foreach(hdr ${hdrs})
+        file(APPEND "${CMAKE_BINARY_DIR}/fips_headers.yml" "    - \"${hdr}\"\n")
+    endforeach()
+endfunction()
+
+#-------------------------------------------------------------------------------
 #   fips_choose_config()
 #   Sets the FIPS_CONFIG variable to a sensible value, call this if
 #   FIPS_CONFIG hasn't been provided by the command line when using

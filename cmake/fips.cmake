@@ -196,8 +196,9 @@ macro(fips_setup)
         message(FATAL_ERROR "Python not found, required for code generation!")
     endif()
 
-    # write empty target files (will be populated in the fips_end macros)
+    # write empty YAML property tracking files
     fips_reset_targets_list()
+    fips_reset_headers_list()
 
     # initialize code generation
     fips_begin_gen()
@@ -273,8 +274,9 @@ macro(fips_end_module)
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
-    # record target name and type in the fips_targets.yml file
+    # track some target propeties in YAML files
     fips_addto_targets_list(${CurTargetName} "module")
+    fips_addto_headers_list(${CurTargetName})
 
 endmacro()
 
@@ -309,8 +311,9 @@ macro(fips_end_lib)
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
-    # record target name and type in the fips_targets.yml file
+    # track some target propeties in YAML files
     fips_addto_targets_list(${CurTargetName} "lib")
+    fips_addto_headers_list(${CurTargetName})
 
 endmacro()
 
@@ -401,8 +404,9 @@ macro(fips_end_app)
     fips_config_output_directory(${CurTargetName})
     fips_config_postfixes_for_exe(${CurTargetName})
 
-    # record target name and type in the fips_targets.yml file
+    # track some target propeties in YAML files
     fips_addto_targets_list(${CurTargetName} "app")
+    fips_addto_headers_list(${CurTargetName})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -447,8 +451,9 @@ macro(fips_end_sharedlib)
     # setup executable output directory and postfixes (_debug, etc...)
     fips_config_output_directory(${CurTargetName})
 
-    # record target name and type in the fips_targets.yml file
+    # track some target propeties in YAML files
     fips_addto_targets_list(${CurTargetName} "sharedlib")
+    fips_addto_headers_list(${CurTargetName})
 
 endmacro()
 
