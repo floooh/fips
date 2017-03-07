@@ -110,13 +110,18 @@ def has_local_changes(proj_dir):
 
 #-------------------------------------------------------------------------------
 def update_submodule(proj_dir):
-    """runs a 'git submodule update --recursive' on the provided git repo,
+    """runs a 'git submodule sync --recursive' followed by a
+    git submodule update --recursive' on the provided git repo,
     unconditionally (it will *not* check for local changes)
 
     :param proj_dir:    a git repo dir
     """
     check_exists_with_error()
-    subprocess.call('git submodule update --recursive', cwd=proj_dir, shell=True)
+    try:
+        subprocess.call('git submodule sync --recursive', cwd=proj_dir, shell=True)
+        subprocess.call('git submodule update --recursive', cwd=proj_dir, shell=True)
+    except subprocess.CalledProcessError:
+        log.error("Failed to call 'git submodule sync/update'")
 
 #-------------------------------------------------------------------------------
 def update(proj_dir):
