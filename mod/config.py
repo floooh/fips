@@ -26,6 +26,8 @@ generators = [
     'Visual Studio 12 Win64', 
     'Visual Studio 14',
     'Visual Studio 14 Win64',
+    'Visual Studio 15',
+    'Visual Studio 15 Win64',
     'CodeBlocks - Ninja',
     'CodeBlocks - Unix Makefiles',
     'CodeLite - Ninja',
