@@ -82,6 +82,8 @@ def isDirty(version, inputs, outputs) :
         if version :
             if fileVersionDirty(output, version) :
                 return True
+        if not os.path.exists(output):
+            return True
         outputTime = os.path.getmtime(output)
         for input in inputs :
             inputTime = os.path.getmtime(input)
