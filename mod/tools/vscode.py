@@ -181,7 +181,7 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
         'request': 'launch',
         'stopOnEntry': True,
         'pythonPath': '${config.python.pythonPath}',
-        'program': '.fips-gen.py',
+        'program': proj_dir + '/.fips-gen.py',
         'args': [ build_dir + '/fips_codegen.yml' ],
         "cwd": proj_dir,
         "debugOptions": [
