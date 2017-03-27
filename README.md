@@ -11,6 +11,11 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **27-Mar-2017**: the root path of the emscripten SDK has changed from
+emsdk\_portable to emsdk-portable, a fix has been committed, but you
+need to setup the emscripten SDK again (first, wipe the fips-sdks directory,
+then run './fips setup emscripten' again from a project directory)
+
 - **25-Feb-2017**: what happened in the last year:
   - python3 compatibility contributed by Levente Polyak (thanks!)
   - various Eclipse fixes contributed by Martin Gerhardy (thanks!)

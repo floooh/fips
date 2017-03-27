@@ -16,11 +16,11 @@
 # define emscripten SDK version
 set(FIPS_EMSCRIPTEN_SDK_VERSION "incoming")
 if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
-    set(EMSC_EMSDK_DIRNAME "../fips-sdks/win/emsdk_portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
+    set(EMSC_EMSDK_DIRNAME "../fips-sdks/win/emsdk-portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
 elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
-    set(EMSC_EMSDK_DIRNAME "../fips-sdks/osx/emsdk_portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
+    set(EMSC_EMSDK_DIRNAME "../fips-sdks/osx/emsdk-portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
 elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
-    set(EMSC_EMSDK_DIRNAME "../fips-sdks/linux/emsdk_portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
+    set(EMSC_EMSDK_DIRNAME "../fips-sdks/linux/emsdk-portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
 endif()
 
 # find the emscripten SDK and set the "EMSC_HAS_LOCAL_CONFIG" variable

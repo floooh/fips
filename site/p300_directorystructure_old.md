@@ -93,7 +93,7 @@ may change in the future):
 ```
 ┗━━ fips-sdks/
     ┗━━ osx/
-        ┣━━ emsdk_portable/
+        ┣━━ emsdk-portable/
         ┣━━ nacl_sdk/ 
         ┣━━ android-ndk-r9d/ 
         ┣━━ android-sdk-macosx/ 

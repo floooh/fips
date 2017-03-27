@@ -43,8 +43,8 @@ def get_sdk_version() :
 
 #-------------------------------------------------------------------------------
 def get_emsdk_dir(fips_dir) :
-    """return the emscripten SDK path (emsdk_portable)"""
-    return get_sdk_dir(fips_dir) + '/emsdk_portable'
+    """return the emscripten SDK path (emsdk-portable)"""
+    return get_sdk_dir(fips_dir) + '/emsdk-portable'
 
 #-------------------------------------------------------------------------------
 def get_archive_name() :
@@ -103,7 +103,7 @@ def setup(fips_dir, proj_dir) :
 
     # uncompress SDK archive
     log.info("uncompressing '{}'...".format(get_archive_name()))
-    uncompress(get_archive_path(fips_dir), get_sdk_dir(fips_dir), 'emsdk_portable')
+    uncompress(get_archive_path(fips_dir), get_sdk_dir(fips_dir), 'emsdk-portable')
 
     # setup SDK
     log.info("setup emscripten SDK...")
