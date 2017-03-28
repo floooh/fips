@@ -8,7 +8,7 @@ import subprocess
 from mod import log, util
 
 archives = {
-    'win': 'emsdk-1.35.0-portable-64bit.zip',
+    'win': 'emsdk-portable.zip',
     'osx': 'emsdk-portable.tar.gz',
     'linux': 'emsdk-portable.tar.gz'
 }
@@ -17,14 +17,6 @@ urls = {
     'win':      'http://s3.amazonaws.com/mozilla-games/emscripten/releases/{}'.format(archives['win']),
     'osx' :     'http://s3.amazonaws.com/mozilla-games/emscripten/releases/{}'.format(archives['osx']),
     'linux' :   'http://s3.amazonaws.com/mozilla-games/emscripten/releases/{}'.format(archives['linux'])
-}
-
-# define SDK version, note that the right version must also
-# be set in the emscripten.toolchain.cmake file!
-sdk_version = {
-    'win': 'sdk-incoming-64bit',
-    'osx': 'sdk-incoming-64bit',
-    'linux': 'sdk-incoming-64bit'
 }
 
 #-------------------------------------------------------------------------------
@@ -36,10 +28,6 @@ def get_sdk_url() :
 def get_sdk_dir(fips_dir) :
     """return the platform-specific SDK dir"""
     return util.get_workspace_dir(fips_dir) + '/fips-sdks/' + util.get_host_platform()
-
-#-------------------------------------------------------------------------------
-def get_sdk_version() :
-    return sdk_version[util.get_host_platform()]
 
 #-------------------------------------------------------------------------------
 def get_emsdk_dir(fips_dir) :
@@ -72,25 +60,29 @@ def uncompress(src_path, dst_path, zip_dir_name) :
         subprocess.call('tar -xvf {}'.format(src_path), cwd=dst_path, shell=True)
 
 #-------------------------------------------------------------------------------
-def finish(sdk_dir) :
-    """finish setting up the emscripten SDK
-
-    FIXME: the used SDK version should be configurable!
-    """
-    if util.get_host_platform() == 'win' :
+def finish(sdk_dir, version_tag) :
+    """finish setting up the emscripten SDK"""
+    if util.get_host_platform() == 'win':
         # on Windows use a stable SDK version which doesn't require clang to be compiled
         subprocess.call(args='emsdk.bat update', cwd=sdk_dir, shell=True)
-        subprocess.call(args='emsdk.bat install {}'.format(get_sdk_version()), cwd=sdk_dir, shell=True)
-        subprocess.call(args='emsdk.bat activate --embedded {}'.format(get_sdk_version()), cwd=sdk_dir, shell=True)
+        subprocess.call(args='emsdk.bat install {}'.format(version_tag), cwd=sdk_dir, shell=True)
+        subprocess.call(args='emsdk.bat activate --embedded {}'.format(version_tag), cwd=sdk_dir, shell=True)
     else :
         subprocess.call(args='./emsdk update', cwd=sdk_dir, shell=True)
-        subprocess.call(args='./emsdk install {}'.format(get_sdk_version()), cwd=sdk_dir, shell=True)
-        subprocess.call(args='./emsdk activate --embedded {}'.format(get_sdk_version()), cwd=sdk_dir, shell=True)
+        subprocess.call(args='./emsdk install {}'.format(version_tag), cwd=sdk_dir, shell=True)
+        subprocess.call(args='./emsdk activate --embedded {}'.format(version_tag), cwd=sdk_dir, shell=True)
 
 #-------------------------------------------------------------------------------
-def setup(fips_dir, proj_dir) :
-    """setup the emscripten SDK from scratch"""
-    log.colored(log.YELLOW, '=== setup emscripten SDK:')
+def setup(fips_dir, proj_dir, version) :
+    """setup the emscripten SDK from scratch
+
+    Version is smth like 'incoming' or '1.37.9', the actual emsdk 
+    version tag will be sdk-[version]-64bit
+    """
+    if version is None:
+        version = 'incoming'
+    version_tag = 'sdk-{}-64bit'.format(version)
+    log.colored(log.YELLOW, '=== setup emscripten SDK ({}):'.format(version_tag))
 
     ensure_sdk_dirs(fips_dir)
 
@@ -107,8 +99,15 @@ def setup(fips_dir, proj_dir) :
 
     # setup SDK
     log.info("setup emscripten SDK...")
-    finish(get_emsdk_dir(fips_dir))
+    finish(get_emsdk_dir(fips_dir), version_tag)
 
+    # write version tag, to a file which will be loaded by the cmake
+    # toolchain file later
+    version_path = '{}/fips_emsdk_version.txt'.format(get_emsdk_dir(fips_dir))
+    log.info("write version tag to '{}'".format(version_path))
+    with open(version_path, "w") as f:
+        f.write(version)
+    
     log.colored(log.GREEN, "done.")
 
 #-------------------------------------------------------------------------------

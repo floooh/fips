@@ -13,33 +13,37 @@
 #   use the --em-config like the C/CXX compilers.
 #
 
-# define emscripten SDK version
-set(FIPS_EMSCRIPTEN_SDK_VERSION "incoming")
+# find the fips_emsdk_version.txt, this is a bit tricky because
+# of cmake's own compiler test which is creating it's own
+# temporary CMakeLists.txt file
 if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
-    set(EMSC_EMSDK_DIRNAME "../fips-sdks/win/emsdk-portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
+    set(fips_emsc_platform "win")
 elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
-    set(EMSC_EMSDK_DIRNAME "../fips-sdks/osx/emsdk-portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
+    set(fips_emsc_platform "osx")
 elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
-    set(EMSC_EMSDK_DIRNAME "../fips-sdks/linux/emsdk-portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
+    set(fips_emsc_platform "linux")
 endif()
 
-# find the emscripten SDK and set the "EMSC_HAS_LOCAL_CONFIG" variable
-macro(find_emscripten_sdk)
-    # first check for the official EMSDK, this does not allow to override
-    # the location of the .emscripten config file
-    get_filename_component(EMSCRIPTEN_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}/../${EMSC_EMSDK_DIRNAME}" ABSOLUTE)
-    if (NOT EXISTS "${EMSCRIPTEN_ROOT_PATH}/emcc")
-        message(FATAL_ERROR "Could not find emscripten SDK! Please run 'fips setup emscripten'!")
+# option 1: project's CMakeLists.txt file
+get_filename_component(FIPS_EMSDK_ROOT "${CMAKE_SOURCE_DIR}/../fips-sdks/${fips_emsc_platform}/emsdk-portable" ABSOLUTE)
+message("Finding emsdk, trying: ${FIPS_EMSDK_ROOT}")
+if (NOT EXISTS "${FIPS_EMSDK_ROOT}/fips_emsdk_version.txt")
+    # option 2: running in compiler test
+    get_filename_component(FIPS_EMSDK_ROOT "${CMAKE_SOURCE_DIR}/../../../../../fips-sdks/${fips_emsc_platform}/emsdk-portable" ABSOLUTE)
+    message("Not found, trying: ${FIPS_EMSDK_ROOT}")
+    if (NOT EXISTS "${FIPS_EMSDK_ROOT}/fips_emsdk_version.txt")
+        message(FATAL_ERROR "emsdk not found, please run './fips setup emscripten'")
     endif()
-endmacro()
+endif()
 
-# find the emscripten SDK
-find_emscripten_sdk()
-set(EMSCRIPTEN_LLVM_ROOT "${EMSCRIPTEN_ROOT_PATH}/../../clang/fastcomp/build_${FIPS_EMSCRIPTEN_SDK_VERSION}_64/bin")
-
-# Normalize, convert Windows backslashes to forward slashes or CMake will crash.
-get_filename_component(EMSCRIPTEN_ROOT_PATH "${EMSCRIPTEN_ROOT_PATH}" ABSOLUTE)
-get_filename_component(EMSCRIPTEN_LLVM_ROOT "${EMSCRIPTEN_LLVM_ROOT}" ABSOLUTE)
+# read the installed SDK version
+file(READ "${FIPS_EMSDK_ROOT}/fips_emsdk_version.txt" FIPS_EMSDK_VERSION)
+message("Emsdk version is: ${FIPS_EMSDK_VERSION}")
+set(EMSCRIPTEN_ROOT_PATH "${FIPS_EMSDK_ROOT}/emscripten/${FIPS_EMSDK_VERSION}")
+if (NOT EXISTS "${EMSCRIPTEN_ROOT_PATH}/emcc")
+    message(FATAL_ERROR "Could not find emscripten SDK at '${EMSCRIPTEN_ROOT_PATH}'! Please run 'fips setup emscripten'!")
+endif()
+message("EMSCRIPTEN_ROOT_PATH: ${EMSCRIPTEN_ROOT_PATH}")
 
 set(FIPS_PLATFORM EMSCRIPTEN)
 set(FIPS_PLATFORM_NAME "emsc")
