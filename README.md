@@ -143,6 +143,7 @@ Libs and engines:
 - **[libcurl (precompiled)](http://curl.haxx.se/libcurl/)**: https://github.com/floooh/fips-libcurl
 - **[libnoise](https://github.com/qknight/libnoise)**: https://github.com/mgerhardy/fips-libnoise
 - **[nanovg](https://github.com/memononen/nanovg)**: https://github.com/fungos/fips-nanovg
+- **[nativefiledialog](https://github.com/mlabbe/nativefiledialog)**: https://github.com/fungos/fips-nfd
 - **[oryol](http://floooh.github.io/oryol/)**: https://github.com/floooh/oryol
 - **[polyvox](https://bitbucket.org/volumesoffun/polyvox.git)**: https://github.com/mgerhardy/fips-polyvox
 - **[recastnavigation](https://github.com/memononen/recastnavigation)**: https://github.com/fungos/fips-recast
