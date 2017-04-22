@@ -217,6 +217,26 @@ may change in the future though</p>
 
 <p>This finishes a fips_begin_lib() block.</p>
 
+<h4>fips_begin_sharedlib(name)</h4>
+
+<p>Begin defining a fips shared library. A fips shared library is a collection of source
+files that compile into a dynamically linkable library (as opposed to static libraries).</p>
+
+<p>After a fips_begin_lib() the following fips macros are valid:</p>
+
+<ul>
+<li>fips_dir()</li>
+<li>fips_files()</li>
+<li>fips_generate()</li>
+<li>fips_deps()</li>
+<li>fips_libs()</li>
+<li>fips_end_lib()</li>
+</ul>
+
+<h4>fips_end_sharedlib()</h4>
+
+<p>This finishes a fips_begin_sharedlib() block.</p>
+
 <h4>fips_begin_app(name type)</h4>
 
 <p>Begin defining a fips application. The <em>type</em> argument can be either &#39;windowed&#39;
