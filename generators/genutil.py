@@ -31,7 +31,7 @@ def fmtError(msg, terminate=True) :
     if platform.system() == 'Windows' :
         print('{}({}): error: {}'.format(FilePath, LineNumber + 1, msg))
     else :
-        print('{}:{}: error: {}\n'.format(FilePath, LineNumber + 1, msg))
+        print('{}:{}:0: error: {}\n'.format(FilePath, LineNumber + 1, msg))
     if terminate:
         sys.exit(10)
 
@@ -43,7 +43,7 @@ def fmtWarning(msg) :
     if platform.system() == 'Windows' :
         print('{}({}): warning: {}'.format(FilePath, LineNumber + 1, msg))
     else :
-        print('{}:{}: warning: {}\n'.format(FilePath, LineNumber + 1, msg))
+        print('{}:{}:0: warning: {}\n'.format(FilePath, LineNumber + 1, msg))
 
 #-------------------------------------------------------------------------------
 def fileVersionDirty(filePath, version) :

@@ -11,6 +11,14 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **25-Apr-2017**: I committed a small fix which changes the order of
+imported dependencies so that imported dependencies now always come
+before the importing project. This was often also the case previously
+but could fail in cases where the same dependency was included from
+different projects. No changes should be required in your project,
+at least if the dependency tree was defined correctly and didn't
+depend on some hidden ordering.
+
 - **27-Mar-2017**: the root path of the emscripten SDK has changed from
 emsdk\_portable to emsdk-portable, a fix has been committed, but you
 need to setup the emscripten SDK again (first, wipe the fips-sdks directory,
@@ -143,6 +151,7 @@ Libs and engines:
 - **[libcurl (precompiled)](http://curl.haxx.se/libcurl/)**: https://github.com/floooh/fips-libcurl
 - **[libnoise](https://github.com/qknight/libnoise)**: https://github.com/mgerhardy/fips-libnoise
 - **[nanovg](https://github.com/memononen/nanovg)**: https://github.com/fungos/fips-nanovg
+- **[nativefiledialog](https://github.com/mlabbe/nativefiledialog)**: https://github.com/fungos/fips-nfd
 - **[oryol](http://floooh.github.io/oryol/)**: https://github.com/floooh/oryol
 - **[polyvox](https://bitbucket.org/volumesoffun/polyvox.git)**: https://github.com/mgerhardy/fips-polyvox
 - **[recastnavigation](https://github.com/memononen/recastnavigation)**: https://github.com/fungos/fips-recast

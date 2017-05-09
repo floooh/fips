@@ -110,6 +110,24 @@ After a fips\_begin\_lib() the following fips macros are valid:
 
 This finishes a fips\_begin\_lib() block.
 
+#### fips\_begin\_sharedlib(name)
+
+Begin defining a fips shared library. A fips shared library is a collection of source
+files that compile into a dynamically linkable library (as opposed to static libraries).
+
+After a fips\_begin\_lib() the following fips macros are valid:
+
+* fips\_dir()
+* fips\_files()
+* fips\_generate()
+* fips\_deps()
+* fips\_libs()
+* fips\_end\_lib()
+
+#### fips\_end\_sharedlib()
+
+This finishes a fips\_begin\_sharedlib() block.
+
 #### fips\_begin\_app(name type)
 
 Begin defining a fips application. The _type_ argument can be either 'windowed'

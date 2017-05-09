@@ -3,7 +3,8 @@ import subprocess
 import os
 import yaml
 import json
-from mod import util,log
+import inspect
+from mod import util,log,verb
 from mod.tools import cmake
 
 name = 'vscode'
@@ -144,6 +145,7 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
                 'type': 'cppvsdbg',
                 'request': 'launch',
                 'program': path,
+                'args': [],
                 'stopAtEntry': True,
                 'cwd': cwd,
                 'environment': [],
@@ -155,6 +157,7 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
                 'type': 'cppdbg',
                 'request': 'launch',
                 'program': path,
+                'args': [],
                 'stopAtEntry': True,
                 'cwd': cwd,
                 'externalConsole': False,
@@ -192,7 +195,26 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
     }
     launch['configurations'].append(c)
 
-    # TODO: add entries for local fips verbs?
+    # add a python debug config for each fips verb
+    for verb_name, verb_mod in verb.verbs.items() :
+        # ignore standard verbs
+        if fips_dir not in inspect.getfile(verb_mod):
+            c = {
+                'name': 'fips {}'.format(verb_name),
+                'type': 'python',
+                'request': 'launch',
+                'stopOnEntry': True,
+                'pythonPath': '${config.python.pythonPath}',
+                'program': proj_dir + '/fips',
+                'args': [ verb_name ],
+                'cwd': proj_dir,
+                "debugOptions": [
+                    "WaitOnAbnormalExit",
+                    "WaitOnNormalExit",
+                    "RedirectOutput"
+                ]
+            }
+            launch['configurations'].append(c)
 
     with open(vscode_dir + '/launch.json', 'w') as f:
         json.dump(launch, f, indent=1, separators=(',',':'))

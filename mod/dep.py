@@ -130,20 +130,20 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, result) :
     ws_dir = util.get_workspace_dir(fips_dir)
     proj_name = util.get_project_name_from_dir(proj_dir)
     if proj_name not in result :
-
-        result[proj_name] = {}
-        result[proj_name]['imports'] = get_imports(fips_dir, proj_dir)
-        result[proj_name]['exports'] = get_exports(proj_dir)
-
-        for dep_proj_name in result[proj_name]['imports'] :
+        imports = get_imports(fips_dir, proj_dir)
+        exports = get_exports(proj_dir)
+        for dep_proj_name in imports :
             if dep_proj_name not in result :
                 dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
-                dep_url = result[proj_name]['imports'][dep_proj_name]['git']
+                dep_url = imports[dep_proj_name]['git']
                 success, result = _rec_get_all_imports_exports(fips_dir, dep_proj_dir, result)
-
                 # break recursion on error
                 if not success :
                     return success, result
+
+        result[proj_name] = {}
+        result[proj_name]['imports'] = imports 
+        result[proj_name]['exports'] = exports 
 
     # done
     return success, result
@@ -295,13 +295,7 @@ def gather_imports(fips_dir, proj_dir) :
                             log.warn("Import module '{}=>{}' in '{}' collides with '{}=>{}' in earlier import".format(
                                 imp_mod, src_dir, imp_proj_name, imp_mod, unique_modules[imp_mod]))
                         unique_modules[imp_mod] = src_dir
-
-        # NOTE: return the imports in reversed order, so that for instance header paths
-        # are defined before the modules that need the header paths
-        reverseImported = OrderedDict()
-        for entry in reversed(imported) :
-            reverseImported[entry] = imported[entry]
-        return reverseImported
+        return imported
 
     else :
         log.warn("imports are incomplete, please run 'fips fetch'")
