@@ -25,8 +25,7 @@ def import_verbs_from(proj_name, proj_dir, verb_dir) :
     global verbs, proj_verbs
 
     # make sure project-verbs find their modules
-    if not proj_dir in sys.path :
-        sys.path.insert(0, proj_dir)
+    sys.path.insert(0, proj_dir)
 
     if os.path.isdir(verb_dir) :
 
@@ -37,13 +36,12 @@ def import_verbs_from(proj_name, proj_dir, verb_dir) :
                 verb_module_name = os.path.split(verb_path)[1]
                 verb_module_name = os.path.splitext(verb_module_name)[0]
                 if not verb_module_name.startswith('__') :
-                    if not verb_module_name in verbs :
-                        fp, pathname, desc = imp.find_module(verb_module_name, [verb_dir])
-                        verb_module = imp.load_module(verb_module_name, fp, pathname, desc)
-                        verbs[verb_module_name] = verb_module
-                        if proj_name not in proj_verbs :
-                            proj_verbs[proj_name] = []
-                        proj_verbs[proj_name].append(verb_module_name)
+                    fp, pathname, desc = imp.find_module(verb_module_name, [verb_dir])
+                    verb_module = imp.load_module(verb_module_name, fp, pathname, desc)
+                    verbs[verb_module_name] = verb_module
+                    if proj_name not in proj_verbs :
+                        proj_verbs[proj_name] = []
+                    proj_verbs[proj_name].append(verb_module_name)
                         
 #-------------------------------------------------------------------------------
 def import_verbs(fips_dir, proj_dir) :
