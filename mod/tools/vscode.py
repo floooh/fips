@@ -228,21 +228,32 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
             'name': config_name,
             'browse': {
                 'limitSymbolsToIncludeHeaders': True,
-                'databaseFilename': ''
+                'databaseFilename': '{}/browse.VS.code'.format(build_dir)
             }
         }
-        if config_name in ['Mac', 'Linux']:
-            c['includePath'] = [
+        config_incl_paths = []
+        if config_name == 'Mac':
+            config_incl_paths = [
+                '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1',
+                '/usr/local/include',
+                '/applications/xcode.app/contents/developer/toolchains/xcodedefault.xctoolchain/usr/lib/clang/8.1.0/include',
+                '/applications/xcode.app/contents/developer/toolchains/xcodedefault.xctoolchain/usr/include',
+                '/usr/include'
+            ]
+        elif config_name == 'Linux':
+            config_incl_paths = [
                 '/usr/include',
                 '/usr/local/include'
             ]
         else:
-            c['includePath'] = [
+            config_incl_paths = [
                 # FIXME
                 'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*'
             ]
         for inc_path in inc_paths:
-            c['includePath'].append(inc_path)
+            config_incl_paths.append(inc_path)
+        c['includePath'] = config_incl_paths
+        c['browse']['path'] = config_incl_paths
         props['configurations'].append(c)
     with open(vscode_dir + '/c_cpp_properties.json', 'w') as f:
         json.dump(props, f, indent=1, separators=(',',':'))
