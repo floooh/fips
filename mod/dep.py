@@ -17,6 +17,7 @@ def get_imports(fips_dir, proj_dir) :
     proj_name = util.get_project_name_from_dir(proj_dir)
     imports = {}
     if util.is_valid_project_dir(proj_dir) :
+        # TODO: Load .fips.pinned_deps instead on `fips update --from-pinned-deps`.
         dic = util.load_fips_yml(proj_dir)
         if 'imports' in dic :
             imports = dic['imports']
