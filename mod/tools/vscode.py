@@ -151,6 +151,18 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
                 'environment': [],
                 'externalConsole': False
             }
+        elif util.get_host_platform() == 'linux':
+            c = {
+                'name': tgt,
+                'type': 'cppdbg',
+                'request': 'launch',
+                'program': path,
+                'args': [],
+                'stopAtEntry': True,
+                'cwd': cwd,
+                'externalConsole': False,
+                'MIMode': 'gdb'
+            }
         else:
             c = {
                 'name': tgt,
@@ -161,19 +173,7 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
                 'stopAtEntry': True,
                 'cwd': cwd,
                 'externalConsole': False,
-                'linux': {
-                    'MIMode': 'gdb',
-                    'setupCommands': [
-                        {
-                            'description': 'Enable pretty-printing for gdb',
-                            'text': '--enable-pretty-printing',
-                            'ignoreFailures': True
-                        }
-                    ]
-                },
-                'osx': {
-                    'MIMode': 'lldb'
-                }
+                'MIMode': 'lldb'
             }
         launch['configurations'].append(c)
 
