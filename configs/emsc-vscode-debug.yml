@@ -1,0 +1,7 @@
+---
+platform: emscripten 
+generator: Ninja
+build_tool: vscode_cmake 
+build_type: Debug
+cmake-toolchain: emscripten.toolchain.cmake
+
