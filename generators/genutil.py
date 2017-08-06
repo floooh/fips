@@ -79,11 +79,11 @@ def isDirty(version, inputs, outputs) :
     :returns:           True if at least one output file is 'dirty'
     '''
     for output in outputs :
+        if not os.path.exists(output):
+            return True
         if version :
             if fileVersionDirty(output, version) :
                 return True
-        if not os.path.exists(output):
-            return True
         outputTime = os.path.getmtime(output)
         for input in inputs :
             inputTime = os.path.getmtime(input)
