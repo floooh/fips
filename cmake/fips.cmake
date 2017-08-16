@@ -8,6 +8,7 @@ if (${CMAKE_VERSION} VERSION_GREATER 3.0)
 endif()
 
 get_filename_component(FIPS_PROJECT_DIR "." ABSOLUTE)
+get_filename_component(FIPS_PROJECT_NAME ${FIPS_PROJECT_DIR} NAME)
 get_filename_component(FIPS_DEPLOY_DIR "../fips-deploy" ABSOLUTE)
 get_filename_component(FIPS_BUILD_DIR "../fips-build" ABSOLUTE)
 
@@ -90,7 +91,21 @@ macro(fips_setup)
     else()
         message(FATAL_ERROR "Must specify absolute FIPS_DEPLOY_DIR before calling fips_setup()!")
     endif()
+    message("FIPS_PROJECT_NAME: ${FIPS_PROJECT_NAME}")
     message("FIPS_AUTO_IMPORT: ${FIPS_AUTO_IMPORT}")
+
+    # set FIPS_CONFIG to default if not provided by command line
+    # (this provides better compatibility with some IDEs not directly
+    # supported by cmake, like QtCreator or CLion
+    if (NOT FIPS_CONFIG)
+        message("FIPS_CONFIG not provided by command line, selecting default value")
+        fips_choose_config()
+    endif()
+    message("FIPS_CONFIG: ${FIPS_CONFIG}")
+    get_filename_component(FIPS_PROJECT_BUILD_DIR "${FIPS_BUILD_DIR}/${FIPS_PROJECT_NAME}/${FIPS_CONFIG}" ABSOLUTE)
+    message("FIPS_PROJECT_BUILD_DIR: ${FIPS_PROJECT_BUILD_DIR}")
+    get_filename_component(FIPS_PROJECT_DEPLOY_DIR "${FIPS_DEPLOY_DIR}/${FIPS_PROJECT_NAME}/${FIPS_CONFIG}" ABSOLUTE)
+    message("FIPS_PROJECT_DEPLOY_DIR: ${FIPS_PROJECT_DEPLOY_DIR}")
 
     # set host system variables
     set (FIPS_HOST_WINDOWS 0)
@@ -132,19 +147,6 @@ macro(fips_setup)
             message("Detected C++ Compiler: Unknown")
         endif()
     endif()
-
-    # set FIPS_CONFIG to default if not provided by command line
-    # (this provides better compatibility with some IDEs not directly
-    # supported by cmake, like QtCreator or CLion
-    if (NOT FIPS_CONFIG)
-        message("FIPS_CONFIG not provided by command line, selecting default value")
-        fips_choose_config()
-    endif()
-    message("FIPS_CONFIG: ${FIPS_CONFIG}")
-    get_filename_component(FIPS_PROJECT_BUILD_DIR "${FIPS_BUILD_DIR}/${CMAKE_PROJECT_NAME}/${FIPS_CONFIG}" ABSOLUTE)
-    message("FIPS_PROJECT_BUILD_DIR: ${FIPS_PROJECT_BUILD_DIR}")
-    get_filename_component(FIPS_PROJECT_DEPLOY_DIR "${FIPS_DEPLOY_DIR}/${CMAKE_PROJECT_NAME}/${FIPS_CONFIG}" ABSOLUTE)
-    message("FIPS_PROJECT_DEPLOY_DIR: ${FIPS_PROJECT_DEPLOY_DIR}")
 
     # Eclipse: Disable linked resources because Eclipse may get confused by these linked resources
     if (${CMAKE_GENERATOR} MATCHES "Eclipse CDT4")
@@ -237,10 +239,6 @@ endmacro()
 macro(fips_project proj)
     message("=== fips_project(${proj})")
     project(${proj})
-    get_filename_component(FIPS_PROJECT_BUILD_DIR "${FIPS_BUILD_DIR}/${CMAKE_PROJECT_NAME}/${FIPS_CONFIG}" ABSOLUTE)
-    message("FIPS_PROJECT_BUILD_DIR: ${FIPS_PROJECT_BUILD_DIR}")
-    get_filename_component(FIPS_PROJECT_DEPLOY_DIR "${FIPS_DEPLOY_DIR}/${CMAKE_PROJECT_NAME}/${FIPS_CONFIG}" ABSOLUTE)
-    message("FIPS_PROJECT_DEPLOY_DIR: ${FIPS_PROJECT_DEPLOY_DIR}")    
 endmacro()
 
 #-------------------------------------------------------------------------------
