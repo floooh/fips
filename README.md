@@ -11,6 +11,14 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **16-Aug-2017**: I found (and fixed) some inconsistent behaviour when 
+the cmake project name is different from the project's directory name,
+this may change the behaviour of cmake- and python-code-generator
+scripts which used the FIPS\_PROJECT\_DEPLOY\_DIR and 
+FIPS\_PROJECT\_BUILD\_DIR (but the previous behaviour was clearly a bug,
+which only manifested itself if the cmake project name and directory
+name differed). See this ticket for details: https://github.com/floooh/fips/issues/154
+
 - **25-Apr-2017**: I committed a small fix which changes the order of
 imported dependencies so that imported dependencies now always come
 before the importing project. This was often also the case previously
