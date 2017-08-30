@@ -8,7 +8,7 @@ import subprocess
 from mod import log, util
 
 archives = {
-    'win': 'emsdk-1.35.0-portable-64bit.zip',
+    'win': 'emsdk-portable-64bit.zip',
     'osx': 'emsdk-portable.tar.gz',
     'linux': 'emsdk-portable.tar.gz'
 }
@@ -102,7 +102,7 @@ def setup(fips_dir, proj_dir) :
         log.info("'{}' already exists".format(get_archive_name()))
 
     # uncompress SDK archive
-    log.info("uncompressing '{}'...".format(get_archive_name()))
+    log.info("\nuncompressing '{}'...".format(get_archive_name()))
     uncompress(get_archive_path(fips_dir), get_sdk_dir(fips_dir), 'emsdk-portable')
 
     # setup SDK
