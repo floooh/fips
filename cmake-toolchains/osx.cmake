@@ -53,6 +53,11 @@ else()
     set(FIPS_OSX_CXX_FLAGS "${FIPS_OSX_CXX_FLAGS} -fno-rtti")
 endif()
 
+# clang address sanitizer?
+if (FIPS_CLANG_ADDRESS_SANITIZER)
+    set(FIPS_OSX_COMMON_FLAGS "${FIPS_OSX_COMMON_FLAGS} -fsanitize=address")
+endif()
+
 # compiler flags
 set(CMAKE_CXX_FLAGS "-std=c++11 ${FIPS_OSX_COMMON_FLAGS} ${FIPS_OSX_CXX_FLAGS} -fstrict-aliasing -Wno-multichar -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-unused-volatile-lvalue -Wno-deprecated-writable-strings")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -DNDEBUG")
