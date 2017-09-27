@@ -151,25 +151,34 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
 
     # write a tasks.json file
     tasks = {
-        'version':  '0.1.0',
-        'command':  fips_cmd,
-        'isShellCommand':   True,
-        'showOutput': 'silent',
-        'suppressTaskName': True,
-        'echoCommand': True,
+        'version': '2.0.0',
         'tasks': []
     }
     for tgt in all_targets:
         tasks['tasks'].append({
             'taskName': tgt,
+            'type': 'process',
+            'command': fips_cmd,
             'args': ['make', tgt],
+            'group': 'build',
+            'presentation': {
+                'reveal': 'always'
+            },
             'problemMatcher': problem_matcher(),
         })
     tasks['tasks'].append({
-        'isBuildCommand': True,
         'taskName': 'ALL',
+        'type': 'process',
+        'command': fips_cmd,
         'args': ['build'],
-        'problemMatcher': problem_matcher()
+        'group': {
+            'kind': 'build',
+            'isDefault': True
+        },
+        'presentation': {
+            'reveal': 'always'
+        },
+        'problemMatcher': problem_matcher(),
     })
     with open(vscode_dir + '/tasks.json', 'w') as f:
         json.dump(tasks, f, indent=1, separators=(',',':'))
