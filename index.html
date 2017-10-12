@@ -11,7 +11,7 @@
 ">
 
   <link rel="stylesheet" href="/fips/css/main.css">
-  <link rel="canonical" href="http://floooh.github.com/fips/">
+  <link rel="canonical" href="http://localhost:4000/fips/">
 </head>
 
 
@@ -103,31 +103,31 @@
         <div>
 
   <article>
-    <h1>fips is like Vagrant, but for cmake.</h1>
+    <h1 id="fips-is-like-vagrant-but-for-cmake">fips is like Vagrant, but for cmake.</h1>
 
 <p>Fips simplifies working with many different cmake build configurations just
 like Vagrant simplifies working with many different Virtual Machine
 configurations.</p>
 
-<h3>Feature Overview</h3>
+<h3 id="feature-overview">Feature Overview</h3>
 
-<p>Fips is a Python tool which provides an &#39;Integrated Build Environment&#39;
+<p>Fips is a Python tool which provides an ‘Integrated Build Environment’
 on the command line for multi-platform, modular C/C++ projects by wiring
-together existing build tools. </p>
+together existing build tools.</p>
 
-<h4>An &#39;Integrated Build Environment&quot;</h4>
+<h4 id="an-integrated-build-environment">An ‘Integrated Build Environment”</h4>
 
-<p>Fips doesn&#39;t reinvent the wheel by implementing yet-another build system
+<p>Fips doesn’t reinvent the wheel by implementing yet-another build system
 from scratch, but instead wires existing build tools together:</p>
 
 <ul>
-<li><strong>cmake</strong> to describe the project structure and generate project files</li>
-<li><strong>make, ninja, xcodebuild</strong> as command line build tools</li>
-<li>IDE support as provided by cmake (i.e. <strong>Visual Studio, Xcode, QtCreator</strong>)</li>
-<li><strong>git</strong> to resolve external project dependencies</li>
+  <li><strong>cmake</strong> to describe the project structure and generate project files</li>
+  <li><strong>make, ninja, xcodebuild</strong> as command line build tools</li>
+  <li>IDE support as provided by cmake (i.e. <strong>Visual Studio, Xcode, QtCreator</strong>)</li>
+  <li><strong>git</strong> to resolve external project dependencies</li>
 </ul>
 
-<h4>Multi-Platform Support</h4>
+<h4 id="multi-platform-support">Multi-Platform Support</h4>
 
 <p>Fips can build on <strong>Windows, OSX, Linux</strong>, and cross-compile to <strong>iOS,
 emscripten, PNaCl</strong> and <strong>Android</strong>. Fips also takes care of installing 
@@ -136,14 +136,14 @@ for all target platforms. Instead of wrestling with the many different build
 systems used by those cross-platform SDKs you only maintain a single set 
 of cmake files for all target platforms.</p>
 
-<h4>Build Configuration Management</h4>
+<h4 id="build-configuration-management">Build Configuration Management</h4>
 
 <p>Multi-platform projects often have dozens of different build configurations
 for combinations of target platforms, build tools and build settings.
 Fips makes it easy to work with many different build configurations, and
 keeps the build files for each configuration separated from each other.</p>
 
-<h4>Dependency Management</h4>
+<h4 id="dependency-management">Dependency Management</h4>
 
 <p>Fips projects can define exports and imports to and from other fips projects,
 and thus serve as a simple package manager for code modules. External
@@ -151,25 +151,26 @@ projects will be pulled in via git and fips will import external build targets,
 and setup header and library search paths. A project with external dependencies
 will look and feel exactly the same like a completely local project.</p>
 
-<h4>Code Generation</h4>
+<h4 id="code-generation">Code Generation</h4>
 
 <p>Fips implements a simple yet powerful code generation mechanism by calling
-Python &#39;generator scripts&#39; during the build process.</p>
+Python ‘generator scripts’ during the build process.</p>
 
-<h4>Extensible</h4>
+<h4 id="extensible">Extensible</h4>
 
 <p>Fips projects can implement their own fips commands, build configurations and
 code generator scripts. This allows projects to implement missing
 fips features and integrate fips with existing workflows and build processes.</p>
 
-<h3>What fips is not:</h3>
+<h3 id="what-fips-is-not">What fips is not:</h3>
 
 <ul>
-<li>fips is not a build job scheduler like Jenkins, Hudson, msbuild or ant</li>
-<li>fips is not a distributed build system like Incredibuild</li>
-<li>fips is not a replacement for cmake, premake or scons</li>
-<li>fips is not a game asset exporter pipeline</li>
+  <li>fips is not a build job scheduler like Jenkins, Hudson, msbuild or ant</li>
+  <li>fips is not a distributed build system like Incredibuild</li>
+  <li>fips is not a replacement for cmake, premake or scons</li>
+  <li>fips is not a game asset exporter pipeline</li>
 </ul>
+
 
   </article>
 

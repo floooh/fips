@@ -11,7 +11,7 @@
 ">
 
   <link rel="stylesheet" href="/fips/css/main.css">
-  <link rel="canonical" href="http://floooh.github.com/fips/exports.html">
+  <link rel="canonical" href="http://localhost:4000/fips/exports.html">
 </head>
 
 
@@ -103,83 +103,88 @@
         <div>
 
   <article>
-    <h1>Exporting from fips projects</h1>
+    <h1 id="exporting-from-fips-projects">Exporting from fips projects</h1>
 
-<p>A fipsified project can provide different types of &#39;exports&#39; to other
+<p>A fipsified project can provide different types of ‘exports’ to other
 fips projects:</p>
 
 <ul>
-<li>code modules</li>
-<li>header search paths</li>
-<li>pre-compiled static libs</li>
-<li>C/C++ preprocessor defines</li>
-<li>a cmake include which is included in root CMakeLists.txt files of importing projects</li>
-<li>new fips commands</li>
-<li>build configs</li>
-<li>code generator scripts</li>
+  <li>code modules</li>
+  <li>header search paths</li>
+  <li>pre-compiled static libs</li>
+  <li>C/C++ preprocessor defines</li>
+  <li>a cmake include which is included in root CMakeLists.txt files of importing projects</li>
+  <li>new fips commands</li>
+  <li>build configs</li>
+  <li>code generator scripts</li>
 </ul>
 
-<h3>Exporting Code Modules</h3>
+<h3 id="exporting-code-modules">Exporting Code Modules</h3>
 
 <p>Projects can export modules defined with the fips_begin_module() and
-fips_begin_lib() commands in under the &#39;exports&#39; section of the fips.yml
-file. </p>
+fips_begin_lib() commands in under the ‘exports’ section of the fips.yml
+file.</p>
 
 <p>For instance, here are the exported modules of the Oryol 3D engine:</p>
-<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">exports</span><span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">modules</span> <span class="p-Indicator">:</span>
-        <span class="c1"># engine modules</span>
-        <span class="l-Scalar-Plain">Core</span> <span class="p-Indicator">:</span>          <span class="l-Scalar-Plain">code/Modules/Core</span>
-        <span class="l-Scalar-Plain">IO</span> <span class="p-Indicator">:</span>            <span class="l-Scalar-Plain">code/Modules/IO</span>
-        <span class="l-Scalar-Plain">Messaging</span> <span class="p-Indicator">:</span>     <span class="l-Scalar-Plain">code/Modules/Messaging</span>
-        <span class="l-Scalar-Plain">HTTP</span> <span class="p-Indicator">:</span>          <span class="l-Scalar-Plain">code/Modules/HTTP</span>
-        <span class="l-Scalar-Plain">Gfx</span> <span class="p-Indicator">:</span>           <span class="l-Scalar-Plain">code/Modules/Gfx</span>
-        <span class="l-Scalar-Plain">Resource</span> <span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">code/Modules/Resource</span>
-        <span class="l-Scalar-Plain">Assets</span> <span class="p-Indicator">:</span>        <span class="l-Scalar-Plain">code/Modules/Assets</span>
-        <span class="l-Scalar-Plain">Time</span> <span class="p-Indicator">:</span>          <span class="l-Scalar-Plain">code/Modules/Time</span>
-        <span class="l-Scalar-Plain">Dbg</span> <span class="p-Indicator">:</span>           <span class="l-Scalar-Plain">code/Modules/Dbg</span>
-        <span class="l-Scalar-Plain">Input</span> <span class="p-Indicator">:</span>         <span class="l-Scalar-Plain">code/Modules/Input</span>
-        <span class="l-Scalar-Plain">Synth</span> <span class="p-Indicator">:</span>         <span class="l-Scalar-Plain">code/Modules/Synth</span>
-        <span class="l-Scalar-Plain">NanoVG</span> <span class="p-Indicator">:</span>        <span class="l-Scalar-Plain">code/Modules/NanoVG</span>
 
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">exports</span><span class="pi">:</span>
+    <span class="na">modules </span><span class="pi">:</span>
+        <span class="c1"># engine modules</span>
+        <span class="na">Core </span><span class="pi">:</span>          <span class="s">code/Modules/Core</span>
+        <span class="na">IO </span><span class="pi">:</span>            <span class="s">code/Modules/IO</span>
+        <span class="na">Messaging </span><span class="pi">:</span>     <span class="s">code/Modules/Messaging</span>
+        <span class="na">HTTP </span><span class="pi">:</span>          <span class="s">code/Modules/HTTP</span>
+        <span class="na">Gfx </span><span class="pi">:</span>           <span class="s">code/Modules/Gfx</span>
+        <span class="na">Resource </span><span class="pi">:</span>      <span class="s">code/Modules/Resource</span>
+        <span class="na">Assets </span><span class="pi">:</span>        <span class="s">code/Modules/Assets</span>
+        <span class="na">Time </span><span class="pi">:</span>          <span class="s">code/Modules/Time</span>
+        <span class="na">Dbg </span><span class="pi">:</span>           <span class="s">code/Modules/Dbg</span>
+        <span class="na">Input </span><span class="pi">:</span>         <span class="s">code/Modules/Input</span>
+        <span class="na">Synth </span><span class="pi">:</span>         <span class="s">code/Modules/Synth</span>
+        <span class="na">NanoVG </span><span class="pi">:</span>        <span class="s">code/Modules/NanoVG</span>
+        
         <span class="c1"># ext libs</span>
-        <span class="l-Scalar-Plain">ConvertUTF</span><span class="p-Indicator">:</span>         <span class="l-Scalar-Plain">code/Ext/ConvertUTF</span>
-        <span class="l-Scalar-Plain">android-native</span><span class="p-Indicator">:</span>     <span class="l-Scalar-Plain">code/Ext/android_native</span>
-        <span class="l-Scalar-Plain">flextgl</span><span class="p-Indicator">:</span>            <span class="l-Scalar-Plain">code/Ext/flextgl</span>
-</code></pre></div>
-<p>The &#39;value&#39; in the modules export dictionary is the directory where the
+        <span class="na">ConvertUTF</span><span class="pi">:</span>         <span class="s">code/Ext/ConvertUTF</span>
+        <span class="na">android-native</span><span class="pi">:</span>     <span class="s">code/Ext/android_native</span>
+        <span class="na">flextgl</span><span class="pi">:</span>            <span class="s">code/Ext/flextgl</span>
+</code></pre></div></div>
+
+<p>The ‘value’ in the modules export dictionary is the directory where the
 CMakeLists.txt file of the module lives, relative to the project root directory.</p>
 
-<p>The &#39;key&#39; value must be identical with the name of the module defined in the
+<p>The ‘key’ value must be identical with the name of the module defined in the
 CMakeLists.txt file.</p>
 
-<h3>Exporting Header Search Paths</h3>
+<h3 id="exporting-header-search-paths">Exporting Header Search Paths</h3>
 
 <p>Projects can export a list of header search paths in their fips.yml file which 
 are then defined in  the toplevel CMakeLists.txt file of the importing project 
 and are visible to the entire project:</p>
-<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">exports</span><span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">header-dirs</span> <span class="p-Indicator">:</span>
-        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">code</span>
-        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">code/Modules</span>
-        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">code/Ext</span>
-</code></pre></div>
-<p>Of course it is also possible to directly use &#39;fips_include_directories()&#39;
-or &#39;include_directories()&#39; in imported CMakeLists.txt files, but be aware
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">exports</span><span class="pi">:</span>
+    <span class="na">header-dirs </span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">code</span>
+        <span class="pi">-</span> <span class="s">code/Modules</span>
+        <span class="pi">-</span> <span class="s">code/Ext</span>
+</code></pre></div></div>
+
+<p>Of course it is also possible to directly use ‘fips_include_directories()’
+or ‘include_directories()’ in imported CMakeLists.txt files, but be aware
 that these only propagate downwards in the CMakeLists.txt hierarchy, not
 upwards.</p>
 
-<h3>Exporting Precompiled Static Libs</h3>
+<h3 id="exporting-precompiled-static-libs">Exporting Precompiled Static Libs</h3>
 
 <p>Exporting precompiled static libs works a bit differently, they are not
 defined in the fips.yml file, instead fips checks if the imported project
-has a &#39;libs&#39; directory. If yes, library search paths are automatically
+has a ‘libs’ directory. If yes, library search paths are automatically
 added in the importing project, so that the imported libs are found
 automatically by fips_libs().</p>
 
-<p>Static link libs need to be located in subdirectories of &#39;libs&#39; named
+<p>Static link libs need to be located in subdirectories of ‘libs’ named
 after the target platform the libs are compiled for:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">┗━━ fips-sdks/
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┗━━ fips-sdks/
     ┗━━ osx/
     ┗━━ win32/
     ┗━━ win64/
@@ -188,76 +193,79 @@ after the target platform the libs are compiled for:</p>
     ┗━━ emscripten/
     ┗━━ ios/
     ┗━━ android/
-</code></pre></div>
-<p>There&#39;s no directory separation for release and debug versions of precompiled
+</code></pre></div></div>
+
+<p>There’s no directory separation for release and debug versions of precompiled
 libs. If you need this, it must be handled through differently named libs
 (e.g. a _d postfix for debug libs).</p>
 
 <blockquote>
-<p>NOTE: the way how static library imports are defined may change in the
+  <p>NOTE: the way how static library imports are defined may change in the
 future (moving them into the fips.yml file)</p>
 </blockquote>
 
-<h3>Exporting C/C++ Preprocessor Defines</h3>
+<h3 id="exporting-cc-preprocessor-defines">Exporting C/C++ Preprocessor Defines</h3>
 
 <p>Projects can list C/C++ preprocessor defines as key/value pairs in the
 export section of the fips.yml file. These defines are visible in the
-entire CMakeLists.txt hierarchy of the importing project. Here&#39;s an 
+entire CMakeLists.txt hierarchy of the importing project. Here’s an 
 example from fips-glm to set the angle unit to radians:</p>
-<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">exports</span> <span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">defines</span> <span class="p-Indicator">:</span>
-        <span class="l-Scalar-Plain">GLM_FORCE_RADIANS</span> <span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1</span>
-</code></pre></div>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">exports </span><span class="pi">:</span>
+    <span class="na">defines </span><span class="pi">:</span>
+        <span class="na">GLM_FORCE_RADIANS </span><span class="pi">:</span> <span class="s">1</span>
+</code></pre></div></div>
+
 <p>For finer control (e.g. define different defines for different platforms)
 it is better to directly use cmake add_defines() statements in the
 fips-include.cmake file (discussed below).</p>
 
-<h3>The fips-include.cmake File</h3>
+<h3 id="the-fips-includecmake-file">The fips-include.cmake File</h3>
 
 <p>Projects can place an optional fips-include.cmake file into their 
 root directory with additional cmake statements. This file is both
 included when building the project directory, as well as in the
 toplevel CMakeLists.txt file of importing projects. Have a look
-at Oryol&#39;s fips-include.cmake file for an example:</p>
+at Oryol’s fips-include.cmake file for an example:</p>
 
 <p>https://github.com/floooh/oryol/blob/master/fips-include.cmake</p>
 
-<h3>Adding New Fips Commands</h3>
+<h3 id="adding-new-fips-commands">Adding New Fips Commands</h3>
 
-<p>Projects can have an optional directory &#39;fips-verbs&#39; containing
+<p>Projects can have an optional directory ‘fips-verbs’ containing
 python scripts which add new subcommands (== verbs) to fips. The
 name of the python script (without the .py) is the name of the 
 command, and the script must define two special functions <strong>help</strong> 
 and <strong>run</strong>:</p>
 
 <ul>
-<li><strong>help()</strong>: this is called when &#39;fips help&#39; is invoked, should print 
+  <li><strong>help()</strong>: this is called when ‘fips help’ is invoked, should print 
 a help message formatted like the other builtin help messges</li>
-<li><strong>run(fips_dir, proj_dir, args)</strong>: contains the actual logic of the 
+  <li><strong>run(fips_dir, proj_dir, args)</strong>: contains the actual logic of the 
 command. The args fips_dir and proj_dir are the absolute paths 
 to the fips directory and the project directory where the command
 is run from. Args is a string array of all arguments given to the
 command.</li>
 </ul>
 
-<p>As an example, have a look at Oryol&#39;s &#39;webpage&#39; command here:</p>
+<p>As an example, have a look at Oryol’s ‘webpage’ command here:</p>
 
 <p>https://github.com/floooh/oryol/blob/master/fips-verbs/webpage.py</p>
 
-<h3>Build Configs</h3>
+<h3 id="build-configs">Build Configs</h3>
 
-<p>Projects can define new build configs which extend fips&#39; builtin
+<p>Projects can define new build configs which extend fips’ builtin
 configs. These build config files must be located in a subdirectory
-called &#39;fips-configs&#39;.</p>
+called ‘fips-configs’.</p>
 
-<p>Again, here&#39;s are example configs in the Oryol engine:</p>
+<p>Again, here’s are example configs in the Oryol engine:</p>
 
 <p>https://github.com/floooh/oryol/tree/master/fips-configs</p>
 
-<h3>Code Generator Scripts</h3>
+<h3 id="code-generator-scripts">Code Generator Scripts</h3>
 
 <p>Projects can extend fips with code generation python scripts in the
-&#39;fips-generators&#39; subdirectory. The details are described on the
+‘fips-generators’ subdirectory. The details are described on the
 <a href="/fips/codegen.html">Code Generation Page</a>.</p>
 
   </article>

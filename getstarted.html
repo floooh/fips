@@ -11,7 +11,7 @@
 ">
 
   <link rel="stylesheet" href="/fips/css/main.css">
-  <link rel="canonical" href="http://floooh.github.com/fips/getstarted.html">
+  <link rel="canonical" href="http://localhost:4000/fips/getstarted.html">
 </head>
 
 
@@ -103,101 +103,102 @@
         <div>
 
   <article>
-    <h1>Get Started</h1>
+    <h1 id="get-started">Get Started</h1>
 
-<h3>You need:</h3>
-
-<ul>
-<li>python 2.7.9</li>
-<li>cmake 2.8.11 or better</li>
-<li>a working C/C++ development environment:
+<h3 id="you-need">You need:</h3>
 
 <ul>
-<li>on <strong>OSX</strong>: Xcode + command line tools</li>
-<li>on <strong>Linux</strong>: make/gcc (or clang)</li>
-<li>on <strong>Windows</strong>: Visual Studio 2013 or better</li>
-</ul></li>
+  <li>python 2.7.9</li>
+  <li>cmake 2.8.11 or better</li>
+  <li>a working C/C++ development environment:
+    <ul>
+      <li>on <strong>OSX</strong>: Xcode + command line tools</li>
+      <li>on <strong>Linux</strong>: make/gcc (or clang)</li>
+      <li>on <strong>Windows</strong>: Visual Studio 2013 or better</li>
+    </ul>
+  </li>
 </ul>
 
-<h3>Get fips</h3>
+<h3 id="get-fips">Get fips</h3>
 
 <p>fips will create additional directories on the same directory level as
 the fips directory itself, thus it is recommended to git-clone fips into a separate
-&#39;workspace&#39; directory:</p>
+‘workspace’ directory:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; <span class="nb">cd</span> ~
-&gt; mkdir fips-workspace
-&gt; <span class="nb">cd </span>fips-workspace
-&gt; git clone https://github.com/floooh/fips.git
-&gt; <span class="nb">cd </span>fips
-&gt; _</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> <span class="nb">cd</span> ~
+<span class="o">&gt;</span> mkdir fips-workspace
+<span class="o">&gt;</span> <span class="nb">cd </span>fips-workspace
+<span class="o">&gt;</span> git clone https://github.com/floooh/fips.git
+<span class="o">&gt;</span> <span class="nb">cd </span>fips
+<span class="o">&gt;</span> _</code></pre></figure>
 
-<h3>Test if fips works</h3>
+<h3 id="test-if-fips-works">Test if fips works</h3>
 
-<p>Invoke the fips main script by running &#39;./fips&#39; from within the fips directory:</p>
+<p>Invoke the fips main script by running ‘./fips’ from within the fips directory:</p>
 
 <blockquote>
-<p>NOTE: on Windows, run &#39;fips&#39; instead of &#39;./fips&#39;</p>
+  <p>NOTE: on Windows, run ‘fips’ instead of ‘./fips’</p>
 </blockquote>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips
-run <span class="s1">&#39;fips help&#39;</span> <span class="k">for</span> more info</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips
+run <span class="s1">'fips help'</span> <span class="k">for </span>more info</code></pre></figure>
 
 <blockquote>
-<p>NOTE: usually &#39;./fips&#39; is run from the root directory of a &#39;fipsified&#39; C/C++
+  <p>NOTE: usually ‘./fips’ is run from the root directory of a ‘fipsified’ C/C++
 project, not from the fips directory</p>
 </blockquote>
 
-<h3>Get help</h3>
+<h3 id="get-help">Get help</h3>
 
-<p>Run &#39;./fips help&#39; to show available fips commands:</p>
+<p>Run ‘./fips help’ to show available fips commands:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">help</span>
-fips: the high-level, multi-platform build system wrapper
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips <span class="nb">help
+</span>fips: the high-level, multi-platform build system wrapper
 v0.0.1
 https://www.github.com/floooh/fips
 
 fips build
-fips build <span class="o">[</span>config<span class="o">]</span>
-   perform a build <span class="k">for</span> current or named config
+fips build <span class="o">[</span>config]
+   perform a build <span class="k">for </span>current or named config
 ...
-&gt; _</code></pre></figure>
+<span class="o">&gt;</span> _</code></pre></figure>
 
 <p>You can also show help for a single command:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">help </span>diag
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips <span class="nb">help </span>diag
 fips diag
 fips diag all
 fips diag fips
 fips diag tools
 fips diag configs
 fips diag imports
-    run diagnostics and check <span class="k">for</span> errors
-&gt; _</code></pre></figure>
+    run diagnostics and check <span class="k">for </span>errors
+<span class="o">&gt;</span> _</code></pre></figure>
 
-<h3>Get required tools</h3>
+<h3 id="get-required-tools">Get required tools</h3>
 
-<p>Run &#39;./fips diag tools&#39; to check for required tools, install any that are
-listed as &#39;NOT FOUND&#39;. The list of required tools may differ depending on 
+<p>Run ‘./fips diag tools’ to check for required tools, install any that are
+listed as ‘NOT FOUND’. The list of required tools may differ depending on 
 your host platform.</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips diag <span class="nv">tools</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips diag tools
 <span class="o">===</span> tools:
-git:    found
-cmake:  found
-ccmake: found
-make:   found
-ninja:  OPTIONAL, NOT FOUND <span class="o">(</span>required <span class="k">for</span> building <span class="s1">&#39;*-ninja-*&#39;</span> configs<span class="o">)</span>
-xcodebuild: found
-java:   found
-ant:    found
-python2:    found
-&gt; _</code></pre></figure>
+git:	found
+cmake:	found
+ccmake:	found
+make:	found
+ninja:	OPTIONAL, NOT FOUND <span class="o">(</span>required <span class="k">for </span>building <span class="s1">'*-ninja-*'</span> configs<span class="o">)</span>
+xcodebuild:	found
+java:	found
+ant:	found
+python2:	found
+<span class="o">&gt;</span> _</code></pre></figure>
 
 <blockquote>
-<p>NOTE that some tools are optional and only required for specific 
+  <p>NOTE that some tools are optional and only required for specific 
 build configurations</p>
 </blockquote>
+
 
   </article>
 

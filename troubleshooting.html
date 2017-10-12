@@ -11,7 +11,7 @@
 ">
 
   <link rel="stylesheet" href="/fips/css/main.css">
-  <link rel="canonical" href="http://floooh.github.com/fips/troubleshooting.html">
+  <link rel="canonical" href="http://localhost:4000/fips/troubleshooting.html">
 </head>
 
 
@@ -103,57 +103,57 @@
         <div>
 
   <article>
-    <h1>Troubleshooting</h1>
+    <h1 id="troubleshooting">Troubleshooting</h1>
 
-<p>If anything goes wrong, &#39;./fips clean all&#39; and &#39;./fips diag&#39; are the two
+<p>If anything goes wrong, ‘./fips clean all’ and ‘./fips diag’ are the two
 most useful commands.</p>
 
-<p>&#39;./fips clean all&#39; deletes all build files created by fips and thus
+<p>’./fips clean all’ deletes all build files created by fips and thus
 resets a project into a clean starting state.</p>
 
-<p>&#39;./fips diag&#39; runs a number of diagnostic tests and provides useful
+<p>’./fips diag’ runs a number of diagnostic tests and provides useful
 error output:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips <span class="nb">help </span>diag
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips <span class="nb">help </span>diag
 fips diag
 fips diag all
 fips diag fips
 fips diag tools
 fips diag configs
 fips diag imports
-    run diagnostics and check <span class="k">for</span> errors
-&gt; _</code></pre></figure>
+    run diagnostics and check <span class="k">for </span>errors
+<span class="o">&gt;</span> _</code></pre></figure>
 
-<p>&#39;./fips diag tools&#39; tests whether additional 3rd party tools are present, 
+<p>’./fips diag tools’ tests whether additional 3rd party tools are present, 
 and if not found, explains whether the tools are required or optional,
 and what they are needed for.</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips diag <span class="nv">tools</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips diag tools
 <span class="o">===</span> tools:
-git:    found
-cmake:  found
-ccmake: found
-make:   found
-ninja:  OPTIONAL, NOT FOUND <span class="o">(</span>required <span class="k">for</span> building <span class="s1">&#39;*-ninja-*&#39;</span> configs<span class="o">)</span>
-xcodebuild: found
-java:   found
-ant:    found
-python2:    found
-&gt; _</code></pre></figure>
+git:	found
+cmake:	found
+ccmake:	found
+make:	found
+ninja:	OPTIONAL, NOT FOUND <span class="o">(</span>required <span class="k">for </span>building <span class="s1">'*-ninja-*'</span> configs<span class="o">)</span>
+xcodebuild:	found
+java:	found
+ant:	found
+python2:	found
+<span class="o">&gt;</span> _</code></pre></figure>
 
-<p>&#39;./fips diag fips&#39; simply checks whether fips itself is up-to-date. If 
-not, simply run a &#39;git pull&#39; from within the fips directory to get the
+<p>’./fips diag fips’ simply checks whether fips itself is up-to-date. If 
+not, simply run a ‘git pull’ from within the fips directory to get the
 latest version.</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">===</span> fips:
   uptodate</code></pre></figure>
 
-<p>&#39;./fips diag configs&#39; goes through all existing build config files, checks
+<p>’./fips diag configs’ goes through all existing build config files, checks
 if their content is valid, and whether all required prerequisites are met
 in the current environment to build them (e.g. wether the required build
 tools exist and cross-platform SDKs have been installed):</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; ./fips diag <span class="nv">configs</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips diag configs
 <span class="o">===</span> configs:
 ...
 ios-xcode-debug
@@ -161,11 +161,12 @@ ios-xcode-debug
 ios-xcode-release
   ok
 linux-make-debug
-  <span class="s1">&#39;linux&#39;</span> is not a valid target platform <span class="k">for</span> host <span class="s1">&#39;osx&#39;</span>
+  <span class="s1">'linux'</span> is not a valid target platform <span class="k">for </span>host <span class="s1">'osx'</span>
 linux-make-release
-  <span class="s1">&#39;linux&#39;</span> is not a valid target platform <span class="k">for</span> host <span class="s1">&#39;osx&#39;</span>
+  <span class="s1">'linux'</span> is not a valid target platform <span class="k">for </span>host <span class="s1">'osx'</span>
 ...
-&gt; _</code></pre></figure>
+<span class="o">&gt;</span> _</code></pre></figure>
+
 
   </article>
 

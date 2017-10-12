@@ -11,7 +11,7 @@
 ">
 
   <link rel="stylesheet" href="/fips/css/main.css">
-  <link rel="canonical" href="http://floooh.github.com/fips/dirstruct.html">
+  <link rel="canonical" href="http://localhost:4000/fips/dirstruct.html">
 </head>
 
 
@@ -103,25 +103,28 @@
         <div>
 
   <article>
-    <h1>Directory Structure</h1>
+    <h1 id="directory-structure">Directory Structure</h1>
 
 <p>fips creates project directories and a few special directories on the same
 level as the fips directory itself.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">┣━━ fips/
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┣━━ fips/
 ┣━━ fips-build/
 ┣━━ fips-deploy/
 ┣━━ fips-sdks/
 ┣━━ project-1/
 ┣━━ project-2/
 ┣━━ .../
-</code></pre></div>
-<h3>The fips-build directory</h3>
+</code></pre></div></div>
+
+<h3 id="the-fips-build-directory">The fips-build directory</h3>
 
 <p>The <strong>fips-build</strong> directory contains the generated cmake build files, 
 separated in subdirectories by project name and config name. The
-content of fips-build is created with the <em>&#39;fips gen&#39;</em> command (or on the 
-fly during <em>&#39;fips build&#39;</em> or <em>&#39;fips make&#39;</em>):</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">┗━━ fips-build/
+content of fips-build is created with the <em>‘fips gen’</em> command (or on the 
+fly during <em>‘fips build’</em> or <em>‘fips make’</em>):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┗━━ fips-build/
     ┣━━ project-1/
     ┃   ┣━━ osx-xcode-debug/
     ┃   ┃   ┣━━ oryol.xcodeproj/
@@ -136,14 +139,16 @@ fly during <em>&#39;fips build&#39;</em> or <em>&#39;fips make&#39;</em>):</p>
         ┗━━ emsc-make-release/
             ┣━━ Makefile
             ┗━━ ...
-</code></pre></div>
-<h3>The fips-deploy directory</h3>
+</code></pre></div></div>
+
+<h3 id="the-fips-deploy-directory">The fips-deploy directory</h3>
 
 <p>The <strong>fips-deploy</strong> directory contains the built executable files, also 
 separated in subdirectories by project and config name. The content of the
-fips-deploy directory is created during the <em>&#39;fips build&#39;</em> or <em>&#39;fips make&#39;</em>
+fips-deploy directory is created during the <em>‘fips build’</em> or <em>‘fips make’</em>
 commands:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">┗━━ fips-deploy/
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┗━━ fips-deploy/
     ┣━━ project-1/
     ┃   ┣━━ osx-xcode-debug/
     ┃   ┃   ┣━━ app-1.app
@@ -160,36 +165,40 @@ commands:</p>
         ┗━━ emsc-make-release/
             ┣━━ app-1.html
             ┗━━ ...
-</code></pre></div>
+</code></pre></div></div>
+
 <p>Both the fips-build and fips-deploy directories contain only generated files,
 it is not dangerous to completely delete these directories.</p>
 
-<p>The fips command <em>&#39;fips clean [config]&#39;</em> deletes the generated files for all
+<p>The fips command <em>‘fips clean [config]’</em> deletes the generated files for all
 configs, the active config, or a named config.</p>
 
-<h3>The fips-sdks directory</h3>
+<h3 id="the-fips-sdks-directory">The fips-sdks directory</h3>
 
 <p>The fips-sdks directory contains the platform SDK files installed with:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; fips setup emscripten
-&gt; fips setup android
-&gt; fips setup nacl</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> fips setup emscripten
+<span class="o">&gt;</span> fips setup android
+<span class="o">&gt;</span> fips setup nacl</code></pre></figure>
 
 <p>The fips-sdks directory structure currently looks like this (details
 may change in the future):</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">┗━━ fips-sdks/
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┗━━ fips-sdks/
     ┗━━ osx/
         ┣━━ emsdk-portable/
         ┣━━ nacl_sdk/ 
         ┣━━ android-ndk-r9d/ 
         ┣━━ android-sdk-macosx/ 
         ┗━━ ...
-</code></pre></div>
-<h3>Special fips files in projects</h3>
+</code></pre></div></div>
+
+<h3 id="special-fips-files-in-projects">Special fips files in projects</h3>
 
 <p>A project needs at least a <strong>fips.yml</strong> file to be recognized as a fips project.
 Most projects have additional fips-specific files and directories:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">┗━━ project-1/
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┗━━ project-1/
     ┣━━ fips.yml 
     ┣━━ fips 
     ┣━━ fips.cmd 
@@ -201,42 +210,44 @@ Most projects have additional fips-specific files and directories:</p>
     ┣━━ .fips-settings.yml
     ┣━━ .fips-imports.cmake
     ┗━━ .fips-gen.py
-</code></pre></div>
+</code></pre></div></div>
+
 <p>All files except <em>fips.yml</em> are optional, all hidden files 
-(starting with a &#39;.&#39;) are maintained by fips and should not be under version
+(starting with a ‘.’) are maintained by fips and should not be under version
 control.</p>
 
-<p>Here&#39;s a description of what each file means:</p>
+<p>Here’s a description of what each file means:</p>
 
 <ul>
-<li><strong>fips.yml</strong>: contains the imports and exports of the project</li>
-<li><strong>fips</strong>: proxy python script to be able to run fips commands from within
+  <li><strong>fips.yml</strong>: contains the imports and exports of the project</li>
+  <li><strong>fips</strong>: proxy python script to be able to run fips commands from within
 the project directory</li>
-<li><strong>fips.cmd</strong>: Windows batch file to call the <em>&#39;fips&#39;</em> python script</li>
-<li><strong>fips-include.cmake</strong>: if present, this cmake file is included by other fips 
+  <li><strong>fips.cmd</strong>: Windows batch file to call the <em>‘fips’</em> python script</li>
+  <li><strong>fips-include.cmake</strong>: if present, this cmake file is included by other fips 
 projects which depend on this project, this can be used to define global 
 cmake attributes for projects which export multiple modules</li>
-<li><strong>fips-verbs/</strong>: if present, this directory contains python scripts which
+  <li><strong>fips-verbs/</strong>: if present, this directory contains python scripts which
 add additional commands (verbs) to fips</li>
-<li><strong>fips-configs/</strong>: if present, the fips-configs directory contains additional
+  <li><strong>fips-configs/</strong>: if present, the fips-configs directory contains additional
 fips configs, the config names must not collide with the fips standard config
 names (e.g. osx-xcode-debug), so it is a good idea to include the project name
 in those custom configs</li>
-<li><strong>fips-toolchains</strong>: if this directory exists it should contain cmake toolchain
+  <li><strong>fips-toolchains</strong>: if this directory exists it should contain cmake toolchain
 files, which can either override the standard toolchain files in the fips-directory,
 or can be completely new toolchain files for new platforms. Toolchain files
-can be defined in build-configs using the &#39;cmake-toolchain&#39; attribute. 
+can be defined in build-configs using the ‘cmake-toolchain’ attribute. 
 Toolchain files will be searched in the following order: first in the current
 project, then in imported projects, and finally in the fips directory itself.</li>
-<li><strong>.fips-settings.yml</strong>: hidden file with project-specific fips settings 
-generated by <em>&#39;fips set [key] [value]&#39;</em> or <em>&#39;fips unset [key]&#39;</em></li>
-<li><strong>.fips-imports.cmake</strong>: generated cmake file which contains all imports of
-the project, the .fips-imports.cmake file is created during <em>&#39;fips gen&#39;</em> and
-other fips commands which implicitly do a cmake run (like <em>&#39;fips build&#39;</em> or
-<em>&#39;fips make&#39;</em>)</li>
-<li><strong>.fips-gen.py</strong>: a generated python helper script for code generation during
+  <li><strong>.fips-settings.yml</strong>: hidden file with project-specific fips settings 
+generated by <em>‘fips set [key] [value]’</em> or <em>‘fips unset [key]’</em></li>
+  <li><strong>.fips-imports.cmake</strong>: generated cmake file which contains all imports of
+the project, the .fips-imports.cmake file is created during <em>‘fips gen’</em> and
+other fips commands which implicitly do a cmake run (like <em>‘fips build’</em> or
+<em>‘fips make’</em>)</li>
+  <li><strong>.fips-gen.py</strong>: a generated python helper script for code generation during
 the build process</li>
 </ul>
+
 
   </article>
 
