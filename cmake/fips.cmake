@@ -561,7 +561,8 @@ endmacro()
 #   fips_files_ex(path [globbing expressions ...]
 #       [EXCEPT globbing expressions ...]
 #       [GROUP ide_group]
-#       [NO_RECURSE])
+#       [NO_RECURSE]
+#       [GROUP_FOLDERS])
 #
 #   Add files from a path to the current target by using globbing expression.
 #   It also creates and IDE group.
@@ -569,12 +570,13 @@ endmacro()
 #   EXCEPT:   globbing expressions on files to exclude
 #   GROUP:    the same as fips_dir GROUP, used for grouping files in a project
 #   NO_RECURSE: do not use GLOB_RECURSE on globbing expressions
+#   GROUP_FOLDERS: will create groups based on folders
 #
 #   Note: fips_dir is used internally, so the current dir will change and you
 #   will be able to more operation on this dir as fips_files().
 #
 macro(fips_files_ex path)
-    set(options NO_RECURSE)
+    set(options NO_RECURSE GROUP_FOLDERS)
     set(oneValueArgs GROUP)
     set(multiValueArgs EXCEPT)
     CMAKE_PARSE_ARGUMENTS(_fd "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -584,56 +586,47 @@ macro(fips_files_ex path)
 
     if (NOT _bs_GROUP)
         set(_bs_GROUP ".")
-    else()
-        #message(STATUS "Group: found ${_bs_GROUP}")
     endif()
 
     set(path "./${path}/")
     file(TO_CMAKE_PATH ${path} path)
-    #message(STATUS "Path: ${path} - ${CMAKE_CURRENT_SOURCE_DIR}/${path}")
 
     set(ARG_LIST ${ARGV})
     list(REMOVE_AT ARG_LIST 0)
-    #message(STATUS "ARGS: ${ARG_LIST}")
 
     set(_fd_FILE_LIST "")
     foreach (_fd_glob_expr ${ARG_LIST})
-        #message(STATUS "Glob: ${path}/${_fd_glob_expr}")
         if (_fd_NO_RECURSE)
             file(GLOB _fd_TMP RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/${path} "${path}/${_fd_glob_expr}")
-            #message(STATUS ${_fd_TMP})
         else()
             file(GLOB_RECURSE _fd_TMP RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/${path} "${path}/${_fd_glob_expr}")
-            #message(STATUS ${_fd_TMP})
         endif()
         list(APPEND _fd_FILE_LIST ${_fd_TMP})
     endforeach()
-    #message(STATUS "${_fd_FILE_LIST}")
 
     if (_fd_EXCEPT)
         set(_fd_EXCEPT_FILE_LIST "")
         foreach (_fd_glob_expr ${_fd_EXCEPT})
-            #message(STATUS "Except Glob: ${path}/${_fd_glob_expr}")
             if (_fd_NO_RECURSE)
                 file(GLOB _fd_TMP RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/${path} "${path}/${_fd_glob_expr}")
-                #message(STATUS ${_fd_TMP})
             else()
                 file(GLOB_RECURSE _fd_TMP RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/${path} "${path}/${_fd_glob_expr}")
-                #message(STATUS ${_fd_TMP})
             endif()
             list(APPEND _fd_EXCEPT_FILE_LIST ${_fd_TMP})
         endforeach()
-        #message(STATUS "Remove: ${_fd_EXCEPT_FILE_LIST}")
         list(LENGTH _fd_EXCEPT_FILE_LIST _has_files)
         if (_has_files)
             list(REMOVE_ITEM _fd_FILE_LIST ${_fd_EXCEPT_FILE_LIST})
         endif()
     endif()
-    #message(STATUS "Result: ${_fd_FILE_LIST}")
 
     if (_fd_FILE_LIST)
-        fips_dir(${path} GROUP ${_fd_GROUP})
-        fips_files(${_fd_FILE_LIST})
+        if (_fd_GROUP_FOLDERS)
+            fips_dir_groups("${_fd_FILE_LIST}")
+        else()
+            fips_dir(${path} GROUP ${_fd_GROUP})
+            fips_files(${_fd_FILE_LIST})
+        endif()
     else()
         message(WARNING "Empty file list for path '${path}' (maybe path doesn't exist?)")
     endif()

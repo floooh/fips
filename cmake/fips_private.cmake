@@ -228,6 +228,23 @@ macro(fips_add_file new_file)
 endmacro()
 
 #-------------------------------------------------------------------------------
+#   fips_dir_groups()
+#   Private helper function to add a list of files in a directory tree as groups
+#   emulating the directory tree.
+#
+macro(fips_dir_groups files)
+    foreach (_fd_file ${files})
+        get_filename_component(_fd_dir "${_fd_file}" DIRECTORY)
+        get_filename_component(_fd_name "${_fd_file}" NAME)
+        if ("${_fd_dir}" STREQUAL "")
+            set(_fd_dir ".")
+        endif()
+        fips_dir(${_fd_dir})
+        fips_add_file(${_fd_name} ".py" "NO_GENERATOR" "NO_GENFILES")
+    endforeach()
+endmacro()
+
+#-------------------------------------------------------------------------------
 #   fips_add_target_dependency(target...)
 #   Add one or more dependencies to the current target. The dependencies
 #   must be cmake build targets defined with fips_begin*/fips_end*().
