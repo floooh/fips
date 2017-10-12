@@ -127,7 +127,7 @@ file.</p>
 
 <p>For instance, here are the exported modules of the Oryol 3D engine:</p>
 
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">exports</span><span class="pi">:</span>
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="na">exports</span><span class="pi">:</span>
     <span class="na">modules </span><span class="pi">:</span>
         <span class="c1"># engine modules</span>
         <span class="na">Core </span><span class="pi">:</span>          <span class="s">code/Modules/Core</span>
@@ -146,8 +146,7 @@ file.</p>
         <span class="c1"># ext libs</span>
         <span class="na">ConvertUTF</span><span class="pi">:</span>         <span class="s">code/Ext/ConvertUTF</span>
         <span class="na">android-native</span><span class="pi">:</span>     <span class="s">code/Ext/android_native</span>
-        <span class="na">flextgl</span><span class="pi">:</span>            <span class="s">code/Ext/flextgl</span>
-</code></pre></div></div>
+        <span class="na">flextgl</span><span class="pi">:</span>            <span class="s">code/Ext/flextgl</span></code></pre></figure>
 
 <p>The ‘value’ in the modules export dictionary is the directory where the
 CMakeLists.txt file of the module lives, relative to the project root directory.</p>
@@ -161,12 +160,11 @@ CMakeLists.txt file.</p>
 are then defined in  the toplevel CMakeLists.txt file of the importing project 
 and are visible to the entire project:</p>
 
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">exports</span><span class="pi">:</span>
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="na">exports</span><span class="pi">:</span>
     <span class="na">header-dirs </span><span class="pi">:</span>
         <span class="pi">-</span> <span class="s">code</span>
         <span class="pi">-</span> <span class="s">code/Modules</span>
-        <span class="pi">-</span> <span class="s">code/Ext</span>
-</code></pre></div></div>
+        <span class="pi">-</span> <span class="s">code/Ext</span></code></pre></figure>
 
 <p>Of course it is also possible to directly use ‘fips_include_directories()’
 or ‘include_directories()’ in imported CMakeLists.txt files, but be aware
@@ -184,7 +182,7 @@ automatically by fips_libs().</p>
 <p>Static link libs need to be located in subdirectories of ‘libs’ named
 after the target platform the libs are compiled for:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┗━━ fips-sdks/
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">┗━━ fips-sdks/
     ┗━━ osx/
     ┗━━ win32/
     ┗━━ win64/
@@ -192,8 +190,7 @@ after the target platform the libs are compiled for:</p>
     ┗━━ pnacl/
     ┗━━ emscripten/
     ┗━━ ios/
-    ┗━━ android/
-</code></pre></div></div>
+    ┗━━ android/</code></pre></figure>
 
 <p>There’s no directory separation for release and debug versions of precompiled
 libs. If you need this, it must be handled through differently named libs
@@ -211,10 +208,9 @@ export section of the fips.yml file. These defines are visible in the
 entire CMakeLists.txt hierarchy of the importing project. Here’s an 
 example from fips-glm to set the angle unit to radians:</p>
 
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">exports </span><span class="pi">:</span>
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="na">exports </span><span class="pi">:</span>
     <span class="na">defines </span><span class="pi">:</span>
-        <span class="na">GLM_FORCE_RADIANS </span><span class="pi">:</span> <span class="s">1</span>
-</code></pre></div></div>
+        <span class="na">GLM_FORCE_RADIANS </span><span class="pi">:</span> <span class="s">1</span></code></pre></figure>
 
 <p>For finer control (e.g. define different defines for different platforms)
 it is better to directly use cmake add_defines() statements in the

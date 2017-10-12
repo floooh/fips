@@ -108,14 +108,13 @@
 <p>fips creates project directories and a few special directories on the same
 level as the fips directory itself.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┣━━ fips/
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">┣━━ fips/
 ┣━━ fips-build/
 ┣━━ fips-deploy/
 ┣━━ fips-sdks/
 ┣━━ project-1/
 ┣━━ project-2/
-┣━━ .../
-</code></pre></div></div>
+┣━━ .../</code></pre></figure>
 
 <h3 id="the-fips-build-directory">The fips-build directory</h3>
 
@@ -124,7 +123,7 @@ separated in subdirectories by project name and config name. The
 content of fips-build is created with the <em>‘fips gen’</em> command (or on the 
 fly during <em>‘fips build’</em> or <em>‘fips make’</em>):</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┗━━ fips-build/
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">┗━━ fips-build/
     ┣━━ project-1/
     ┃   ┣━━ osx-xcode-debug/
     ┃   ┃   ┣━━ oryol.xcodeproj/
@@ -138,8 +137,7 @@ fly during <em>‘fips build’</em> or <em>‘fips make’</em>):</p>
         ┃   ┗━━ ...
         ┗━━ emsc-make-release/
             ┣━━ Makefile
-            ┗━━ ...
-</code></pre></div></div>
+            ┗━━ ...</code></pre></figure>
 
 <h3 id="the-fips-deploy-directory">The fips-deploy directory</h3>
 
@@ -148,7 +146,7 @@ separated in subdirectories by project and config name. The content of the
 fips-deploy directory is created during the <em>‘fips build’</em> or <em>‘fips make’</em>
 commands:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┗━━ fips-deploy/
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">┗━━ fips-deploy/
     ┣━━ project-1/
     ┃   ┣━━ osx-xcode-debug/
     ┃   ┃   ┣━━ app-1.app
@@ -164,8 +162,7 @@ commands:</p>
         ┃   ┗━━ ...
         ┗━━ emsc-make-release/
             ┣━━ app-1.html
-            ┗━━ ...
-</code></pre></div></div>
+            ┗━━ ...</code></pre></figure>
 
 <p>Both the fips-build and fips-deploy directories contain only generated files,
 it is not dangerous to completely delete these directories.</p>
@@ -184,21 +181,20 @@ configs, the active config, or a named config.</p>
 <p>The fips-sdks directory structure currently looks like this (details
 may change in the future):</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┗━━ fips-sdks/
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">┗━━ fips-sdks/
     ┗━━ osx/
         ┣━━ emsdk-portable/
         ┣━━ nacl_sdk/ 
         ┣━━ android-ndk-r9d/ 
         ┣━━ android-sdk-macosx/ 
-        ┗━━ ...
-</code></pre></div></div>
+        ┗━━ ...</code></pre></figure>
 
 <h3 id="special-fips-files-in-projects">Special fips files in projects</h3>
 
 <p>A project needs at least a <strong>fips.yml</strong> file to be recognized as a fips project.
 Most projects have additional fips-specific files and directories:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┗━━ project-1/
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">┗━━ project-1/
     ┣━━ fips.yml 
     ┣━━ fips 
     ┣━━ fips.cmd 
@@ -209,8 +205,7 @@ Most projects have additional fips-specific files and directories:</p>
     ┣━━ fips-toolchains/
     ┣━━ .fips-settings.yml
     ┣━━ .fips-imports.cmake
-    ┗━━ .fips-gen.py
-</code></pre></div></div>
+    ┗━━ .fips-gen.py</code></pre></figure>
 
 <p>All files except <em>fips.yml</em> are optional, all hidden files 
 (starting with a ‘.’) are maintained by fips and should not be under version
