@@ -9,7 +9,7 @@ permalink: dirstruct.html
 fips creates project directories and a few special directories on the same
 level as the fips directory itself.
 
-```
+{% highlight bash %}
 ┣━━ fips/
 ┣━━ fips-build/
 ┣━━ fips-deploy/
@@ -17,7 +17,7 @@ level as the fips directory itself.
 ┣━━ project-1/
 ┣━━ project-2/
 ┣━━ .../
-```
+{% endhighlight %}
 
 ### The fips-build directory
 
@@ -26,7 +26,7 @@ separated in subdirectories by project name and config name. The
 content of fips-build is created with the _'fips gen'_ command (or on the 
 fly during _'fips build'_ or _'fips make'_):
 
-```
+{% highlight bash %}
 ┗━━ fips-build/
     ┣━━ project-1/
     ┃   ┣━━ osx-xcode-debug/
@@ -42,7 +42,7 @@ fly during _'fips build'_ or _'fips make'_):
         ┗━━ emsc-make-release/
             ┣━━ Makefile
             ┗━━ ...
-```
+{% endhighlight %}
 
 ### The fips-deploy directory
 
@@ -51,7 +51,7 @@ separated in subdirectories by project and config name. The content of the
 fips-deploy directory is created during the _'fips build'_ or _'fips make'_
 commands:
 
-```
+{% highlight bash %}
 ┗━━ fips-deploy/
     ┣━━ project-1/
     ┃   ┣━━ osx-xcode-debug/
@@ -69,7 +69,7 @@ commands:
         ┗━━ emsc-make-release/
             ┣━━ app-1.html
             ┗━━ ...
-```
+{% endhighlight %}
 
 Both the fips-build and fips-deploy directories contain only generated files,
 it is not dangerous to completely delete these directories.
@@ -90,7 +90,7 @@ The fips-sdks directory contains the platform SDK files installed with:
 The fips-sdks directory structure currently looks like this (details
 may change in the future):
 
-```
+{% highlight bash %}
 ┗━━ fips-sdks/
     ┗━━ osx/
         ┣━━ emsdk-portable/
@@ -98,14 +98,14 @@ may change in the future):
         ┣━━ android-ndk-r9d/ 
         ┣━━ android-sdk-macosx/ 
         ┗━━ ...
-```
+{% endhighlight %}
 
 ### Special fips files in projects
 
 A project needs at least a **fips.yml** file to be recognized as a fips project.
 Most projects have additional fips-specific files and directories:
 
-```
+{% highlight bash %}
 ┗━━ project-1/
     ┣━━ fips.yml 
     ┣━━ fips 
@@ -118,7 +118,7 @@ Most projects have additional fips-specific files and directories:
     ┣━━ .fips-settings.yml
     ┣━━ .fips-imports.cmake
     ┗━━ .fips-gen.py
-```
+{% endhighlight %}
 
 All files except _fips.yml_ are optional, all hidden files 
 (starting with a '.') are maintained by fips and should not be under version

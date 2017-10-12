@@ -26,7 +26,7 @@ file.
 
 For instance, here are the exported modules of the Oryol 3D engine:
 
-```yaml
+{% highlight yaml %}
 exports:
     modules :
         # engine modules
@@ -47,7 +47,7 @@ exports:
         ConvertUTF:         code/Ext/ConvertUTF
         android-native:     code/Ext/android_native
         flextgl:            code/Ext/flextgl
-```
+{% endhighlight %}
 
 The 'value' in the modules export dictionary is the directory where the
 CMakeLists.txt file of the module lives, relative to the project root directory.
@@ -61,13 +61,13 @@ Projects can export a list of header search paths in their fips.yml file which
 are then defined in  the toplevel CMakeLists.txt file of the importing project 
 and are visible to the entire project:
 
-```yaml
+{% highlight yaml %}
 exports:
     header-dirs :
         - code
         - code/Modules
         - code/Ext
-```
+{% endhighlight %}
 
 Of course it is also possible to directly use 'fips\_include\_directories()'
 or 'include\_directories()' in imported CMakeLists.txt files, but be aware
@@ -85,7 +85,7 @@ automatically by fips\_libs().
 Static link libs need to be located in subdirectories of 'libs' named
 after the target platform the libs are compiled for:
 
-```
+{% highlight bash %}
 ┗━━ fips-sdks/
     ┗━━ osx/
     ┗━━ win32/
@@ -95,7 +95,7 @@ after the target platform the libs are compiled for:
     ┗━━ emscripten/
     ┗━━ ios/
     ┗━━ android/
-```
+{% endhighlight %}
 
 There's no directory separation for release and debug versions of precompiled
 libs. If you need this, it must be handled through differently named libs
@@ -111,11 +111,11 @@ export section of the fips.yml file. These defines are visible in the
 entire CMakeLists.txt hierarchy of the importing project. Here's an 
 example from fips-glm to set the angle unit to radians:
 
-```yaml
+{% highlight yaml %}
 exports :
     defines :
         GLM_FORCE_RADIANS : 1
-```
+{% endhighlight %}
 
 For finer control (e.g. define different defines for different platforms)
 it is better to directly use cmake add\_defines() statements in the

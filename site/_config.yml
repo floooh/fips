@@ -10,7 +10,4 @@ url: "http://floooh.github.com" # the base hostname & protocol for your site
 twitter_username: flohofwoe
 github_username:  floooh
 
-# Build settings
-highlighter: pygments
-markdown: redcarpet 
 
