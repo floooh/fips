@@ -244,14 +244,14 @@ project's fips.yml file using the 'no\_auto\_import' policy. Here is an example
 fips.yml file which imports a complex dependency and activates the
 no\_auto\_import policy:
 
-```yaml
+{% highlight yaml %}
 ---
 policies:
     no_auto_import: true
 imports:
     oryol:
         git: https://github.com/floooh/oryol.git
-```
+{% endhighlight %}
 
 Not automatically importing modules means that imported modules must be listed
 manually in the root CMakeLists.txt file. For this, fips has created a cmake
@@ -267,7 +267,7 @@ or nothing with the 'no\_auto\_import' policy.
 Here's a segment from a project's root CMakeLists.txt file with 'no\_auto\_import'
 enabled as an example:
 
-```cmake
+{% highlight cmake %}
 fips_setup()
 fips_project(yakc)
 
@@ -294,8 +294,7 @@ fips_import_fips_unittestpp_unittestpp()
 fips_ide_group("")
 
 fips_include_directories(.)
-```
-
+{% endhighlight %}
 
 ### Under the hood
 
