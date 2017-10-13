@@ -329,13 +329,12 @@ project’s fips.yml file using the ‘no_auto_import’ policy. Here is an exam
 fips.yml file which imports a complex dependency and activates the
 no_auto_import policy:</p>
 
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
 <span class="na">policies</span><span class="pi">:</span>
     <span class="na">no_auto_import</span><span class="pi">:</span> <span class="no">true</span>
 <span class="na">imports</span><span class="pi">:</span>
     <span class="na">oryol</span><span class="pi">:</span>
-        <span class="na">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/oryol.git</span>
-</code></pre></div></div>
+        <span class="na">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/oryol.git</span></code></pre></figure>
 
 <p>Not automatically importing modules means that imported modules must be listed
 manually in the root CMakeLists.txt file. For this, fips has created a cmake
@@ -351,7 +350,7 @@ or nothing with the ‘no_auto_import’ policy.</p>
 <p>Here’s a segment from a project’s root CMakeLists.txt file with ‘no_auto_import’
 enabled as an example:</p>
 
-<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">fips_setup</span><span class="p">()</span>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nf">fips_setup</span><span class="p">()</span>
 <span class="nf">fips_project</span><span class="p">(</span>yakc<span class="p">)</span>
 
 <span class="c1"># manual imports</span>
@@ -376,8 +375,7 @@ enabled as an example:</p>
 <span class="nf">fips_import_fips_unittestpp_unittestpp</span><span class="p">()</span>
 <span class="nf">fips_ide_group</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 
-<span class="nf">fips_include_directories</span><span class="p">(</span>.<span class="p">)</span>
-</code></pre></div></div>
+<span class="nf">fips_include_directories</span><span class="p">(</span>.<span class="p">)</span></code></pre></figure>
 
 <h3 id="under-the-hood">Under the hood</h3>
 
