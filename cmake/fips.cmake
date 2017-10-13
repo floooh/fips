@@ -622,7 +622,7 @@ macro(fips_files_ex path)
 
     if (_fd_FILE_LIST)
         if (_fd_GROUP_FOLDERS)
-            fips_dir_groups("${_fd_FILE_LIST}")
+            fips_dir_groups("${path}" "${_fd_FILE_LIST}")
         else()
             fips_dir(${path} GROUP ${_fd_GROUP})
             fips_files(${_fd_FILE_LIST})
