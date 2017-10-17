@@ -4,6 +4,7 @@ import os
 import yaml
 import json
 import inspect
+import tempfile
 from mod import util,log,verb
 from mod.tools import cmake
 
@@ -79,7 +80,42 @@ def problem_matcher():
             }
         }
 
-#------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+def get_clang_header_paths():
+    '''runs "clang -E -xc++ -v dummy.cc" and extract the header search
+    path from stdout, return these as array of strings.
+    '''
+    if util.get_host_platform() != 'osx':
+        return []
+    
+    # write a dummy C source file
+    tmp = tempfile.NamedTemporaryFile(delete=False)
+    tmp.write('int main() {return 0;}')
+    tmp.close()
+
+    # run clang in preprocessor mode
+    outp = subprocess.check_output(['clang', '-E', '-xc++', '-v', tmp.name], stderr=subprocess.STDOUT)
+
+    # delete the temp source file
+    os.remove(tmp.name)
+
+    # find the header search paths
+    result = []
+    capture = False
+    for line in outp.splitlines():
+        if line == '#include <...> search starts here:':
+            # start capturing lines
+            capture = True
+            continue
+        if line == 'End of search list.':
+            # finish capturing
+            break
+        if capture:
+            l = line.replace('(framework directory)', '').strip()
+            result.append(l)
+    return result
+
+#-------------------------------------------------------------------------------
 def write_workspace_settings(fips_dir, proj_dir, cfg):
     '''write the VSCode launch.json, tasks.json and
     c_cpp_properties.json files from cmake output files
@@ -233,13 +269,7 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
         }
         config_incl_paths = []
         if config_name == 'Mac':
-            config_incl_paths = [
-                '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1',
-                '/usr/local/include',
-                '/applications/xcode.app/contents/developer/toolchains/xcodedefault.xctoolchain/usr/lib/clang/8.1.0/include',
-                '/applications/xcode.app/contents/developer/toolchains/xcodedefault.xctoolchain/usr/include',
-                '/usr/include'
-            ]
+            config_incl_paths = get_clang_header_paths()
         elif config_name == 'Linux':
             config_incl_paths = [
                 '/usr/include',
