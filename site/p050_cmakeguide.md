@@ -115,14 +115,14 @@ This finishes a fips\_begin\_lib() block.
 Begin defining a fips shared library. A fips shared library is a collection of source
 files that compile into a dynamically linkable library (as opposed to static libraries).
 
-After a fips\_begin\_lib() the following fips macros are valid:
+After a fips\_begin\_sharedlib() the following fips macros are valid:
 
 * fips\_dir()
 * fips\_files()
 * fips\_generate()
 * fips\_deps()
 * fips\_libs()
-* fips\_end\_lib()
+* fips\_end\_sharedlib()
 
 #### fips\_end\_sharedlib()
 
