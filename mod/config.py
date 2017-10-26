@@ -201,6 +201,7 @@ def list(fips_dir, proj_dir, pattern) :
             fname = os.path.split(path)[1]
             fname = os.path.splitext(fname)[0]
             res[curDir].append(fname)
+        res[curDir].sort()
     return res
 
 #-------------------------------------------------------------------------------
