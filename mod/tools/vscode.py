@@ -115,6 +115,17 @@ def get_clang_header_paths():
             result.append(l)
     return result
 
+#------------------------------------------------------------------------------
+def list_extensions() :
+    '''queries Visual Studio Code for installed extensions
+    :returns:   list of extensions
+    '''
+    try:
+        outp = subprocess.check_output('code --list-extensions', shell=True)
+        return outp.splitlines()
+    except (OSError, subprocess.CalledProcessError):
+        return []
+
 #-------------------------------------------------------------------------------
 def write_workspace_settings(fips_dir, proj_dir, cfg):
     '''write the VSCode launch.json, tasks.json and
@@ -129,6 +140,9 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
     exe_targets = read_cmake_targets(fips_dir, proj_dir, cfg, ['app'])
     all_targets = read_cmake_targets(fips_dir, proj_dir, cfg, None)
     inc_paths = read_cmake_headerdirs(fips_dir, proj_dir, cfg)
+
+    vscode_extensions = list_extensions()
+    has_cmake_tools = any('vector-of-bool.cmake-tools' in ext for ext in vscode_extensions)
 
     if util.get_host_platform() == 'win':
         fips_cmd = 'fips'
@@ -256,34 +270,46 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
         json.dump(launch, f, indent=1, separators=(',',':'))
 
     # write a c_cpp_properties.json file with header-search paths
-    props = {
-        'configurations': []
-    }
-    for config_name in ['Mac','Linux','Win32']:
-        c = {
-            'name': config_name,
-            'browse': {
-                'limitSymbolsToIncludeHeaders': True,
-                'databaseFilename': '{}/browse.VS.code'.format(build_dir)
+    if not has_cmake_tools:
+        props = {
+            'configurations': []
+        }
+        for config_name in ['Mac','Linux','Win32']:
+            c = {
+                'name': config_name,
+                'browse': {
+                    'limitSymbolsToIncludeHeaders': True,
+                    'databaseFilename': '{}/browse.VS.code'.format(build_dir)
+                }
+            }
+            config_incl_paths = []
+            if config_name == 'Mac':
+                config_incl_paths = get_clang_header_paths()
+            elif config_name == 'Linux':
+                config_incl_paths = [
+                    '/usr/include',
+                    '/usr/local/include'
+                ]
+            else:
+                config_incl_paths = [
+                    # FIXME
+                    'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*'
+                ]
+            for inc_path in inc_paths:
+                config_incl_paths.append(inc_path)
+            c['includePath'] = config_incl_paths
+            c['browse']['path'] = config_incl_paths
+            props['configurations'].append(c)
+        with open(vscode_dir + '/c_cpp_properties.json', 'w') as f:
+            json.dump(props, f, indent=1, separators=(',',':'))
+
+    # write a settings.json for CMakeTools plugin settings
+    if has_cmake_tools:
+        settings = {
+            'cmake.buildDirectory': build_dir,
+            'cmake.configureSettings': {
+                'FIPS_CONFIG:': cfg['name']
             }
         }
-        config_incl_paths = []
-        if config_name == 'Mac':
-            config_incl_paths = get_clang_header_paths()
-        elif config_name == 'Linux':
-            config_incl_paths = [
-                '/usr/include',
-                '/usr/local/include'
-            ]
-        else:
-            config_incl_paths = [
-                # FIXME
-                'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*'
-            ]
-        for inc_path in inc_paths:
-            config_incl_paths.append(inc_path)
-        c['includePath'] = config_incl_paths
-        c['browse']['path'] = config_incl_paths
-        props['configurations'].append(c)
-    with open(vscode_dir + '/c_cpp_properties.json', 'w') as f:
-        json.dump(props, f, indent=1, separators=(',',':'))
+        with open(vscode_dir + '/settings.json', 'w') as f:
+            json.dump(settings, f, indent=1, separators=(',',':'))
