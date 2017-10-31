@@ -135,7 +135,7 @@ def get_toolchain(fips_dir, proj_dir, cfg) :
         # look for toolchain in all imported directories
         _, imported_projs = dep.get_all_imports_exports(fips_dir, proj_dir)
         for imported_proj_name in imported_projs :
-            imported_proj_dir = util.get_project_dir(fips_dir, imported_proj_name)
+            imported_proj_dir = imported_projs[imported_proj_name]['proj_dir']
             toolchain_path = '{}/fips-toolchains/{}'.format(imported_proj_dir, toolchain)
             if os.path.isfile(toolchain_path) :
                 return toolchain_path
@@ -174,7 +174,7 @@ def get_config_dirs(fips_dir, proj_dir) :
         success, result = dep.get_all_imports_exports(fips_dir, proj_dir)
         if success :
             for dep_proj_name in result :
-                dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
+                dep_proj_dir = result[dep_proj_name]['proj_dir']
                 dep_configs_dir = dep_proj_dir + '/fips-configs'
                 if os.path.isdir(dep_configs_dir) :
                     dirs.append(dep_configs_dir)

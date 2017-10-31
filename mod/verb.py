@@ -59,7 +59,7 @@ def import_verbs(fips_dir, proj_dir) :
     if fips_dir != proj_dir :
         _, imported_projs = dep.get_all_imports_exports(fips_dir, proj_dir)
         for imported_proj_name in imported_projs :
-            imported_proj_dir = util.get_project_dir(fips_dir, imported_proj_name)
+            imported_proj_dir = imported_projs[imported_proj_name]['proj_dir']
             import_verbs_from(imported_proj_name, imported_proj_dir, imported_proj_dir + '/fips-verbs')
 
     
