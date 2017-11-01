@@ -142,6 +142,7 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, result) :
                     return success, result
 
         result[proj_name] = {}
+        result[proj_name]['proj_dir'] = proj_dir
         result[proj_name]['imports'] = imports 
         result[proj_name]['exports'] = exports 
 
@@ -429,7 +430,7 @@ def check_imports(fips_dir, proj_dir) :
     success, imported_projects = get_all_imports_exports(fips_dir, proj_dir)
     num_imports = 0
     for imp_proj_name in imported_projects :
-        imp_proj_dir = util.get_project_dir(fips_dir, imp_proj_name)
+        imp_proj_dir = imported_projects[imp_proj_name]['proj_dir']
 
         # don't git-check the top-level project directory
         if imp_proj_dir != proj_dir :
@@ -460,7 +461,7 @@ def check_local_changes(fips_dir, proj_dir) :
     success, imported_projects = get_all_imports_exports(fips_dir, proj_dir)
     num_imports = 0
     for imp_proj_name in imported_projects :
-        imp_proj_dir = util.get_project_dir(fips_dir, imp_proj_name)
+        imp_proj_dir = imported_projects[imp_proj_name]['proj_dir']
 
         # don't git-check the top-level project directory
         if imp_proj_dir != proj_dir :
