@@ -79,6 +79,19 @@ def commit(proj_dir, msg):
         log.error("'git commit' failed with '{}'".format(e.returncode))
 
 #-------------------------------------------------------------------------------
+def commit_allow_empty(proj_dir, msg):
+    """same as commit(), but uses the --allow-empty arg so that the
+    commit doesn't fail if there's nothing to commit.
+
+    :param proj_dir:    path to a git repo
+    """
+    check_exists_with_error()
+    try:
+        subprocess.check_call('git commit --allow-empty -m "{}"'.format(msg), cwd=proj_dir, shell=True)
+    except subprocess.CalledProcessError as e:
+        log.error("'git commit' failed with '{}'".format(e.returncode))
+
+#-------------------------------------------------------------------------------
 def push(proj_dir):
     """runs a 'git push' in the provided git repo
     
