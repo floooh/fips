@@ -127,36 +127,20 @@ def list_extensions() :
         return []
 
 #-------------------------------------------------------------------------------
-def write_workspace_settings(fips_dir, proj_dir, cfg):
-    '''write the VSCode launch.json, tasks.json and
-    c_cpp_properties.json files from cmake output files
-    '''
-    proj_name = util.get_project_name_from_dir(proj_dir)
-    deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
-    build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
-    vscode_dir = proj_dir + '/.vscode'
-    if not os.path.isdir(vscode_dir):
-        os.makedirs(vscode_dir)
-    exe_targets = read_cmake_targets(fips_dir, proj_dir, cfg, ['app'])
-    all_targets = read_cmake_targets(fips_dir, proj_dir, cfg, None)
-    inc_paths = read_cmake_headerdirs(fips_dir, proj_dir, cfg)
-
-    vscode_extensions = list_extensions()
-    has_cmake_tools = any('vector-of-bool.cmake-tools' in ext for ext in vscode_extensions)
-
+def write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg):
+    '''write the .vscode/tasks.json file'''
     if util.get_host_platform() == 'win':
         fips_cmd = 'fips'
     else:
         fips_cmd = './fips'
-
-    # write a tasks.json file
+    all_targets = read_cmake_targets(fips_dir, proj_dir, cfg, None)
     tasks = {
         'version': '2.0.0',
         'tasks': []
     }
     for tgt in all_targets:
         tasks['tasks'].append({
-            'taskName': tgt,
+            'label': tgt,
             'type': 'process',
             'command': fips_cmd,
             'args': ['make', tgt],
@@ -167,7 +151,7 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
             'problemMatcher': problem_matcher(),
         })
     tasks['tasks'].append({
-        'taskName': 'ALL',
+        'label': 'ALL',
         'type': 'process',
         'command': fips_cmd,
         'args': ['build'],
@@ -183,7 +167,14 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
     with open(vscode_dir + '/tasks.json', 'w') as f:
         json.dump(tasks, f, indent=1, separators=(',',':'))
 
-    # write a launch.json with 1 config per build target
+#-------------------------------------------------------------------------------
+def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg):
+    '''write the .vscode/launch.json file'''
+    proj_name = util.get_project_name_from_dir(proj_dir)
+    exe_targets = read_cmake_targets(fips_dir, proj_dir, cfg, ['app'])
+    deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+
     launch = {
         'version': '0.2.0',
         'configurations': []
@@ -278,47 +269,72 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
     with open(vscode_dir + '/launch.json', 'w') as f:
         json.dump(launch, f, indent=1, separators=(',',':'))
 
-    # write a c_cpp_properties.json file with header-search paths
-    if not has_cmake_tools:
-        props = {
-            'configurations': []
-        }
-        for config_name in ['Mac','Linux','Win32']:
-            c = {
-                'name': config_name,
-                'browse': {
-                    'limitSymbolsToIncludeHeaders': True,
-                    'databaseFilename': '{}/browse.VS.code'.format(build_dir)
-                }
+#-------------------------------------------------------------------------------
+def write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg):
+    '''write the .vscode/c_cpp_properties.json file'''
+    proj_name = util.get_project_name_from_dir(proj_dir)
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+    inc_paths = read_cmake_headerdirs(fips_dir, proj_dir, cfg)
+    props = {
+        'configurations': []
+    }
+    for config_name in ['Mac','Linux','Win32']:
+        c = {
+            'name': config_name,
+            'browse': {
+                'limitSymbolsToIncludeHeaders': True,
+                'databaseFilename': '{}/browse.VS.code'.format(build_dir)
             }
-            config_incl_paths = []
-            if config_name == 'Mac':
-                config_incl_paths = get_clang_header_paths()
-            elif config_name == 'Linux':
-                config_incl_paths = [
-                    '/usr/include',
-                    '/usr/local/include'
-                ]
-            else:
-                config_incl_paths = [
-                    # FIXME
-                    'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*'
-                ]
-            for inc_path in inc_paths:
-                config_incl_paths.append(inc_path)
-            c['includePath'] = config_incl_paths
-            c['browse']['path'] = config_incl_paths
-            props['configurations'].append(c)
-        with open(vscode_dir + '/c_cpp_properties.json', 'w') as f:
-            json.dump(props, f, indent=1, separators=(',',':'))
+        }
+        config_incl_paths = []
+        if config_name == 'Mac':
+            config_incl_paths = get_clang_header_paths()
+        elif config_name == 'Linux':
+            config_incl_paths = [
+                '/usr/include',
+                '/usr/local/include'
+            ]
+        else:
+            config_incl_paths = [
+                # FIXME
+                'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*'
+            ]
+        for inc_path in inc_paths:
+            config_incl_paths.append(inc_path)
+        c['includePath'] = config_incl_paths
+        c['browse']['path'] = config_incl_paths
+        props['configurations'].append(c)
+    with open(vscode_dir + '/c_cpp_properties.json', 'w') as f:
+        json.dump(props, f, indent=1, separators=(',',':'))
 
-    # write a settings.json for CMakeTools plugin settings
-    if has_cmake_tools:
-        settings = {
-            'cmake.buildDirectory': build_dir,
-            'cmake.configureSettings': {
-                'FIPS_CONFIG:': cfg['name']
-            }
+#-------------------------------------------------------------------------------
+def write_cmake_tools_settings(fips_dir, proj_dir, vscode_dir, cfg):
+    '''write a settings.json for CMakeTools plugin settings'''
+    proj_name = util.get_project_name_from_dir(proj_dir)
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+    settings = {
+        'cmake.buildDirectory': build_dir,
+        'cmake.configureSettings': {
+            'FIPS_CONFIG:': cfg['name']
         }
-        with open(vscode_dir + '/settings.json', 'w') as f:
-            json.dump(settings, f, indent=1, separators=(',',':'))
+    }
+    with open(vscode_dir + '/settings.json', 'w') as f:
+        json.dump(settings, f, indent=1, separators=(',',':'))
+
+#-------------------------------------------------------------------------------
+def write_workspace_settings(fips_dir, proj_dir, cfg):
+    '''write the VSCode launch.json, tasks.json and
+    c_cpp_properties.json files from cmake output files
+    '''
+    vscode_dir = proj_dir + '/.vscode'
+    if not os.path.isdir(vscode_dir):
+        os.makedirs(vscode_dir)
+    vscode_extensions = list_extensions()
+    has_cmake_tools = any('vector-of-bool.cmake-tools' in ext for ext in vscode_extensions)
+
+    write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg)
+    write_launch_json(fips_dir, proj_dir, vscode_dir, cfg)
+    if has_cmake_tools:
+        write_cmake_tools_settings(fips_dir, proj_dir, vscode_dir, cfg)
+    else:
+        write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg)
