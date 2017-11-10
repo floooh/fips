@@ -5,7 +5,7 @@ import yaml
 import json
 import inspect
 import tempfile
-from mod import util,log,verb
+from mod import util,log,verb,dep
 from mod.tools import cmake
 
 name = 'vscode'
@@ -27,7 +27,7 @@ def check_exists(fips_dir) :
 #------------------------------------------------------------------------------
 def run(proj_dir):
     try:
-        subprocess.call('code .', cwd=proj_dir, shell=True)
+        subprocess.call('code .vscode/fips.code-workspace', cwd=proj_dir, shell=True)
     except OSError:
         log.error("Failed to run Visual Studio Code as 'code'") 
 
@@ -129,30 +129,33 @@ def list_extensions() :
 #-------------------------------------------------------------------------------
 def write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg):
     '''write the .vscode/tasks.json file'''
-    if util.get_host_platform() == 'win':
-        fips_cmd = 'fips'
-    else:
-        fips_cmd = './fips'
     all_targets = read_cmake_targets(fips_dir, proj_dir, cfg, None)
     tasks = {
         'version': '2.0.0',
         'tasks': []
     }
+    # write the actual tasks
     for tgt in all_targets:
         tasks['tasks'].append({
             'label': tgt,
-            'type': 'shell',
-            'command': '{} make {}'.format(fips_cmd, tgt),
+            'type': 'shell', 
+            'command': './fips make {}'.format(tgt),
+            'windows': {
+                'command': 'fips make {}'.format(tgt)
+            },
             'group': 'build',
             'presentation': {
                 'reveal': 'always'
             },
-            'problemMatcher': problem_matcher(),
+            'problemMatcher': [ problem_matcher() ]
         })
     tasks['tasks'].append({
         'label': 'ALL',
         'type': 'shell',
-        'command': '{} build'.format(fips_cmd),
+        'command': './fips build',
+        'windows': {
+            'command': 'fips build'
+        },
         'group': {
             'kind': 'build',
             'isDefault': True
@@ -160,7 +163,7 @@ def write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg):
         'presentation': {
             'reveal': 'always'
         },
-        'problemMatcher': problem_matcher(),
+        'problemMatcher': [ problem_matcher() ]
     })
     with open(vscode_dir + '/tasks.json', 'w') as f:
         json.dump(tasks, f, indent=1, separators=(',',':'))
@@ -320,20 +323,38 @@ def write_cmake_tools_settings(fips_dir, proj_dir, vscode_dir, cfg):
         json.dump(settings, f, indent=1, separators=(',',':'))
 
 #-------------------------------------------------------------------------------
+def write_code_workspace_file(fips_dir, proj_dir, vscode_dir, cfg):
+    '''write a multiroot-workspace config file'''
+    ws = {
+        'folders': [],
+        'settings': {}
+    }
+    # fetch all project dependencies
+    success, impex = dep.get_all_imports_exports(fips_dir, proj_dir)
+    if not success :
+        log.warn("missing import project directories, please run 'fips fetch'")
+    # add dependencies in reverse order, so that main project is first
+    for dep_proj_name in reversed(impex):
+        dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
+        ws['folders'].append({ 'path': dep_proj_dir })
+    with open(vscode_dir + '/fips.code-workspace', 'w') as f:
+        json.dump(ws, f, indent=1, separators=(',',':'))
+
+#-------------------------------------------------------------------------------
 def write_workspace_settings(fips_dir, proj_dir, cfg):
     '''write the VSCode launch.json, tasks.json and
     c_cpp_properties.json files from cmake output files
     '''
-    log.info("=== writing VSCode config files...")
+    log.info("=== writing Visual Studio Code config files...")
     vscode_dir = proj_dir + '/.vscode'
     if not os.path.isdir(vscode_dir):
         os.makedirs(vscode_dir)
     vscode_extensions = list_extensions()
     has_cmake_tools = any('vector-of-bool.cmake-tools' in ext for ext in vscode_extensions)
-
     write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg)
     write_launch_json(fips_dir, proj_dir, vscode_dir, cfg)
     if has_cmake_tools:
         write_cmake_tools_settings(fips_dir, proj_dir, vscode_dir, cfg)
     else:
         write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg)
+    write_code_workspace_file(fips_dir, proj_dir, vscode_dir, cfg)
