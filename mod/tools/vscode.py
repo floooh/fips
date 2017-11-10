@@ -141,9 +141,8 @@ def write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg):
     for tgt in all_targets:
         tasks['tasks'].append({
             'label': tgt,
-            'type': 'process',
-            'command': fips_cmd,
-            'args': ['make', tgt],
+            'type': 'shell',
+            'command': '{} make {}'.format(fips_cmd, tgt),
             'group': 'build',
             'presentation': {
                 'reveal': 'always'
@@ -152,9 +151,8 @@ def write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg):
         })
     tasks['tasks'].append({
         'label': 'ALL',
-        'type': 'process',
-        'command': fips_cmd,
-        'args': ['build'],
+        'type': 'shell',
+        'command': '{} build'.format(fips_cmd),
         'group': {
             'kind': 'build',
             'isDefault': True
@@ -326,6 +324,7 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
     '''write the VSCode launch.json, tasks.json and
     c_cpp_properties.json files from cmake output files
     '''
+    log.info("=== writing VSCode config files...")
     vscode_dir = proj_dir + '/.vscode'
     if not os.path.isdir(vscode_dir):
         os.makedirs(vscode_dir)
