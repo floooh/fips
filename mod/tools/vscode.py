@@ -27,7 +27,8 @@ def check_exists(fips_dir) :
 #------------------------------------------------------------------------------
 def run(proj_dir):
     try:
-        subprocess.call('code .vscode/fips.code-workspace', cwd=proj_dir, shell=True)
+        proj_name = util.get_project_name_from_dir(proj_dir)
+        subprocess.call('code .vscode/{}.code-workspace'.format(proj_name), cwd=proj_dir, shell=True)
     except OSError:
         log.error("Failed to run Visual Studio Code as 'code'") 
 
@@ -337,7 +338,8 @@ def write_code_workspace_file(fips_dir, proj_dir, vscode_dir, cfg):
     for dep_proj_name in reversed(impex):
         dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
         ws['folders'].append({ 'path': dep_proj_dir })
-    with open(vscode_dir + '/fips.code-workspace', 'w') as f:
+    proj_name = util.get_project_name_from_dir(proj_dir)
+    with open('{}/{}.code-workspace'.format(vscode_dir, proj_name), 'w') as f:
         json.dump(ws, f, indent=1, separators=(',',':'))
 
 #-------------------------------------------------------------------------------
