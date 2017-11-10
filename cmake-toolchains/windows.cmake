@@ -66,6 +66,13 @@ if (FIPS_EXCEPTIONS)
 else()
     set(FIPS_VS_EXCEPTION_FLAGS "/EHsc")
 endif()
+
+if (FIPS_DYNAMIC_CRT)
+    set(FIPS_VS_CRT_FLAGS "/MD")
+else()
+    set(FIPS_VS_CRT_FLAGS "/MT")
+endif()
+
 set(CMAKE_CXX_FLAGS "${FIPS_VS_EXCEPTION_FLAGS} /MP /WX /TP /DWIN32")
 set(CMAKE_CXX_FLAGS_DEBUG "/Zi /Od /Oy- /D_DEBUG /DFIPS_DEBUG=1")
 set(CMAKE_CXX_FLAGS_RELEASE "/Ox /DNDEBUG")
@@ -74,9 +81,8 @@ if (FIPS_UWP)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd /ZW")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD /ZW")
 else()
-    # on Win32, link runtime statically 
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
 endif()
 
 set(CMAKE_C_FLAGS "/MP /WX /TC /errorReport:queue /DWIN32")
@@ -86,10 +92,9 @@ if (FIPS_UWP)
     # must link runtime as DLLs
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MDd /ZW")
     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MD /ZW")
-else()
-    # on Win32, link runtime statically 
-    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MTd")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MT")
+else() 
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
 endif()
 
 # define exe linker flags
