@@ -133,26 +133,25 @@ def write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg):
     all_targets = read_cmake_targets(fips_dir, proj_dir, cfg, None)
     tasks = {
         'version': '2.0.0',
+        'type': 'shell',
+        'presentation': {
+            'reveal': 'always'
+        },
         'tasks': []
     }
     # write the actual tasks
     for tgt in all_targets:
         tasks['tasks'].append({
             'label': tgt,
-            'type': 'shell', 
             'command': './fips make {}'.format(tgt),
             'windows': {
                 'command': 'fips make {}'.format(tgt)
             },
             'group': 'build',
-            'presentation': {
-                'reveal': 'always'
-            },
-            'problemMatcher': [ problem_matcher() ]
+            'problemMatcher': [ problem_matcher() ],
         })
     tasks['tasks'].append({
         'label': 'ALL',
-        'type': 'shell',
         'command': './fips build',
         'windows': {
             'command': 'fips build'
@@ -161,10 +160,7 @@ def write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg):
             'kind': 'build',
             'isDefault': True
         },
-        'presentation': {
-            'reveal': 'always'
-        },
-        'problemMatcher': [ problem_matcher() ]
+        'problemMatcher': [ problem_matcher() ],
     })
     with open(vscode_dir + '/tasks.json', 'w') as f:
         json.dump(tasks, f, indent=1, separators=(',',':'))
