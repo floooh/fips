@@ -274,7 +274,8 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg):
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
     inc_paths = read_cmake_headerdirs(fips_dir, proj_dir, cfg)
     props = {
-        'configurations': []
+        'configurations': [],
+        'version': 3
     }
     for config_name in ['Mac','Linux','Win32']:
         c = {
@@ -285,6 +286,8 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg):
             }
         }
         config_incl_paths = []
+        defines = []
+        intellisense_mode = 'clang-x64'
         if config_name == 'Mac':
             config_incl_paths = get_clang_header_paths()
         elif config_name == 'Linux':
@@ -293,6 +296,8 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg):
                 '/usr/local/include'
             ]
         else:
+            intellisense_mode = 'msvc-x64'
+            defines = ['_DEBUG']
             config_incl_paths = [
                 # FIXME
                 'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*'
@@ -301,6 +306,8 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg):
             config_incl_paths.append(inc_path)
         c['includePath'] = config_incl_paths
         c['browse']['path'] = config_incl_paths
+        c['intelliSenseMode'] = intellisense_mode
+        c['defines'] = defines
         props['configurations'].append(c)
     with open(vscode_dir + '/c_cpp_properties.json', 'w') as f:
         json.dump(props, f, indent=1, separators=(',',':'))
