@@ -11,7 +11,7 @@
 ">
 
   <link rel="stylesheet" href="/fips/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/fips/cmakeguide.html">
+  <link rel="canonical" href="http://floooh.github.com/fips/cmakeguide.html">
 </head>
 
 
@@ -222,7 +222,7 @@ may change in the future though</p>
 <p>Begin defining a fips shared library. A fips shared library is a collection of source
 files that compile into a dynamically linkable library (as opposed to static libraries).</p>
 
-<p>After a fips_begin_lib() the following fips macros are valid:</p>
+<p>After a fips_begin_sharedlib() the following fips macros are valid:</p>
 
 <ul>
   <li>fips_dir()</li>
@@ -230,7 +230,7 @@ files that compile into a dynamically linkable library (as opposed to static lib
   <li>fips_generate()</li>
   <li>fips_deps()</li>
   <li>fips_libs()</li>
-  <li>fips_end_lib()</li>
+  <li>fips_end_sharedlib()</li>
 </ul>
 
 <h4 id="fips_end_sharedlib">fips_end_sharedlib()</h4>
@@ -243,6 +243,17 @@ files that compile into a dynamically linkable library (as opposed to static lib
 or ‘cmdline’, this only makes a difference on platform with separate
 command-line and UI application types, like Windows (WinMain vs main)
 or OSX (app bundle vs command line tool).</p>
+
+<p>The executable target (and only the executable target) will see the following 
+preprocessor definitions:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="c1">// fips_begin_app(bla windowed)
+</span><span class="cp">#define FIPS_APP_WINDOWED (1)
+</span><span class="c1">// fips_begin_app(bla cmdline)
+</span><span class="cp">#define FIPS_APP_CMDLINE (1)</span></code></pre></figure>
+
+<p>On Windows this can be used to either used to select between main() or WinMain() 
+as app entry function.</p>
 
 <p>After a fips_begin_app() the following fips macros are valid:</p>
 
