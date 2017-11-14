@@ -145,7 +145,7 @@ preprocessor definitions:
 #define FIPS_APP_CMDLINE (1)
 {% endhighlight %}
 
-On Windows this can be used to either used to select between main() or WinMain() 
+On Windows this can be used to select between main() or WinMain() 
 as app entry function.
 
 After a fips\_begin\_app() the following fips macros are valid:
