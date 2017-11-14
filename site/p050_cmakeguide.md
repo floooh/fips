@@ -138,12 +138,12 @@ or OSX (app bundle vs command line tool).
 The executable target (and only the executable target) will see the following 
 preprocessor definitions:
 
-```cpp
+{% highlight cpp %}
 // fips_begin_app(bla windowed)
 #define FIPS_APP_WINDOWED (1)
 // fips_begin_app(bla cmdline)
 #define FIPS_APP_CMDLINE (1)
-```
+{% endhighlight %}
 
 On Windows this can be used to either used to select between main() or WinMain() 
 as app entry function.
