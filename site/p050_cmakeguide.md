@@ -135,6 +135,19 @@ or 'cmdline', this only makes a difference on platform with separate
 command-line and UI application types, like Windows (WinMain vs main)
 or OSX (app bundle vs command line tool).
 
+The executable target (and only the executable target) will see the following 
+preprocessor definitions:
+
+```cpp
+// fips_begin_app(bla windowed)
+#define FIPS_APP_WINDOWED (1)
+// fips_begin_app(bla cmdline)
+#define FIPS_APP_CMDLINE (1)
+```
+
+On Windows this can be used to either used to select between main() or WinMain() 
+as app entry function.
+
 After a fips\_begin\_app() the following fips macros are valid:
 
 * fips\_dir()
