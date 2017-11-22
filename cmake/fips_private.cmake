@@ -266,3 +266,18 @@ macro(fips_add_target_dependency targets)
         list(REMOVE_DUPLICATES CurTargetDependencies)
     endif()
 endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_apply_executable_type_defines(target [cmdline|windowed])
+#   Adds the define FIPS_APP_CMDLINE or FIPS_APP_WINDOWED to the current
+#   executable target (and only this target). This can be used on
+#   Windows to decide whether the app should implement a main() or WinMai()
+#   entry function.
+#
+macro(fips_apply_executable_type_defines target type)
+    if (${CurAppType} STREQUAL "windowed")
+        target_compile_definitions(${target} PRIVATE FIPS_APP_WINDOWED=1)
+    else()
+        target_compile_definitions(${target} PRIVATE FIPS_APP_CMDLINE=1)
+    endif()
+endmacro()

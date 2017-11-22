@@ -381,6 +381,9 @@ macro(fips_end_app)
     # set platform- and target-specific compiler options
     fips_vs_apply_options(${CurTargetName})
 
+    # FIPS_APP_WINDOWED or FIPS_APP_CMDLINE defines
+    fips_apply_executable_type_defines(${CurTargetName} ${CurAppType})
+
     # android specific stuff
     if (FIPS_ANDROID)
         fips_android_create_project(${CurTargetName})
