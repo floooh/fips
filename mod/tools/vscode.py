@@ -143,19 +143,13 @@ def write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg):
     for tgt in all_targets:
         tasks['tasks'].append({
             'label': tgt,
-            'command': './fips make {}'.format(tgt),
-            'windows': {
-                'command': 'fips make {}'.format(tgt)
-            },
+            'command': 'python fips make {}'.format(tgt),
             'group': 'build',
             'problemMatcher': [ problem_matcher() ],
         })
     tasks['tasks'].append({
         'label': 'ALL',
-        'command': './fips build',
-        'windows': {
-            'command': 'fips build'
-        },
+        'command': 'python fips build',
         'group': {
             'kind': 'build',
             'isDefault': True
