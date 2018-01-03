@@ -47,6 +47,7 @@ set(FIPS_EMSCRIPTEN 1)
 set(FIPS_POSIX 1)
 
 # tweakable options 
+option(FIPS_EMSCRIPTEN_USE_CWRAP "emscripten: enable cwrap/ccall functions" OFF)
 option(FIPS_EMSCRIPTEN_USE_FS "emscripten: enable FS module" OFF)
 option(FIPS_EMSCRIPTEN_USE_DFE "emscripten: enable Duplicate Function Elimination" OFF)
 option(FIPS_EMSCRIPTEN_USE_WASM "emscripten: enable WebAssembly (experimental)" OFF)
@@ -80,6 +81,9 @@ set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s TOTAL_MEMORY=${FIPS_EMSCRIPTEN_TO
 set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s ERROR_ON_UNDEFINED_SYMBOLS=1")
 set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s NO_EXIT_RUNTIME=1")
 
+if (FIPS_EMSCRIPTEN_USE_CWRAP)
+    set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s \"EXTRA_EXPORTED_RUNTIME_METHODS=['cwrap','ccall']\"")
+endif()
 if (FIPS_PROFILING)
     set(EMSC_TRACING 1)
     set(EMSC_COMMON_FLAGS "${EMSC_COMMON_FLAGS} --tracing")
