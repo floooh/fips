@@ -11,6 +11,9 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **04-Jan-2018**: The previously experimental Visual Studio Code support is
+now 'official', [see here for details](http://floooh.github.io/2018/01/04/vscode-fips.html)
+
 - **16-Aug-2017**: I found (and fixed) some inconsistent behaviour when 
 the cmake project name is different from the project's directory name,
 this may change the behaviour of cmake- and python-code-generator
