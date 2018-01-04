@@ -261,6 +261,7 @@ def gather_imports(fips_dir, proj_dir) :
                 # add header search paths
                 for imp_hdr in deps[imp_proj_name]['exports']['header-dirs'] :
                     hdr_path = '{}/{}/{}'.format(ws_dir, imp_proj_name, imp_hdr)
+                    hdr_path = os.path.normpath(hdr_path)
                     if not os.path.isdir(hdr_path) :
                         log.warn("header search path '{}' not found in project '{}'".format(hdr_path, imp_proj_name))
                     imported[imp_proj_name]['hdrdirs'].append(hdr_path)
@@ -268,6 +269,7 @@ def gather_imports(fips_dir, proj_dir) :
                 # add lib search paths
                 for imp_lib in deps[imp_proj_name]['exports']['lib-dirs'] :
                     lib_path = '{}/{}/{}'.format(ws_dir, imp_proj_name, imp_lib)
+                    lib_path = os.path.normpath(lib_path)
                     if not os.path.isdir(lib_path) :
                         log.warn("lib search path '{}' not found in project '{}'".format(lib_path, imp_proj_name))
                     imported[imp_proj_name]['libdirs'].append(lib_path)
