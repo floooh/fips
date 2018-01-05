@@ -309,18 +309,19 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg):
             }
         }
         config_incl_paths = []
-        defines = []
         intellisense_mode = 'clang-x64'
         if config_name == 'Mac':
             config_incl_paths = get_clang_header_paths()
+            defines = ['_DEBUG','__GNUC__','__APPLE__','__clang__']
         elif config_name == 'Linux':
             config_incl_paths = [
                 '/usr/include',
                 '/usr/local/include'
             ]
+            defines = ['_DEBUG','__GNUC__']
         else:
             intellisense_mode = 'msvc-x64'
-            defines = ['_DEBUG']
+            defines = ['_DEBUG','_WIN32']
             config_incl_paths = get_vs_header_paths(fips_dir, proj_dir, cfg)
         for inc_path in inc_paths:
             config_incl_paths.append(inc_path)
