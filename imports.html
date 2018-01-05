@@ -199,6 +199,24 @@ has had an update that breaks existing code:</p>
 <p>The ‘branch:’ item can either be a branch or tag name.
 The ‘rev:’ item should be a valid commit SHA1 reference.</p>
 
+<h3 id="conditional-imports">Conditional Imports</h3>
+
+<p>An import can contain a conditional cmake-expression which must be true
+for the import to happen. For instance to ignore an import on IOS:</p>
+
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
+<span class="na">imports</span><span class="pi">:</span>
+    <span class="na">my-awesome-lib</span><span class="pi">:</span>
+        <span class="na">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/my-awesome-lib.git</span>
+        <span class="na">cond</span><span class="pi">:</span> <span class="s2">"</span><span class="s">NOT</span><span class="nv"> </span><span class="s">FIPS_IOS"</span></code></pre></figure>
+
+<p>The resulting cmake code to import this dependency will then be surrounded
+with:</p>
+
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">if</span> <span class="p">(</span>NOT FIPS_IOS<span class="p">)</span>
+    ...actual import code
+<span class="nb">endif</span><span class="p">()</span></code></pre></figure>
+
 <h3 id="fetching-imports">Fetching imports</h3>
 
 <p>To fetch external dependencies simply run ‘./fips fetch’ from within
