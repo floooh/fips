@@ -5,6 +5,7 @@ import yaml
 import json
 import inspect
 import tempfile
+import glob
 from mod import util,log,verb,dep
 from mod.tools import cmake
 
@@ -114,6 +115,34 @@ def get_clang_header_paths():
         if capture:
             l = line.replace('(framework directory)', '').strip()
             result.append(l)
+    return result
+
+#------------------------------------------------------------------------------
+def get_vs_header_paths(fips_dir, proj_dir, cfg):
+    '''hacky way to find the header search path in the latest installed
+    Windows 10 Kit and Visual Studio instance
+    '''
+    if util.get_host_platform() != 'win':
+        return []
+
+    # Windows system headers are in 2 locations, first find the latest Windows Kit
+    result = []
+    kits = glob.glob('C:/Program Files (x86)/Windows Kits/10/Include/*/')
+    if kits:
+        latest = max(kits).replace('\\','/')
+        subdirs = glob.glob(latest + '/*/')
+        for d in subdirs:
+            result.append(d.replace('\\','/'))
+
+    # next get the used active Visual Studio instance from the cmake cache
+    proj_name = util.get_project_name_from_dir(proj_dir)
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+    outp = subprocess.check_output(['cmake', '-LA', '.'], cwd=build_dir)
+    for line in outp.splitlines():
+        if line.startswith('CMAKE_LINKER:FILEPATH='):
+            bin_index = line.find('/bin/')
+            if bin_index > 0:
+                result.append(line[22:bin_index+1]+'include')
     return result
 
 #------------------------------------------------------------------------------
@@ -292,10 +321,7 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg):
         else:
             intellisense_mode = 'msvc-x64'
             defines = ['_DEBUG']
-            config_incl_paths = [
-                # FIXME
-                'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*'
-            ]
+            config_incl_paths = get_vs_header_paths(fips_dir, proj_dir, cfg)
         for inc_path in inc_paths:
             config_incl_paths.append(inc_path)
         c['includePath'] = config_incl_paths
