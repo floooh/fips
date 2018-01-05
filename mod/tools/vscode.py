@@ -83,11 +83,11 @@ def problem_matcher():
         }
 
 #-------------------------------------------------------------------------------
-def get_clang_header_paths():
-    '''runs "clang -E -xc++ -v dummy.cc" and extract the header search
+def get_cc_header_paths():
+    '''runs "cc -E -xc++ -v dummy.cc" and extract the header search
     path from stdout, return these as array of strings.
     '''
-    if util.get_host_platform() != 'osx':
+    if util.get_host_platform() not in ['osx','linux']:
         return []
     
     # write a dummy C source file
@@ -96,7 +96,7 @@ def get_clang_header_paths():
     tmp.close()
 
     # run clang in preprocessor mode
-    outp = subprocess.check_output(['clang', '-E', '-xc++', '-v', tmp.name], stderr=subprocess.STDOUT)
+    outp = subprocess.check_output(['cc', '-E', '-xc++', '-v', tmp.name], stderr=subprocess.STDOUT)
 
     # delete the temp source file
     os.remove(tmp.name)
@@ -311,13 +311,10 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg):
         config_incl_paths = []
         intellisense_mode = 'clang-x64'
         if config_name == 'Mac':
-            config_incl_paths = get_clang_header_paths()
+            config_incl_paths = get_cc_header_paths()
             defines = ['_DEBUG','__GNUC__','__APPLE__','__clang__']
         elif config_name == 'Linux':
-            config_incl_paths = [
-                '/usr/include',
-                '/usr/local/include'
-            ]
+            config_incl_paths = get_cc_header_paths()
             defines = ['_DEBUG','__GNUC__']
         else:
             intellisense_mode = 'msvc-x64'
