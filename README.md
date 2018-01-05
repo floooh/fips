@@ -11,6 +11,10 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **05-Jan-2018**: Import definitions in fips.yml files can now contain an
+expression which is evaluated in cmake. This can be used to include or
+exclude platform-specific includes. [See here for details](http://floooh.github.io/fips/imports.html)
+
 - **04-Jan-2018**: The previously experimental Visual Studio Code support is
 now 'official', [see here for details](http://floooh.github.io/2018/01/04/vscode-fips.html)
 

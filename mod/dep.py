@@ -42,6 +42,8 @@ def get_imports(fips_dir, proj_dir) :
                 for dep in imports :
                     if not 'branch' in imports[dep] :
                         imports[dep]['branch'] = 'master'
+                    if not 'cond' in imports[dep] :
+                        imports[dep]['cond'] = None
                     if not 'git' in imports[dep] :
                         log.error("no git URL in import '{}' in '{}/fips.yml'!\n".format(dep, proj_dir))
             else :
@@ -116,6 +118,7 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, result) :
                 name:
                     git:    [git-url]
                     branch: [optional: branch or tag]
+                    cond:   [optional: cmake-if condition string conditionally including the dependency]
                 name:
                     ...
                 ...
@@ -257,6 +260,7 @@ def gather_imports(fips_dir, proj_dir) :
                 imported[imp_proj_name]['hdrdirs'] = []
                 imported[imp_proj_name]['libdirs'] = []
                 imported[imp_proj_name]['defines'] = {}
+                imported[imp_proj_name]['cond'] = imports[imp_proj_name]['cond']
 
                 # add header search paths
                 for imp_hdr in deps[imp_proj_name]['exports']['header-dirs'] :
@@ -306,7 +310,7 @@ def gather_imports(fips_dir, proj_dir) :
 
 #-------------------------------------------------------------------------------
 def write_imports(fips_dir, proj_dir, imported) :
-    """write the big imports directory created with 'gather_imports'
+    """write the big imports map created with 'gather_imports'
     to a .fips-imports.cmake file in the current project
 
     :params fips_dir:   absolute path to fips
@@ -331,6 +335,9 @@ def write_imports(fips_dir, proj_dir, imported) :
             
             for imp_proj_name in imported :
                 imp_proj_dir = util.get_project_dir(fips_dir, imp_proj_name)
+                
+                if imported[imp_proj_name]['cond']:
+                    f.write('if ({})\n'.format(imported[imp_proj_name]['cond']))
 
                 # add include and lib search paths
                 if imp_proj_dir != proj_dir :
@@ -386,6 +393,9 @@ def write_imports(fips_dir, proj_dir, imported) :
                     for import_func in import_functions :
                         f.write('    {}()\n'.format(import_func))
                     f.write('    fips_ide_group("")\n')
+                    f.write('endif()\n')
+                
+                if imported[imp_proj_name]['cond']:
                     f.write('endif()\n')
 
         # check content of old and new file, only replace if changed

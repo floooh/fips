@@ -106,6 +106,28 @@ imports:
 The 'branch:' item can either be a branch or tag name.
 The 'rev:' item should be a valid commit SHA1 reference.
 
+### Conditional Imports
+
+An import can contain a conditional cmake-expression which must be true
+for the import to happen. For instance to ignore an import on IOS:
+
+{% highlight yaml %}
+---
+imports:
+    my-awesome-lib:
+        git: https://github.com/floooh/my-awesome-lib.git
+        cond: "NOT FIPS_IOS"
+{% endhighlight %}
+
+The resulting cmake code to import this dependency will then be surrounded
+with:
+
+{% highlight cmake %}
+if (NOT FIPS_IOS)
+    ...actual import code
+endif()
+{% endhighlight %}
+
 ### Fetching imports
 
 To fetch external dependencies simply run './fips fetch' from within
