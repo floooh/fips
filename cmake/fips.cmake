@@ -202,6 +202,7 @@ macro(fips_setup)
     # write empty YAML property tracking files
     fips_reset_targets_list()
     fips_reset_headerdirs_list()
+    fips_reset_defines_list()
 
     # initialize code generation
     fips_begin_gen()
@@ -276,7 +277,7 @@ macro(fips_end_module)
     # track some target propeties in YAML files
     fips_addto_targets_list(${CurTargetName} "module")
     fips_addto_headerdirs_list(${CurTargetName})
-
+    fips_addto_defines_list(${CurTargetName})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -313,7 +314,7 @@ macro(fips_end_lib)
     # track some target propeties in YAML files
     fips_addto_targets_list(${CurTargetName} "lib")
     fips_addto_headerdirs_list(${CurTargetName})
-
+    fips_addto_defines_list(${CurTargetName})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -409,6 +410,7 @@ macro(fips_end_app)
     # track some target propeties in YAML files
     fips_addto_targets_list(${CurTargetName} "app")
     fips_addto_headerdirs_list(${CurTargetName})
+    fips_addto_defines_list(${CurTargetName})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -456,7 +458,7 @@ macro(fips_end_sharedlib)
     # track some target propeties in YAML files
     fips_addto_targets_list(${CurTargetName} "sharedlib")
     fips_addto_headerdirs_list(${CurTargetName})
-
+    fips_addto_defines_list(${CurTargetName})
 endmacro()
 
 #-------------------------------------------------------------------------------

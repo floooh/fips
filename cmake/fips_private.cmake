@@ -146,6 +146,30 @@ function(fips_addto_headerdirs_list target)
 endfunction()
 
 #-------------------------------------------------------------------------------
+#   fips_reset_defines_list
+#   Clears the fips_defines.yml file which keeps track of target definitions.
+#
+function(fips_reset_defines_list)
+    file(WRITE "${CMAKE_BINARY_DIR}/fips_defines.yml" "---\n")
+endfunction()
+
+
+#-------------------------------------------------------------------------------
+#   fips_addto_defines_list(target)
+#   Add target compile definitions to the fips_defines.yml file.
+#
+#   NOTE: currently this only adds the global-level defines, a proper
+#   implementation should add global- and target-level defines.
+#
+function(fips_addto_defines_list target)
+    get_property(defs DIRECTORY "." PROPERTY COMPILE_DEFINITIONS)
+    file(APPEND "${CMAKE_BINARY_DIR}/fips_defines.yml" "${target}:\n")
+    foreach(def ${defs})
+        file(APPEND "${CMAKE_BINARY_DIR}/fips_defines.yml" "    - '${def}'\n")
+    endforeach()
+endfunction()
+
+#-------------------------------------------------------------------------------
 #   fips_choose_config()
 #   Sets the FIPS_CONFIG variable to a sensible value, call this if
 #   FIPS_CONFIG hasn't been provided by the command line when using
