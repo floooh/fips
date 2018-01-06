@@ -225,9 +225,22 @@ def get_cfg_headersdirs_by_target(fips_dir, proj_dir, cfg):
     build_dir = get_build_dir(fips_dir, proj_name, cfg)
     path = build_dir + '/fips_headerdirs.yml'
     if os.path.isfile(path):
-        target = {}
+        headerdirs = {}
         with open(path) as f:
             headerdirs = yaml.load(f)
         return True, headerdirs
+    else:
+        return False,{}
+
+#-------------------------------------------------------------------------------
+def get_cfg_defines_by_target(fips_dir, proj_dir, cfg):
+    proj_name = get_project_name_from_dir(proj_dir)
+    build_dir = get_build_dir(fips_dir, proj_name, cfg)
+    path = build_dir + '/fips_defines.yml'
+    if os.path.isfile(path):
+        defines = {}
+        with open(path) as f:
+            defines = yaml.load(f)
+        return True,defines
     else:
         return False,{}

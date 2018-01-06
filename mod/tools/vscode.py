@@ -53,16 +53,28 @@ def read_cmake_targets(fips_dir, proj_dir, cfg, types):
 #------------------------------------------------------------------------------
 def read_cmake_headerdirs(fips_dir, proj_dir, cfg):
     '''reads the fips_headerdirs.yml file which was created during
-    "fips gen" and returns a list of unique header search paths
+    "fips gen" and returns a list of unique include paths
     '''
     result = []
     success, dirs = util.get_cfg_headersdirs_by_target(fips_dir, proj_dir, cfg)
     if success:
-        for _,dirs in dirs.items():
-            result.extend(dirs)
+        for _,val in dirs.items():
+            result.extend(val)
     return set(result)
 
-#------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+def read_cmake_defines(fips_dir, proj_dir, cfg):
+    '''reads the fips_defines.yml file which was created during
+    "fips gen" and returns map of unique top-level defines.
+    '''
+    result = []
+    success, defs = util.get_cfg_defines_by_target(fips_dir, proj_dir, cfg)
+    if success:
+        for _,val in defs.items():
+            result.extend(val)
+    return set(result)
+
+#-------------------------------------------------------------------------------
 def problem_matcher():
     # FIXME: an actual compiler identification would be better here!
     if util.get_host_platform() == 'win':
@@ -296,6 +308,7 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg):
     proj_name = util.get_project_name_from_dir(proj_dir)
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
     inc_paths = read_cmake_headerdirs(fips_dir, proj_dir, cfg)
+    defines = read_cmake_defines(fips_dir, proj_dir, cfg)
     props = {
         'configurations': [],
         'version': 3
@@ -312,20 +325,21 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg):
         intellisense_mode = 'clang-x64'
         if config_name == 'Mac':
             config_incl_paths = get_cc_header_paths()
-            defines = ['_DEBUG','__GNUC__','__APPLE__','__clang__']
+            config_defines = ['_DEBUG','__GNUC__','__APPLE__','__clang__']
         elif config_name == 'Linux':
             config_incl_paths = get_cc_header_paths()
-            defines = ['_DEBUG','__GNUC__']
+            config_defines = ['_DEBUG','__GNUC__']
         else:
             intellisense_mode = 'msvc-x64'
-            defines = ['_DEBUG','_WIN32']
             config_incl_paths = get_vs_header_paths(fips_dir, proj_dir, cfg)
-        for inc_path in inc_paths:
-            config_incl_paths.append(inc_path)
+            config_defines = ['_DEBUG','_WIN32']
+        config_incl_paths.extend(inc_paths)
+        config_defines.extend(defines)
+        
         c['includePath'] = config_incl_paths
+        c['defines'] = config_defines
         c['browse']['path'] = config_incl_paths
         c['intelliSenseMode'] = intellisense_mode
-        c['defines'] = defines
         props['configurations'].append(c)
     with open(vscode_dir + '/c_cpp_properties.json', 'w') as f:
         json.dump(props, f, indent=1, separators=(',',':'))
