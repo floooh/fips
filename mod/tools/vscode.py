@@ -71,7 +71,8 @@ def read_cmake_defines(fips_dir, proj_dir, cfg):
     success, defs = util.get_cfg_defines_by_target(fips_dir, proj_dir, cfg)
     if success:
         for _,val in defs.items():
-            result.extend(val)
+            if val:
+                result.extend(val)
     return set(result)
 
 #-------------------------------------------------------------------------------
