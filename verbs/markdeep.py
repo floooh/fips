@@ -10,6 +10,8 @@ def run(fips_dir, proj_dir, args):
         if args[0] == 'build':
             markdeep.build(fips_dir, proj_dir)
         elif args[0] == 'view':
+            # view also build the markdown docs first
+            markdeep.build(fips_dir, proj_dir)
             markdeep.view(fips_dir, proj_dir)
         else:
             log.error("expected 'build' or 'serve' arg")
