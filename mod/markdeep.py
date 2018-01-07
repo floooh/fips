@@ -28,6 +28,11 @@ def build(fips_dir, proj_dir):
                 if "#*/" in line and capturing:
                     capturing = False
                 if capturing:
+                    # remove trailing tab
+                    if line.startswith('    '):
+                        line = line[4:]
+                    elif line.startswith('\t'):
+                        line = line[1:]
                     markdeep_lines.append(line)
                 if "/*#" in line and not capturing:
                     capturing = True
@@ -56,7 +61,7 @@ def build(fips_dir, proj_dir):
             dst.write('# {}\n'.format(proj_name))
             for hdr in markdeep_files:
                 rel_path = os.path.relpath(hdr,proj_dir)
-                dst.write('- [{}]({})'.format(rel_path, rel_path+'.html'))
+                dst.write('- [{}]({})\n'.format(rel_path, rel_path+'.html'))
             dst.write("<script>markdeepOptions={tocStyle:'medium'};</script>")
             dst.write("<!-- Markdeep: --><script src='https://casual-effects.com/markdeep/latest/markdeep.min.js?'></script>")
     else:
