@@ -20,7 +20,7 @@ endmacro()
 #   Copy OSX dynamic link libs to the executables directory.
 #
 macro(fips_copy_osx_dylib_files target isbundle)
-    if (FIPS_IOS OR FIPS_OSX)
+    if (FIPS_OSX)
         if (${isbundle})
             set(XCODE_OUTPUT_DIR \${TARGET_BUILD_DIR}/\${FULL_PRODUCT_NAME}/Contents/MacOS)
         else()
@@ -147,7 +147,7 @@ endmacro()
 #   Setup special target properties for OSX/iOS.
 #
 macro(fips_osx_add_target_properties target)
-    if (FIPS_IOS OR FIPS_OSX)
+    if (FIPS_OSX)
         fips_osx_generate_plist_file(${target})
         if (FIPS_IOS)
             set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer")    
