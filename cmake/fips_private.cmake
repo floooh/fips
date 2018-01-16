@@ -60,7 +60,7 @@ macro(fips_resolve_dependencies target)
     foreach (lib_release ${CurLinkLibsRelease})
         target_link_libraries(${target} optimized ${lib_release})
     endforeach()
-    if (FIPS_IOS OR FIPS_OSX)
+    if (FIPS_OSX)
         foreach (fw ${CurFrameworks})
             unset(found_framework CACHE)
             find_library(found_framework ${fw})
@@ -91,7 +91,7 @@ endmacro(fips_config_postfixes_for_exe)
 #   Internal macro to set the output directory for exes and sharedlibs
 #
 function(fips_config_output_directory target)
-    if (NOT (FIPS_IOS OR FIPS_ANDROID))
+    if (NOT FIPS_ANDROID)
         set(dir ${FIPS_DEPLOY_DIR}/${FIPS_PROJECT_NAME}/${FIPS_CONFIG})
 
         # exes
