@@ -11,6 +11,12 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **16-Jan-2018**: The iOS build configs now put the resulting .app bundle
+into the ```fips-deploy/[proj]/[config]/``` directory, so they behave
+the same as most other target platforms. This makes it
+easier for helper scripts (code generators and verbs) to
+find the iOS app bundle (for instance to copy asset files).
+
 - **05-Jan-2018**: Import definitions in fips.yml files can now contain an
 expression which is evaluated in cmake. This can be used to include or
 exclude platform-specific includes. [See here for details](http://floooh.github.io/fips/imports.html)
