@@ -39,6 +39,9 @@ endmacro()
 #-------------------------------------------------------------------------------
 #   fips_osx_generate_plist_file(target)
 #
+#   FIXME: need a way to override the plist file from a fips target
+#   description.
+#
 macro(fips_osx_generate_plist_file target)
     set(FIPS_OSX_PLIST_PATH ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
     set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${FIPS_OSX_PLIST_PATH})
@@ -96,7 +99,7 @@ macro(fips_osx_generate_plist_file target)
             "    <dict>\n"
             "      <key>NSAllowsArbitraryLoads</key>\n"
             "      <true/>\n"
-	        "    </dict>\n"
+            "    </dict>\n"
             "  </dict>\n"
             "</plist>\n")
     elseif (FIPS_MACOS)
@@ -137,6 +140,11 @@ macro(fips_osx_generate_plist_file target)
             "    <string>\${MACOSX_DEPLOYMENT_TARGET}</string>\n"
             "    <key>NSHighResolutionCapable</key>\n"
             "    <true/>\n"
+            "    <key>NSAppTransportSecurity</key>\n"
+            "    <dict>\n"
+            "      <key>NSAllowsArbitraryLoads</key>\n"
+            "      <true/>\n"
+            "    </dict>\n"
             "  </dict>\n"
             "</plist>\n")
     endif()
