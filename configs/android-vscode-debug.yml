@@ -1,0 +1,9 @@
+---
+platform: android 
+generator: Ninja 
+build_tool: vscode_cmake
+build_type: Debug
+cmake-toolchain: android.toolchain.cmake
+defines:
+    ANDROID_CPU: arm
+    ANDROID_API: android-19
