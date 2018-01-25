@@ -86,5 +86,5 @@ def setup(fips_dir, proj_dir) :
 
 #-------------------------------------------------------------------------------
 def check_exists(fips_dir) :
-    """check if the android sdk/ndk has been installed"""
-    return os.path.isdir(get_androidsdk_dir(fips_dir)) and os.path.isdir(get_androidndk_dir(fips_dir))
+    """check if the android sdk has been installed"""
+    return os.path.isdir(get_sdk_dir(fips_dir))
