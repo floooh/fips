@@ -5,5 +5,5 @@ build_tool: ninja
 build_type: Debug
 cmake-toolchain: android.toolchain.cmake
 defines :
-    ANDROID_CPU: mips 
-    ANDROID_API: android-19
+    ANDROID_ABI: mips
+    ANDROID_PLATFORM: android-21

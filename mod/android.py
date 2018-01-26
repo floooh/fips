@@ -22,7 +22,7 @@ tools_archives = {
 
 #-------------------------------------------------------------------------------
 def get_sdk_dir(fips_dir) :
-    return util.get_workspace_dir(fips_dir) + '/fips-sdks/' + util.get_host_platform() + '/android/'
+    return util.get_workspace_dir(fips_dir) + '/fips-sdks/android/'
 
 #-------------------------------------------------------------------------------
 def get_tools_url() :

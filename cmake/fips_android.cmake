@@ -9,6 +9,16 @@
 #
 macro(fips_android_create_project target)
     
+    # call python helper script to setup the Android project directory which
+    # will be converted to an APK in the post build step
+    add_custom_command(TARGET ${target} POST_BUILD 
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMAND ${PYTHON} ${FIPS_ROOT_DIR}/tools/android.py 
+            --create ${SMAKE_CURRENT_BINARY_DIR}/android
+            --api ${ANDROID_API}
+            --name ${target}
+    )
+
     # call the android SDK tool to create a new project (skip if already exists)
     if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/android)
         message("=> create Android SDK project: ${target}")
@@ -56,8 +66,6 @@ endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_android_postbuildstep
-#   Setup a post-build-step which creates the actual APK file, and copy to
-#   deploy directory.
 #
 macro(fips_android_postbuildstep target)
     if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")

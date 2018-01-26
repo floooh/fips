@@ -5,5 +5,5 @@ build_tool: make
 build_type: Debug
 cmake-toolchain: android.toolchain.cmake
 defines:
-    ANDROID_CPU: arm
-    ANDROID_API: android-19
+    ANDROID_ABI: armeabi-v7a
+    ANDROID_PLATFORM: android-21
