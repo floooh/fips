@@ -74,6 +74,7 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
         # if Ninja build tool and on Windows, need to copy 
         # the precompiled ninja.exe to the build dir
         log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
+        log.info("config file: {}".format(cfg['path']))
         toolchain_path = config.get_toolchain(fips_dir, proj_dir, cfg)
         if toolchain_path :
             log.info("Using Toolchain File: {}".format(toolchain_path))

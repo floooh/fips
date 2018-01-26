@@ -16,44 +16,12 @@ native_platforms = [
     'win64'
 ] 
 
-# supported cmake generators
-generators = [
-    'Default',
-    'Unix Makefiles',
-    'Ninja',
-    'Xcode',
-    'Visual Studio 12',
-    'Visual Studio 12 Win64', 
-    'Visual Studio 14',
-    'Visual Studio 14 Win64',
-    'Visual Studio 15',
-    'Visual Studio 15 Win64',
-    'CodeBlocks - Ninja',
-    'CodeBlocks - Unix Makefiles',
-    'CodeLite - Ninja',
-    'CodeLite - Unix Makefiles',
-    'Eclipse CDT4 - Ninja',
-    'Eclipse CDT4 - Unix Makefiles',
-    'KDevelop3',
-    'KDevelop3 - Unix Makefiles',
-    'Kate - Ninja',
-    'Kate - Unix Makefiles',
-    'Sublime Text 2 - Ninja',
-    'Sublime Text 2 - Unix Makefiles'
-]
-
 build_tools = [
     'make',
     'ninja',
     'xcodebuild',
     'cmake',
     'vscode_cmake'
-]
-
-build_types = [
-    'Release',
-    'Debug',
-    'Profiling'
 ]
 
 default_config = {
@@ -63,15 +31,6 @@ default_config = {
 }
 
 #-------------------------------------------------------------------------------
-def valid_generator(name) :
-    """test if provided cmake generator name is valid
-
-    :param name: generator name (e.g. 'Unix Makefiles', 'Ninja', ...)
-    :returns: True if generator name is valid
-    """
-    return name in generators
-
-#-------------------------------------------------------------------------------
 def valid_build_tool(name) :
     """test if provided build tool name is valid
 
@@ -79,15 +38,6 @@ def valid_build_tool(name) :
     :returns: True if build tool name is valid
     """
     return name in build_tools
-
-#-------------------------------------------------------------------------------
-def valid_build_type(name) :
-    """test if provided build type name is valid
-
-    :param name: build type (Debug, Release, ...)
-    :returns: True if build type is valid
-    """
-    return name in build_types
 
 #-------------------------------------------------------------------------------
 def get_default_config() :
@@ -169,7 +119,7 @@ def get_config_dirs(fips_dir, proj_dir) :
     :param proj_dir: absolute project directory
     :returns:        list of all directories with config files
     """
-    dirs = [ fips_dir + '/configs' ]
+    dirs = []
     if fips_dir != proj_dir :
         success, result = dep.get_all_imports_exports(fips_dir, proj_dir)
         if success :
@@ -180,6 +130,7 @@ def get_config_dirs(fips_dir, proj_dir) :
                     dirs.append(dep_configs_dir)
         else :
             log.warn("missing import directories, please run 'fips fetch'")
+    dirs.append(fips_dir + '/configs')
     return dirs
 
 #-------------------------------------------------------------------------------
@@ -235,7 +186,13 @@ def load(fips_dir, proj_dir, pattern) :
                     cfg['generator-toolset'] = None
                 if 'defines' not in cfg :
                     cfg['defines'] = None
-                configs.append(cfg)
+
+                # don't append multiple configs with the same name
+                for c in configs:
+                    if c['name'] == cfg['name']:
+                        break
+                else:
+                    configs.append(cfg)
             except yaml.error.YAMLError as e:
                 log.error('YML parse error: {}', e.message)
     return configs
@@ -292,11 +249,6 @@ def check_config_valid(fips_dir, proj_dir, cfg, print_errors=False) :
         messages.append("platform sdk for '{}' not installed (see './fips help setup')".format(cfg['platform']))
         valid = False
 
-    # check if the generator name is valid
-    if not valid_generator(cfg['generator']) :
-        messages.append("invalid generator name '{}' in '{}'".format(cfg['generator'], cfg['path']))
-        valid = False
-
     # check if build tool is valid
     if not valid_build_tool(cfg['build_tool']) :
         messages.append("invalid build_tool name '{}' in '{}'".format(cfg['build_tool'], cfg['path']))
@@ -305,11 +257,6 @@ def check_config_valid(fips_dir, proj_dir, cfg, print_errors=False) :
     # check if the build tool can be found
     if not check_build_tool(fips_dir, cfg['build_tool']) :
         messages.append("build tool '{}' not found".format(cfg['build_tool']))
-        valid = False
-
-    # check if build type is valid (Debug, Release, Profiling)
-    if not valid_build_type(cfg['build_type']) :
-        messages.append("invalid build_type '{}' in '{}'".format(cfg['build_type'], cfg['path']))
         valid = False
 
     # check if the toolchain file can be found (if this is a crosscompiling toolchain)
