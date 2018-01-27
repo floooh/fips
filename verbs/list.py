@@ -176,12 +176,6 @@ def run(fips_dir, proj_dir, args) :
     if noun in ['all', 'build-tools'] :
         list_build_tools()
         ok = True
-    if noun in ['all', 'build-types'] :
-        list_build_types()
-        ok = True
-    if noun in ['all', 'generators'] :
-        list_generators()
-        ok = True
     if noun in ['all', 'registry'] :
         list_registry(fips_dir)
         ok = True
@@ -208,8 +202,6 @@ def help() :
              "fips list all\n"
              "fips list configs\n"
              "fips list build-tools\n"
-             "fips list build-types\n"
-             "fips list generators\n"
              "fips list registry\n"
              "fips list settings\n"
              "fips list targets [config]\n"
