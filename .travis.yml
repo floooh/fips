@@ -35,8 +35,6 @@ script:
     - python fips list all
     - python fips list configs
     - python fips list build-tools
-    - python fips list build-types
-    - python fips list generators
     - python fips list registry
     - python fips list settings
     - python fips list exports
