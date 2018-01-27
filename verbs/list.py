@@ -22,20 +22,6 @@ def list_build_tools() :
         log.info('{}'.format(tool))
 
 #-------------------------------------------------------------------------------
-def list_build_types() :
-    """list supported build types"""
-    log.colored(log.YELLOW, '=== build-types:')
-    for type in config.build_types :
-        log.info('{}'.format(type))
-
-#-------------------------------------------------------------------------------
-def list_generators() :
-    """list supported generatores"""
-    log.colored(log.YELLOW, '=== generators:')
-    for gen in config.generators :
-        log.info('{}'.format(gen))
-
-#-------------------------------------------------------------------------------
 def list_configs(fips_dir, proj_dir) :
     """list available configs"""
     log.colored(log.YELLOW, '=== configs:')
