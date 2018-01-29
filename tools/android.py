@@ -23,13 +23,17 @@ import shutil
 import subprocess
 
 # FIXME! output of /usr/libexec/java_home
+fips_dir = os.path.normpath(os.path.dirname(os.path.abspath(__file__)) + '/..')
 JAVA_HOME = '/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home'
 RT_JAR = JAVA_HOME + '/jre/lib/rt.jar'
-
-fips_dir = os.path.normpath(os.path.dirname(os.path.abspath(__file__)) + '/..')
+SDK_HOME = os.path.abspath(fips_dir + '/../fips-sdks/android/') + '/'
+BUILD_TOOLS = SDK_HOME + 'build-tools/27.0.3/'
+AAPT = BUILD_TOOLS + 'aapt'
+DX = BUILD_TOOLS + 'dx'
+ZIPALIGN = BUILD_TOOLS + 'zipalign'
+APKSIGNER = BUILD_TOOLS + 'apksigner'
 
 parser = argparse.ArgumentParser(description="Android APK package helper.")
-parser.add_argument('--sdk', help='path to Android SDK', required=True)
 parser.add_argument('--path', help='path to the cmake build dir', required=True)
 parser.add_argument('--name', help='cmake target name', required=True)
 parser.add_argument('--abi', help='the NDK ABI string (armeabi-v7a, mips or x86', default='armeabi-v7a')
@@ -37,8 +41,6 @@ parser.add_argument('--version', help='the Android SDK platform version (e.g. 21
 parser.add_argument('--package', help='the Java package name', required=True)
 args = parser.parse_args()
 
-if not args.sdk.endswith('/'):
-    args.sdk += '/'
 if not args.path.endswith('/'):
     args.path += '/'
 
@@ -96,12 +98,12 @@ with open(apk_dir + 'AndroidManifest.xml', 'w') as f:
 
 # prepare APK structure
 cmd = [
-    args.sdk + 'build-tools/27.0.3/aapt',
+    AAPT,
     'package',
     '-v', '-f', '-m',
     '-S', 'res', '-J', 'src',
     '-M', 'AndroidManifest.xml',
-    '-I', args.sdk + 'platforms/android-' + args.version + '/android.jar'
+    '-I', SDK_HOME + 'platforms/android-' + args.version + '/android.jar'
 ]
 subprocess.call(cmd, cwd=apk_dir)
 
@@ -118,7 +120,7 @@ subprocess.call(cmd, cwd=apk_dir)
 
 # convert Java byte code to DEX
 cmd = [
-    args.sdk + 'build-tools/27.0.3/dx',
+    DX,
     '--verbose',
     '--dex', '--output=bin/classes.dex',
     './obj'
@@ -127,13 +129,57 @@ subprocess.call(cmd, cwd=apk_dir)
 
 # package the APK
 cmd = [
-    args.sdk + 'build-tools/27.0.3/aapt',
+    AAPT,
     'package', 
     '-v', '-f', 
     '-S', 'res', 
     '-M', 'AndroidManifest.xml', 
-    '-I', args.sdk + 'platforms/android-' + args.version + '/android.jar',
-    '-F', args.path + args.name + '.apk',
+    '-I', SDK_HOME + 'platforms/android-' + args.version + '/android.jar',
+    '-F', args.path + args.name + '-unaligned.apk',
     'libs', 'bin'
+]
+subprocess.call(cmd, cwd=apk_dir)
+
+# run zipalign on the package
+cmd = [
+    ZIPALIGN,
+    '-f', '4',
+    args.path + args.name + '-unaligned.apk',
+    args.path + args.name + '.apk'
+]
+subprocess.call(cmd, cwd=apk_dir)
+
+# create debug signing key
+keystore_path = args.path + 'debug.keystore'
+if not os.path.exists(keystore_path):
+    cmd = [
+        'keytool', '-genkeypair', 
+        '-keystore', keystore_path,
+        '-storepass', 'android',
+        '-alias', 'androiddebugkey',
+        '-keypass', 'android',
+        '-keyalg', 'RSA',
+        '-validity', '10000',
+        '-dname', 'CN=,OU=,O=,L=,S=,C='
+    ]
+    subprocess.call(cmd, cwd=apk_dir)
+
+# sign the APK
+cmd = [
+    APKSIGNER, 'sign',
+    '-v',
+    '--ks', keystore_path,
+    '--ks-pass', 'pass:android',
+    '--key-pass', 'pass:android',
+    '--ks-key-alias', 'androiddebugkey',
+    args.path + args.name + '.apk'
+]
+subprocess.call(cmd, cwd=apk_dir)
+
+# verify the APK
+cmd = [
+    APKSIGNER, 'verify',
+    '-v',
+    args.path + args.name + '.apk'
 ]
 subprocess.call(cmd, cwd=apk_dir)
