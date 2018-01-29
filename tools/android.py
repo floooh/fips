@@ -20,6 +20,13 @@ import sys
 import os
 import argparse
 import shutil
+import subprocess
+
+# FIXME! output of /usr/libexec/java_home
+JAVA_HOME = '/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home'
+RT_JAR = JAVA_HOME + '/jre/lib/rt.jar'
+
+fips_dir = os.path.normpath(os.path.dirname(os.path.abspath(__file__)) + '/..')
 
 parser = argparse.ArgumentParser(description="Android APK package helper.")
 parser.add_argument('--sdk', help='path to Android SDK', required=True)
@@ -30,26 +37,38 @@ parser.add_argument('--version', help='the Android SDK platform version (e.g. 21
 parser.add_argument('--package', help='the Java package name', required=True)
 args = parser.parse_args()
 
+if not args.sdk.endswith('/'):
+    args.sdk += '/'
+if not args.path.endswith('/'):
+    args.path += '/'
+
 # create the empty project
-apk_dir = args.path + '/android/'
+apk_dir = args.path + 'android/'
 if not os.path.exists(apk_dir):
     os.makedirs(apk_dir)
 libs_dir = apk_dir + 'libs/' + args.abi + '/'
 if not os.path.exists(libs_dir):
     os.makedirs(libs_dir)
-res_dir = apk_dir + 'res/drawable/'
-if not os.path.exists(libs_dir):
-    os.makedirs(res_dir)
 src_dir = (apk_dir + 'src/' + args.package).replace('.', '/')
 if not os.path.exists(src_dir):
     os.makedirs(src_dir)
+obj_dir = apk_dir + '/obj'
+if not os.path.exists(obj_dir):
+    os.makedirs(obj_dir)
+bin_dir = apk_dir + '/bin'
+if not os.path.exists(bin_dir):
+    os.makedirs(bin_dir)
 
 # copy the native shared library
 so_name = 'lib' + args.name + '.so'
 src_so = args.path + so_name
 dst_so = libs_dir + so_name
-print src_so, dst_so
 shutil.copy(src_so, dst_so)
+
+# copy the dummy assets directory
+res_dir = apk_dir + 'res/'
+if not os.path.exists(res_dir):
+    shutil.copytree(fips_dir + '/templates/android_assets/res', res_dir)
 
 # generate AndroidManifest.xml
 with open(apk_dir + 'AndroidManifest.xml', 'w') as f:
@@ -63,7 +82,6 @@ with open(apk_dir + 'AndroidManifest.xml', 'w') as f:
     f.write('  <application android:label="{}" android:hasCode="false">\n'.format(args.name))
     f.write('    <activity android:name="android.app.NativeActivity"\n');
     f.write('      android:label="{}"\n'.format(args.name))
-    f.write('      android:theme="@android:style/Theme.NoTitleBar.Fullscreen"\n')
     f.write('      android:launchMode="singleTask"\n')
     f.write('      android:screenOrientation="landscape"\n')
     f.write('      android:configChanges="orientation|keyboardHidden">\n')
@@ -75,3 +93,47 @@ with open(apk_dir + 'AndroidManifest.xml', 'w') as f:
     f.write('    </activity>\n')
     f.write('  </application>\n')
     f.write('</manifest>\n')
+
+# prepare APK structure
+cmd = [
+    args.sdk + 'build-tools/27.0.3/aapt',
+    'package',
+    '-v', '-f', '-m',
+    '-S', 'res', '-J', 'src',
+    '-M', 'AndroidManifest.xml',
+    '-I', args.sdk + 'platforms/android-' + args.version + '/android.jar'
+]
+subprocess.call(cmd, cwd=apk_dir)
+
+# compile Java sources
+cmd = [
+    'javac', '-d', './obj',
+    '-source', '1.7',
+    '-target', '1.7',
+    '-sourcepath', 'src',
+    '-bootclasspath', RT_JAR,
+    src_dir + '/R.java' 
+]
+subprocess.call(cmd, cwd=apk_dir)
+
+# convert Java byte code to DEX
+cmd = [
+    args.sdk + 'build-tools/27.0.3/dx',
+    '--verbose',
+    '--dex', '--output=bin/classes.dex',
+    './obj'
+]
+subprocess.call(cmd, cwd=apk_dir)
+
+# package the APK
+cmd = [
+    args.sdk + 'build-tools/27.0.3/aapt',
+    'package', 
+    '-v', '-f', 
+    '-S', 'res', 
+    '-M', 'AndroidManifest.xml', 
+    '-I', args.sdk + 'platforms/android-' + args.version + '/android.jar',
+    '-F', args.path + args.name + '.apk',
+    'libs', 'bin'
+]
+subprocess.call(cmd, cwd=apk_dir)
