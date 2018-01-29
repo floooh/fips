@@ -22,8 +22,8 @@ import argparse
 import shutil
 import subprocess
 
-# FIXME! output of /usr/libexec/java_home
 fips_dir = os.path.normpath(os.path.dirname(os.path.abspath(__file__)) + '/..')
+# FIXME! output of /usr/libexec/java_home
 JAVA_HOME = '/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home'
 RT_JAR = JAVA_HOME + '/jre/lib/rt.jar'
 SDK_HOME = os.path.abspath(fips_dir + '/../fips-sdks/android/') + '/'
@@ -35,6 +35,7 @@ APKSIGNER = BUILD_TOOLS + 'apksigner'
 
 parser = argparse.ArgumentParser(description="Android APK package helper.")
 parser.add_argument('--path', help='path to the cmake build dir', required=True)
+parser.add_argument('--deploy', help='path where resulting APK will be copied to', required=True)
 parser.add_argument('--name', help='cmake target name', required=True)
 parser.add_argument('--abi', help='the NDK ABI string (armeabi-v7a, mips or x86', default='armeabi-v7a')
 parser.add_argument('--version', help='the Android SDK platform version (e.g. 21)', default='21')
@@ -43,12 +44,16 @@ args = parser.parse_args()
 
 if not args.path.endswith('/'):
     args.path += '/'
+if not args.deploy.endswith('/'):
+    args.deploy += '/'
+if not os.path.exists(args.deploy):
+    os.makedirs(args.deploy)
 
 # create the empty project
 apk_dir = args.path + 'android/'
 if not os.path.exists(apk_dir):
     os.makedirs(apk_dir)
-libs_dir = apk_dir + 'libs/' + args.abi + '/'
+libs_dir = apk_dir + 'lib/' + args.abi + '/'
 if not os.path.exists(libs_dir):
     os.makedirs(libs_dir)
 src_dir = (apk_dir + 'src/' + args.package).replace('.', '/')
@@ -136,7 +141,13 @@ cmd = [
     '-M', 'AndroidManifest.xml', 
     '-I', SDK_HOME + 'platforms/android-' + args.version + '/android.jar',
     '-F', args.path + args.name + '-unaligned.apk',
-    'libs', 'bin'
+    'bin'
+]
+subprocess.call(cmd, cwd=apk_dir)
+cmd = [
+    AAPT, 'add', '-v',
+    args.path + args.name + '-unaligned.apk',
+    'lib/'+args.abi+'/'+so_name
 ]
 subprocess.call(cmd, cwd=apk_dir)
 
@@ -183,3 +194,6 @@ cmd = [
     args.path + args.name + '.apk'
 ]
 subprocess.call(cmd, cwd=apk_dir)
+
+# copy APK to the fips-deploy directory
+shutil.copy(args.path+args.name+'.apk', args.deploy+args.name+'.apk')

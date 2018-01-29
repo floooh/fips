@@ -392,8 +392,7 @@ macro(fips_end_app)
 
     # android specific stuff
     if (FIPS_ANDROID)
-        # fips_android_create_project(${CurTargetName})
-        # fips_android_postbuildstep(${CurTargetName})
+        fips_android_postbuildstep(${CurTargetName})
     endif()
 
     # handle generators (post-target)

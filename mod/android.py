@@ -25,6 +25,10 @@ def get_sdk_dir(fips_dir) :
     return util.get_workspace_dir(fips_dir) + '/fips-sdks/android/'
 
 #-------------------------------------------------------------------------------
+def get_adb_path(fips_dir):
+    return get_sdk_dir(fips_dir) + 'platform-tools/adb'
+
+#-------------------------------------------------------------------------------
 def get_tools_url() :
     return tools_urls[util.get_host_platform()]
 
