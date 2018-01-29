@@ -86,7 +86,7 @@ with open(apk_dir + 'AndroidManifest.xml', 'w') as f:
     f.write('  <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="{}"/>\n'.format(args.version))
     f.write('  <uses-permission android:name="android.permission.INTERNET"></uses-permission>\n')
     f.write('  <uses-feature android:glEsVersion="0x00030000"></uses-feature>\n')
-    f.write('  <application android:label="{}" android:hasCode="false">\n'.format(args.name))
+    f.write('  <application android:label="{}" android:debuggable="true" android:hasCode="false">\n'.format(args.name))
     f.write('    <activity android:name="android.app.NativeActivity"\n');
     f.write('      android:label="{}"\n'.format(args.name))
     f.write('      android:launchMode="singleTask"\n')
