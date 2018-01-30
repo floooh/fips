@@ -80,7 +80,7 @@ if not os.path.exists(apk_dir):
 libs_dir = apk_dir + 'lib/' + args.abi + '/'
 if not os.path.exists(libs_dir):
     os.makedirs(libs_dir)
-src_dir = (apk_dir + 'src/' + args.package).replace('.', '/')
+src_dir = apk_dir + 'src/' + args.package.replace('.', '/')
 if not os.path.exists(src_dir):
     os.makedirs(src_dir)
 obj_dir = apk_dir + '/obj'
