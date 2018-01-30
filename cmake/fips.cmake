@@ -55,6 +55,11 @@ endif()
 #
 macro(fips_setup)
 
+    # default settings
+    if (NOT CMAKE_CXX_STANDARD)
+        set(CMAKE_CXX_STANDARD 11)
+    endif()
+
     # check for optional main-project name, this is the preferred way to
     # define the project name, but we better be backward compatible
     # it is still allowed to call fips_project() afterwards
@@ -387,7 +392,6 @@ macro(fips_end_app)
 
     # android specific stuff
     if (FIPS_ANDROID)
-        fips_android_create_project(${CurTargetName})
         fips_android_postbuildstep(${CurTargetName})
     endif()
 
