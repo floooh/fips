@@ -11,6 +11,26 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **30-Jan-2018**: Android support has been modernized, usage should
+be the same as before, but there are some nice changes under the hood:
+  - ```fips setup android``` now only downloads the SDK Tools archive,
+  and uses the contained ```sdkmanager``` tool to install the required
+  SDK components (including the NDK)
+  - fips is now using the official Android NDK cmake toolchain file
+  - Android builds no longer require the ```ant``` tool, and also
+  don't need Gradle or Android Studio to build projects, instead
+  APKs are created directly created from a small python helper script
+  called from a cmake post-build job
+  - you can now use Android Studio for debugging (tested so far on 
+  Mac and Linux), select the ```Profile or debug APK``` option when
+  starting Android Studio, and follow the steps (sometimes debugging
+  still seems to hang or ignore breakpoints on first start, in this
+  case, just stop debugging and try again)
+  - some things are not yet configurable:
+    - can't yet override the default AndroidManifest.xml
+    - can't yet sign APKs with your own key
+    - can't yet add Java code to the APK
+
 - **16-Jan-2018**: The iOS build configs now put the resulting .app bundle
 into the ```fips-deploy/[proj]/[config]/``` directory, so they behave
 the same as most other target platforms. This makes it
