@@ -75,10 +75,7 @@ Cross-compiling to **PNaCl** is just as easy, just use a different config:
 {% endhighlight %}
 
 Same for **Android**, note that Android provides 3 types of config, one for each
-CPU type. 'Running' an Android will only deploy the application to the device,
-after that it must be started manually.
-
-> NOTE: './fips run' for Android is not implemented yet
+CPU type.
 
 {% highlight bash %}
 > ./fips build android-make-release
