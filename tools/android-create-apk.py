@@ -23,12 +23,13 @@ import subprocess
 import platform
 
 fips_dir = os.path.normpath(os.path.dirname(os.path.abspath(__file__)) + '/..')
-# get the Java SDK directory
-if platform.system() == 'Darwin':
-    JAVA_HOME = subprocess.check_output('/usr/libexec/java_home').rstrip()
-else:
-    JAVA_HOME = os.environ['JAVA_HOME']
-RT_JAR = JAVA_HOME + '/jre/lib/rt.jar'
+# find the path of rt.jar
+jre_paths = subprocess.check_output(['java', 'GetRT'], cwd=fips_dir+'/tools').split(':')
+RT_JAR = None
+for jre_path in jre_paths:
+    if jre_path.endswith('rt.jar'):
+        RT_JAR = jre_path
+        break
 SDK_HOME = os.path.abspath(fips_dir + '/../fips-sdks/android/') + '/'
 BUILD_TOOLS = SDK_HOME + 'build-tools/27.0.3/'
 AAPT = BUILD_TOOLS + 'aapt'
@@ -36,8 +37,8 @@ DX = BUILD_TOOLS + 'dx'
 ZIPALIGN = BUILD_TOOLS + 'zipalign'
 APKSIGNER = BUILD_TOOLS + 'apksigner'
 
-if not os.path.isdir(JAVA_HOME):
-    print("Can't find Java JDK at '{}'!".format(JAVA_HOME))
+if not RT_JAR:
+    print("Can't find rt.jar (is the Java JDK installed?)")
     sys.exit(10)
 if not os.path.isfile(RT_JAR):
     print("Can't find Java runtime package '{}'!".format(RT_JAR))
