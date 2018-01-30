@@ -30,7 +30,8 @@ be the same as before, but there are some nice changes under the hood:
   - some things are not yet configurable:
     - override the default AndroidManifest.xml
     - sign APKs with your own key
-    - add Java code to the APK
+    - add your own Java code to the APK
+    - add your own assets to the APK
 
 - **16-Jan-2018**: The iOS build configs now put the resulting .app bundle
 into the ```fips-deploy/[proj]/[config]/``` directory, so they behave
