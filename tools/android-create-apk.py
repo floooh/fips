@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-#   android.py
+#   android-create-apk.py
 #
 #   Helper script to create an APK project directory and create
 #   an APK.
@@ -8,23 +8,26 @@
 #
 #   Arguments:
 #
-#   --path [path-to-cmake-build-dir]
-#   --name [target-name]
-#   --abi ["armeabi-v7a"|"mips"|"x86"]
-#   --platform ["android-21"]
-#   --package [package-name]
-#
-#   Result will be a name.apk file in 'path'.
+#   --path      the current cmake binary dir (where the .so file resides)
+#   --deploy    path where the .apk file will be copied to
+#   --name      the target name (result will be target.apk)
+#   --abi       "armeabi-v7a", "mips" or "x86" (default is armeabi-v7a)
+#   --version   the Android SDK platform version (default is "21")
+#   --package   the APK main package name (e.g. org.fips.bla)
 #
 import sys
 import os
 import argparse
 import shutil
 import subprocess
+import platform
 
 fips_dir = os.path.normpath(os.path.dirname(os.path.abspath(__file__)) + '/..')
-# FIXME! output of /usr/libexec/java_home
-JAVA_HOME = '/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home'
+# get the Java SDK directory
+if platform.system() == 'Darwin':
+    JAVA_HOME = subprocess.check_output('/usr/libexec/java_home').rstrip()
+else:
+    JAVA_HOME = os.environ['JAVA_HOME']
 RT_JAR = JAVA_HOME + '/jre/lib/rt.jar'
 SDK_HOME = os.path.abspath(fips_dir + '/../fips-sdks/android/') + '/'
 BUILD_TOOLS = SDK_HOME + 'build-tools/27.0.3/'
@@ -32,6 +35,20 @@ AAPT = BUILD_TOOLS + 'aapt'
 DX = BUILD_TOOLS + 'dx'
 ZIPALIGN = BUILD_TOOLS + 'zipalign'
 APKSIGNER = BUILD_TOOLS + 'apksigner'
+
+if not os.path.isdir(JAVA_HOME):
+    print("Can't find Java JDK at '{}'!".format(JAVA_HOME))
+    sys.exit(10)
+if not os.path.isfile(RT_JAR):
+    print("Can't find Java runtime package '{}'!".format(RT_JAR))
+    sys.exit(10)
+if not os.path.isdir(SDK_HOME):
+    print("Can't find Android SDK '{}'!".format(SDK_HOME))
+    sys.exit(10)
+for tool in [AAPT, DX, ZIPALIGN, APKSIGNER]:
+    if not os.path.isfile(tool):
+        print("Can't find required tool in Android SDK: {}".format(tool))
+        sys.exit(10)
 
 parser = argparse.ArgumentParser(description="Android APK package helper.")
 parser.add_argument('--path', help='path to the cmake build dir', required=True)

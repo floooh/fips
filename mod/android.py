@@ -6,7 +6,7 @@ import zipfile
 import subprocess
 
 from mod import log, util 
-from mod.tools import java
+from mod.tools import javac
 
 tools_urls = {
     'win':      'https://dl.google.com/android/repository/sdk-tools-windows-3859397.zip',
@@ -23,6 +23,11 @@ tools_archives = {
 #-------------------------------------------------------------------------------
 def get_sdk_dir(fips_dir) :
     return util.get_workspace_dir(fips_dir) + '/fips-sdks/android/'
+
+#-------------------------------------------------------------------------------
+def check_exists(fips_dir) :
+    """check if the android sdk has been installed"""
+    return os.path.isdir(get_sdk_dir(fips_dir))
 
 #-------------------------------------------------------------------------------
 def get_adb_path(fips_dir):
@@ -66,9 +71,8 @@ def setup(fips_dir, proj_dir) :
 
     # first make sure that java is present, otherwise the Android
     # SDK setup will finish without errors, but is not actually usable
-    if not java.check_exists(fips_dir) :
-        log.error("please install java first (see './fips diag tools')")
-
+    if not javac.check_exists(fips_dir) :
+        log.error("please install Java JDK (see './fips diag tools')")
     ensure_sdk_dirs(fips_dir)
 
     # download the command line tools archive
@@ -82,13 +86,7 @@ def setup(fips_dir, proj_dir) :
     # install the required SDK components through sdkmanager
     install_package(fips_dir, '"platforms;android-21"')
     install_package(fips_dir, '"build-tools;27.0.3"')
-    install_package(fips_dir, 'emulator')
     install_package(fips_dir, 'platform-tools')
     install_package(fips_dir, 'ndk-bundle')
 
     log.colored(log.GREEN, "done.")
-
-#-------------------------------------------------------------------------------
-def check_exists(fips_dir) :
-    """check if the android sdk has been installed"""
-    return os.path.isdir(get_sdk_dir(fips_dir))

@@ -1,15 +1,15 @@
-"""wrapper for java, only check_exists"""
+"""wrapper for javac, only check_exists"""
 import subprocess
 
-name = 'java'
+name = 'javac'
 platforms = ['osx', 'linux', 'win']
 optional = True
-not_found = "required for Android, on OSX run 'brew cask install java'"
+not_found = "a current Java JDK is required for Android development"
 
 #------------------------------------------------------------------------------
 def check_exists(fips_dir) :
     try :
-        subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT)
+        subprocess.check_output(['javac', '-version'], stderr=subprocess.STDOUT)
         return True
     except (OSError, subprocess.CalledProcessError) :
         return False

@@ -8,7 +8,7 @@
 #
 macro(fips_android_postbuildstep target)
     add_custom_command(TARGET ${target} POST_BUILD
-        COMMAND python ${FIPS_ROOT_DIR}/tools/android.py
+        COMMAND python ${FIPS_ROOT_DIR}/tools/android-create-apk.py
         --path ${CMAKE_CURRENT_BINARY_DIR}
         --name ${target}
         --package org.fips.${target}
