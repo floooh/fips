@@ -24,7 +24,11 @@ import platform
 
 fips_dir = os.path.normpath(os.path.dirname(os.path.abspath(__file__)) + '/..')
 # find the path of rt.jar
-jre_paths = subprocess.check_output(['java', 'GetRT'], cwd=fips_dir+'/tools').split(':')
+jre_paths = subprocess.check_output(['java', 'GetRT'], cwd=fips_dir+'/tools')
+if platform.system() == 'Windows':
+    jre_paths = jre_paths.replace('\\','/').split(';')
+else:
+    jre_paths = jre_paths.split(':')
 RT_JAR = None
 for jre_path in jre_paths:
     if jre_path.endswith('rt.jar'):
@@ -32,10 +36,12 @@ for jre_path in jre_paths:
         break
 SDK_HOME = os.path.abspath(fips_dir + '/../fips-sdks/android/') + '/'
 BUILD_TOOLS = SDK_HOME + 'build-tools/27.0.3/'
-AAPT = BUILD_TOOLS + 'aapt'
-DX = BUILD_TOOLS + 'dx'
-ZIPALIGN = BUILD_TOOLS + 'zipalign'
-APKSIGNER = BUILD_TOOLS + 'apksigner'
+EXE = '.exe' if platform.system() == 'Windows' else ''
+BAT = '.bat' if platform.system() == 'Windows' else ''
+AAPT = BUILD_TOOLS + 'aapt' + EXE
+DX = BUILD_TOOLS + 'dx' + BAT
+ZIPALIGN = BUILD_TOOLS + 'zipalign' + EXE
+APKSIGNER = BUILD_TOOLS + 'apksigner' + BAT
 
 if not RT_JAR:
     print("Can't find rt.jar (is the Java JDK installed?)")
