@@ -23,7 +23,7 @@ be the same as before, but there are some nice changes under the hood:
   called from a cmake post-build job, as a result, Android builds
   are now also quite a bit faster 
   - you can now use Android Studio for debugging (tested so far on 
-  Mac and Linux), select the ```Profile or debug APK``` option when
+  Mac and Windows), select the ```Profile or debug APK``` option when
   starting Android Studio, and follow the steps (sometimes debugging
   still seems to hang or ignore breakpoints on first start, in this
   case, just stop debugging and try again)
