@@ -167,12 +167,7 @@ to start.</p>
 <span class="o">&gt;</span> ./fips run Triangle</code></pre></figure>
 
 <p>Same for <strong>Android</strong>, note that Android provides 3 types of config, one for each
-CPU type. ‘Running’ an Android will only deploy the application to the device,
-after that it must be started manually.</p>
-
-<blockquote>
-  <p>NOTE: ‘./fips run’ for Android is not implemented yet</p>
-</blockquote>
+CPU type.</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips build android-make-release
 <span class="o">&gt;</span> ./fips build androidx86-make-release
@@ -185,8 +180,18 @@ works best directly in Xcode. Instead of a command line build, we only
 generate the Xcode project files, and then start Xcode:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips <span class="nb">set </span>config ios-xcode-debug
+<span class="o">&gt;</span> ./fips <span class="nb">set </span>iosteam XYZW123456
 <span class="o">&gt;</span> ./fips gen
 <span class="o">&gt;</span> ./fips open</code></pre></figure>
+
+<p>Note the <strong>./fips set iosteam XYZW123456</strong> before the first call to <strong>./fips gen</strong>.
+This sets the <em>iOS Development Team ID</em> for each target in the Xcode project,
+so you don’t need to do this manually each time you generate the solution.
+The team id will be written to the local file <em>.fips-settings.yml</em> in the project
+directory, so you only need to do this once before the first <strong>./fips gen</strong>.</p>
+
+<p>You can lookup your team id on the Apple Developer web site:
+https://developer.apple.com/account/#/membership</p>
 
 <p>Once in Xcode, the samples can be compiled and debugged either in the simulator
 or on a real device (provided Xcode is properly setup for iOS development).</p>

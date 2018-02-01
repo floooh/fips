@@ -231,6 +231,32 @@ argument of fips_generate())</li>
 <em>ARGS</em> cmake argument to fips_generate()</li>
 </ul>
 
+<h3 id="target-platform-detection">Target Platform Detection</h3>
+
+<p>Sometimes you’ll need to do things differently when cross-compiling to 
+specific target platforms. Use the <em>getutil.getEnv()</em> method with the
+key <em>target_platform</em> to check the target platform, for instance to check
+for iOS:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">genutil</span>
+
+<span class="k">def</span> <span class="nf">only_on_ios</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">genutil</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s">'target_platform'</span><span class="p">)</span> <span class="o">==</span> <span class="s">'ios'</span><span class="p">:</span>
+        <span class="c"># building for iOS...</span></code></pre></figure>
+
+<p>The valid target platform names are the same as in the cmake variable
+<em>FIPS_PLATFORM_NAME</em>:</p>
+
+<ul>
+  <li>ios</li>
+  <li>osx</li>
+  <li>android</li>
+  <li>linux</li>
+  <li>linuxraspbian</li>
+  <li>win64</li>
+  <li>win32</li>
+</ul>
+
 <h3 id="file-dirty-check">File Dirty Check</h3>
 
 <p>Generator scripts should not overwrite the target files if nothing has changed
