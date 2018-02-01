@@ -24,9 +24,13 @@ isn't under version control). You can review the currently set Team ID with
 
 ```bash
 > ./fips set config ios-xcode-debug
+# only need to set the Team ID once!
 > ./fips set iosteam XYZW123456
 > ./fips gen
 > ./fips open
+...
+> ./fips gen
+...
 ```
 
 - **30-Jan-2018**: Android support has been modernized, usage should
