@@ -91,9 +91,19 @@ generate the Xcode project files, and then start Xcode:
 
 {% highlight bash %}
 > ./fips set config ios-xcode-debug
+> ./fips set iosteam XYZW123456
 > ./fips gen
 > ./fips open
 {% endhighlight %}
+
+Note the **./fips set iosteam XYZW123456** before the first call to **./fips gen**.
+This sets the _iOS Development Team ID_ for each target in the Xcode project,
+so you don't need to do this manually each time you generate the solution.
+The team id will be written to the local file _.fips-settings.yml_ in the project
+directory, so you only need to do this once before the first **./fips gen**.
+
+You can lookup your team id on the Apple Developer web site:
+https://developer.apple.com/account/#/membership
 
 Once in Xcode, the samples can be compiled and debugged either in the simulator
 or on a real device (provided Xcode is properly setup for iOS development).

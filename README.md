@@ -11,6 +11,24 @@ http://floooh.github.io/fips/index.html
 
 ### Public Service Announcements
 
+- **01-Feb-2018**: iOS development is now a bit more convenient: fips can
+write the "Development Team ID" to the generated Xcode project (previously,
+the Team ID had to be set manually for each target in Xcode). Before calling
+```./fips gen``` for the first time in a project, set the Team ID via
+```./fips set iosteam XYZW123456```, where XYZW123456 must be replaced with
+your own Team ID, you can look this up on
+https://developer.apple.com/account/#/membership). The Team ID will be
+written to the file _[cur\_proj\_dir]/.fips-settings.yml_ (which usually
+isn't under version control). You can review the currently set Team ID with
+```./fips list settings```. Here's a usage example:
+
+```bash
+> ./fips set config ios-xcode-debug
+> ./fips set iosteam XYZW123456
+> ./fips gen
+> ./fips open
+```
+
 - **30-Jan-2018**: Android support has been modernized, usage should
 be the same as before, but there are some nice changes under the hood:
   - ```fips setup android``` now only downloads the SDK Tools archive,

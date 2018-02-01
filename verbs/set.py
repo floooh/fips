@@ -42,7 +42,7 @@ def run(fips_dir, proj_dir, args) :
                 else :
                     log.error("value for setting 'ccache' must be 'on' or 'off")
         else :
-            log.error("invalid noun '{}', must be 'config' or 'target'".format(noun))
+            settings.set(proj_dir, noun, args[1])
     else :
         log.error("expected noun 'config' or 'target'")
 

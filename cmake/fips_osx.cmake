@@ -160,6 +160,9 @@ macro(fips_osx_add_target_properties target)
         if (FIPS_IOS)
             set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer")    
             set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2")
+            if (FIPS_IOS_TEAMID)
+                set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ${FIPS_IOS_TEAMID})
+            endif()
         endif()
         set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "fips.${target}")
         set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_ICON_FILE "Icon.png")
@@ -173,5 +176,6 @@ macro(fips_osx_add_target_properties target)
         endif()
     endif()
 endmacro()
+
 
 

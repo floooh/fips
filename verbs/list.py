@@ -44,7 +44,7 @@ def list_settings(proj_dir) :
     """list settings file content"""
     log.colored(log.YELLOW, '=== settings:')
     if util.is_valid_project_dir(proj_dir) :
-        for key in ['config', 'target', 'jobs', 'ccache'] :
+        for key in ['config', 'target', 'jobs', 'ccache', 'iosteam'] :
             value = settings.get(proj_dir, key)
             if type(value) is bool :
                 value = 'on' if value else 'off'
