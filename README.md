@@ -9,6 +9,10 @@ Read the docs to get a better idea what this means:
 
 http://floooh.github.io/fips/index.html
 
+### Install Instructions
+
+http://floooh.github.io/fips/getstarted.html
+
 ### Public Service Announcements
 
 - **01-Feb-2018**: iOS development is now a bit more convenient: fips can
