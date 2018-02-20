@@ -105,7 +105,7 @@ def get_cc_header_paths():
     
     # write a dummy C source file
     tmp = tempfile.NamedTemporaryFile(delete=False)
-    tmp.write('int main() {return 0;}')
+    tmp.write(b'int main() {return 0;}')
     tmp.close()
 
     # run clang in preprocessor mode
@@ -388,7 +388,7 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
     if not os.path.isdir(vscode_dir):
         os.makedirs(vscode_dir)
     vscode_extensions = list_extensions()
-    has_cmake_tools = any('vector-of-bool.cmake-tools' in ext for ext in vscode_extensions)
+    has_cmake_tools = any(b'vector-of-bool.cmake-tools' in ext for ext in vscode_extensions)
     write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg)
     write_launch_json(fips_dir, proj_dir, vscode_dir, cfg)
     if has_cmake_tools:
