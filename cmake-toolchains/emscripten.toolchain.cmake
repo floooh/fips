@@ -57,6 +57,7 @@ option(FIPS_EMSCRIPTEN_USE_CPU_PROFILER "emscripten: enable the built-in CPU pro
 option(FIPS_EMSCRIPTEN_USE_MEMORY_PROFILER "emscripten: enable the built-in memory profiler" OFF)
 option(FIPS_EMSCRIPTEN_USE_WEBGL2 "emscripten: use WebGL2" OFF)
 option(FIPS_EMSCRIPTEN_USE_CLOSURE "emscripten: run closure compiler on JS code" OFF)
+option(FIPS_EMSCRIPTEN_ALLOW_MEMORY_GROWTH "emscripten: allow memory growth" OFF)
 set(FIPS_EMSCRIPTEN_TOTAL_MEMORY 134217728 CACHE STRING "emscripten: total heap size in bytes")
 set(FIPS_EMSCRIPTEN_LTO_LEVEL 1 CACHE STRING "emscripten: Link-time-optimization level (0..3)")
 set(FIPS_EMSCRIPTEN_OUTLINING_LIMIT 60000 CACHE STRING "emscripten: outlining limit")
@@ -81,6 +82,10 @@ set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} --memory-init-file ${FIPS_EMSCRIPTEN
 set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s TOTAL_MEMORY=${FIPS_EMSCRIPTEN_TOTAL_MEMORY}")
 set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s ERROR_ON_UNDEFINED_SYMBOLS=1")
 set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s NO_EXIT_RUNTIME=1")
+
+if (FIPS_EMSCRIPTEN_ALLOW_MEMORY_GROWTH)
+    set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
+endif()
 
 if (FIPS_EMSCRIPTEN_USE_CWRAP)
     set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s \"EXTRA_EXPORTED_RUNTIME_METHODS=['cwrap','ccall']\"")
