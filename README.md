@@ -15,7 +15,7 @@ http://floooh.github.io/fips/getstarted.html
 
 ### Public Service Announcements
 
-- **10-Mar-2018**: some improvements Visual Studio Code improvements:
+- **10-Mar-2018**: some Visual Studio Code improvements:
     - the .vscode/c_cpp_properties.json file is now written to all dependent
       projects, this fixes Intellisense problems in dependencies
     - new verb **fips vscode clean** for deleting the .vscode/ directories
