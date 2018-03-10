@@ -198,7 +198,8 @@ def write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg):
         },
         'problemMatcher': [ problem_matcher() ],
     })
-    with open(vscode_dir + '/tasks.json', 'w') as f:
+    task_path = vscode_dir + '/tasks.json'
+    with open(task_path, 'w') as f:
         json.dump(tasks, f, indent=1, separators=(',',':'))
 
 #-------------------------------------------------------------------------------
@@ -299,13 +300,16 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg):
                 ]
             }
             launch['configurations'].append(c)
-
-    with open(vscode_dir + '/launch.json', 'w') as f:
+    launch_path = vscode_dir + '/launch.json'
+    log.info('  => {}'.format(launch_path))
+    with open(launch_path, 'w') as f:
         json.dump(launch, f, indent=1, separators=(',',':'))
 
 #-------------------------------------------------------------------------------
-def write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg):
-    '''write the .vscode/c_cpp_properties.json file'''
+def write_c_cpp_properties_json(fips_dir, proj_dir, cfg):
+    '''write the .vscode/c_cpp_properties.json files for main project
+       and all dependent projects
+    '''
     proj_name = util.get_project_name_from_dir(proj_dir)
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
     inc_paths = read_cmake_headerdirs(fips_dir, proj_dir, cfg)
@@ -342,8 +346,21 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg):
         c['browse']['path'] = config_incl_paths
         c['intelliSenseMode'] = intellisense_mode
         props['configurations'].append(c)
-    with open(vscode_dir + '/c_cpp_properties.json', 'w') as f:
-        json.dump(props, f, indent=1, separators=(',',':'))
+    
+    # get dependencies
+    success, impex = dep.get_all_imports_exports(fips_dir, proj_dir)
+    if not success :
+        log.warn("missing import project directories, please run 'fips fetch'")
+    # add dependencies in reverse order, so that main project is first
+    for dep_proj_name in reversed(impex):
+        dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
+        vscode_dir = dep_proj_dir + '/.vscode'
+        if not os.path.isdir(vscode_dir):
+            os.makedirs(vscode_dir)
+        prop_path = vscode_dir + '/c_cpp_properties.json'
+        log.info('  => {}'.format(prop_path))
+        with open(prop_path, 'w') as f:
+            json.dump(props, f, indent=1, separators=(',',':'))
 
 #-------------------------------------------------------------------------------
 def write_cmake_tools_settings(fips_dir, proj_dir, vscode_dir, cfg):
@@ -356,7 +373,9 @@ def write_cmake_tools_settings(fips_dir, proj_dir, vscode_dir, cfg):
             'FIPS_CONFIG:': cfg['name']
         }
     }
-    with open(vscode_dir + '/settings.json', 'w') as f:
+    settings_path = vscode_dir + '/settings.json' 
+    log.info('  => {}'.format(settings_path))
+    with open(settings_path, 'w') as f:
         json.dump(settings, f, indent=1, separators=(',',':'))
 
 #-------------------------------------------------------------------------------
@@ -375,7 +394,9 @@ def write_code_workspace_file(fips_dir, proj_dir, vscode_dir, cfg):
         dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
         ws['folders'].append({ 'path': dep_proj_dir })
     proj_name = util.get_project_name_from_dir(proj_dir)
-    with open('{}/{}.code-workspace'.format(vscode_dir, proj_name), 'w') as f:
+    ws_path = '{}/{}.code-workspace'.format(vscode_dir, proj_name) 
+    log.info('  => {}'.format(ws_path))
+    with open(ws_path, 'w') as f:
         json.dump(ws, f, indent=1, separators=(',',':'))
 
 #-------------------------------------------------------------------------------
@@ -394,5 +415,5 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
     if has_cmake_tools:
         write_cmake_tools_settings(fips_dir, proj_dir, vscode_dir, cfg)
     else:
-        write_c_cpp_properties_json(fips_dir, proj_dir, vscode_dir, cfg)
+        write_c_cpp_properties_json(fips_dir, proj_dir, cfg)
     write_code_workspace_file(fips_dir, proj_dir, vscode_dir, cfg)
