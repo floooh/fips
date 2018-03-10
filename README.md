@@ -15,6 +15,22 @@ http://floooh.github.io/fips/getstarted.html
 
 ### Public Service Announcements
 
+- **10-Mar-2018**: some improvements Visual Studio Code improvements:
+    - the .vscode/c_cpp_properties.json file is now written to all dependent
+      projects, this fixes Intellisense problems in dependencies
+    - new verb **fips vscode clean** for deleting the .vscode/ directories
+      in all dependencies, this is useful before git operations (e.g. _fips update_)
+      if you don't want/can add the .vscode directory to your .gitignore file
+    - .vscode/tasks.json and .vscode/launch.json files in dependencies will be deleted during _fips gen_ if generating a VSCode build config, otherwise VSCode would also show build tasks and debug targets from dependencies, which is cluttering the build/debug workflow UIs
+    - it is now possible to add additional compiler defines just for the VSCode Intellisense engine in custom build config files, this is for instance useful with header-only libraries to 'light up' syntax highlighting in the implementation code block, example:
+    ```yaml
+    ---
+    platform: osx
+    generator: Ninja 
+    build_tool: vscode_cmake
+    build_type: Debug
+    vscode_additional_defines: [ 'CHIPS_IMPL', 'SOKOL_IMPL' ]
+    ```
 - **01-Feb-2018**: iOS development is now a bit more convenient: fips can
 write the "Development Team ID" to the generated Xcode project (previously,
 the Team ID had to be set manually for each target in Xcode). Before calling

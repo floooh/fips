@@ -1,11 +1,5 @@
 '''VSCode helper functions'''
-import subprocess
-import os
-import yaml
-import json
-import inspect
-import tempfile
-import glob
+import subprocess, os, yaml, json, inspect, tempfile, glob, shutil
 from mod import util,log,verb,dep
 from mod.tools import cmake
 
@@ -70,10 +64,22 @@ def read_cmake_defines(fips_dir, proj_dir, cfg):
     result = []
     success, defs = util.get_cfg_defines_by_target(fips_dir, proj_dir, cfg)
     if success:
+        log.info('     defines from cmake:')
         for _,val in defs.items():
             if val:
-                result.extend(val)
-    return set(result)
+                for define in val:
+                    if define not in result:
+                        result.append(define)
+                        log.info('       {}'.format(define))
+    if 'vscode_additional_defines' in cfg:
+        log.info('     defines from build config (vscode_additional_defines):')
+        for define in cfg['vscode_additional_defines']:
+            if define not in result:
+                result.append(define)
+                log.info('       {}'.format(define))
+    else:
+        log.info('     no additional defines from build config (vscode_additional_defines)')
+    return result
 
 #-------------------------------------------------------------------------------
 def problem_matcher():
@@ -301,12 +307,12 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg):
             }
             launch['configurations'].append(c)
     launch_path = vscode_dir + '/launch.json'
-    log.info('  => {}'.format(launch_path))
+    log.info('  writing {}'.format(launch_path))
     with open(launch_path, 'w') as f:
         json.dump(launch, f, indent=1, separators=(',',':'))
 
 #-------------------------------------------------------------------------------
-def write_c_cpp_properties_json(fips_dir, proj_dir, cfg):
+def write_c_cpp_properties_json(fips_dir, proj_dir, impex, cfg):
     '''write the .vscode/c_cpp_properties.json files for main project
        and all dependent projects
     '''
@@ -347,10 +353,6 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, cfg):
         c['intelliSenseMode'] = intellisense_mode
         props['configurations'].append(c)
     
-    # get dependencies
-    success, impex = dep.get_all_imports_exports(fips_dir, proj_dir)
-    if not success :
-        log.warn("missing import project directories, please run 'fips fetch'")
     # add dependencies in reverse order, so that main project is first
     for dep_proj_name in reversed(impex):
         dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
@@ -358,7 +360,7 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, cfg):
         if not os.path.isdir(vscode_dir):
             os.makedirs(vscode_dir)
         prop_path = vscode_dir + '/c_cpp_properties.json'
-        log.info('  => {}'.format(prop_path))
+        log.info('  writing {}'.format(prop_path))
         with open(prop_path, 'w') as f:
             json.dump(props, f, indent=1, separators=(',',':'))
 
@@ -374,30 +376,43 @@ def write_cmake_tools_settings(fips_dir, proj_dir, vscode_dir, cfg):
         }
     }
     settings_path = vscode_dir + '/settings.json' 
-    log.info('  => {}'.format(settings_path))
+    log.info('  writing {}'.format(settings_path))
     with open(settings_path, 'w') as f:
         json.dump(settings, f, indent=1, separators=(',',':'))
 
 #-------------------------------------------------------------------------------
-def write_code_workspace_file(fips_dir, proj_dir, vscode_dir, cfg):
+def write_code_workspace_file(fips_dir, proj_dir, impex, cfg):
     '''write a multiroot-workspace config file'''
+    vscode_dir = proj_dir + '/.vscode'
     ws = {
         'folders': [],
         'settings': {}
     }
-    # fetch all project dependencies
-    success, impex = dep.get_all_imports_exports(fips_dir, proj_dir)
-    if not success :
-        log.warn("missing import project directories, please run 'fips fetch'")
     # add dependencies in reverse order, so that main project is first
     for dep_proj_name in reversed(impex):
         dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
         ws['folders'].append({ 'path': dep_proj_dir })
     proj_name = util.get_project_name_from_dir(proj_dir)
     ws_path = '{}/{}.code-workspace'.format(vscode_dir, proj_name) 
-    log.info('  => {}'.format(ws_path))
+    log.info('  writing {}'.format(ws_path))
     with open(ws_path, 'w') as f:
         json.dump(ws, f, indent=1, separators=(',',':'))
+
+#-------------------------------------------------------------------------------
+def remove_vscode_tasks_launch_files(fips_dir, proj_dir, impex, cfg):
+    '''walks through the dependencies, and deletes the .vscode/tasks.json
+    and .vscode/launch.json files
+    '''
+    for dep_proj_name in reversed(impex):
+        dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
+        tasks_path = dep_proj_dir + '/.vscode/tasks.json'
+        launch_path = dep_proj_dir + '/.vscode/launch.json'
+        if os.path.exists(tasks_path):
+            log.info('  deleting {}'.format(tasks_path))
+            os.remove(tasks_path)
+        if os.path.exists(launch_path):
+            log.info('  deleting {}'.format(launch_path))
+            os.remove(launch_path)
 
 #-------------------------------------------------------------------------------
 def write_workspace_settings(fips_dir, proj_dir, cfg):
@@ -408,12 +423,41 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
     vscode_dir = proj_dir + '/.vscode'
     if not os.path.isdir(vscode_dir):
         os.makedirs(vscode_dir)
+    # fetch all project dependencies
+    success, impex = dep.get_all_imports_exports(fips_dir, proj_dir)
+    if not success :
+        log.warn("missing import project directories, please run 'fips fetch'")
     vscode_extensions = list_extensions()
     has_cmake_tools = any(b'vector-of-bool.cmake-tools' in ext for ext in vscode_extensions)
+    remove_vscode_tasks_launch_files(fips_dir, proj_dir, impex, cfg)
     write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg)
     write_launch_json(fips_dir, proj_dir, vscode_dir, cfg)
     if has_cmake_tools:
         write_cmake_tools_settings(fips_dir, proj_dir, vscode_dir, cfg)
     else:
-        write_c_cpp_properties_json(fips_dir, proj_dir, cfg)
-    write_code_workspace_file(fips_dir, proj_dir, vscode_dir, cfg)
+        write_c_cpp_properties_json(fips_dir, proj_dir, impex, cfg)
+    write_code_workspace_file(fips_dir, proj_dir, impex, cfg)
+
+#-------------------------------------------------------------------------------
+def cleanup(fips_dir, proj_dir):
+    '''goes through all dependencies and deletes the .vscode directory'''
+    # fetch all project dependencies
+    success, impex = dep.get_all_imports_exports(fips_dir, proj_dir)
+    if not success :
+        log.warn("missing import project directories, please run 'fips fetch'")
+    log.info(log.RED + 'Please confirm to delete the following directories:' + log.DEF)
+    for dep_proj_name in reversed(impex):
+        dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
+        vscode_dir = dep_proj_dir + '/.vscode/'
+        if os.path.isdir(vscode_dir):
+            log.info('  {}'.format(vscode_dir))
+    if util.confirm(log.RED + 'Delete those directories?' + log.DEF):
+        for dep_proj_name in reversed(impex):
+            dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
+            vscode_dir = dep_proj_dir + '/.vscode/'
+            if os.path.isdir(vscode_dir):
+                log.info('  deleting {}'.format(vscode_dir))
+                shutil.rmtree(vscode_dir)
+        log.info('Done.')
+    else:
+        log.info('Nothing deleted, done.')
