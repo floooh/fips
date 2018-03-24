@@ -1,0 +1,5 @@
+---
+platform: osx
+generator: Ninja 
+build_tool: vscode_cmake
+build_type: Release
