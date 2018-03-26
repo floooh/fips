@@ -80,11 +80,11 @@ def finish(sdk_dir) :
     if util.get_host_platform() == 'win' :
         # on Windows use a stable SDK version which doesn't require clang to be compiled
         subprocess.call(args='emsdk.bat update', cwd=sdk_dir, shell=True)
-        subprocess.call(args='emsdk.bat install --shallow --disable-assertions --enable-wasm {}'.format(get_sdk_version()), cwd=sdk_dir, shell=True)
+        subprocess.call(args='emsdk.bat install --shallow --disable-assertions {}'.format(get_sdk_version()), cwd=sdk_dir, shell=True)
         subprocess.call(args='emsdk.bat activate --embedded {}'.format(get_sdk_version()), cwd=sdk_dir, shell=True)
     else :
         subprocess.call(args='./emsdk update', cwd=sdk_dir, shell=True)
-        subprocess.call(args='./emsdk install --shallow --disable-assertions --enable-wasm {}'.format(get_sdk_version()), cwd=sdk_dir, shell=True)
+        subprocess.call(args='./emsdk install --shallow --disable-assertions {}'.format(get_sdk_version()), cwd=sdk_dir, shell=True)
         subprocess.call(args='./emsdk activate --embedded {}'.format(get_sdk_version()), cwd=sdk_dir, shell=True)
 
 #-------------------------------------------------------------------------------
