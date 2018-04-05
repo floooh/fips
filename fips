@@ -2,8 +2,50 @@
 """fips main entry"""
 import os
 import sys
+import subprocess
+import atexit
+
 from mod import fips
 fips_path = os.path.dirname(os.path.abspath(__file__))
 proj_path = fips_path
-fips.run(fips_path, proj_path, sys.argv)
+
+# https://gist.github.com/yuzurihara/3b805aa29aad20e7506e
+# https://github.com/git/git/blob/398dd4bd039680ba98497fbedffa415a43583c16/pager.c
+def with_pager(func, *args, **kwargs):
+  pager = os.getenv('PAGER', '/usr/bin/less')
+  arg1 = '-FRX'
+  if pager != '/usr/bin/less':
+      pager = None
+      arg1 = ''
+
+  p2 = None
+  stdout_save = sys.stdout
+  def on_exit():
+    if p2:
+      p2.stdin.close()
+      p2.wait()
+    sys.stdout = stdout_save
+
+  if pager and os.isatty(sys.stdout.fileno()):
+    p2 = subprocess.Popen(
+      [pager, arg1], shell=False,
+      stdin=subprocess.PIPE,
+      universal_newlines=True)
+    if p2.poll() is None:
+      sys.stdout = p2.stdin
+      atexit.register(on_exit)
+    else: # Popen() failed.
+      p2 = None
+  try:
+    retval = func(*args, **kwargs)
+  finally:
+    on_exit()
+    #atexit.unregister(on_exit)
+  return retval
+
+if os.name == "posix":
+    with_pager(fips.run, fips_path, proj_path, sys.argv)
+
+else:
+    fips.run(fips_path, proj_path, sys.argv)
 
