@@ -412,11 +412,12 @@ def write_imports(fips_dir, proj_dir, imported) :
 
     # write the .fips-imports.py file (copy from template)
     gen_search_paths  = '"{}","{}/generators",\n'.format(fips_dir, fips_dir)
-    if os.path.isdir("{}/fips-generators".format(proj_dir)) :
-        gen_search_paths += '"{}","{}/fips-generators",\n'.format(proj_dir, proj_dir)
+    proj_gen_dir = util.get_generators_dir(proj_dir)
+    if proj_gen_dir:
+        gen_search_paths += '"{}","{}",\n'.format(proj_dir, proj_gen_dir)
     for imp_proj_name in imported :
-        gen_dir = util.get_project_dir(fips_dir, imp_proj_name) + '/fips-generators'
-        if os.path.isdir(gen_dir) :
+        gen_dir = util.get_generators_dir(util.get_project_dir(fips_dir, imp_proj_name))
+        if gen_dir:
             gen_search_paths += '"' + gen_dir + '",\n' 
     template.copy_template_file(fips_dir, proj_dir, '.fips-gen.py', { 'genpaths': gen_search_paths}, True)
 

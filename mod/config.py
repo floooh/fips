@@ -78,16 +78,22 @@ def get_toolchain(fips_dir, proj_dir, cfg) :
         toolchain = '{}.toolchain.cmake'.format(cfg['platform'])
     
     # look for toolchain file in current project directory
-    toolchain_path = '{}/fips-toolchains/{}'.format(proj_dir, toolchain)
-    if os.path.isfile(toolchain_path) :
+    toolchain_dir = util.get_toolchains_dir(proj_dir)
+    toolchain_path = None
+    if toolchain_dir:
+        toolchain_path = toolchain_dir + '/' + toolchain
+    if toolchain_path and os.path.isfile(toolchain_path) :
         return toolchain_path
     else :
         # look for toolchain in all imported directories
         _, imported_projs = dep.get_all_imports_exports(fips_dir, proj_dir)
         for imported_proj_name in imported_projs :
             imported_proj_dir = imported_projs[imported_proj_name]['proj_dir']
-            toolchain_path = '{}/fips-toolchains/{}'.format(imported_proj_dir, toolchain)
-            if os.path.isfile(toolchain_path) :
+            toolchain_dir = util.get_toolchains_dir(imported_proj_dir)
+            toolchain_path = None
+            if toolchain_dir:
+                toolchain_path = toolchain_dir + '/' + toolchain
+            if toolchain_path and os.path.isfile(toolchain_path):
                 return toolchain_path
         else :
             # toolchain is not in current project or imported projects, 
@@ -125,8 +131,8 @@ def get_config_dirs(fips_dir, proj_dir) :
         if success :
             for dep_proj_name in result :
                 dep_proj_dir = result[dep_proj_name]['proj_dir']
-                dep_configs_dir = dep_proj_dir + '/fips-configs'
-                if os.path.isdir(dep_configs_dir) :
+                dep_configs_dir = util.get_configs_dir(dep_proj_dir)
+                if dep_configs_dir:
                     dirs.append(dep_configs_dir)
         else :
             log.warn("missing import directories, please run 'fips fetch'")

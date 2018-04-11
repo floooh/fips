@@ -20,15 +20,14 @@ def import_verbs_from(proj_name, proj_dir, verb_dir) :
     verb and proj_verbs global variables
 
     :param proj_dir:    name of project that owns verb_dir
-    :param verb_dir:    directory with verb python scripts
+    :param verb_dir:    directory with verb python scripts (can be None)
     """
     global verbs, proj_verbs
 
     # make sure project-verbs find their modules
     sys.path.insert(0, proj_dir)
 
-    if os.path.isdir(verb_dir) :
-
+    if verb_dir and os.path.isdir(verb_dir):
         # get all .py file in verb dir
         verb_paths = glob.glob(verb_dir + '/*.py')
         if verb_paths :
@@ -60,7 +59,7 @@ def import_verbs(fips_dir, proj_dir) :
         _, imported_projs = dep.get_all_imports_exports(fips_dir, proj_dir)
         for imported_proj_name in imported_projs :
             imported_proj_dir = imported_projs[imported_proj_name]['proj_dir']
-            import_verbs_from(imported_proj_name, imported_proj_dir, imported_proj_dir + '/fips-verbs')
+            import_verbs_from(imported_proj_name, imported_proj_dir, util.get_verbs_dir(imported_proj_dir))
 
     
 
