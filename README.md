@@ -15,6 +15,15 @@ http://floooh.github.io/fips/getstarted.html
 
 ### Public Service Announcements
 
+- **12-Apr-2018**: there are now new optional locations for fips-directories
+and -files in a project in order to unclutter the project directory root a
+bit (all under a new project subdirectory called ```fips-files/```):
+    - ```fips-verbs/``` => ```fips-files/verbs/```
+    - ```fips-configs/``` => ```fips-files/configs/```
+    - ```fips-generators/``` => ```fips-files/generators/```
+    - ```fips-toolchains/``` => ```fips-files/toolchains```
+    - ```fips-include.cmake``` => ```fips-files/include.cmake```
+
 - **10-Mar-2018**: some Visual Studio Code improvements:
     - the .vscode/c_cpp_properties.json file is now written to all dependent
       projects, this fixes Intellisense problems in dependencies
