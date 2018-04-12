@@ -343,6 +343,8 @@ def write_imports(fips_dir, proj_dir, imported) :
                 if imp_proj_dir != proj_dir :
                     f.write('if (EXISTS "{}/fips-include.cmake")\n'.format(imp_proj_dir))
                     f.write('    include("{}/fips-include.cmake")\n'.format(imp_proj_dir))
+                    f.write('elseif (EXISTS "{}/fips-files/include.cmake")\n'.format(imp_proj_dir))
+                    f.write('    include ("{}/fips-files/include.cmake")\n'.format(imp_proj_dir))
                     f.write('endif()\n')
                     f.write('if (EXISTS "{}/lib/${{FIPS_PLATFORM_NAME}}")\n'.format(imp_proj_dir))
                     f.write('    link_directories("{}/lib/${{FIPS_PLATFORM_NAME}}")\n'.format(imp_proj_dir))

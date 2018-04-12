@@ -215,6 +215,8 @@ macro(fips_setup)
     # load project-local fips-include.cmake if exists
     if (EXISTS "${FIPS_PROJECT_DIR}/fips-include.cmake")
         include("${FIPS_PROJECT_DIR}/fips-include.cmake")
+    elseif (EXISTS "${FIPS_PROJECT_DIR}/fips-files/include.cmake")
+        include("${FIPS_PROJECT_DIR}/fips-files/include.cmake")
     endif()
 
     # load generated .fips-imports.cmake if exists
