@@ -64,6 +64,29 @@ def get_deploy_dir(fips_dir, proj_name, cfg) :
     return '{}/fips-deploy/{}/{}'.format(get_workspace_dir(fips_dir), proj_name, cfg['name'])
 
 #-------------------------------------------------------------------------------
+def get_fips_dir(proj_dir, name):
+    """Internal helper method to check for and return the absolute path of
+    a fips directory.
+
+    If name is 'config', the following happens:
+
+    If 'proj_dir/fips-configs/' exists, return that path, otherwise,
+    if 'proj_dir/fips-files/configs' exists, return that path, otherwise,
+    return None.
+
+    :param proj_dir:    absolute path of project directory
+    :name:              the name without the 'fips-' prefix
+    """
+    d0 = proj_dir + '/fips-' + name
+    d1 = proj_dir + '/fips-files/' + name
+    if os.path.isdir(d0):
+        return d0
+    elif os.path.isdir(d1):
+        return d1
+    else:
+        return None
+
+#-------------------------------------------------------------------------------
 def get_configs_dir(proj_dir):
     """returns path to directory with project-specific config files, or
     None if no such directory exists.
@@ -71,11 +94,7 @@ def get_configs_dir(proj_dir):
     :param proj_dir:    absolute path of project directory
     :returns:           absolute path of configs dir, or None 
     """
-    d = proj_dir + '/fips-configs'
-    if os.path.isdir(d):
-        return d
-    else:
-        return None
+    return get_fips_dir(proj_dir, 'configs')
 
 #-------------------------------------------------------------------------------
 def get_verbs_dir(proj_dir):
@@ -85,11 +104,7 @@ def get_verbs_dir(proj_dir):
     :param proj_dir:    absolute path of project directory
     :returns:           absolute path of verbs dir, or None
     """
-    d = proj_dir + '/fips-verbs'
-    if os.path.isdir(d):
-        return d
-    else:
-        return None
+    return get_fips_dir(proj_dir, 'verbs')
 
 #-------------------------------------------------------------------------------
 def get_generators_dir(proj_dir):
@@ -99,11 +114,7 @@ def get_generators_dir(proj_dir):
     :param proj_dir:    absolute path of project directory
     :returns:           absolute path of generators dir, or None
     """
-    d = proj_dir + '/fips-generators'
-    if os.path.isdir(d):
-        return d
-    else:
-        return None
+    return get_fips_dir(proj_dir, 'generators')
 
 #-------------------------------------------------------------------------------
 def get_toolchains_dir(proj_dir):
@@ -113,11 +124,7 @@ def get_toolchains_dir(proj_dir):
     :param proj_dir:    absolute path of project directory
     :returns:           absolute path of toolchains dir, or None
     """
-    d = proj_dir + '/fips-toolchains'
-    if os.path.isdir(d):
-        return d
-    else:
-        return None
+    return get_fips_dir(proj_dir, 'toolchains')
 
 #-------------------------------------------------------------------------------
 def get_giturl_from_url(url) :
