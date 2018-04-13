@@ -12,7 +12,7 @@
 #       during the build and is expected to build exactly one .cc and one .h
 #       file (this detail may change in the future).
 #   (2) Or use the fips_generate() macro which accepts the name of a generator
-#       python script (located under project-dir/fips-generators),
+#       python script (located under project-dir/fips-files/generators),
 #       one input file, and a one or multiple output files. The generator
 #       must produce the output files using the input file.
 #

@@ -127,7 +127,7 @@ Cross-compiling build settings are defined in cmake toolchain files in:
 
 Fips projects can override these standard toolchain files, or define
 completely new toolchain files, by creating
-a directory named 'fips-toolchains' in the project root directory, and
+a directory named 'fips-files/toolchains' in the project root directory, and
 placing cmake toolchain files there.
 
 Fips will search for toolchain files in the following order:

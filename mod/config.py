@@ -54,8 +54,8 @@ def get_toolchain(fips_dir, proj_dir, cfg) :
     a xxx.toolchain.cmake file from the platform name (only for cross-
     compiling platforms). Toolchain files are searched in the
     following locations:
-    - a fips-toolchains subdirectory in the project directory
-    - a fips-toolchains subdirectory in all imported projects
+    - a fips-files/toolchains subdirectory in the project directory
+    - a fips-files/toolchains subdirectory in all imported projects
     - finally in the cmake-toolchains subdirectory of the fips directory
 
     :param fips_dir:    absolute path to fips
@@ -142,7 +142,7 @@ def get_config_dirs(fips_dir, proj_dir) :
 #-------------------------------------------------------------------------------
 def list(fips_dir, proj_dir, pattern) :
     """return { dir : [cfgname, ...] } in fips_dir/configs and
-    proj_dir/fips-configs
+    proj_dir/fips-files/configs
 
     :param fips_dir:    absolute fips directory
     :param proj_dir:    absolute project directory

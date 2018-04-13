@@ -110,11 +110,12 @@ Most projects have additional fips-specific files and directories:
     ┣━━ fips.yml 
     ┣━━ fips 
     ┣━━ fips.cmd 
-    ┣━━ fips-include.cmake 
-    ┣━━ fips-verbs/ 
-    ┣━━ fips-generators/ 
-    ┣━━ fips-configs/
-    ┣━━ fips-toolchains/
+    ┣━━ fips-files/
+    ┃   ┣━━ include.cmake 
+    ┃   ┣━━ verbs/ 
+    ┃   ┣━━ generators/ 
+    ┃   ┣━━ configs/
+    ┃   ┗━━ toolchains/
     ┣━━ .fips-settings.yml
     ┣━━ .fips-imports.cmake
     ┗━━ .fips-gen.py
@@ -130,16 +131,16 @@ Here's a description of what each file means:
 - **fips**: proxy python script to be able to run fips commands from within
 the project directory
 - **fips.cmd**: Windows batch file to call the _'fips'_ python script
-- **fips-include.cmake**: if present, this cmake file is included by other fips 
+- **fips-files/include.cmake**: if present, this cmake file is included by other fips 
 projects which depend on this project, this can be used to define global 
 cmake attributes for projects which export multiple modules
-- **fips-verbs/**: if present, this directory contains python scripts which
+- **fips-files/verbs/**: if present, this directory contains python scripts which
 add additional commands (verbs) to fips
-- **fips-configs/**: if present, the fips-configs directory contains additional
+- **fips-files/configs/**: if present, the fips-files/configs directory contains additional
 fips configs, the config names must not collide with the fips standard config
 names (e.g. osx-xcode-debug), so it is a good idea to include the project name
 in those custom configs
-- **fips-toolchains**: if this directory exists it should contain cmake toolchain
+- **fips-files/toolchains**: if this directory exists it should contain cmake toolchain
 files, which can either override the standard toolchain files in the fips-directory,
 or can be completely new toolchain files for new platforms. Toolchain files
 can be defined in build-configs using the 'cmake-toolchain' attribute. 
@@ -153,6 +154,3 @@ other fips commands which implicitly do a cmake run (like _'fips build'_ or
 _'fips make'_)
 - **.fips-gen.py**: a generated python helper script for code generation during
 the build process
-
-
-

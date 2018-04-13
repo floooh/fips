@@ -110,13 +110,13 @@ fips_generate(FROM fs_metaballs.sc
 A _generator_ is a Python script which is called to generate C/C++ files.
 
 Fips doesn't come with its own generators, instead it looks in the 
-**fips-generators** directory in the current project and imported projects
+**fips-files/generators** directory in the current project and imported projects
 for generator scripts.
 
 Let's check what generators Oryol has to offer:
 
 {% highlight bash %}
-> cd oryol/fips-generators
+> cd oryol/fips-files/generators
 > ls *.py
 MessageProtocol.py Shader.py          SoundSheet.py      SpriteSheet.py
 {% endhighlight %}
