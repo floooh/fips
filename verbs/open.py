@@ -31,7 +31,7 @@ def run(fips_dir, proj_dir, args) :
         cfg = configs[0]
 
         # find build dir, if it doesn't exist, generate it
-        build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+        build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
         if not os.path.isdir(build_dir) :
             log.warn("build dir not found, generating...")
             project.gen(fips_dir, proj_dir, cfg['name'])

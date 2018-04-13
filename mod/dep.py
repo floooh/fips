@@ -309,7 +309,7 @@ def gather_imports(fips_dir, proj_dir) :
         return None
 
 #-------------------------------------------------------------------------------
-def write_imports(fips_dir, proj_dir, imported) :
+def write_imports(fips_dir, proj_dir, cfg_name, imported) :
     """write the big imports map created with 'gather_imports'
     to a .fips-imports.cmake file in the current project
 
@@ -421,14 +421,18 @@ def write_imports(fips_dir, proj_dir, imported) :
         gen_dir = util.get_generators_dir(util.get_project_dir(fips_dir, imp_proj_name))
         if gen_dir:
             gen_search_paths += '"' + gen_dir + '",\n' 
-    template.copy_template_file(fips_dir, proj_dir, '.fips-gen.py', { 'genpaths': gen_search_paths}, True)
+    proj_name = util.get_project_name_from_dir(proj_dir)
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg_name); 
+    if not os.path.isdir(build_dir):
+        os.makedirs(build_dir)
+    template.copy_template_file(fips_dir, build_dir, 'fips-gen.py', { 'genpaths': gen_search_paths}, True)
 
 #-------------------------------------------------------------------------------
-def gather_and_write_imports(fips_dir, proj_dir) :
+def gather_and_write_imports(fips_dir, proj_dir, cfg_name) :
     """first does and gather_imports, then a write_imports with the result"""
     imports = gather_imports(fips_dir, proj_dir)
     if imports is not None :
-        write_imports(fips_dir, proj_dir, imports)
+        write_imports(fips_dir, proj_dir, cfg_name, imports)
     else :
         log.error("project imports are incomplete, please run 'fips fetch'")
 

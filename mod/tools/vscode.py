@@ -155,7 +155,7 @@ def get_vs_header_paths(fips_dir, proj_dir, cfg):
 
     # next get the used active Visual Studio instance from the cmake cache
     proj_name = util.get_project_name_from_dir(proj_dir)
-    build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
     outp = subprocess.check_output(['cmake', '-LA', '.'], cwd=build_dir)
     for line in outp.splitlines():
         if line.startswith('CMAKE_LINKER:FILEPATH='):
@@ -213,8 +213,8 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg):
     '''write the .vscode/launch.json file'''
     proj_name = util.get_project_name_from_dir(proj_dir)
     exe_targets = read_cmake_targets(fips_dir, proj_dir, cfg, ['app'])
-    deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
-    build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+    deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg['name'])
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
 
     launch = {
         'version': '0.2.0',
@@ -275,7 +275,7 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg):
         'request': 'launch',
         'stopOnEntry': True,
         'pythonPath': '${config:python.pythonPath}',
-        'program': proj_dir + '/.fips-gen.py',
+        'program': build_dir + '/fips-gen.py',
         'args': [ build_dir + '/fips_codegen.yml' ],
         "cwd": proj_dir,
         "debugOptions": [
@@ -317,7 +317,7 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, impex, cfg):
        and all dependent projects
     '''
     proj_name = util.get_project_name_from_dir(proj_dir)
-    build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
     inc_paths = read_cmake_headerdirs(fips_dir, proj_dir, cfg)
     defines = read_cmake_defines(fips_dir, proj_dir, cfg)
     props = {
@@ -368,7 +368,7 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, impex, cfg):
 def write_cmake_tools_settings(fips_dir, proj_dir, vscode_dir, cfg):
     '''write a settings.json for CMakeTools plugin settings'''
     proj_name = util.get_project_name_from_dir(proj_dir)
-    build_dir = util.get_build_dir(fips_dir, proj_name, cfg)
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
     settings = {
         'cmake.buildDirectory': build_dir,
         'cmake.configureSettings': {

@@ -24,7 +24,7 @@ def gdb(fips_dir, proj_dir, cfg_name, target=None, target_args=None) :
             # check if config is valid
             config_valid, _ = config.check_config_valid(fips_dir, proj_dir, cfg, print_errors = True)
             if config_valid :
-                deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg)
+                deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg['name'])
                 log.colored(log.YELLOW, "=== gdb: {}".format(cfg['name']))
                 cmdLine = ['gdb', "-ex", "run", "--args", target]
                 if target_args :
