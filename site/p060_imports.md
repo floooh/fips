@@ -350,8 +350,8 @@ importing projects, and simplifies working with git.
 Project imports are resolved during './fips gen' before
 running cmake ('./fips fetch' will only git-clone the projects).
 
-During './fips gen', a hidden file _.fips-imports.cmake_ will be 
-created in the importing project's root directory which is included
+During './fips gen', a file _fips-imports.cmake_ will be 
+created in the importing project's build directory which is included
 in the main CMakeLists.txt hierarchy and implements the actual cmake 
 import magic. For a simple project like _fips-hello-world_ the file
 looks like this (details may change in newer fips versions):
