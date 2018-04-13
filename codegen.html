@@ -198,12 +198,12 @@ in a YAML-formatted string:</p>
 <p>A <em>generator</em> is a Python script which is called to generate C/C++ files.</p>
 
 <p>Fips doesn’t come with its own generators, instead it looks in the 
-<strong>fips-generators</strong> directory in the current project and imported projects
+<strong>fips-files/generators</strong> directory in the current project and imported projects
 for generator scripts.</p>
 
 <p>Let’s check what generators Oryol has to offer:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> <span class="nb">cd </span>oryol/fips-generators
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> <span class="nb">cd </span>oryol/fips-files/generators
 <span class="o">&gt;</span> <span class="nb">ls</span> <span class="k">*</span>.py
 MessageProtocol.py Shader.py          SoundSheet.py      SpriteSheet.py</code></pre></figure>
 

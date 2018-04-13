@@ -228,7 +228,7 @@ at Oryol’s fips-include.cmake file for an example:</p>
 
 <h3 id="adding-new-fips-commands">Adding New Fips Commands</h3>
 
-<p>Projects can have an optional directory ‘fips-verbs’ containing
+<p>Projects can have an optional directory ‘fips-files/verbs’ containing
 python scripts which add new subcommands (== verbs) to fips. The
 name of the python script (without the .py) is the name of the 
 command, and the script must define two special functions <strong>help</strong> 
@@ -246,22 +246,22 @@ command.</li>
 
 <p>As an example, have a look at Oryol’s ‘webpage’ command here:</p>
 
-<p>https://github.com/floooh/oryol/blob/master/fips-verbs/webpage.py</p>
+<p>https://github.com/floooh/oryol/blob/master/fips-files/verbs/webpage.py</p>
 
 <h3 id="build-configs">Build Configs</h3>
 
 <p>Projects can define new build configs which extend fips’ builtin
 configs. These build config files must be located in a subdirectory
-called ‘fips-configs’.</p>
+called ‘fips-files/configs’.</p>
 
 <p>Again, here’s are example configs in the Oryol engine:</p>
 
-<p>https://github.com/floooh/oryol/tree/master/fips-configs</p>
+<p>https://github.com/floooh/oryol/tree/master/fips-files/configs</p>
 
 <h3 id="code-generator-scripts">Code Generator Scripts</h3>
 
 <p>Projects can extend fips with code generation python scripts in the
-‘fips-generators’ subdirectory. The details are described on the
+‘fips-files/generators’ subdirectory. The details are described on the
 <a href="/fips/codegen.html">Code Generation Page</a>.</p>
 
   </article>

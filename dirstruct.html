@@ -198,11 +198,12 @@ Most projects have additional fips-specific files and directories:</p>
     ┣━━ fips.yml 
     ┣━━ fips 
     ┣━━ fips.cmd 
-    ┣━━ fips-include.cmake 
-    ┣━━ fips-verbs/ 
-    ┣━━ fips-generators/ 
-    ┣━━ fips-configs/
-    ┣━━ fips-toolchains/
+    ┣━━ fips-files/
+    ┃   ┣━━ include.cmake 
+    ┃   ┣━━ verbs/ 
+    ┃   ┣━━ generators/ 
+    ┃   ┣━━ configs/
+    ┃   ┗━━ toolchains/
     ┣━━ .fips-settings.yml
     ┣━━ .fips-imports.cmake
     ┗━━ .fips-gen.py</code></pre></figure>
@@ -218,16 +219,16 @@ control.</p>
   <li><strong>fips</strong>: proxy python script to be able to run fips commands from within
 the project directory</li>
   <li><strong>fips.cmd</strong>: Windows batch file to call the <em>‘fips’</em> python script</li>
-  <li><strong>fips-include.cmake</strong>: if present, this cmake file is included by other fips 
+  <li><strong>fips-files/include.cmake</strong>: if present, this cmake file is included by other fips 
 projects which depend on this project, this can be used to define global 
 cmake attributes for projects which export multiple modules</li>
-  <li><strong>fips-verbs/</strong>: if present, this directory contains python scripts which
+  <li><strong>fips-files/verbs/</strong>: if present, this directory contains python scripts which
 add additional commands (verbs) to fips</li>
-  <li><strong>fips-configs/</strong>: if present, the fips-configs directory contains additional
+  <li><strong>fips-files/configs/</strong>: if present, the fips-files/configs directory contains additional
 fips configs, the config names must not collide with the fips standard config
 names (e.g. osx-xcode-debug), so it is a good idea to include the project name
 in those custom configs</li>
-  <li><strong>fips-toolchains</strong>: if this directory exists it should contain cmake toolchain
+  <li><strong>fips-files/toolchains</strong>: if this directory exists it should contain cmake toolchain
 files, which can either override the standard toolchain files in the fips-directory,
 or can be completely new toolchain files for new platforms. Toolchain files
 can be defined in build-configs using the ‘cmake-toolchain’ attribute. 
@@ -242,7 +243,6 @@ other fips commands which implicitly do a cmake run (like <em>‘fips build’</
   <li><strong>.fips-gen.py</strong>: a generated python helper script for code generation during
 the build process</li>
 </ul>
-
 
   </article>
 
