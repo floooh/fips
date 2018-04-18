@@ -219,9 +219,9 @@ macro(fips_setup)
         include("${FIPS_PROJECT_DIR}/fips-files/include.cmake")
     endif()
 
-    # load generated fips-imports.cmake if exists
-    if (EXISTS "${CMAKE_BINARY_DIR}/fips-imports.cmake")
-        include("${CMAKE_BINARY_DIR}/fips-imports.cmake")
+    # load generated .fips-imports.cmake if exists
+    if (EXISTS "${FIPS_PROJECT_DIR}/.fips-imports.cmake")
+        include("${FIPS_PROJECT_DIR}/.fips-imports.cmake")
     endif()
 
 endmacro()
