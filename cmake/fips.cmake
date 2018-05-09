@@ -41,6 +41,7 @@ option(FIPS_OSX_UNIVERSAL "Enable generation of universal binaries on OS X" OFF)
 option(FIPS_LINUX_MACH32 "Enable 32-bit code generation on 64-bit Linux host" OFF)
 option(FIPS_AUTO_IMPORT "Automatically include all modules from imports" ON)
 option(FIPS_CLANG_ADDRESS_SANITIZER "Enable clang address sanitizer" OFF)
+option(FIPS_CLANG_SAVE_OPTIMIZATION_RECORD "Enable clang -fsave-optimization-record option" OFF)
 
 # turn some dependent options on/off
 if (FIPS_UNITTESTS)

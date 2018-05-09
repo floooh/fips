@@ -21,41 +21,38 @@ set(FIPS_POSIX 1)
 # define configuration types
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
-# exceptions on/off?
-if (FIPS_EXCEPTIONS)
-    set(FIPS_LINUX_EXCEPTION_FLAGS "")
-else()
-    set(FIPS_LINUX_EXCEPTION_FLAGS "-fno-exceptions")
-endif()
-
-# RTTI on/off?
-if (FIPS_RTTI)
-    set(FIPS_LINUX_RTTI_FLAGS "")
-else()
-    set(FIPS_LINUX_RTTI_FLAGS "-fno-rtti")
-endif()
-
-# 32-bit build on/off?
-if (FIPS_LINUX_MACH32)
-    set(FIPS_LINUX_MACH_FLAGS "-m32")
-else()
-    set(FIPS_LINUX_MACH_FLAGS "")
-endif()
-
 # C++ flags
-set(CMAKE_CXX_FLAGS "-fPIC ${FIPS_LINUX_EXCEPTION_FLAGS} ${FIPS_LINUX_RTTI_FLAGS} ${FIPS_LINUX_MACH_FLAGS} -std=c++11 -pthread -fno-strict-aliasing -Wno-expansion-to-defined -Wno-multichar -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers")
+set(CMAKE_CXX_FLAGS "-fPIC -std=c++11 -pthread -fno-strict-aliasing -Wno-expansion-to-defined -Wno-multichar -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ftree-vectorize -ffast-math -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1 -ggdb")
 
 # C flags
-set(CMAKE_C_FLAGS "-fPIC ${FIPS_LINUX_MACH_FLAGS} -pthread -fno-strict-aliasing -Wno-multichar -Wall -Wextra -Wno-expansion-to-defined -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers")
+set(CMAKE_C_FLAGS "-fPIC -pthread -fno-strict-aliasing -Wno-multichar -Wall -Wextra -Wno-expansion-to-defined -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers")
 set(CMAKE_C_FLAGS_RELEASE "-O3 -ftree-vectorize -ffast-math -DNDEBUG")
 set(CMAKE_C_FLAGS_DEBUG "-O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1 -ggdb")
 
 # exe linker flags
-set(CMAKE_EXE_LINKER_FLAGS "${FIPS_LINUX_MACH_FLAGS} -pthread -dead_strip -lpthread")
+set(CMAKE_EXE_LINKER_FLAGS "-pthread -dead_strip -lpthread")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "")
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "")
+
+# exceptions on/off?
+if (NOT FIPS_EXCEPTIONS)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
+endif()
+
+# RTTI on/off?
+if (NOT FIPS_RTTI)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+endif()
+
+# 32-bit build on/off?
+if (FIPS_LINUX_MACH32)
+    set(CMAKE_CXX_FLASG "${CMAKE_CXX_FLAGS} -m32")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS -m32")
+endif()
+
 if (FIPS_GCC)
     check_function_exists(__atomic_fetch_add_4 HAVE___ATOMIC_FETCH_ADD_4)
     if (NOT HAVE___ATOMIC_FETCH_ADD_4)
