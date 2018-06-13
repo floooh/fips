@@ -28,6 +28,9 @@ set(CMAKE_CONFIGURATION_TYPES Debug Release)
 # define standard frame works that are always linked
 set(FIPS_OSX_STANDARD_FRAMEWORKS Foundation UIKit)
 
+# globally silence the GLES depreciation warning
+add_definitions(-DGLES_SILENCE_DEPRECATION)
+
 # ARC on/off?
 option(FIPS_IOS_USE_ARC "Enable/disable Automatic Reference Counting" OFF)
 if (FIPS_IOS_USE_ARC)
