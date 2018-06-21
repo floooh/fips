@@ -253,8 +253,8 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
                 elif cfg['build_tool'] == xcodebuild.name :
                     result = xcodebuild.run_build(fips_dir, target, cfg['build_type'], build_dir, num_jobs)
                 else :
-                    result = cmake.run_build(fips_dir, target, cfg['build_type'], build_dir)
-                
+                    result = cmake.run_build(fips_dir, target, cfg['build_type'], build_dir, num_jobs)
+
                 if result :
                     num_valid_configs += 1
                 else :
