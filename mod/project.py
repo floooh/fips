@@ -66,6 +66,8 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
     defines = {}
     defines['FIPS_USE_CCACHE'] = 'ON' if settings.get(proj_dir, 'ccache') else 'OFF'
     defines['FIPS_AUTO_IMPORT'] = 'OFF' if dep.get_policy(proj_dir, 'no_auto_import') else 'ON'
+    if cfg['build_tool'] == 'vscode_cmake':
+        defines['CMAKE_EXPORT_COMPILE_COMMANDS'] = 'ON'
     if cfg['platform'] == 'ios':
         ios_team_id = settings.get(proj_dir, 'iosteam')
         if ios_team_id:

@@ -318,8 +318,12 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, impex, cfg):
     '''
     proj_name = util.get_project_name_from_dir(proj_dir)
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
-    inc_paths = read_cmake_headerdirs(fips_dir, proj_dir, cfg)
     defines = read_cmake_defines(fips_dir, proj_dir, cfg)
+    compile_commands_path = build_dir + '/compile_commands.json'
+    has_compile_command_json = os.path.isfile(compile_commands_path)
+    inc_paths = None
+    if not has_compile_command_json:
+        inc_paths = read_cmake_headerdirs(fips_dir, proj_dir, cfg)
     props = {
         'configurations': [],
         'version': 3
@@ -332,24 +336,37 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, impex, cfg):
                 'databaseFilename': '{}/browse.VS.code'.format(build_dir)
             }
         }
-        config_incl_paths = []
+        config_incl_paths = None
+        compiler_path = None
         intellisense_mode = 'clang-x64'
         if config_name == 'Mac':
-            config_incl_paths = get_cc_header_paths()
+            if not has_compile_command_json:
+                config_incl_paths = get_cc_header_paths()
             config_defines = ['_DEBUG','__GNUC__','__APPLE__','__clang__']
+            compiler_path = '/usr/bin/c++'
         elif config_name == 'Linux':
-            config_incl_paths = get_cc_header_paths()
+            if not has_compile_command_json:
+                config_incl_paths = get_cc_header_paths()
             config_defines = ['_DEBUG','__GNUC__']
+            compiler_path = '/usr/bin/c++'
         else:
+            if not has_compile_command_json:
+                config_incl_paths = get_vs_header_paths(fips_dir, proj_dir, cfg)
             intellisense_mode = 'msvc-x64'
-            config_incl_paths = get_vs_header_paths(fips_dir, proj_dir, cfg)
             config_defines = ['_DEBUG','_WIN32']
-        config_incl_paths.extend(inc_paths)
+        if inc_paths:
+            config_incl_paths.extend(inc_paths)
         config_defines.extend(defines)
         
-        c['includePath'] = config_incl_paths
+        if compiler_path:
+            c['compilerPath'] = compiler_path
+        if has_compile_command_json:
+            c['compileCommands'] = compile_commands_path
+        if config_incl_paths:
+            c['includePath'] = config_incl_paths
         c['defines'] = config_defines
-        c['browse']['path'] = config_incl_paths
+        if config_incl_paths:
+            c['browse']['path'] = config_incl_paths
         c['intelliSenseMode'] = intellisense_mode
         props['configurations'].append(c)
     
