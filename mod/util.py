@@ -3,6 +3,7 @@
 import os.path
 import sys
 import platform
+import multiprocessing
 import yaml
 from mod import log
 
@@ -309,3 +310,10 @@ def get_cfg_defines_by_target(fips_dir, proj_dir, cfg):
         return True,defines
     else:
         return False,{}
+
+#-------------------------------------------------------------------------------
+def get_num_cpucores():
+    try :
+        return multiprocessing.cpu_count()
+    except NotImplementedError :
+        return 2

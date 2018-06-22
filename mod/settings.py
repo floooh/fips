@@ -44,7 +44,8 @@ def get_default(key) :
     elif key == 'target' :
         return None
     elif key == 'jobs' :
-        return 3
+        # this is what ninja seems to do for default num jobs
+        return util.get_num_cpucores() + 2
     elif key == 'ccache' :
         return False
     else :
