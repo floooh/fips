@@ -1,6 +1,6 @@
 """functions for generating source code documentation"""
 
-import os, fnmatch, shutil, subprocess
+import os, fnmatch, shutil, subprocess, re
 from mod import log, util
 
 def build(fips_dir, proj_dir):
@@ -18,6 +18,7 @@ def build(fips_dir, proj_dir):
         for filename in fnmatch.filter(filenames, '*.h'):
             hdrs.append(os.path.join(root, filename).replace('\\','/'))
     markdeep_files = []
+    capture_begin = re.compile(r'/\*#\s')
     for hdr in hdrs:
         log.info('  parsing {}'.format(hdr))
         capturing = False
@@ -34,7 +35,7 @@ def build(fips_dir, proj_dir):
                     elif line.startswith('\t'):
                         line = line[1:]
                     markdeep_lines.append(line)
-                if "/*#" in line and not capturing:
+                if capture_begin.match(line) and not capturing:
                     capturing = True
         if markdeep_lines:
             markdeep_files.append(hdr)
