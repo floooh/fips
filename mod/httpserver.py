@@ -1,7 +1,13 @@
 """wrap SimpleHTTPServer and prevent Ctrl-C stack trace output"""
 
-import SimpleHTTPServer
-import SocketServer
+import sys
+
+if sys.version_info > (3, 0):
+    import http.server as SimpleHTTPServer
+    import socketserver as SocketServer
+else:
+    import SimpleHTTPServer
+    import SocketServer
 
 import log
 
