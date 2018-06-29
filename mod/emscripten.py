@@ -1,9 +1,14 @@
 """emscripten SDK support"""
 
 import os
-import urllib
+import sys
 import zipfile
 import subprocess
+
+if sys.version_info > (3, 0):
+    import urllib.request as urllib
+else:
+    import urllib
 
 from mod import log, util
 
