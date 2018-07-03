@@ -21,6 +21,7 @@ macro(fips_reset target)
     set(CurCompileFlags "")
     set(FipsAddFilesEnabled 1)
     set(CurTargetName ${target})
+    set(FIPS_OSX_PLIST_PATH)
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -234,10 +235,14 @@ macro(fips_add_file new_file)
         # add to current source group
         source_group("${CurGroup}" FILES ${cur_file})
 
-        # mark .m as .c file for older cmake versions (bug is fixed in cmake 3.1+)
         if (FIPS_OSX)
+            # mark .m as .c file for older cmake versions (bug is fixed in cmake 3.1+)
             if (${f_ext} STREQUAL ".m")
                 set_source_files_properties(${cur_file} PROPERTIES LANGUAGE C)
+            endif()
+            # handle plist files special
+            if (${f_ext} STREQUAL ".plist")
+                set(FIPS_OSX_PLIST_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${cur_file}")
             endif()
         endif()
 
