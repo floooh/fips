@@ -24,7 +24,7 @@ import platform
 
 fips_dir = os.path.normpath(os.path.dirname(os.path.abspath(__file__)) + '/..')
 # find the path of rt.jar
-jre_paths = subprocess.check_output(['java', 'GetRT'], cwd=fips_dir+'/tools')
+jre_paths = subprocess.check_output(['java', 'GetRT'], cwd=fips_dir+'/tools').decode("utf-8")
 if platform.system() == 'Windows':
     jre_paths = jre_paths.replace('\\','/').split(';')
 else:

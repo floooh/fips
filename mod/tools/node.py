@@ -9,8 +9,8 @@ not_found = 'node.js required for emscripten cross-compiling'
 #------------------------------------------------------------------------------
 def check_exists(fips_dir) :
     try :
-        out = subprocess.check_output(['node', '--version'])
-        if not out.startswith(b'v') :
+        out = subprocess.check_output(['node', '--version']).decode("utf-8")
+        if not out.startswith('v') :
             log.warn("this doesn't look like a proper node.js 'node'")
             return False 
         return True
