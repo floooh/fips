@@ -14,9 +14,9 @@ def run(fips_dir, proj_dir, args):
             markdeep.build(fips_dir, proj_dir)
             markdeep.view(fips_dir, proj_dir)
         else:
-            log.error("expected 'build' or 'serve' arg")
+            log.error("expected 'build' or 'view' arg")
     else:
-        log.error("expected 'build' or 'serve' arg")
+        log.error("expected 'build' or 'view' arg")
 
 def help():
     log.info(log.YELLOW +
