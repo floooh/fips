@@ -372,18 +372,26 @@ def clean(fips_dir, proj_dir, cfg_name) :
     proj_name = util.get_project_name_from_dir(proj_dir)
     configs = config.load(fips_dir, proj_dir, cfg_name)
     if configs :
+        num_cleaned_configs = 0
         for cfg in configs :
-            log.colored(log.YELLOW, "=== clean: {}".format(cfg['name']))
-
             build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
-            if os.path.isdir(build_dir) :
+            build_dir_exists = os.path.isdir(build_dir)
+            deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg['name'])
+            deploy_dir_exists = os.path.isdir(deploy_dir)
+
+            if build_dir_exists or deploy_dir_exists :
+                log.colored(log.YELLOW, "=== clean: {}".format(cfg['name']))
+                num_cleaned_configs += 1
+
+            if build_dir_exists :
                 shutil.rmtree(build_dir)
                 log.info("  deleted '{}'".format(build_dir))
 
-            deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg['name'])
-            if os.path.isdir(deploy_dir) :
+            if deploy_dir_exists :
                 shutil.rmtree(deploy_dir)
                 log.info("  deleted '{}'".format(deploy_dir))
+        if num_cleaned_configs == 0 :
+            log.colored(log.YELLOW, "=== clean: nothing to clean for {}".format(cfg_name))
     else :
         log.error("No valid configs found for '{}'".format(cfg_name))
 
