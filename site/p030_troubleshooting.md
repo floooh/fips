@@ -57,7 +57,7 @@ latest version.
 
 './fips diag configs' goes through all existing build config files, checks
 if their content is valid, and whether all required prerequisites are met
-in the current environment to build them (e.g. wether the required build
+in the current environment to build them (e.g. whether the required build
 tools exist and cross-platform SDKs have been installed):
 
 {% highlight bash %}

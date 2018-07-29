@@ -152,7 +152,7 @@ then run './fips setup emscripten' again from a project directory)
   - emscripten: use linker response files when using the UNIX
     Makefiles generator to workaround command line length limit 
     on Windows
-  - emscripten: on Windows, use the the Emscripten SDK incoming
+  - emscripten: on Windows, use the Emscripten SDK incoming
     branch (requires LLVM compilation, but behaviour is now the
     same as on OSX and Linux)
   - fips\_files\_ex() and related cmake functions now warn if 

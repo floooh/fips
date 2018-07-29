@@ -19,7 +19,7 @@ endif()
 # FIXME: define standard frame works that are always linked
 set(FIPS_OSX_STANDARD_FRAMEWORKS Foundation IOKit)
 
-# globally silence the GL depreciation warning
+# globally silence the GL deprecation warning
 add_definitions(-DGL_SILENCE_DEPRECATION)
 
 # compiler flags

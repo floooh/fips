@@ -57,7 +57,7 @@ automatically generate one _.cc_ source and one _.h_ header file with the same b
 name as the _FROM_ file.
 
 To generate output files with different file extensions (or filenames), provide
-them explicitely with the _SOURCE_ and _HEADER_ args, e.g.:
+them explicitly with the _SOURCE_ and _HEADER_ args, e.g.:
 
 {% highlight cmake %}
 fips_generate(FROM IOProtocol.yml
@@ -320,7 +320,7 @@ with code generation
 
 - ALL\_GENERATE custom build target will run before any regular build target 
 which depends on generated code
-- the ALL\_GENERATE target runs the the python file '.fips-gen.py' from the 
+- the ALL\_GENERATE target runs the python file '.fips-gen.py' from the
 project root directory with the fips\_codegen.yml file as argument
 - '.fips-gen.py' loads the fips\_codegen.yml file, and imports and runs 
 code generator python scripts, which will generate the C/C++ source code files
