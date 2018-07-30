@@ -282,7 +282,7 @@ macro(fips_end_module)
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
-    # track some target propeties in YAML files
+    # track some target properties in YAML files
     fips_addto_targets_list(${CurTargetName} "module")
     fips_addto_headerdirs_list(${CurTargetName})
     fips_addto_defines_list(${CurTargetName})
@@ -319,7 +319,7 @@ macro(fips_end_lib)
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
-    # track some target propeties in YAML files
+    # track some target properties in YAML files
     fips_addto_targets_list(${CurTargetName} "lib")
     fips_addto_headerdirs_list(${CurTargetName})
     fips_addto_defines_list(${CurTargetName})
@@ -414,7 +414,7 @@ macro(fips_end_app)
     fips_config_output_directory(${CurTargetName})
     fips_config_postfixes_for_exe(${CurTargetName})
 
-    # track some target propeties in YAML files
+    # track some target properties in YAML files
     fips_addto_targets_list(${CurTargetName} "app")
     fips_addto_headerdirs_list(${CurTargetName})
     fips_addto_defines_list(${CurTargetName})
@@ -462,7 +462,7 @@ macro(fips_end_sharedlib)
     # setup executable output directory and postfixes (_debug, etc...)
     fips_config_output_directory(${CurTargetName})
 
-    # track some target propeties in YAML files
+    # track some target properties in YAML files
     fips_addto_targets_list(${CurTargetName} "sharedlib")
     fips_addto_headerdirs_list(${CurTargetName})
     fips_addto_defines_list(${CurTargetName})
@@ -542,7 +542,7 @@ macro(fips_dir dir)
 
     # assign CurGroup global var
     if (_fd_GROUP)
-        # group is explicitely given as GROUP argument
+        # group is explicitly given as GROUP argument
         set(CurGroup ${_fd_GROUP})
         # special case 'no group' as GROUP "."
         if (${CurGroup} STREQUAL ".")

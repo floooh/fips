@@ -174,7 +174,7 @@ path, so that the directory structure is reflected in IDE file explorers.
 This behaviour can be overriden with the optional GROUP argument, and 
 an explicit group name (or path) can be defined.
 
-This is the default usage of fips\_dir, without explicitely overriding
+This is the default usage of fips\_dir, without explicitly overriding
 the IDE group name:
 
 {% highlight cmake %}
