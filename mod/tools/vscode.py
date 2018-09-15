@@ -445,7 +445,7 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
     if not success :
         log.warn("missing import project directories, please run 'fips fetch'")
     vscode_extensions = list_extensions()
-    has_cmake_tools = any(b'vector-of-bool.cmake-tools' in ext for ext in vscode_extensions)
+    has_cmake_tools = any('vector-of-bool.cmake-tools' in ext for ext in vscode_extensions)
     remove_vscode_tasks_launch_files(fips_dir, proj_dir, impex, cfg)
     write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg)
     write_launch_json(fips_dir, proj_dir, vscode_dir, cfg)
