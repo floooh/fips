@@ -5,7 +5,7 @@ import glob
 import yaml
 from collections import OrderedDict
 from mod import log, util, dep
-from mod.tools import cmake, make, ninja, xcodebuild, vscode
+from mod.tools import cmake, make, ninja, xcodebuild, vscode, clion
 from mod import emscripten, nacl, android
 
 # non-cross-compiling platforms
@@ -21,7 +21,8 @@ build_tools = [
     'ninja',
     'xcodebuild',
     'cmake',
-    'vscode_cmake'
+    'vscode_cmake',
+    'clion'
 ]
 
 default_config = {
@@ -216,6 +217,8 @@ def check_build_tool(fips_dir, tool_name) :
         return xcodebuild.check_exists(fips_dir)
     elif tool_name == 'vscode_cmake' :
         return vscode.check_exists(fips_dir)
+    elif tool_name == 'clion' :
+        return clion.check_exists(fips_dir)
     else :
         return False;
 
