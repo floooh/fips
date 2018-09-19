@@ -13,19 +13,37 @@ def check_exists(fips_dir) :
     """test if 'clion' is in the path
     :returns:   True if clion is in the path
     """
-    try:
-        subprocess.check_output("snap list | grep 'clion'", shell=True)
-        return True
-    except (OSError, subprocess.CalledProcessError):
+    host = util.get_host_platform()
+    if host == 'linux':
+        try:
+            subprocess.check_output("snap list | grep 'clion'", shell=True)
+            return True
+        except (OSError, subprocess.CalledProcessError):
+            return False
+    elif host == 'osx':
+        try:
+            subprocess.check_output("mdfind -name CLion.app | grep 'CLion'", shell=True)
+            return True
+        except (OSError, subprocess.CalledProcessError):
+            return False
+    else:
         return False
 
 #------------------------------------------------------------------------------
 def run(proj_dir):
-    try:
-        proj_name = util.get_project_name_from_dir(proj_dir)
-        subprocess.Popen('clion {}'.format(proj_dir), cwd=proj_dir, shell=True)
-    except OSError:
-        log.error("Failed to run JetBrains CLion as 'clion'") 
+    host = util.get_host_platform()
+    if host == 'linux':
+        try:
+            subprocess.Popen('clion {}'.format(proj_dir), cwd=proj_dir, shell=True)
+        except OSError:
+            log.error("Failed to run JetBrains CLion as 'clion'")
+    elif host == 'osx':
+        try:
+            subprocess.Popen('open /Applications/CLion.app --args {}'.format(proj_dir), cwd=proj_dir, shell=True)
+        except OSError:
+            log.error("Failed to run JetBrains CLion as '/Applications/CLion.app'")
+    else:
+        log.error("Not supported on this platform")
 
 #-------------------------------------------------------------------------------
 def write_clion_module_files(fips_dir, proj_dir, cfg):
