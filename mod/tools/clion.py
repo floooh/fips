@@ -1,6 +1,6 @@
 '''CLion helper functions'''
-import subprocess, os, yaml, json, inspect, tempfile, glob, shutil
-from mod import util,log,verb,dep
+import subprocess, os, shutil
+from mod import util, log, verb, dep
 from mod.tools import cmake
 
 name = 'clion'
@@ -85,13 +85,13 @@ def write_clion_workspace_file(fips_dir, proj_dir, cfg):
     with open(ws_path, 'w') as f:
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
         f.write('<project version="4">\n')
-        #CMakeRunConfigurationManager
+        # TODO: CMakeRunConfigurationManager
         f.write('  <component name="CMakeSettings">\n')
         f.write('    <configurations>\n')
         f.write('      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" GENERATION_OPTIONS="{}" GENERATION_DIR="{}" />\n'.format(gen_options, gen_dir))
         f.write('    </configurations>\n')
         f.write('  </component>\n')
-        #RunManager
+        # TODO: RunManager
         f.write('</project>')
 
 #-------------------------------------------------------------------------------
@@ -104,3 +104,20 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
         os.makedirs(clion_dir)
     write_clion_module_files(fips_dir, proj_dir, cfg)
     write_clion_workspace_file(fips_dir, proj_dir, cfg)
+
+#-------------------------------------------------------------------------------
+def cleanup(fips_dir, proj_dir):
+    '''deletes the .idea directory'''
+    clion_dir = proj_dir + '/.idea'
+    if os.path.isdir(clion_dir):
+        log.info(log.RED + 'Please confirm to delete the following directory:' + log.DEF)
+        log.info('  {}'.format(clion_dir))
+        if util.confirm(log.RED + 'Delete this directory?' + log.DEF):
+            if os.path.isdir(clion_dir):
+                log.info('  deleting {}'.format(clion_dir))
+                shutil.rmtree(clion_dir)
+            log.info('Done.')
+        else:
+            log.info('Nothing deleted, done.')
+    else:
+        log.info('Nothing to delete.')
