@@ -103,7 +103,7 @@ macro(fips_setup)
 
     # set FIPS_CONFIG to default if not provided by command line
     # (this provides better compatibility with some IDEs not directly
-    # supported by cmake, like QtCreator or CLion
+    # supported by cmake, like QtCreator
     if (NOT FIPS_CONFIG)
         message("FIPS_CONFIG not provided by command line, selecting default value")
         fips_choose_config()

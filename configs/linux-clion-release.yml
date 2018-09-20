@@ -1,0 +1,5 @@
+---
+platform: linux 
+generator: Unix Makefiles
+build_tool: clion
+build_type: Release
