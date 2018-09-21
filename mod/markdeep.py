@@ -54,6 +54,7 @@ def build(fips_dir, proj_dir):
     
     # write a toplevel index.html
     if markdeep_files:
+        markdeep_files = sorted(markdeep_files)
         dst_path = out_dir + '/index.html'
         log.info('writing toc file: {}'.format(dst_path))
         with open(dst_path, 'w') as dst:
