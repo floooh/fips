@@ -1,7 +1,12 @@
 """Android SDK support"""
 
 import os
-import urllib
+import sys
+
+if sys.version_info[0] >= 3:
+    from urllib.request import urlretrieve
+else:
+    from urllib import urlretrieve
 import zipfile
 import subprocess
 
@@ -79,7 +84,7 @@ def setup(fips_dir, proj_dir) :
     tools_archive_path = get_tools_archive_path(fips_dir)
     tools_url = get_tools_url()
     log.info("downloading '{}'...".format(tools_url))
-    urllib.urlretrieve(tools_url, tools_archive_path, util.url_download_hook)
+    urlretrieve(tools_url, tools_archive_path, util.url_download_hook)
     log.info("\nunpacking '{}'...".format(tools_archive_path))
     uncompress(fips_dir, tools_archive_path)
 
