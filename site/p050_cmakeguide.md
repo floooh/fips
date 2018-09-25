@@ -321,7 +321,7 @@ external dependency in another project. Fips will include this file either
 when the project itself is compiled, or the project is imported as an
 external dependency in other projects.
 
-Check out the [fips-include.cmake](https://github.com/floooh/oryol/blob/master/fips-include.cmake)
+Check out the [fips-include.cmake](https://github.com/floooh/oryol/blob/master/fips-files/include.cmake)
 file included in the Oryol 3D engine for a complex example.
 
 ### Fips Predefined CMake Variables
