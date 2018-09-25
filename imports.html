@@ -144,9 +144,9 @@ fips.</p>
 <p>Here is a very simple example from the <em>fips-hello-world</em> project:</p>
 
 <figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
-<span class="na">imports</span><span class="pi">:</span>
-    <span class="na">fips-hello-dep1</span><span class="pi">:</span>
-        <span class="na">git</span><span class="pi">:</span>    <span class="s">https://github.com/floooh/fips-hello-dep1.git</span></code></pre></figure>
+<span class="s">imports</span><span class="pi">:</span>
+    <span class="s">fips-hello-dep1</span><span class="pi">:</span>
+        <span class="s">git</span><span class="pi">:</span>    <span class="s">https://github.com/floooh/fips-hello-dep1.git</span></code></pre></figure>
 
 <p>This defines a single import <em>fips-hello-dep1</em> from the github URL 
 <em>https://github.com/floooh/fips-hello-dep1.git</em>.</p>
@@ -155,26 +155,26 @@ fips.</p>
 project imports another project:</p>
 
 <figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
-<span class="na">imports</span><span class="pi">:</span>
-    <span class="na">fips-hello-dep2</span><span class="pi">:</span>
-        <span class="na">git</span><span class="pi">:</span>    <span class="s">https://github.com/floooh/fips-hello-dep2.git</span></code></pre></figure>
+<span class="s">imports</span><span class="pi">:</span>
+    <span class="s">fips-hello-dep2</span><span class="pi">:</span>
+        <span class="s">git</span><span class="pi">:</span>    <span class="s">https://github.com/floooh/fips-hello-dep2.git</span></code></pre></figure>
 
 <p>A more complex import section might look like this (from the Oryol 3D engine):</p>
 
 <figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
-<span class="na">imports</span><span class="pi">:</span>
-    <span class="na">gliml</span><span class="pi">:</span>
-        <span class="na">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/gliml.git</span>
-    <span class="na">fips-glm</span><span class="pi">:</span>
-        <span class="na">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/fips-glm.git</span>
-    <span class="na">fips-unittestpp</span><span class="pi">:</span>
-        <span class="na">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/fips-unittestpp.git</span>
-    <span class="na">fips-zlib</span><span class="pi">:</span>
-        <span class="na">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/fips-zlib.git</span>
-    <span class="na">fips-glfw</span><span class="pi">:</span>
-        <span class="na">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/fips-glfw.git</span>
-    <span class="na">fips-libcurl</span><span class="pi">:</span>
-        <span class="na">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/fips-libcurl.git</span></code></pre></figure>
+<span class="s">imports</span><span class="pi">:</span>
+    <span class="s">gliml</span><span class="pi">:</span>
+        <span class="s">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/gliml.git</span>
+    <span class="s">fips-glm</span><span class="pi">:</span>
+        <span class="s">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/fips-glm.git</span>
+    <span class="s">fips-unittestpp</span><span class="pi">:</span>
+        <span class="s">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/fips-unittestpp.git</span>
+    <span class="s">fips-zlib</span><span class="pi">:</span>
+        <span class="s">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/fips-zlib.git</span>
+    <span class="s">fips-glfw</span><span class="pi">:</span>
+        <span class="s">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/fips-glfw.git</span>
+    <span class="s">fips-libcurl</span><span class="pi">:</span>
+        <span class="s">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/fips-libcurl.git</span></code></pre></figure>
 
 <p>In the future there will be more ways to define imports, 
 most likely support for more version control systems like Subversion
@@ -188,13 +188,13 @@ since it prevents that a build suddenly breaks because an external dependency
 has had an update that breaks existing code:</p>
 
 <figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
-<span class="na">imports</span><span class="pi">:</span>
-    <span class="na">my-awesome-lib</span><span class="pi">:</span>
-        <span class="na">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/my-awesome-lib.git</span>
-        <span class="na">branch</span><span class="pi">:</span> <span class="s">version-0.0.1</span>
-    <span class="na">my-other-awesome-lib</span><span class="pi">:</span>
-        <span class="na">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/my-other-awesome-lib.git</span>
-        <span class="na">rev</span><span class="pi">:</span> <span class="s">00f1a6d3</span></code></pre></figure>
+<span class="s">imports</span><span class="pi">:</span>
+    <span class="s">my-awesome-lib</span><span class="pi">:</span>
+        <span class="s">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/my-awesome-lib.git</span>
+        <span class="s">branch</span><span class="pi">:</span> <span class="s">version-0.0.1</span>
+    <span class="s">my-other-awesome-lib</span><span class="pi">:</span>
+        <span class="s">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/my-other-awesome-lib.git</span>
+        <span class="s">rev</span><span class="pi">:</span> <span class="s">00f1a6d3</span></code></pre></figure>
 
 <p>The ‘branch:’ item can either be a branch or tag name.
 The ‘rev:’ item should be a valid commit SHA1 reference.</p>
@@ -205,10 +205,10 @@ The ‘rev:’ item should be a valid commit SHA1 reference.</p>
 for the import to happen. For instance to ignore an import on IOS:</p>
 
 <figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
-<span class="na">imports</span><span class="pi">:</span>
-    <span class="na">my-awesome-lib</span><span class="pi">:</span>
-        <span class="na">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/my-awesome-lib.git</span>
-        <span class="na">cond</span><span class="pi">:</span> <span class="s2">"</span><span class="s">NOT</span><span class="nv"> </span><span class="s">FIPS_IOS"</span></code></pre></figure>
+<span class="s">imports</span><span class="pi">:</span>
+    <span class="s">my-awesome-lib</span><span class="pi">:</span>
+        <span class="s">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/my-awesome-lib.git</span>
+        <span class="s">cond</span><span class="pi">:</span> <span class="s2">"</span><span class="s">NOT</span><span class="nv"> </span><span class="s">FIPS_IOS"</span></code></pre></figure>
 
 <p>The resulting cmake code to import this dependency will then be surrounded
 with:</p>
@@ -222,23 +222,23 @@ with:</p>
 <p>To fetch external dependencies simply run ‘./fips fetch’ from within
 the project directory which defines the imports:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips fetch
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips fetch
 <span class="o">[</span>WARNING] project dir <span class="s1">'/Users/floh/projects/fips-hello-dep1'</span> does not exist
 <span class="o">===</span> dependency: <span class="s1">'fips-hello-dep1'</span>:
 Cloning into <span class="s1">'fips-hello-dep1'</span>...
-remote: Counting objects: 51, <span class="k">done</span><span class="nb">.</span>
-remote: Compressing objects: 100% <span class="o">(</span>35/35<span class="o">)</span>, <span class="k">done</span><span class="nb">.</span>
+remote: Counting objects: 51, <span class="k">done</span>.
+remote: Compressing objects: 100% <span class="o">(</span>35/35<span class="o">)</span>, <span class="k">done</span>.
 remote: Total 51 <span class="o">(</span>delta 13<span class="o">)</span>, reused 49 <span class="o">(</span>delta 12<span class="o">)</span>
-Unpacking objects: 100% <span class="o">(</span>51/51<span class="o">)</span>, <span class="k">done</span><span class="nb">.</span>
-Checking connectivity... <span class="k">done</span><span class="nb">.</span>
+Unpacking objects: 100% <span class="o">(</span>51/51<span class="o">)</span>, <span class="k">done</span>.
+Checking connectivity... <span class="k">done</span>.
 <span class="o">===</span> dependency: <span class="s1">'fips-hello-dep2'</span>:
 Cloning into <span class="s1">'fips-hello-dep2'</span>...
-remote: Counting objects: 57, <span class="k">done</span><span class="nb">.</span>
-remote: Compressing objects: 100% <span class="o">(</span>36/36<span class="o">)</span>, <span class="k">done</span><span class="nb">.</span>
+remote: Counting objects: 57, <span class="k">done</span>.
+remote: Compressing objects: 100% <span class="o">(</span>36/36<span class="o">)</span>, <span class="k">done</span>.
 remote: Total 57 <span class="o">(</span>delta 16<span class="o">)</span>, reused 56 <span class="o">(</span>delta 15<span class="o">)</span>
-Unpacking objects: 100% <span class="o">(</span>57/57<span class="o">)</span>, <span class="k">done</span><span class="nb">.</span>
-Checking connectivity... <span class="k">done</span><span class="nb">.</span>
-<span class="o">&gt;</span> _</code></pre></figure>
+Unpacking objects: 100% <span class="o">(</span>57/57<span class="o">)</span>, <span class="k">done</span>.
+Checking connectivity... <span class="k">done</span>.
+<span class="gp">&gt; </span>_</code></pre></figure>
 
 <p>Dependencies will also be automatically be fetched when running ‘./fips clone’,
 ‘./fips gen’, ‘./fips build’, and ‘./fips make’. So most of the time, dependency
@@ -248,7 +248,7 @@ fetching will happen automatically when needed.</p>
 
 <p>To get an overview of the dependency structure of a project, run ‘./fips list imports’:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips list imports
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips list imports
 <span class="o">==</span> imports:
 project <span class="s1">'fips-hello-world'</span> imports:
   <span class="s1">'fips-hello-dep1'</span> from <span class="s1">'https://github.com/floooh/fips-hello-dep1.git'</span> at branch <span class="s1">'master'</span>
@@ -276,7 +276,7 @@ directory will not be updated, only the imports.</p>
 <p>Fips can tell you if an imported dependency is uptodate (meaning: in
 sync with its remote repository on github) with ‘./fips diag imports’:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips diag imports
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips diag imports
 <span class="o">===</span> imports:
 git status of <span class="s1">'fips-hello-dep1'</span>:
   uptodate
@@ -348,11 +348,11 @@ fips.yml file which imports a complex dependency and activates the
 no_auto_import policy:</p>
 
 <figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
-<span class="na">policies</span><span class="pi">:</span>
-    <span class="na">no_auto_import</span><span class="pi">:</span> <span class="no">true</span>
-<span class="na">imports</span><span class="pi">:</span>
-    <span class="na">oryol</span><span class="pi">:</span>
-        <span class="na">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/oryol.git</span></code></pre></figure>
+<span class="s">policies</span><span class="pi">:</span>
+    <span class="s">no_auto_import</span><span class="pi">:</span> <span class="s">true</span>
+<span class="s">imports</span><span class="pi">:</span>
+    <span class="s">oryol</span><span class="pi">:</span>
+        <span class="s">git</span><span class="pi">:</span> <span class="s">https://github.com/floooh/oryol.git</span></code></pre></figure>
 
 <p>Not automatically importing modules means that imported modules must be listed
 manually in the root CMakeLists.txt file. For this, fips has created a cmake
@@ -402,7 +402,7 @@ enabled as an example:</p>
 <p>To speed up importing, fetching doesn’t clone the entire git repository,
 instead git is called like this:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> git clone <span class="nt">--recursive</span> <span class="nt">--branch</span> xxx <span class="nt">--single-branch</span> <span class="nt">--depth</span> 10 </code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>git clone --recursive --branch xxx --single-branch --depth 10 </code></pre></figure>
 
 <p>It’s recommended to use the https protocol to define git URLs so that
 projects can be imported without setting up an SSH key for github,

@@ -122,9 +122,9 @@ other target platforms are supported on all 3 host platforms (OSX, Linux, Window
 <p>Fips provides simple commands to setup the SDKs for Android, emscripten and
 PNaCl:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips setup emscripten
-<span class="o">&gt;</span> ./fips setup nacl
-<span class="o">&gt;</span> ./fips setup android</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips setup emscripten
+<span class="gp">&gt; </span>./fips setup nacl
+<span class="gp">&gt; </span>./fips setup android</code></pre></figure>
 
 <p>This will download, unpack and setup the respective SDKs into a directory
 <em>fips-sdks</em> next to the fips directory.</p>
@@ -136,7 +136,7 @@ PNaCl:</p>
 <p>You should also run ‘fips diag tools’ to make sure that all required
 tools are in the path:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips diag tools
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips diag tools
 ...</code></pre></figure>
 
 <h3 id="testing-cross-compilation">Testing cross-compilation</h3>
@@ -145,15 +145,15 @@ tools are in the path:</p>
 PNaCl this is a bit non-trivial (e.g. the canonical C ‘Hello World’ doesn’t
 work). Let’s use the Oryol 3D engine for testing:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips clone oryol
-<span class="o">&gt;</span> <span class="nb">cd</span> ../oryol</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips clone oryol
+<span class="gp">&gt; </span><span class="nb">cd</span> ../oryol</code></pre></figure>
 
 <p>First let’s try whether <strong>emscripten</strong> compilation works:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips <span class="nb">set </span>config emsc-make-release
-<span class="o">&gt;</span> ./fips build
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips <span class="nb">set </span>config emsc-make-release
+<span class="gp">&gt; </span>./fips build
 ...
-<span class="o">&gt;</span> ./fips run Triangle</code></pre></figure>
+<span class="gp">&gt; </span>./fips run Triangle</code></pre></figure>
 
 <p>The last command should open the default web browser and a local http server.
 It may be necessary to refresh the page in case the http server needs too long
@@ -161,28 +161,28 @@ to start.</p>
 
 <p>Cross-compiling to <strong>PNaCl</strong> is just as easy, just use a different config:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips <span class="nb">set </span>config pnacl-make-release
-<span class="o">&gt;</span> ./fips build
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips <span class="nb">set </span>config pnacl-make-release
+<span class="gp">&gt; </span>./fips build
 ...
-<span class="o">&gt;</span> ./fips run Triangle</code></pre></figure>
+<span class="gp">&gt; </span>./fips run Triangle</code></pre></figure>
 
 <p>Same for <strong>Android</strong>, note that Android provides 3 types of config, one for each
 CPU type.</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips build android-make-release
-<span class="o">&gt;</span> ./fips build androidx86-make-release
-<span class="o">&gt;</span> ./fips build androidmips-make-release
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips build android-make-release
+<span class="gp">&gt; </span>./fips build androidx86-make-release
+<span class="gp">&gt; </span>./fips build androidmips-make-release
 
-<span class="o">&gt;</span> NOTE: Android MIPS is not yet fully supported on Oryol!</code></pre></figure>
+<span class="gp">&gt; </span>NOTE: Android MIPS is not yet fully supported on Oryol!</code></pre></figure>
 
 <p>Finally iOS: this works a bit differently since iOS compiling and debugging
 works best directly in Xcode. Instead of a command line build, we only 
 generate the Xcode project files, and then start Xcode:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips <span class="nb">set </span>config ios-xcode-debug
-<span class="o">&gt;</span> ./fips <span class="nb">set </span>iosteam XYZW123456
-<span class="o">&gt;</span> ./fips gen
-<span class="o">&gt;</span> ./fips open</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips <span class="nb">set </span>config ios-xcode-debug
+<span class="gp">&gt; </span>./fips <span class="nb">set </span>iosteam XYZW123456
+<span class="gp">&gt; </span>./fips gen
+<span class="gp">&gt; </span>./fips open</code></pre></figure>
 
 <p>Note the <strong>./fips set iosteam XYZW123456</strong> before the first call to <strong>./fips gen</strong>.
 This sets the <em>iOS Development Team ID</em> for each target in the Xcode project,

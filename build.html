@@ -108,27 +108,27 @@
 <p>To build the default build configuration of a ‘fipsified’ project for your 
 host platform, simply run ‘./fips build’ in its root directory:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> <span class="nb">cd</span> ~/fips-workspace
-<span class="o">&gt;</span> git clone https://github.com/floooh/fips-hello-world.git
-<span class="o">&gt;</span> <span class="nb">cd </span>fips-hello-world
-<span class="o">&gt;</span> ./fips build
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span><span class="nb">cd</span> ~/fips-workspace
+<span class="gp">&gt; </span>git clone https://github.com/floooh/fips-hello-world.git
+<span class="gp">&gt; </span><span class="nb">cd </span>fips-hello-world
+<span class="gp">&gt; </span>./fips build
 ...
-<span class="o">&gt;</span> _</code></pre></figure>
+<span class="gp">&gt; </span>_</code></pre></figure>
 
 <p>By default, a non-optimized <em>debug</em> version will be built, to build
 an optimized <em>release</em> version append the configuration name that is 
 right for your host platform:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># on OSX:</span>
-<span class="o">&gt;</span> ./fips build osx-xcode-release
+<span class="gp">&gt; </span>./fips build osx-xcode-release
 ...
 <span class="c"># on Linux:</span>
-<span class="o">&gt;</span> ./fips build linux-make-release
+<span class="gp">&gt; </span>./fips build linux-make-release
 ...
 <span class="c"># on Windows:</span>
-<span class="o">&gt;</span> ./fips build win64-vstudio-release
+<span class="gp">&gt; </span>./fips build win64-vstudio-release
 ...
-<span class="o">&gt;</span> _</code></pre></figure>
+<span class="gp">&gt; </span>_</code></pre></figure>
 
 <h3 id="build-configs">Build Configs</h3>
 
@@ -144,7 +144,7 @@ build config tells cmake how to compile the project:</p>
 
 <p>To get a list of build configurations, run ‘./fips list configs’:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips list configs
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips list configs
 from /Users/floh/projects/fips/configs:
   android-make-debug
   android-make-release
@@ -155,13 +155,13 @@ from /Users/floh/projects/fips/configs:
   win32-vstudio-release
   win64-vstudio-debug
   win64-vstudio-release
-<span class="o">&gt;</span> _</code></pre></figure>
+<span class="gp">&gt; </span>_</code></pre></figure>
 
 <p>There are dozens of build configs, but not all are supported on every
 host platform, to test which build configs are supported, run 
 ‘./fips diag configs’:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips diag configs
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips diag configs
 <span class="o">===</span> configs:
 android-make-debug
   ok
@@ -172,7 +172,7 @@ android-ninja-debug
 android-ninja-release
   build tool <span class="s1">'ninja'</span> not found
 ...
-<span class="o">&gt;</span> _</code></pre></figure>
+<span class="gp">&gt; </span>_</code></pre></figure>
 
 <p>In this example, the build configurations which use the ‘ninja’ build tool
 can not be used because ninja is currently not installed (see also ‘./fips
@@ -187,38 +187,38 @@ want to compile the release version of a project instead of the default
 debug version whenever ‘./fips build’ is run:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># on OSX:</span>
-<span class="o">&gt;</span> ./fips <span class="nb">set </span>config osx-xcode-release
+<span class="gp">&gt; </span>./fips <span class="nb">set </span>config osx-xcode-release
 <span class="s1">'config'</span> <span class="nb">set </span>to <span class="s1">'osx-xcode-release'</span> <span class="k">in </span>project <span class="s1">'fips-hello-world'</span>
-<span class="o">&gt;</span> ./fips build
+<span class="gp">&gt; </span>./fips build
 ...
 <span class="c"># on Linux:</span>
-<span class="o">&gt;</span> ./fips <span class="nb">set </span>config linux-make-release
+<span class="gp">&gt; </span>./fips <span class="nb">set </span>config linux-make-release
 <span class="s1">'config'</span> <span class="nb">set </span>to <span class="s1">'linux-make-release'</span> <span class="k">in </span>project <span class="s1">'fips-hello-world'</span>
-<span class="o">&gt;</span> ./fips build
+<span class="gp">&gt; </span>./fips build
 ...
 <span class="c"># on Windows:</span>
-<span class="o">&gt;</span> ./fips <span class="nb">set </span>config win64-vstudio-release 
+<span class="gp">&gt; </span>./fips <span class="nb">set </span>config win64-vstudio-release 
 <span class="s1">'config'</span> <span class="nb">set </span>to <span class="s1">'win64-vstudio-release'</span> <span class="k">in </span>project <span class="s1">'fips-hello-world'</span>
-<span class="o">&gt;</span> ./fips build
+<span class="gp">&gt; </span>./fips build
 ...
-<span class="o">&gt;</span> _</code></pre></figure>
+<span class="gp">&gt; </span>_</code></pre></figure>
 
 <p>Run ‘./fips list settings’ to check what the currently active config is:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips list settings
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips list settings
 <span class="o">===</span> settings:
   config: osx-xcode-release
   target: None <span class="o">(</span>default value<span class="o">)</span></code></pre></figure>
 
 <p>To revert back to the default config, run ‘./fips unset config’:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips <span class="nb">unset </span>config
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips <span class="nb">unset </span>config
 <span class="s1">'config'</span> <span class="nb">unset </span><span class="k">in </span>project <span class="s1">'fips-hello-world'</span>
-<span class="o">&gt;</span> ./fips list settings
+<span class="gp">&gt; </span>./fips list settings
 <span class="o">===</span> settings:
   config: osx-xcode-debug <span class="o">(</span>default value<span class="o">)</span>
   target: None <span class="o">(</span>default value<span class="o">)</span>
-<span class="o">&gt;</span> _</code></pre></figure>
+<span class="gp">&gt; </span>_</code></pre></figure>
 
 <h3 id="build-targets">Build Targets</h3>
 
@@ -241,9 +241,9 @@ targets.</p>
 from the project root directory. For this to work, cmake must have generated 
 build files before via ‘./fips gen’:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips gen
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips gen
 ...
-<span class="o">&gt;</span> ./fips list targets
+<span class="gp">&gt; </span>./fips list targets
 <span class="o">===</span> targets:
   config: osx-xcode-debug
   lib:
@@ -252,24 +252,24 @@ build files before via ‘./fips gen’:</p>
     dep2
   app:
     hello
-<span class="o">&gt;</span> _ </code></pre></figure>
+<span class="gp">&gt; </span>_ </code></pre></figure>
 
 <p>A specific target can be built with ‘./fips make [target]’:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips make hello
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips make hello
 ...
-<span class="o">&gt;</span> _</code></pre></figure>
+<span class="gp">&gt; </span>_</code></pre></figure>
 
 <p>App targets can be run with ‘./fips run [target]’:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> ./fips run hello
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>./fips run hello
 <span class="o">===</span> run <span class="s1">'hello'</span> <span class="o">(</span>config: osx-xcode-debug, project: fips-hello-world<span class="o">)</span>:
 Hello World!
 Hello from dep1
 Hello from dep2!
 Imported string define: Bla
 Imported int define: 1
-<span class="o">&gt;</span> _</code></pre></figure>
+<span class="gp">&gt; </span>_</code></pre></figure>
 
 
   </article>

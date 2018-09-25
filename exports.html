@@ -127,26 +127,26 @@ file.</p>
 
 <p>For instance, here are the exported modules of the Oryol 3D engine:</p>
 
-<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="na">exports</span><span class="pi">:</span>
-    <span class="na">modules </span><span class="pi">:</span>
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="s">exports</span><span class="pi">:</span>
+    <span class="s">modules</span> <span class="pi">:</span>
         <span class="c1"># engine modules</span>
-        <span class="na">Core </span><span class="pi">:</span>          <span class="s">code/Modules/Core</span>
-        <span class="na">IO </span><span class="pi">:</span>            <span class="s">code/Modules/IO</span>
-        <span class="na">Messaging </span><span class="pi">:</span>     <span class="s">code/Modules/Messaging</span>
-        <span class="na">HTTP </span><span class="pi">:</span>          <span class="s">code/Modules/HTTP</span>
-        <span class="na">Gfx </span><span class="pi">:</span>           <span class="s">code/Modules/Gfx</span>
-        <span class="na">Resource </span><span class="pi">:</span>      <span class="s">code/Modules/Resource</span>
-        <span class="na">Assets </span><span class="pi">:</span>        <span class="s">code/Modules/Assets</span>
-        <span class="na">Time </span><span class="pi">:</span>          <span class="s">code/Modules/Time</span>
-        <span class="na">Dbg </span><span class="pi">:</span>           <span class="s">code/Modules/Dbg</span>
-        <span class="na">Input </span><span class="pi">:</span>         <span class="s">code/Modules/Input</span>
-        <span class="na">Synth </span><span class="pi">:</span>         <span class="s">code/Modules/Synth</span>
-        <span class="na">NanoVG </span><span class="pi">:</span>        <span class="s">code/Modules/NanoVG</span>
+        <span class="s">Core</span> <span class="pi">:</span>          <span class="s">code/Modules/Core</span>
+        <span class="s">IO</span> <span class="pi">:</span>            <span class="s">code/Modules/IO</span>
+        <span class="s">Messaging</span> <span class="pi">:</span>     <span class="s">code/Modules/Messaging</span>
+        <span class="s">HTTP</span> <span class="pi">:</span>          <span class="s">code/Modules/HTTP</span>
+        <span class="s">Gfx</span> <span class="pi">:</span>           <span class="s">code/Modules/Gfx</span>
+        <span class="s">Resource</span> <span class="pi">:</span>      <span class="s">code/Modules/Resource</span>
+        <span class="s">Assets</span> <span class="pi">:</span>        <span class="s">code/Modules/Assets</span>
+        <span class="s">Time</span> <span class="pi">:</span>          <span class="s">code/Modules/Time</span>
+        <span class="s">Dbg</span> <span class="pi">:</span>           <span class="s">code/Modules/Dbg</span>
+        <span class="s">Input</span> <span class="pi">:</span>         <span class="s">code/Modules/Input</span>
+        <span class="s">Synth</span> <span class="pi">:</span>         <span class="s">code/Modules/Synth</span>
+        <span class="s">NanoVG</span> <span class="pi">:</span>        <span class="s">code/Modules/NanoVG</span>
         
         <span class="c1"># ext libs</span>
-        <span class="na">ConvertUTF</span><span class="pi">:</span>         <span class="s">code/Ext/ConvertUTF</span>
-        <span class="na">android-native</span><span class="pi">:</span>     <span class="s">code/Ext/android_native</span>
-        <span class="na">flextgl</span><span class="pi">:</span>            <span class="s">code/Ext/flextgl</span></code></pre></figure>
+        <span class="s">ConvertUTF</span><span class="pi">:</span>         <span class="s">code/Ext/ConvertUTF</span>
+        <span class="s">android-native</span><span class="pi">:</span>     <span class="s">code/Ext/android_native</span>
+        <span class="s">flextgl</span><span class="pi">:</span>            <span class="s">code/Ext/flextgl</span></code></pre></figure>
 
 <p>The ‘value’ in the modules export dictionary is the directory where the
 CMakeLists.txt file of the module lives, relative to the project root directory.</p>
@@ -160,8 +160,8 @@ CMakeLists.txt file.</p>
 are then defined in  the toplevel CMakeLists.txt file of the importing project 
 and are visible to the entire project:</p>
 
-<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="na">exports</span><span class="pi">:</span>
-    <span class="na">header-dirs </span><span class="pi">:</span>
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="s">exports</span><span class="pi">:</span>
+    <span class="s">header-dirs</span> <span class="pi">:</span>
         <span class="pi">-</span> <span class="s">code</span>
         <span class="pi">-</span> <span class="s">code/Modules</span>
         <span class="pi">-</span> <span class="s">code/Ext</span></code></pre></figure>
@@ -208,9 +208,9 @@ export section of the fips.yml file. These defines are visible in the
 entire CMakeLists.txt hierarchy of the importing project. Here’s an 
 example from fips-glm to set the angle unit to radians:</p>
 
-<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="na">exports </span><span class="pi">:</span>
-    <span class="na">defines </span><span class="pi">:</span>
-        <span class="na">GLM_FORCE_RADIANS </span><span class="pi">:</span> <span class="s">1</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="s">exports</span> <span class="pi">:</span>
+    <span class="s">defines</span> <span class="pi">:</span>
+        <span class="s">GLM_FORCE_RADIANS</span> <span class="pi">:</span> <span class="s">1</span></code></pre></figure>
 
 <p>For finer control (e.g. define different defines for different platforms)
 it is better to directly use cmake add_defines() statements in the

@@ -155,7 +155,7 @@ automatically generate one <em>.cc</em> source and one <em>.h</em> header file w
 name as the <em>FROM</em> file.</p>
 
 <p>To generate output files with different file extensions (or filenames), provide
-them explicitely with the <em>SOURCE</em> and <em>HEADER</em> args, e.g.:</p>
+them explicitly with the <em>SOURCE</em> and <em>HEADER</em> args, e.g.:</p>
 
 <figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nf">fips_generate</span><span class="p">(</span>FROM IOProtocol.yml
               TYPE MessageProtocol
@@ -203,8 +203,8 @@ for generator scripts.</p>
 
 <p>Let’s check what generators Oryol has to offer:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">&gt;</span> <span class="nb">cd </span>oryol/fips-files/generators
-<span class="o">&gt;</span> <span class="nb">ls</span> <span class="k">*</span>.py
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span><span class="nb">cd </span>oryol/fips-files/generators
+<span class="gp">&gt; </span>ls <span class="k">*</span>.py
 MessageProtocol.py Shader.py          SoundSheet.py      SpriteSheet.py</code></pre></figure>
 
 <p>A generator script must contain a Python function called ‘generate()’,
@@ -281,7 +281,7 @@ number doesn’t match.</p>
 
 <p>Let’s have a look at a very simple generator script:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1
 2
 3
 4
@@ -306,12 +306,11 @@ number doesn’t match.</p>
 23
 24
 25
-26
-</pre></td><td class="code"><pre><span class="s">"""fips imported code generator for testing"""</span>
+26</pre></td><td class="code"><pre><span class="s">"""fips imported code generator for testing"""</span>
 
 <span class="n">Version</span> <span class="o">=</span> <span class="mi">2</span> 
 
-<span class="kn">import</span> <span class="nn">genutil</span> <span class="k">as</span> <span class="n">util</span>
+<span class="kn">import</span> <span class="nn">genutil</span> <span class="kn">as</span> <span class="nn">util</span>
 
 <span class="c">#-------------------------------------------------------------------------------</span>
 <span class="k">def</span> <span class="nf">generateHeader</span><span class="p">(</span><span class="n">hdrPath</span><span class="p">)</span> <span class="p">:</span>
@@ -332,7 +331,8 @@ number doesn’t match.</p>
 <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span> <span class="p">:</span>
     <span class="k">if</span> <span class="n">util</span><span class="o">.</span><span class="n">isDirty</span><span class="p">(</span><span class="n">Version</span><span class="p">,</span> <span class="p">[</span><span class="nb">input</span><span class="p">],</span> <span class="p">[</span><span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">])</span> <span class="p">:</span>
         <span class="n">generateHeader</span><span class="p">(</span><span class="n">out_hdr</span><span class="p">)</span>
-        <span class="n">generateSource</span><span class="p">(</span><span class="n">out_src</span><span class="p">)</span></pre></td></tr></tbody></table></code></pre></figure>
+        <span class="n">generateSource</span><span class="p">(</span><span class="n">out_src</span><span class="p">)</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></figure>
 
 <p>Note the <strong>Version = 2</strong> statement in line 3, this is the ‘generator version’,
 bumping this number will mark all generated source files as dirty and cause
@@ -373,7 +373,7 @@ it generates the target files without any parameterization. This very special
 case only works with a Python script in the source tree which serves as 
 ‘input file’ and calls the above generator ‘hello_generator’:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">hello_generator</span> <span class="k">as</span> <span class="n">gen</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">hello_generator</span> <span class="kn">as</span> <span class="nn">gen</span>
 
 <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span> <span class="p">:</span>
     <span class="n">gen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">out_src</span><span class="p">,</span> <span class="n">out_hdr</span><span class="p">)</span></code></pre></figure>
@@ -424,7 +424,7 @@ with code generation</li>
 <ul>
   <li>ALL_GENERATE custom build target will run before any regular build target 
 which depends on generated code</li>
-  <li>the ALL_GENERATE target runs the the python file ‘.fips-gen.py’ from the 
+  <li>the ALL_GENERATE target runs the python file ‘.fips-gen.py’ from the
 project root directory with the fips_codegen.yml file as argument</li>
   <li>‘.fips-gen.py’ loads the fips_codegen.yml file, and imports and runs 
 code generator python scripts, which will generate the C/C++ source code files
