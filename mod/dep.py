@@ -46,6 +46,8 @@ def get_imports(fips_dir, proj_dir) :
                         imports[dep]['cond'] = None
                     if not 'git' in imports[dep] :
                         log.error("no git URL in import '{}' in '{}/fips.yml'!\n".format(dep, proj_dir))
+                    if not 'group' in imports[dep] :
+                        imports[dep]['group'] = None
             else :
                 log.error("imports in '{}/fips.yml' must be a dictionary!".format(proj_dir))
     return imports
@@ -261,6 +263,7 @@ def gather_imports(fips_dir, proj_dir) :
                 imported[imp_proj_name]['libdirs'] = []
                 imported[imp_proj_name]['defines'] = {}
                 imported[imp_proj_name]['cond'] = imports[imp_proj_name]['cond']
+                imported[imp_proj_name]['group'] = imports[imp_proj_name]['group']
 
                 # add header search paths
                 for imp_hdr in deps[imp_proj_name]['exports']['header-dirs'] :
@@ -391,7 +394,12 @@ def write_imports(fips_dir, proj_dir, cfg_name, imported) :
 
                     # if auto-import is enabled, also actually import all modules
                     f.write('if (FIPS_AUTO_IMPORT)\n')
-                    f.write('    fips_ide_group("Imports")\n')
+                    group = "Imports"
+                    if imported[imp_proj_name]['group'] :
+                        group += "/" + imported[imp_proj_name]['group']                        
+                    if len(imported[imp_proj_name]['modules']) > 3 :
+                        group += "/" + imp_proj_name
+                    f.write('    fips_ide_group("{}")\n'.format(group))
                     for import_func in import_functions :
                         f.write('    {}()\n'.format(import_func))
                     f.write('    fips_ide_group("")\n')
