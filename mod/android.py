@@ -9,6 +9,7 @@ else:
     from urllib import urlretrieve
 import zipfile
 import subprocess
+import hashlib
 
 from mod import log, util 
 from mod.tools import javac
@@ -27,7 +28,7 @@ tools_archives = {
 
 #-------------------------------------------------------------------------------
 def get_sdk_dir(fips_dir) :
-    return util.get_workspace_dir(fips_dir) + '/fips-sdks/android/'
+    return util.get_workspace_dir(fips_dir) + '/fips-sdks/android'
 
 #-------------------------------------------------------------------------------
 def check_exists(fips_dir) :
@@ -36,7 +37,7 @@ def check_exists(fips_dir) :
 
 #-------------------------------------------------------------------------------
 def get_adb_path(fips_dir):
-    return get_sdk_dir(fips_dir) + 'platform-tools/adb'
+    return get_sdk_dir(fips_dir) + '/platform-tools/adb'
 
 #-------------------------------------------------------------------------------
 def get_tools_url() :
@@ -49,7 +50,7 @@ def get_tools_archive_path(fips_dir):
 #-------------------------------------------------------------------------------
 def install_package(fips_dir, pkg):
     log.colored(log.BLUE, '>>> install Android SDK package: {}'.format(pkg))
-    sdkmgr_dir = get_sdk_dir(fips_dir) + 'tools/bin/'
+    sdkmgr_dir = get_sdk_dir(fips_dir) + '/tools/bin/'
     sdkmgr_path = sdkmgr_dir + 'sdkmanager'
     cmd = '{} --verbose {}'.format(sdkmgr_path, pkg)
     subprocess.call(cmd, cwd=sdkmgr_dir, shell=True)
@@ -68,6 +69,18 @@ def uncompress(fips_dir, path) :
     else:
         with zipfile.ZipFile(path, 'r') as archive:
             archive.extractall(get_sdk_dir(fips_dir))
+
+#-------------------------------------------------------------------------------
+def compute_sha256(path, chunk_size=65536) :
+    if not os.path.isfile(path) :
+        return None
+    result = hashlib.sha256()
+    with open(path, 'rb') as file :
+        chunk = file.read(chunk_size)
+        while chunk :
+            result.update(chunk)
+            chunk = file.read(chunk_size)
+    return result.hexdigest()
 
 #-------------------------------------------------------------------------------
 def setup(fips_dir, proj_dir) :
@@ -93,5 +106,11 @@ def setup(fips_dir, proj_dir) :
     install_package(fips_dir, '"build-tools;27.0.3"')
     install_package(fips_dir, 'platform-tools')
     install_package(fips_dir, 'ndk-bundle')
+
+    # check for potentially breaking changes in build setup
+    fips_cmake = fips_dir + '/cmake-toolchains/android.toolchain.orig'
+    ndk_cmake = get_sdk_dir(fips_dir) + '/ndk-bundle/build/cmake/android.toolchain.cmake'
+    if compute_sha256(ndk_cmake) != compute_sha256(fips_cmake) :
+        log.warn('android.toolchain.cmake in fips might be outdated...')
 
     log.colored(log.GREEN, "done.")
