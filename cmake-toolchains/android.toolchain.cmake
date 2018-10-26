@@ -77,7 +77,7 @@ else()
   # https://github.com/android-ndk/ndk/issues/473
   get_filename_component(ANDROID_NDK "${ANDROID_NDK}" ABSOLUTE)
   if(NOT "${ANDROID_NDK}" STREQUAL "${ANDROID_NDK_EXPECTED_PATH}")
-    message(WARNING "Using custom NDK path (ANDROID_NDK is set): ${ANDROID_NDK}")
+    # message(WARNING "Using custom NDK path (ANDROID_NDK is set): ${ANDROID_NDK}")
   endif()
 endif()
 unset(ANDROID_NDK_EXPECTED_PATH)
