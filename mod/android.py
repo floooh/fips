@@ -71,16 +71,22 @@ def uncompress(fips_dir, path) :
             archive.extractall(get_sdk_dir(fips_dir))
 
 #-------------------------------------------------------------------------------
-def compute_sha256(path, chunk_size=65536) :
+def compute_sha256(path, converter=lambda x: x, chunk_size=65536) :
     if not os.path.isfile(path) :
         return None
     result = hashlib.sha256()
     with open(path, 'rb') as file :
         chunk = file.read(chunk_size)
         while chunk :
-            result.update(chunk)
+            result.update(converter(chunk))
             chunk = file.read(chunk_size)
     return result.hexdigest()
+
+#-------------------------------------------------------------------------------
+def strip_whitespace(bin_str) :
+    for ws in [b' ', b'\t', b'\n', b'\r', b'\x0b', b'\x0c']:
+        bin_str = bin_str.replace(ws, b'')
+    return bin_str
 
 #-------------------------------------------------------------------------------
 def setup(fips_dir, proj_dir) :
@@ -110,7 +116,7 @@ def setup(fips_dir, proj_dir) :
     # check for potentially breaking changes in build setup
     fips_cmake = fips_dir + '/cmake-toolchains/android.toolchain.orig'
     ndk_cmake = get_sdk_dir(fips_dir) + '/ndk-bundle/build/cmake/android.toolchain.cmake'
-    if compute_sha256(ndk_cmake) != compute_sha256(fips_cmake) :
+    if compute_sha256(ndk_cmake, strip_whitespace) != compute_sha256(fips_cmake, strip_whitespace) :
         log.warn('android.toolchain.cmake in fips might be outdated...')
 
     log.colored(log.GREEN, "done.")
