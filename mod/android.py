@@ -11,8 +11,8 @@ import zipfile
 import subprocess
 import hashlib
 
-from mod import log, util 
-from mod.tools import javac
+from mod import log, util
+from mod.tools import java, javac
 
 tools_urls = {
     'win':      'https://dl.google.com/android/repository/sdk-tools-windows-3859397.zip',
@@ -89,8 +89,8 @@ def setup(fips_dir, proj_dir) :
 
     # first make sure that java is present, otherwise the Android
     # SDK setup will finish without errors, but is not actually usable
-    if not javac.check_exists(fips_dir) :
-        log.error("please install Java JDK (see './fips diag tools')")
+    if not java.check_exists(fips_dir) or not javac.check_exists(fips_dir) :
+        log.error("please install Java JDK 8 (see './fips diag tools')")
     ensure_sdk_dirs(fips_dir)
 
     # download the command line tools archive
