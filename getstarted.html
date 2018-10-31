@@ -199,6 +199,25 @@ python2:	found
 build configurations</p>
 </blockquote>
 
+<h3 id="setup-new-project">Setup new project</h3>
+
+<p>A new fips project can be setup by running ‘./fips init path/to/project’. This will copy a few commonly used fips config files into the target project directory. From the fips directory run ‘./fips init project-1’ and the following will be setup for you:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">┗━━ fips-workspace/
+    ┗━━ fips/
+    ┃   ┗━━ ...
+    ┗━━ project-1/
+        ┣━━ fips.yml 
+        ┣━━ fips 
+        ┣━━ fips.cmd 
+        ┣━━ CMakeLists.txt 
+        ┗━━ .gitignore</code></pre></figure>
+
+<blockquote>
+  <p>NOTE fips will look for the folder in the root of the fipsified project (in this case the fips-workspace created above) and not in the fips folder itself.</p>
+</blockquote>
+
+<p>From now on you can run all fips commands directly in the new project’s directory.</p>
 
   </article>
 
