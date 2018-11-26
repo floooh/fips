@@ -18,7 +18,7 @@ def check_exists(fips_dir) :
         out = subprocess.check_output(['make', '--version'])
         return True
     except (OSError, subprocess.CalledProcessError):
-        return False;
+        return False
 
 #-------------------------------------------------------------------------------
 def run_build(fips_dir, target, build_dir, num_jobs=1) :
