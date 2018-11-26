@@ -216,57 +216,65 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg):
     deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg['name'])
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
 
+    pre_launch_build_options = [('', True), (' [Skip Build]', False)]
+    stop_at_entry_options = [('', False), (' [Stop At Entry]', True)]
+
     launch = {
         'version': '0.2.0',
         'configurations': []
     }
     for tgt in exe_targets:
-        path = deploy_dir + '/' + tgt
-        if util.get_host_platform() == 'win':
-            path += '.exe'
-        cwd = os.path.dirname(path)
-        osx_path = path + '.app/Contents/MacOS/' + tgt
-        osx_cwd = os.path.dirname(osx_path)
-        if os.path.isdir(osx_cwd):
-            path = osx_path
-            cwd = osx_cwd
-        if util.get_host_platform() == 'win':
-            c = {
-                'name': tgt,
-                'type': 'cppvsdbg',
-                'request': 'launch',
-                'program': path,
-                'args': [],
-                'stopAtEntry': True,
-                'cwd': cwd,
-                'environment': [],
-                'externalConsole': False
-            }
-        elif util.get_host_platform() == 'linux':
-            c = {
-                'name': tgt,
-                'type': 'cppdbg',
-                'request': 'launch',
-                'program': path,
-                'args': [],
-                'stopAtEntry': True,
-                'cwd': cwd,
-                'externalConsole': False,
-                'MIMode': 'gdb'
-            }
-        else:
-            c = {
-                'name': tgt,
-                'type': 'cppdbg',
-                'request': 'launch',
-                'program': path,
-                'args': [],
-                'stopAtEntry': True,
-                'cwd': cwd,
-                'externalConsole': False,
-                'MIMode': 'lldb'
-            }
-        launch['configurations'].append(c)
+        for pre_launch_build in pre_launch_build_options:
+            for stop_at_entry in stop_at_entry_options:
+                path = deploy_dir + '/' + tgt
+                if util.get_host_platform() == 'win':
+                    path += '.exe'
+                cwd = os.path.dirname(path)
+                osx_path = path + '.app/Contents/MacOS/' + tgt
+                osx_cwd = os.path.dirname(osx_path)
+                if os.path.isdir(osx_cwd):
+                    path = osx_path
+                    cwd = osx_cwd
+                if util.get_host_platform() == 'win':
+                    c = {
+                        'name': tgt + pre_launch_build[0] + stop_at_entry[0],
+                        'type': 'cppvsdbg',
+                        'request': 'launch',
+                        'program': path,
+                        'args': [],
+                        'stopAtEntry': stop_at_entry[1],
+                        'cwd': cwd,
+                        'environment': [],
+                        'externalConsole': False,
+                        'preLaunchTask': tgt if pre_launch_build[1] else ''
+                    }
+                elif util.get_host_platform() == 'linux':
+                    c = {
+                        'name': tgt + pre_launch_build[0] + stop_at_entry[0],
+                        'type': 'cppdbg',
+                        'request': 'launch',
+                        'program': path,
+                        'args': [],
+                        'stopAtEntry': stop_at_entry[1],
+                        'cwd': cwd,
+                        'externalConsole': False,
+                        'MIMode': 'gdb',
+                        'preLaunchTask': tgt if pre_launch_build[1] else ''
+                    }
+                else:
+                    c = {
+                        'name': tgt + pre_launch_build[0] + stop_at_entry[0],
+                        'type': 'cppdbg',
+                        'request': 'launch',
+                        'program': path,
+                        'args': [],
+                        'stopAtEntry': stop_at_entry[1],
+                        'cwd': cwd,
+                        'externalConsole': False,
+                        'MIMode': 'lldb',
+                        'preLaunchTask': tgt if pre_launch_build[1] else ''
+                    }
+                launch['configurations'].append(c)
 
     # add a python code-generator debug config
     c = {
