@@ -183,7 +183,8 @@ def write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg):
         'version': '2.0.0',
         'type': 'shell',
         'presentation': {
-            'reveal': 'always'
+            'reveal': 'always',
+            'clear':True
         },
         'tasks': []
     }
