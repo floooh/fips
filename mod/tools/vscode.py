@@ -1,5 +1,5 @@
 '''VSCode helper functions'''
-import subprocess, os, yaml, json, inspect, tempfile, glob, shutil
+import platform,subprocess, os, yaml, json, inspect, tempfile, glob, shutil
 from mod import util,log,verb,dep
 from mod.tools import cmake
 
@@ -14,7 +14,10 @@ def check_exists(fips_dir) :
     :returns:   True if code is in the path
     """
     try:
-        subprocess.check_output(['code', '-version'])
+        if platform.system() == 'Windows':
+            subprocess.check_output('code -version', shell=True);
+        else:
+            subprocess.check_output(['code', '-version'])
         return True
     except (OSError, subprocess.CalledProcessError):
         return False
