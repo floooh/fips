@@ -2,6 +2,7 @@
 import subprocess, os, shutil
 from mod import util, log, verb, dep
 from mod.tools import cmake
+from distutils.spawn import find_executable
 
 name = 'clion'
 platforms = ['osx','linux','win']
@@ -18,7 +19,7 @@ def check_exists(fips_dir) :
         # See if CLion was installed from a tar.gz and manually added to the path ("clion.sh"),
         # or added to the path using the "create launcher" command in CLion, which would by default
         # create a symlink from clion.sh to /usr/local/bin/clion.
-        if shutil.which("clion.sh") is not None or shutil.which("clion") is not None:
+        if find_executable("clion.sh") is not None or find_executable("clion") is not None:
             return True
         else:
             try:
@@ -41,7 +42,7 @@ def run(proj_dir):
     host = util.get_host_platform()
     if host == 'linux':
         try:
-            if shutil.which("clion.sh") is not None:
+            if find_executable("clion.sh") is not None:
                 subprocess.Popen('clion.sh {}'.format(proj_dir), cwd=proj_dir, shell=True)
             else:
                 subprocess.Popen('clion {}'.format(proj_dir), cwd=proj_dir, shell=True)
