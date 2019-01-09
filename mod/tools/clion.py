@@ -19,15 +19,9 @@ def check_exists(fips_dir) :
         # See if CLion was installed from a tar.gz and manually added to the path ("clion.sh"),
         # or added to the path using the "create launcher" command in CLion, which would by default
         # create a symlink from clion.sh to /usr/local/bin/clion.
+        # This will also pick up CLion if it was installed using snap.
         if find_executable("clion.sh") is not None or find_executable("clion") is not None:
             return True
-        else:
-            try:
-                # See if CLion was installed using snap
-                subprocess.check_output("snap list | grep 'clion'", shell=True)
-                return True
-            except (OSError, subprocess.CalledProcessError):
-                return False
     elif host == 'osx':
         try:
             subprocess.check_output("mdfind -name CLion.app | grep 'CLion'", shell=True)
