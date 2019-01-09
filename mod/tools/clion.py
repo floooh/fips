@@ -22,6 +22,8 @@ def check_exists(fips_dir) :
         # This will also pick up CLion if it was installed using snap.
         if find_executable("clion.sh") is not None or find_executable("clion") is not None:
             return True
+        else
+            return False
     elif host == 'osx':
         try:
             subprocess.check_output("mdfind -name CLion.app | grep 'CLion'", shell=True)
