@@ -18,6 +18,7 @@ install:
 script:
     - echo $TRAVIS_OS_NAME
     - git --version
+    - python --version
     # test fips command itself
     - python fips
     # clone hello world project

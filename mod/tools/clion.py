@@ -2,6 +2,7 @@
 import subprocess, os, shutil
 from mod import util, log, verb, dep
 from mod.tools import cmake
+from distutils.spawn import find_executable
 
 name = 'clion'
 platforms = ['osx','linux','win']
@@ -15,10 +16,13 @@ def check_exists(fips_dir) :
     """
     host = util.get_host_platform()
     if host == 'linux':
-        try:
-            subprocess.check_output("snap list | grep 'clion'", shell=True)
+        # See if CLion was installed from a tar.gz and manually added to the path ("clion.sh"),
+        # or added to the path using the "create launcher" command in CLion, which would by default
+        # create a symlink from clion.sh to /usr/local/bin/clion.
+        # This will also pick up CLion if it was installed using snap.
+        if find_executable("clion.sh") is not None or find_executable("clion") is not None:
             return True
-        except (OSError, subprocess.CalledProcessError):
+        else:
             return False
     elif host == 'osx':
         try:
@@ -34,9 +38,12 @@ def run(proj_dir):
     host = util.get_host_platform()
     if host == 'linux':
         try:
-            subprocess.Popen('clion {}'.format(proj_dir), cwd=proj_dir, shell=True)
+            if find_executable("clion.sh") is not None:
+                subprocess.Popen('clion.sh {}'.format(proj_dir), cwd=proj_dir, shell=True)
+            else:
+                subprocess.Popen('clion {}'.format(proj_dir), cwd=proj_dir, shell=True)
         except OSError:
-            log.error("Failed to run JetBrains CLion as 'clion'")
+            log.error("Failed to run JetBrains CLion as 'clion' or 'clion.sh'")
     elif host == 'osx':
         try:
             subprocess.Popen('open /Applications/CLion.app --args {}'.format(proj_dir), cwd=proj_dir, shell=True)
