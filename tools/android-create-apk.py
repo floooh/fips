@@ -101,10 +101,13 @@ res_dir = apk_dir + 'res/'
 if not os.path.exists(res_dir):
     shutil.copytree(fips_dir + '/templates/android_assets/res', res_dir)
 
+# the manifest package name cannot contain some special characters
+manifest_package_name = args.package.replace('-', '_')
+
 # generate AndroidManifest.xml
 with open(apk_dir + 'AndroidManifest.xml', 'w') as f:
     f.write('<manifest xmlns:android="http://schemas.android.com/apk/res/android"\n')
-    f.write('  package="{}"\n'.format(args.package))
+    f.write('  package="{}"\n'.format(manifest_package_name))
     f.write('  android:versionCode="1"\n')
     f.write('  android:versionName="1.0">\n')
     f.write('  <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="{}"/>\n'.format(args.version))
