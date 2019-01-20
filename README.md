@@ -15,8 +15,10 @@ http://floooh.github.io/fips/getstarted.html
 
 ### Public Service Announcements
 
-- **20-Jan-2019**: NaCl and UWP support have been removed (both haven't been
-maintained for a very long time)
+- **20-Jan-2019**: 
+    - NaCl and UWP support have been removed (both haven't been maintained for a very long time)
+    - remove the builtin unittest support, this was hardwired to UnitTest++ and should
+      better be done in project-specific scripts (see Oryol for an example)
 
 - **03-Jul-2018**: on iOS and MacOS, you can now simply add a *.plist file
 to the file list of a target, and this will override the default plist file

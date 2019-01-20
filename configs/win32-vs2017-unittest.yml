@@ -1,8 +1,0 @@
----
-platform: win32 
-generator: Visual Studio 15
-build_tool: cmake
-build_type: Debug
-defines:
-    FIPS_UNITTESTS: ON
-
