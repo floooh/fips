@@ -74,7 +74,7 @@ if not os.path.exists(args.deploy):
     os.makedirs(args.deploy)
 
 # create the empty project
-apk_dir = args.path + 'android/'
+apk_dir = args.path + 'android/' + args.name + '/'
 if not os.path.exists(apk_dir):
     os.makedirs(apk_dir)
 libs_dir = apk_dir + 'lib/' + args.abi + '/'
