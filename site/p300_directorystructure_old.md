@@ -36,9 +36,6 @@ fly during _'fips build'_ or _'fips make'_):
     ┃       ┣━━ Makefile
     ┃       ┗━━ ...
     ┗━━ project-2/
-        ┣━━ pnacl-ninja-debug/
-        ┃   ┣━━ build.ninja
-        ┃   ┗━━ ...
         ┗━━ emsc-make-release/
             ┣━━ Makefile
             ┗━━ ...
@@ -63,9 +60,6 @@ commands:
     ┃       ┣━━ app-2.html
     ┃       ┗━━ ...
     ┗━━ project-2/
-        ┣━━ pnacl-ninja-debug/
-        ┃   ┣━━ app-1.html
-        ┃   ┗━━ ...
         ┗━━ emsc-make-release/
             ┣━━ app-1.html
             ┗━━ ...
@@ -84,7 +78,6 @@ The fips-sdks directory contains the platform SDK files installed with:
 {% highlight bash %}
 > fips setup emscripten
 > fips setup android
-> fips setup nacl
 {% endhighlight %}
 
 The fips-sdks directory structure currently looks like this (details
@@ -94,7 +87,6 @@ may change in the future):
 ┗━━ fips-sdks/
     ┗━━ osx/
         ┣━━ emsdk-portable/
-        ┣━━ nacl_sdk/ 
         ┣━━ android-ndk-r9d/ 
         ┣━━ android-sdk-macosx/ 
         ┗━━ ...

@@ -1,6 +1,0 @@
----
-platform: pnacl 
-generator: Unix Makefiles
-build_tool: make
-build_type: Debug
-cmake-toolchain: pnacl.toolchain.cmake

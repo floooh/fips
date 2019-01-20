@@ -11,7 +11,6 @@ Fips provides easy cross-compiling support to the following platforms:
 - **iOS**
 - [**Android**](https://developer.android.com/tools/sdk/ndk/index.html)
 - [**emscripten**](http://kripken.github.io/emscripten-site/index.html)
-- [**PNaCl**](https://developer.chrome.com/native-client)
 
 Cross-compilation to iOS is only supported on the OSX host platform. All
 other target platforms are supported on all 3 host platforms (OSX, Linux, Windows).
@@ -19,12 +18,10 @@ other target platforms are supported on all 3 host platforms (OSX, Linux, Window
 
 ### Setting up the platform SDKs
 
-Fips provides simple commands to setup the SDKs for Android, emscripten and
-PNaCl:
+Fips provides simple commands to setup the SDKs for Android and emscripten:
 
 {% highlight bash %}
 > ./fips setup emscripten
-> ./fips setup nacl
 > ./fips setup android
 {% endhighlight %}
 
@@ -43,8 +40,8 @@ tools are in the path:
 
 ### Testing cross-compilation
 
-Cross-compilation requires a portable code base, in the case of Android and
-PNaCl this is a bit non-trivial (e.g. the canonical C 'Hello World' doesn't
+Cross-compilation requires a portable code base, in the case of Android this 
+is a bit non-trivial (e.g. the canonical C 'Hello World' doesn't
 work). Let's use the Oryol 3D engine for testing:
 
 {% highlight bash %}
@@ -64,15 +61,6 @@ First let's try whether **emscripten** compilation works:
 The last command should open the default web browser and a local http server.
 It may be necessary to refresh the page in case the http server needs too long
 to start.
-
-Cross-compiling to **PNaCl** is just as easy, just use a different config:
-
-{% highlight bash %}
-> ./fips set config pnacl-make-release
-> ./fips build
-...
-> ./fips run Triangle
-{% endhighlight %}
 
 Same for **Android**, note that Android provides 3 types of config, one for each
 CPU type.
@@ -114,7 +102,6 @@ Cross-compiling currently has a few caveats:
 
 * it is currently not possible to use existing SDKs in other filesystem locations
 * the _emscripten_ SDK always uses the _incoming_ branch, not the _master_ branch
-* the NaCl SDK currently always uses the pepper_canary API version
 * for Android, 'universal binaries' containing ARM, X86 and MIPS binaries are 
   currently not supported
 
@@ -123,7 +110,6 @@ Cross-compiling build settings are defined in cmake toolchain files in:
 * fips/cmake-toolchains/android.toolchain.cmake
 * fips/cmake-toolchains/emscripten.toolchain.cmake
 * fips/cmake-toolchains/ios.toolchain.cmake
-* fips/cmake-toolchains/pnacl.toolchain.cmake
 
 Fips projects can override these standard toolchain files, or define
 completely new toolchain files, by creating
@@ -146,9 +132,6 @@ For some target platforms, cmake generates additional files during the cmake run
 
 On **Android**, a Java wrapper application directory and AndroidManifest.xml 
 file is created (see fips/cmake/fips_android.cmake).
-
-On **PNaCl**, a manifest (.nmf) and a HTML file is generated, and the PNaCl 
-finalizer tool is run as post-build-step (see fips/cmake/fips_pnacl.cmake).
 
 On **iOS**, a .plist file is generated (see fips/cmake/fips_osx.cmake).
 

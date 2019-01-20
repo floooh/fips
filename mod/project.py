@@ -302,12 +302,9 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
             if not target_cwd :
                 target_cwd = deploy_dir
 
-            if cfg['platform'] in ['emscripten', 'pnacl'] : 
+            if cfg['platform'] == 'emscripten': 
                 # special case: emscripten app
-                if cfg['platform'] == 'emscripten' :
-                    html_name = target_name + '.html'
-                else :
-                    html_name = target_name + '_pnacl.html'
+                html_name = target_name + '.html'
                 if util.get_host_platform() == 'osx' :
                     try :
                         subprocess.call(

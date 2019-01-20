@@ -340,7 +340,6 @@ Fips defines a number of useful cmake variables:
 * **FIPS\_WIN32**: target platform is 32-bit Windows
 * **FIPS\_WIN64**: target platform is 64-bit Windows
 * **FIPS\_EMSCRIPTEN**: target platform is emscripten
-* **FIPS\_PNACL**: target platform is PNaCl
 * **FIPS\_ANDROID**: target platform is Android
 * **FIPS\_HOST\_WINDOWS**: host platform is Windows
 * **FIPS\_HOST\_OSX**: host platform is OSX
@@ -481,10 +480,6 @@ fips_begin_module(Input)
     if (FIPS_IOS)
         fips_dir(ios)
         fips_files(iosInputMgr.cc iosInputMgr.h)
-    endif()
-    if (FIPS_PNACL)
-        fips_dir(pnacl)
-        fips_files(pnaclInputMgr.cc pnaclInputMgr.h)
     endif()
     if (FIPS_MACOS OR FIPS_WINDOWS OR FIPS_LINUX)
         fips_dir(glfw)

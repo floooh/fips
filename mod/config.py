@@ -6,7 +6,7 @@ import yaml
 from collections import OrderedDict
 from mod import log, util, dep
 from mod.tools import cmake, make, ninja, xcodebuild, vscode, clion
-from mod import emscripten, nacl, android
+from mod import emscripten, android
 
 # non-cross-compiling platforms
 native_platforms = [
@@ -227,8 +227,6 @@ def check_sdk(fips_dir, platform_name) :
     """check whether an external crossplatform-SDK is installed"""
     if platform_name == 'emscripten' :
         return emscripten.check_exists(fips_dir)
-    elif platform_name == 'pnacl' :
-        return nacl.check_exists(fips_dir)
     elif platform_name == 'android' :
         return android.check_exists(fips_dir)
     else :

@@ -29,7 +29,7 @@ from scratch, but instead wires existing build tools together:
 #### Multi-Platform Support
 
 Fips can build on **Windows, OSX, Linux**, and cross-compile to **iOS,
-emscripten, PNaCl** and **Android**. Fips also takes care of installing 
+emscripten** and **Android**. Fips also takes care of installing 
 the cross-platform SDKs and provides a unified cmake build environment 
 for all target platforms. Instead of wrestling with the many different build
 systems used by those cross-platform SDKs you only maintain a single set 

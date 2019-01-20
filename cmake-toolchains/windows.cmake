@@ -18,24 +18,12 @@ else()
     set(FIPS_WINDOWS_PLATFORM_NAME "x86")
 endif()
 
-if (${CMAKE_SYSTEM_NAME} STREQUAL "WindowsStore")
-    message("Building for UWP")
-    set(FIPS_UWP 1)
-else()
-    set(FIPS_UWP 0)
-endif()
-
 # define configuration types
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
 # define the standard link libraries
-if (FIPS_UWP)
-    set(CMAKE_CXX_STANDARD_LIBRARIES "WindowsApp.lib")
-    set(CMAKE_C_STANDARD_LIBRARIES "WindowsApp.lib")
-else()
-    set(CMAKE_CXX_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib dbghelp.lib wsock32.lib ws2_32.lib rpcrt4.lib wininet.lib")
-    set(CMAKE_C_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib dbghelp.lib wsock32.lib ws2_32.lib rpcrt4.lib wininet.lib")
-endif()
+set(CMAKE_CXX_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib dbghelp.lib wsock32.lib ws2_32.lib rpcrt4.lib wininet.lib")
+set(CMAKE_C_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib dbghelp.lib wsock32.lib ws2_32.lib rpcrt4.lib wininet.lib")
 
 # define compiler and linker flags
 
@@ -76,40 +64,20 @@ endif()
 set(CMAKE_CXX_FLAGS "${FIPS_VS_EXCEPTION_FLAGS} /MP /WX /TP /DWIN32")
 set(CMAKE_CXX_FLAGS_DEBUG "/Zi /Od /Oy- /D_DEBUG /DFIPS_DEBUG=1")
 set(CMAKE_CXX_FLAGS_RELEASE "/Ox /DNDEBUG")
-if (FIPS_UWP)
-    # must link runtime as DLLs
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd /ZW")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD /ZW")
-else()
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
-endif()
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
 
 set(CMAKE_C_FLAGS "/MP /WX /TC /errorReport:queue /DWIN32")
 set(CMAKE_C_FLAGS_DEBUG "/Zi /Od /Oy- /D_DEBUG /DFIPS_DEBUG=1")
 set(CMAKE_C_FLAGS_RELEASE "/Ox /DNDEBUG ")
-if (FIPS_UWP)
-    # must link runtime as DLLs
-    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MDd /ZW")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MD /ZW")
-else() 
-    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
-endif()
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
 
 # define exe linker flags
-if (FIPS_UWP)
-    set(CMAKE_EXE_LINKER_FLAGS "/MANIFEST:NO /DEBUG:FASTLINK /WINMD")
-else()
-    set(CMAKE_EXE_LINKER_FLAGS "/STACK:5000000 /machine:${FIPS_WINDOWS_PLATFORM_NAME}")
-endif()
+set(CMAKE_EXE_LINKER_FLAGS "/STACK:5000000 /machine:${FIPS_WINDOWS_PLATFORM_NAME}")
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/DEBUG")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "")
 
-if (FIPS_UWP)
-    # 4264: UWP-specific static linking warnings
-    set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} /ignore:4264")
-endif()
 # 4221: warning on empty object files
 set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} /ignore:4221")
 

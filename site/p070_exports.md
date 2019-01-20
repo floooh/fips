@@ -91,7 +91,6 @@ after the target platform the libs are compiled for:
     ┗━━ win32/
     ┗━━ win64/
     ┗━━ linux/
-    ┗━━ pnacl/
     ┗━━ emscripten/
     ┗━━ ios/
     ┗━━ android/
