@@ -102,7 +102,7 @@ if not os.path.exists(res_dir):
     shutil.copytree(fips_dir + '/templates/android_assets/res', res_dir)
 
 # the manifest package name cannot contain some special characters
-manifest_package_name = args.package.replace('-', '_')
+manifest_package_name = args.package.replace('-','_')
 
 # generate AndroidManifest.xml
 with open(apk_dir + 'AndroidManifest.xml', 'w') as f:

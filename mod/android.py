@@ -48,6 +48,15 @@ def get_tools_archive_path(fips_dir):
     return get_sdk_dir(fips_dir) + '/' + tools_archives[util.get_host_platform()]
 
 #-------------------------------------------------------------------------------
+#   convert a cmake target into a valid Android package name,
+#   some characters are invalid for package names and must be replaced
+#   NOTE: the same rules must be applied in the android-create-apk.py
+#   helper script which is run as a build job!
+#
+def target_to_package_name(target):
+    return 'org.fips.'+target.replace('-','_')
+
+#-------------------------------------------------------------------------------
 def install_package(fips_dir, pkg):
     log.colored(log.BLUE, '>>> install Android SDK package: {}'.format(pkg))
     sdkmgr_dir = get_sdk_dir(fips_dir) + '/tools/bin/'

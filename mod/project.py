@@ -330,11 +330,12 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
             elif cfg['platform'] == 'android' :
                 try :
                     adb_path = android.get_adb_path(fips_dir)
+                    pkg_name = android.target_to_package_name(target_name)
                     # Android: first install the apk...
                     cmd = '{} install -r {}/{}.apk'.format(adb_path, deploy_dir, target_name)
                     subprocess.call(cmd, shell=True)
                     # ...then start the apk
-                    cmd = '{} shell am start -n org.fips.{}/android.app.NativeActivity'.format(adb_path, target_name)
+                    cmd = '{} shell am start -n {}/android.app.NativeActivity'.format(adb_path, pkg_name)
                     subprocess.call(cmd, shell=True)
                     # ...then run adb logcat
                     cmd = '{} logcat'.format(adb_path)
