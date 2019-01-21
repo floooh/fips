@@ -6,7 +6,7 @@ import subprocess
 import yaml
 
 from mod import log, util, config, dep, template, settings, android
-from mod.tools import git, cmake, make, ninja, xcodebuild, ccmake, cmake_gui, vscode, clion
+from mod.tools import git, cmake, make, ninja, xcodebuild, xcrun, ccmake, cmake_gui, vscode, clion
 
 #-------------------------------------------------------------------------------
 def init(fips_dir, proj_name) :
@@ -69,9 +69,12 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
     if cfg['generator'] in ['Ninja', 'Unix Makefiles']:
         defines['CMAKE_EXPORT_COMPILE_COMMANDS'] = 'ON'
     if cfg['platform'] == 'ios':
+        defines['CMAKE_OSX_SYSROOT'] = xcrun.get_ios_sdk_sysroot()
         ios_team_id = settings.get(proj_dir, 'iosteam')
         if ios_team_id:
             defines['FIPS_IOS_TEAMID'] = ios_team_id
+    if cfg['platform'] == 'osx':
+        defines['CMAKE_OSX_SYSROOT'] = xcrun.get_macos_sdk_sysroot()
     do_it = force
     if not os.path.isdir(build_dir) :
         os.makedirs(build_dir)
