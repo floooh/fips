@@ -112,11 +112,22 @@ def has_local_changes(proj_dir):
             cwd=proj_dir, shell=True).decode("utf-8")
     if output:
         return True
-    # get current branch name
-    cur_branch = subprocess.check_output('git rev-parse --abbrev-ref HEAD', 
-            cwd=proj_dir, shell=True).decode("utf-8")
-    cur_branch = cur_branch.strip()
-    output = subprocess.check_output('git log origin/{}..{} --oneline'.format(cur_branch, cur_branch),
+    # get current branch name and tracked remote if exists, this has
+    # either the form:
+    #       ## master...origin/master [optional stuff]
+    # ...if there's a remote tracking branch setup, or just
+    #       ## my_branch
+    # ...if this is a local branch
+    #
+    cur_status = subprocess.check_output('git status -sb', cwd=proj_dir, shell=True).decode("utf-8")[3:].rstrip().split(' ')[0]
+    if '...' in cur_status:
+        str_index = cur_status.find('...')
+        cur_branch = cur_status[:str_index]
+        cur_remote = cur_status[str_index+3:]
+    else:
+        cur_branch = cur_status
+        cur_remote = ''
+    output = subprocess.check_output('git log {}..{} --oneline'.format(cur_remote, cur_branch),
             cwd=proj_dir, shell=True).decode("utf-8")
     if output:
         return True
