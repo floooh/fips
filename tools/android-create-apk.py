@@ -117,8 +117,8 @@ with open(apk_dir + 'AndroidManifest.xml', 'w') as f:
     f.write('    <activity android:name="android.app.NativeActivity"\n');
     f.write('      android:label="{}"\n'.format(args.name))
     f.write('      android:launchMode="singleTask"\n')
-    f.write('      android:screenOrientation="landscape"\n')
-    f.write('      android:configChanges="orientation|keyboardHidden">\n')
+    f.write('      android:screenOrientation="fullUser"\n')
+    f.write('      android:configChanges="orientation|screenSize|keyboard|keyboardHidden">\n')
     f.write('      <meta-data android:name="android.app.lib_name" android:value="{}"/>\n'.format(args.name))
     f.write('      <intent-filter>\n')
     f.write('        <action android:name="android.intent.action.MAIN"/>\n')
