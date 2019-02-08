@@ -228,24 +228,6 @@ macro(fips_dir_groups path files)
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_add_generator_dependency(target...)
-#   Add one or more dependencies to the current generator target. The dependencies
-#   must be cmake build targets defined with fips_begin*/fips_end*().
-#   Used to define a build order required when, for example, building tools to
-#   use during compilation of the current target.
-#
-macro(fips_add_generator_dependency targets)
-    foreach(target ${ARGV})
-        if (TARGET ${target})
-            list(APPEND CurGeneratorDependencies ${target})
-        endif()
-    endforeach()
-    if (CurGeneratorDependencies)
-        list(REMOVE_DUPLICATES CurGeneratorDependencies)
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
 #   fips_apply_executable_type_defines(target [cmdline|windowed])
 #   Adds the define FIPS_APP_CMDLINE or FIPS_APP_WINDOWED to the current
 #   executable target (and only this target). This can be used on
