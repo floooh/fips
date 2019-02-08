@@ -1,8 +1,40 @@
 #-------------------------------------------------------------------------------
-#   fips_osx.cmake
-#   OSX/IOS specific cmake functions.
-#   FIXME: OSX framework resolution doesn't seem to work
+#   Target platform specific stuff
+#
+
 #-------------------------------------------------------------------------------
+#   fips_vs_warning_level(1..4)
+#   Set a module-specific warning level for Visual Studio, simply set this
+#   within a 'begin/end' pair.
+#
+macro(fips_vs_warning_level level)
+    if (FIPS_MSVC AND CurTargetName)
+        add_target_compile_options(${CurTargetName} PRIVATE "/W${level}")
+    endif()
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_vs_disable_warning(warnings ...)
+#   Disable a specific vstudio warning
+#
+macro(fips_vs_disable_warnings warnings)
+    if (FIPS_MSVC AND CurTargetName)
+        foreach (warning ${ARGV})
+            add_target_compile_options(${CurTargetName} PRIVATE "/wd${warning}")
+        endforeach()
+    endif()
+endmacro()
+#-------------------------------------------------------------------------------
+#   fips_android_postbuildstep
+#
+macro(fips_android_postbuildstep target)
+    add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND python ${FIPS_ROOT_DIR}/tools/android-create-apk.py
+        --path ${CMAKE_CURRENT_BINARY_DIR}
+        --name ${target}
+        --package org.fips.${target}
+        --deploy ${FIPS_DEPLOY_DIR}/${FIPS_PROJECT_NAME}/${FIPS_CONFIG})
+endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_frameworks_osx(frameworks ...)
@@ -10,9 +42,14 @@
 #   current target.
 #
 macro(fips_frameworks_osx frameworks)
-    foreach (fw ${ARGV})
-        list(APPEND CurFrameworks ${fw})
-    endforeach()
+    if (FIPS_OSX AND CurTargetName)
+        foreach (fw ${ARGV})
+            unset(found_framework CACHE)
+            find_library(found_framework ${fw})
+            target_link_libraries(${CurTargetName} ${found_framework})
+            unset(found_framework CACHE)
+        endforeach()
+    endif()
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -181,6 +218,5 @@ macro(fips_osx_add_target_properties target)
         endif()
     endif()
 endmacro()
-
 
 

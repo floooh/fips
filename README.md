@@ -15,6 +15,20 @@ http://floooh.github.io/fips/getstarted.html
 
 ### Public Service Announcements
 
+- **08-Feb-2019**:
+    - **internal cmake script cleanup:** fips is now creating "empty" targets in the
+      ```fips_begin_*()``` calls and uses modern (post 3.0) commands to add
+      source files, dependencies and options to the targets (previously those
+      were gathered in custom variables, and creating the actual targets happend
+      in the ```fips_end_*()``` functions). This simplifies the fips cmake
+      scripts a lot, and it allows better mixing of native cmake commands with
+      fips commands (e.g. you can now use commands which modify cmake target
+      properties **inside** the fips begin/end blocks, previously such
+      commands had to be added *after* the ```fips_end_*```. Unfortunately the
+      changes break the Oryol unit testing cmake macros (which depend on internal
+      implementation details, which obviously is a bit naughty), so you need
+      to update fips and Oryol at the same time.
+
 - **20-Jan-2019**: 
     - NaCl and UWP support have been removed (both haven't been maintained for a very long time)
     - remove the builtin unittest support, this was hardwired to UnitTest++ and should
