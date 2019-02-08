@@ -9,7 +9,7 @@
 #
 macro(fips_vs_warning_level level)
     if (FIPS_MSVC AND CurTargetName)
-        add_target_compile_options(${CurTargetName} PRIVATE "/W${level}")
+        target_compile_options(${CurTargetName} PRIVATE "/W${level}")
     endif()
 endmacro()
 
@@ -20,7 +20,7 @@ endmacro()
 macro(fips_vs_disable_warnings warnings)
     if (FIPS_MSVC AND CurTargetName)
         foreach (warning ${ARGV})
-            add_target_compile_options(${CurTargetName} PRIVATE "/wd${warning}")
+            target_compile_options(${CurTargetName} PRIVATE "/wd${warning}")
         endforeach()
     endif()
 endmacro()
