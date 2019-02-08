@@ -17,6 +17,7 @@ install:
 
 script:
     - echo $TRAVIS_OS_NAME
+    - cmake --version
     - git --version
     - python --version
     # test fips command itself
