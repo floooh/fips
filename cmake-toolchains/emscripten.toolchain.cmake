@@ -47,7 +47,6 @@ set(FIPS_EMSCRIPTEN 1)
 set(FIPS_POSIX 1)
 
 # tweakable options 
-option(FIPS_EMSCRIPTEN_USE_CWRAP "emscripten: enable cwrap/ccall functions" OFF)
 option(FIPS_EMSCRIPTEN_USE_FS "emscripten: enable FS module" OFF)
 option(FIPS_EMSCRIPTEN_USE_DFE "emscripten: enable Duplicate Function Elimination" OFF)
 option(FIPS_EMSCRIPTEN_USE_WASM "emscripten: enable WebAssembly (experimental)" OFF)
@@ -90,9 +89,6 @@ if (FIPS_EMSCRIPTEN_ALLOW_MEMORY_GROWTH)
     set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
 endif()
 
-if (FIPS_EMSCRIPTEN_USE_CWRAP)
-    set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s \"EXTRA_EXPORTED_RUNTIME_METHODS=['cwrap','ccall']\"")
-endif()
 if (FIPS_EMSCRIPTEN_USE_WASM_TRAP_MODE_CLAMP)
     set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s \"BINARYEN_TRAP_MODE='clamp'\"")
 endif()
