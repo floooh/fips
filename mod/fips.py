@@ -35,6 +35,8 @@ def show_help(args) :
 def run(fips_path, proj_path, args) :
     fips_path = util.fix_path(fips_path)
     proj_path = util.fix_path(proj_path)
+    if ' ' in proj_path:
+        log.warn("whitespace in project path detected, fips will not work correctly")
     verb.import_verbs(fips_path, proj_path)
     if len(args) <= 1:
         print("run 'fips help' for more info")
