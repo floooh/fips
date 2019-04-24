@@ -344,7 +344,7 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, impex, cfg):
         c = {
             'name': config_name,
             'browse': {
-                'limitSymbolsToIncludeHeaders': True,
+                'limitSymbolsToIncludedHeaders': True,
                 'databaseFilename': '{}/browse.VS.code'.format(build_dir)
             }
         }
