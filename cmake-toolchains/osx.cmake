@@ -19,9 +19,6 @@ endif()
 # FIXME: define standard frame works that are always linked
 set(FIPS_OSX_STANDARD_FRAMEWORKS Foundation IOKit)
 
-# globally silence the GL deprecation warning
-add_definitions(-DGL_SILENCE_DEPRECATION)
-
 # compiler flags
 set(CMAKE_CXX_FLAGS "-std=c++11 -fstrict-aliasing -Wno-expansion-to-defined -Wno-multichar -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-unused-volatile-lvalue -Wno-deprecated-writable-strings")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 -DNDEBUG")
