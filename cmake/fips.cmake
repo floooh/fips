@@ -15,9 +15,7 @@ get_filename_component(FIPS_BUILD_DIR "${FIPS_ROOT_DIR}/../fips-build" ABSOLUTE)
 include(CMakeParseArguments)
 
 include("${FIPS_ROOT_DIR}/cmake/fips_private.cmake")
-include("${FIPS_ROOT_DIR}/cmake/fips_windows.cmake")
-include("${FIPS_ROOT_DIR}/cmake/fips_android.cmake")
-include("${FIPS_ROOT_DIR}/cmake/fips_osx.cmake")
+include("${FIPS_ROOT_DIR}/cmake/fips_platform.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_generators.cmake")
 
 #-------------------------------------------------------------------------------
@@ -36,7 +34,6 @@ option(FIPS_LINUX_MACH32 "Enable 32-bit code generation on 64-bit Linux host" OF
 option(FIPS_AUTO_IMPORT "Automatically include all modules from imports" ON)
 option(FIPS_CLANG_ADDRESS_SANITIZER "Enable clang address sanitizer" OFF)
 option(FIPS_CLANG_SAVE_OPTIMIZATION_RECORD "Enable clang -fsave-optimization-record option" OFF)
-
 
 #-------------------------------------------------------------------------------
 #   fips_setup()
@@ -241,52 +238,18 @@ macro(fips_project proj)
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_begin_module(module)
-#   Begin defining an fips module.
-#
-macro(fips_begin_module name)
-    set(name ${name})
-    if (FIPS_CMAKE_VERBOSE)
-        message("Module: name=" ${name})
-    endif()
-    fips_reset(${name})
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_end_module(module)
-#   End defining an fips module, the interesting stuff happens here.
-#
-macro(fips_end_module)
-
-    # add library target
-    add_library(${CurTargetName} ${CurSources})
-    fips_apply_target_group(${CurTargetName})
-
-    # set platform- and target-specific compiler options
-    fips_vs_apply_options(${CurTargetName})
-
-    # add dependencies
-    fips_resolve_dependencies(${CurTargetName})
-
-    # handle generators (post-target)
-    fips_handle_generators(${CurTargetName})
-
-    # track some target properties in YAML files
-    fips_addto_targets_list(${CurTargetName} "module")
-    fips_addto_headerdirs_list(${CurTargetName})
-    fips_addto_defines_list(${CurTargetName})
-endmacro()
-
-#-------------------------------------------------------------------------------
 #   fips_begin_lib(name)
 #   Begin defining a static link library
 #
-macro(fips_begin_lib name)
-    set(name ${name})
+macro(fips_begin_lib target)
     if (FIPS_CMAKE_VERBOSE)
-        message("Library: name=" ${name})
+        message("Library: name=" ${target})
     endif()
-    fips_reset(${name})
+    fips_reset(${target})
+    
+    # add library target
+    add_library(${CurTargetName} STATIC)
+    fips_apply_target_group(${CurTargetName})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -295,16 +258,6 @@ endmacro()
 #
 macro(fips_end_lib)
 
-    # add library target
-    add_library(${CurTargetName} ${CurSources})
-    fips_apply_target_group(${CurTargetName})
-
-    # set platform- and target-specific compiler options
-    fips_vs_apply_options(${CurTargetName})
-    
-    # add dependencies
-    fips_resolve_dependencies(${CurTargetName})
-
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
@@ -312,6 +265,30 @@ macro(fips_end_lib)
     fips_addto_targets_list(${CurTargetName} "lib")
     fips_addto_headerdirs_list(${CurTargetName})
     fips_addto_defines_list(${CurTargetName})
+
+    set(CurTargetName)
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_begin_module(module)
+#   Begin defining an fips module.
+#
+#   FIXME: modules and libs are now exactly the same, fips_begin_module
+#   should be phased out.
+#
+macro(fips_begin_module target)
+    fips_begin_lib(${target})
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_end_module(module)
+#   End defining an fips module, the interesting stuff happens here.
+#
+#   FIXME: modules and libs are now exactly the same, fips_begin_module
+#   should be phased out.
+#
+macro(fips_end_module)
+    fips_end_lib()
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -319,13 +296,50 @@ endmacro()
 #   Begin an fips command line app.
 #   Type can be "windowed" or "cmdline", default is "cmdline".
 #
-macro(fips_begin_app name type)
+macro(fips_begin_app target type)
     if (${type} STREQUAL "windowed" OR ${type} STREQUAL "cmdline")
-        fips_reset(${name})
-        set(CurAppType ${type})
         if (FIPS_CMAKE_VERBOSE)
-            message("App: name=" ${CurTargetName} " type=" ${CurAppType})
+            message("App: target=" ${target} " type=" ${type})
         endif()
+        fips_reset(${target})
+        if (${type} STREQUAL "windowed")
+            if (FIPS_OSX)
+                add_executable(${CurTargetName} MACOSX_BUNDLE)
+                fips_osx_add_target_properties(${CurTargetName})
+                fips_copy_osx_dylib_files(${CurTargetName} 1)
+            elseif (FIPS_WIN32 OR FIPS_WIN64)
+                add_executable(${CurTargetName} WIN32)
+            elseif (FIPS_ANDROID)
+                add_library(${CurTargetName} SHARED)
+            else()
+                add_executable(${CurTargetName})
+            endif()
+        else()
+            if (FIPS_ANDROID)
+                add_library(${CurTargetName} SHARED)
+            else()
+                add_executable(${CurTargetName})
+            endif()
+            if (FIPS_OSX)
+                fips_copy_osx_dylib_files(${CurTargetName} 0)
+            endif()
+        endif()
+        
+        # add standard frameworks and libs
+        if (FIPS_OSX)
+            fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
+        endif()
+    
+        # set the right IDE group
+        fips_apply_target_group(${CurTargetName})
+        
+        # FIPS_APP_WINDOWED or FIPS_APP_CMDLINE defines
+        fips_apply_executable_type_defines(${CurTargetName} ${type})
+
+        # setup executable output directory and postfixes (_debug, etc...)
+        fips_config_output_directory(${CurTargetName})
+        fips_config_postfixes_for_exe(${CurTargetName})
+
     else()
         message(FATAL_ERROR "type must be \"windowed\" or \"cmdline\"!")
     endif()
@@ -337,48 +351,6 @@ endmacro()
 #
 macro(fips_end_app)
 
-    # add standard frameworks and libs
-    if (FIPS_OSX)
-        fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
-    endif()
-
-    if (NOT CurSources)
-        message(FATAL_ERROR "No sources in target: ${CurTargetName} !!!")
-    endif()
-
-    # add executable target
-    if (${CurAppType} STREQUAL "windowed")
-        # a windowed application
-        if (FIPS_OSX)
-            add_executable(${CurTargetName} MACOSX_BUNDLE ${CurSources})
-            fips_osx_add_target_properties(${CurTargetName})
-            fips_copy_osx_dylib_files(${CurTargetName} 1)
-        elseif (FIPS_WIN32 OR FIPS_WIN64)
-            add_executable(${CurTargetName} WIN32 ${CurSources})
-        elseif (FIPS_ANDROID)
-            add_library(${CurTargetName} SHARED ${CurSources})
-        else()
-            add_executable(${CurTargetName} ${CurSources})
-        endif()
-    else()
-        # a command line application
-        if (FIPS_ANDROID)
-            add_library(${CurTargetName} SHARED ${CurSources})
-        else()
-            add_executable(${CurTargetName} ${CurSources})
-        endif()
-        if (FIPS_OSX)
-            fips_copy_osx_dylib_files(${CurTargetName} 0)
-        endif()
-    endif()
-    fips_apply_target_group(${CurTargetName})
-
-    # set platform- and target-specific compiler options
-    fips_vs_apply_options(${CurTargetName})
-
-    # FIPS_APP_WINDOWED or FIPS_APP_CMDLINE defines
-    fips_apply_executable_type_defines(${CurTargetName} ${CurAppType})
-
     # android specific stuff
     if (FIPS_ANDROID)
         fips_android_postbuildstep(${CurTargetName})
@@ -387,28 +359,36 @@ macro(fips_end_app)
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
 
-    # add dependencies
-    fips_resolve_dependencies(${CurTargetName})
-
-    # setup executable output directory and postfixes (_debug, etc...)
-    fips_config_output_directory(${CurTargetName})
-    fips_config_postfixes_for_exe(${CurTargetName})
-
     # track some target properties in YAML files
     fips_addto_targets_list(${CurTargetName} "app")
     fips_addto_headerdirs_list(${CurTargetName})
     fips_addto_defines_list(${CurTargetName})
+    
+    set(CurTargetName)
 endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_begin_sharedlib(name)
 #   Begin a fips shared library.
 #
-macro(fips_begin_sharedlib name)
-    fips_reset(${name})
+macro(fips_begin_sharedlib target)
     if (FIPS_CMAKE_VERBOSE)
-        message("Shared Lib: name=" ${CurTargetName})
+        message("Shared Lib: target=" ${target})
     endif()
+    fips_reset(${target})
+    
+    # add shared lib target
+    add_library(${CurTargetName} SHARED)
+    fips_apply_target_group(${CurTargetName})
+
+    # add standard frameworks and libs
+    if (FIPS_OSX)
+        fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
+    endif()
+
+    # setup executable output directory and postfixes (_debug, etc...)
+    fips_config_output_directory(${CurTargetName})
+
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -417,35 +397,15 @@ endmacro()
 #
 macro(fips_end_sharedlib)
 
-    # add standard frameworks and libs
-    if (FIPS_OSX)
-        fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
-    endif()
-
-    if (NOT CurSources)
-        message(FATAL_ERROR "No sources in target: ${CurTargetName} !!!")
-    endif()
-
-    # add shared lib target
-    add_library(${CurTargetName} SHARED ${CurSources})
-    fips_apply_target_group(${CurTargetName})
-
-    # set platform- and target-specific compiler options
-    fips_vs_apply_options(${CurTargetName})
-
     # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
-
-    # add dependencies
-    fips_resolve_dependencies(${CurTargetName})
-
-    # setup executable output directory and postfixes (_debug, etc...)
-    fips_config_output_directory(${CurTargetName})
 
     # track some target properties in YAML files
     fips_addto_targets_list(${CurTargetName} "sharedlib")
     fips_addto_headerdirs_list(${CurTargetName})
     fips_addto_defines_list(${CurTargetName})
+
+    set(CurTargetName)
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -453,25 +413,27 @@ endmacro()
 #   Add one or more dependencies to the current target. The dependencies
 #   must be cmake build targets defined with fips_begin/end_module()
 #   or fips_begin/end_lib(). Dependencies can also be added to fips modules
-#   or libs, they will then be resolved recursively in the app linking stage.
+#   or libs.
 #
 macro(fips_deps deps)
-    foreach(dep ${ARGV})
-        list(APPEND CurDependencies ${dep})
-    endforeach()
+    if (CurTargetName)
+        foreach(dep ${ARGV})
+            target_link_libraries(${CurTargetName} ${dep})
+        endforeach()
+    endif()
 endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_libs(libs ...)
 #   Add one or more static link library dependencies to the current target.
-#   The current target can also be a fips module or lib. Dependencies added
-#   with fips_libs() will be resolved recursively in the app linking stage
-#   (see fips_deps()).
+#   The current target can also be a fips module or lib.
 #
 macro(fips_libs libs)
-    foreach(lib ${ARGV})
-        list(APPEND CurLinkLibs ${lib})
-    endforeach()
+    if (CurTargetName)
+        foreach(lib ${ARGV})
+            target_link_libraries(${CurTargetName} ${lib})
+        endforeach()
+    endif()
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -479,13 +441,13 @@ endmacro()
 #   Add one or more static link library that are only used in debug mode.
 #   This is sometimes necessary for precompiled visual studio libs (if they
 #   use STL code).
-#   NOTE: libraries with fips_libs_debug() have no recursive dependency
-#   resolution.
 #
 macro(fips_libs_debug libs)
-    foreach(lib ${ARGV})
-        list(APPEND CurLinkLibsDebug ${lib})
-    endforeach()
+    if (CurTargetName)
+        foreach(lib ${ARGV})
+            target_link_libraries(${CurTargetName} debug ${lib})
+        endforeach()
+    endif()
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -494,9 +456,11 @@ endmacro()
 #   modes).
 #
 macro(fips_libs_release libs)
-    foreach(lib ${ARGV})
-        list(APPEND CurLinkLibsRelease ${lib})
-    endforeach()
+    if (CurTargetName)
+        foreach(lib ${ARGV})
+            target_link_libraries(${CurTargetName} optimized ${lib})
+        endforeach()
+    endif()
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -679,28 +643,30 @@ endmacro()
 #   is important, so define required targets BEFORE requiring generators.
 #
 macro(fips_generate)
-    set(options OUT_OF_SOURCE)
-    set(oneValueArgs FROM TYPE SOURCE HEADER ARGS REQUIRES)
-    set(multiValueArgs)
-    CMAKE_PARSE_ARGUMENTS(_fg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
-    if (_fg_UNPARSED_ARGUMENTS)
-        message(FATAL_ERROR "fips_generate(): called with invalid args '${_fg_UNPARSED_ARGUMENTS}'")
+    if (CurTargetName)
+        set(options OUT_OF_SOURCE)
+        set(oneValueArgs FROM TYPE SOURCE HEADER ARGS REQUIRES)
+        set(multiValueArgs)
+        CMAKE_PARSE_ARGUMENTS(_fg "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+        if (_fg_UNPARSED_ARGUMENTS)
+            message(FATAL_ERROR "fips_generate(): called with invalid args '${_fg_UNPARSED_ARGUMENTS}'")
+        endif()
+        if (NOT _fg_FROM)
+            message(FATAL_ERROR "fips_generate(): FROM arg required")
+        endif()
+        if (NOT _fg_SOURCE AND NOT _fg_HEADER)
+            # if both no SOURCE and no HEADER provided, set both
+            # to input file plus .cc / .h extension
+            get_filename_component(f_ext ${_fg_FROM} EXT)
+            string(REPLACE ${f_ext} ".cc" _fg_SOURCE ${_fg_FROM})
+            string(REPLACE ${f_ext} ".h" _fg_HEADER ${_fg_FROM})
+        endif()
+        if (_fg_REQUIRES)
+            fips_add_generator_dependency(${_fg_REQUIRES})
+        endif()
+        fips_add_file("${_fg_FROM}")
+        fips_add_generator(${CurTargetName} "${_fg_TYPE}" ${_fg_OUT_OF_SOURCE} "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}" "${_fg_ARGS}") 
     endif()
-    if (NOT _fg_FROM)
-        message(FATAL_ERROR "fips_generate(): FROM arg required")
-    endif()
-    if (NOT _fg_SOURCE AND NOT _fg_HEADER)
-        # if both no SOURCE and no HEADER provided, set both
-        # to input file plus .cc / .h extension
-        get_filename_component(f_ext ${_fg_FROM} EXT)
-        string(REPLACE ${f_ext} ".cc" _fg_SOURCE ${_fg_FROM})
-        string(REPLACE ${f_ext} ".h" _fg_HEADER ${_fg_FROM})
-    endif()
-    if (_fg_REQUIRES)
-        fips_add_target_dependency(${_fg_REQUIRES})
-    endif()
-    fips_add_file("${_fg_FROM}")
-    fips_add_generator(${CurTargetName} "${_fg_TYPE}" ${_fg_OUT_OF_SOURCE} "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}" "${_fg_ARGS}") 
 endmacro()
 
 #-------------------------------------------------------------------------------

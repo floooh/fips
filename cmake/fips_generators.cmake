@@ -32,6 +32,24 @@
 #
 
 #-------------------------------------------------------------------------------
+#   fips_add_generator_dependency(target...)
+#   Add one or more dependencies to the current generator target. The dependencies
+#   must be cmake build targets defined with fips_begin*/fips_end*().
+#   Used to define a build order required when, for example, building tools to
+#   use during compilation of the current target.
+#
+macro(fips_add_generator_dependency targets)
+    foreach(target ${ARGV})
+        if (TARGET ${target})
+            list(APPEND CurGeneratorDependencies ${target})
+        endif()
+    endforeach()
+    if (CurGeneratorDependencies)
+        list(REMOVE_DUPLICATES CurGeneratorDependencies)
+    endif()
+endmacro()
+
+#-------------------------------------------------------------------------------
 #   fips_begin_gen(target)
 #
 #   Called from fips_begin_module, fips_begin_lib, fips_begin_app to 
@@ -47,7 +65,7 @@ endmacro()
 #   Add a code generator item to the current target.
 #
 macro(fips_add_generator target in_generator in_outofsource in_file out_src out_hdr args)
-    if (FipsAddFilesEnabled)
+    if (CurTargetName)
         get_filename_component(f_abs ${CurDir}${in_file} ABSOLUTE)
         get_filename_component(f_dir ${f_abs} PATH)
         if ("${in_generator}" STREQUAL "")
@@ -66,7 +84,7 @@ macro(fips_add_generator target in_generator in_outofsource in_file out_src out_
             else()
                 set(out_src_abs "${f_dir}/${out_src}")
             endif()
-            list(APPEND CurSources ${out_src_abs})
+            target_sources(${CurTargetName} PRIVATE ${out_src_abs})
             source_group("${CurGroup}\\gen" FILES ${out_src_abs})
             set(yml_content "${yml_content}  out_src: '${out_src_abs}'\n")
             if (NOT EXISTS ${out_src_abs})
@@ -81,7 +99,7 @@ macro(fips_add_generator target in_generator in_outofsource in_file out_src out_
             else()
                 set(out_hdr_abs "${f_dir}/${out_hdr}")
             endif()
-            list(APPEND CurSources ${out_hdr_abs})
+            target_sources(${CurTargetName} PRIVATE ${out_hdr_abs})
             source_group("${CurGroup}\\gen" FILES ${out_hdr_abs})
             set(yml_content "${yml_content}  out_hdr: '${out_hdr_abs}'\n")
             if (NOT EXISTS ${out_hdr_abs})
@@ -108,7 +126,7 @@ macro(fips_add_generator target in_generator in_outofsource in_file out_src out_
 endmacro()
             
 #-------------------------------------------------------------------------------
-#   fips_handle_py_files_posttarget(target pyFiles)
+#   fips_handle_generators(target)
 #   Create custom target for .py generator files.
 #
 macro(fips_handle_generators target) 
@@ -117,15 +135,15 @@ macro(fips_handle_generators target)
             add_custom_target(ALL_GENERATE
                 COMMAND ${PYTHON} ${CMAKE_BINARY_DIR}/fips-gen.py ${CMAKE_BINARY_DIR}/fips_codegen.yml
                 WORKING_DIRECTORY ${FIPS_PROJECT_DIR})
-             if (CurTargetDependencies)
-                add_dependencies(ALL_GENERATE ${CurTargetDependencies})
+            if (CurGeneratorDependencies)
+                add_dependencies(ALL_GENERATE ${CurGeneratorDependencies})
             endif()               
         endif()
         add_dependencies(${target} ALL_GENERATE)
     endif()
-    if (CurTargetDependencies)
-        add_dependencies(${target} ${CurTargetDependencies})
-        unset(CurTargetDependencies)
+    if (CurGeneratorDependencies)
+        add_dependencies(${target} ${CurGeneratorDependencies})
+        unset(CurGeneratorDependencies)
     endif()
 endmacro()
 
