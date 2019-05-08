@@ -28,27 +28,32 @@ set(CMAKE_C_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib s
 # define compiler and linker flags
 
 # GENERIC compiler flags:
-# 	/WX treat warnings as errors
-# 	/GF eliminate duplicate strings
-# 	/TP treat files as C++ source
-#	/TC treat files as C source
-# 	/fp:fast create fast (not precise) floating point code
-# 	/Gm: enable minimal rebuild
-#	/EHsc: slim exception model
-#	/EHa: fat exception model
+#   /WX treat warnings as errors
+#   /GF eliminate duplicate strings
+#   /TP treat files as C++ source
+#   /TC treat files as C source
+#   /fp:fast create fast (not precise) floating point code
+#   /Gm: enable minimal rebuild
+#   /EHsc: slim exception model
+#   /EHa: fat exception model
 #   /MP: use multiple cores
 #
 # DEBUG compiler flags:
-#	/Zi create debugging information PDB file
-#	/Od disable optimizations
-# 	/Oy- do not suppress frame pointers (recommended for debugging)
-#	/MTd use statically linked, thread-safe, debug CRT libs
+#   /Zi create debugging information PDB file
+#   /Od disable optimizations
+#   /Oy- do not suppress frame pointers (recommended for debugging)
+#   /MTd use statically linked, thread-safe, debug CRT libs
 #
-# RELEASE compiler flags:
-#	/Ox full optimization
-#	/MT use statically linked, thread-safe CRT libs
-# 	/GS- no Buffer Security Check
-#	
+# RELEASE compiler/linker flags:
+#   /Ox full optimization
+#   /MT use statically linked, thread-safe CRT libs
+#   /GS- no Buffer Security Check
+#   /GL whole-program-optimization
+#   /LTCG use link-time code generation
+#   /INCREMENTAL:NO don't use incremental linking
+#   /OPT:REF dead-code-elimination
+#   /OPT:ICF identical COMDAT folding
+#
 if (FIPS_EXCEPTIONS)
     set(FIPS_VS_EXCEPTION_FLAGS "/EHa")
 else()
@@ -63,23 +68,25 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${FIPS_VS_EXCEPTION_FLAGS} /MP /WX /TP /DWIN32")
 set(CMAKE_CXX_FLAGS_DEBUG "/Zi /Od /Oy- /D_DEBUG /DFIPS_DEBUG=1")
-set(CMAKE_CXX_FLAGS_RELEASE "/Ox /DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "/GL /Ox /DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
 
 set(CMAKE_C_FLAGS "/MP /WX /TC /errorReport:queue /DWIN32")
 set(CMAKE_C_FLAGS_DEBUG "/Zi /Od /Oy- /D_DEBUG /DFIPS_DEBUG=1")
-set(CMAKE_C_FLAGS_RELEASE "/Ox /DNDEBUG ")
+set(CMAKE_C_FLAGS_RELEASE "/GL /Ox /DNDEBUG ")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
 
 # define exe linker flags
 set(CMAKE_EXE_LINKER_FLAGS "/STACK:5000000 /machine:${FIPS_WINDOWS_PLATFORM_NAME}")
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/DEBUG")
-set(CMAKE_EXE_LINKER_FLAGS_RELEASE "")
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "/INCREMENTAL:NO /LTCG")
 
+# librarian flags
 # 4221: warning on empty object files
 set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} /ignore:4221")
+set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "/LTCG")
 
 # update cache variables for cmake gui
 set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}" CACHE STRING "Config Type" FORCE)

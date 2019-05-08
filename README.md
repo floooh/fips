@@ -15,6 +15,12 @@ http://floooh.github.io/fips/getstarted.html
 
 ### Public Service Announcements
 
+- **08-May-2019**: Some tweaks to the release-mode compiler- and linker-flags
+    for Visual Studio projects: in release mode, link-time code-generation
+    (aka LTO) is now always enabled. If this causes any trouble for your
+    projects, please open a github ticket, and I'll add something to make
+    this optional :)
+
 - **20-Jan-2019**: 
     - NaCl and UWP support have been removed (both haven't been maintained for a very long time)
     - remove the builtin unittest support, this was hardwired to UnitTest++ and should
