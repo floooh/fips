@@ -139,7 +139,7 @@ def parse_config(fips_dir):
             config_text = f.read()
             exec(config_text, config)
     except Exception as e:
-        log.error("error in evaluation .emscripten file at '{}' with '{}'".format(config_path, str(e)))
+        log.error("error in evaluating .emscripten file at '{}' with '{}'".format(config_path, str(e)))
     return config
 
 #-------------------------------------------------------------------------------
