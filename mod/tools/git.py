@@ -149,7 +149,7 @@ def update_submodule(proj_dir):
 
 #-------------------------------------------------------------------------------
 def update(proj_dir):
-    """runs a git pull --rebase && git submodule update --recursive on the
+    """runs a git pull && git submodule update --recursive on the
     provided git repo, but only if the repo has no local changes
 
     :param proj_dir:    a git repo dir
@@ -162,6 +162,15 @@ def update(proj_dir):
     else:
         log.warn('skipping {}, uncommitted or unpushed changes!'.format(proj_dir))
         return False
+
+#-------------------------------------------------------------------------------
+def update_ignore_local_changes(proj_dir):
+    """same as git.update() but does not check for local changes"""
+    check_exists_with_error()
+    res = subprocess.call('git pull', cwd=proj_dir, shell=True)
+    if 0 == res:
+        update_submodule(proj_dir)
+    return 0 == res
 
 #-------------------------------------------------------------------------------
 def get_branches(proj_dir) :
