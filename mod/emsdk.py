@@ -50,7 +50,7 @@ def get_emsdk_path(fips_dir):
     return emsdk_path
 
 #-------------------------------------------------------------------------------
-def emsdk_exists(fips_dir):
+def check_exists(fips_dir):
     emsdk_path = get_emsdk_path(fips_dir)
     return os.path.isfile(emsdk_path)
 
@@ -61,7 +61,7 @@ def get_em_config(fips_dir):
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, cmdline):
-    if not emsdk_exists(fips_dir):
+    if not check_exists(fips_dir):
         log.error("emsdk script not found at '{}', please run './fips emsdk install'".format(get_emsdk_path(fips_dir)))
     emsdk_path = get_emsdk_path(fips_dir)
     emsdk_dir = get_emsdk_dir(fips_dir)
