@@ -26,8 +26,8 @@ def run(fips_dir, proj_dir, args):
             emsdk.show_config(fips_dir)
         elif cmd == 'show-em-config':
             log.info(emsdk.get_em_config(fips_dir))
-        elif cmd == 'show-toolchain-root':
-            log.info(emsdk.get_toolchain_root(fips_dir))
+        elif cmd == 'show-emscripten-root':
+            log.info(emsdk.get_emscripten_root(fips_dir))
         else:
             log.error("unknown subcommand '{}' (run './fips help emsdk')".format(cmd))
     else:
@@ -42,6 +42,6 @@ def help():
              "fips emsdk uninstall\n"
              "fips emsdk show-config\n"
              "fips emsdk show-em-config\n"
-             "fips emsdk show-toolchain-root\n"
+             "fips emsdk show-emscripten-root\n"
              + log.DEF +
              "    install and maintain the emscripten SDK")

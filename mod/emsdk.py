@@ -150,7 +150,7 @@ def show_config(fips_dir):
             log.info('{}: {}'.format(key, value))
 
 #-------------------------------------------------------------------------------
-def get_toolchain_root(fips_dir):
+def get_emscripten_root(fips_dir):
     # returns the path where the emcc, em++ etc scripts are located
     emsdk_config = parse_config(fips_dir)
     if 'EMSCRIPTEN_ROOT' in emsdk_config:
@@ -158,4 +158,4 @@ def get_toolchain_root(fips_dir):
         return emsdk_config['EMSCRIPTEN_ROOT']
     else:
         # new SDKs
-        return emsdk_config['LLVM_ROOT']
+        return emsdk_config['BINARYEN_ROOT'] + '/emscripten'
