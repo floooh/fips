@@ -236,8 +236,8 @@ fips\_files() must be called inside a module, lib, or app definition block.
 
 Like fips\_dir(), but will also do a fips\_files() with files found in a directory
 that match an expression from the glob expression list excluding any file that
-is in the `EXCEPT` glob expression list. You can use `NO_RECURSE` so it will not
-search files in subdirectories. The flag `GROUP_FOLDERS` will enable the automatic creation of groups that reflect folders in the filesystem.
+is in the ```EXCEPT``` glob expression list. You can use ```NO_RECURSE``` so it will not
+search files in subdirectories. The flag ```GROUP_FOLDERS``` will enable the automatic creation of groups that reflect folders in the filesystem.
 
 To add all files contained in a folder but excluding some types to the group 
 "everything":
