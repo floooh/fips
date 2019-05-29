@@ -16,8 +16,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://floooh.github.com/fips/docs/getstarted/</guid>
-      <description>Get Started You need:  python 2.7.9 cmake 2.8.11 or better a working C/C++ development environment:  on OSX: Xcode + command line tools on Linux: make/gcc (or clang) on Windows: Visual Studio 2013 or better   Get fips fips will create additional directories on the same directory level as the fips directory itself, thus it is recommended to git-clone fips into a separate &amp;lsquo;workspace&amp;rsquo; directory:
-&amp;gt; cd ~ &amp;gt; mkdir fips-workspace &amp;gt; cd fips-workspace &amp;gt; git clone https://github.</description>
+      <description>Get Started You need:  python (2.7.x or 3.x should both work) cmake (any 3.x version should work) a working C/C++ development environment:  on OSX: Xcode + command line tools on Linux: make/gcc (or clang) on Windows: Visual Studio 2013 or better   Get fips fips will create additional directories on the same directory level as the fips directory itself, thus it is recommended to git-clone fips into a separate &amp;lsquo;workspace&amp;rsquo; directory:</description>
     </item>
     
     <item>
