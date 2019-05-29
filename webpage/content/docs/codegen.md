@@ -192,7 +192,7 @@ number doesn't match.
 
 Let's have a look at a very simple generator script:
 
-```python linenos
+```python
 """fips imported code generator for testing"""
 
 Version = 2 

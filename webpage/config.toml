@@ -9,8 +9,9 @@ disablePathToLower = true
 enableGitInfo = false
 
 # Code highlight
-# pygmentsStyle = 'monokailight'
+pygmentsUseClasses = true
 pygmentsCodeFences = true
+pygmentsCodeFencesGuessSyntax = true
 
 [params]
   # (Optional, default true) Show or hide table of contents globally
