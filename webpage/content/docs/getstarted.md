@@ -9,8 +9,8 @@ weight: 1
 
 ### You need:
 
-* python 2.7.9
-* cmake 2.8.11 or better
+* python (2.7.x or 3.x should both work)
+* cmake (any 3.x version should work)
 * a working C/C++ development environment:
     * on **OSX**: Xcode + command line tools
     * on **Linux**: make/gcc (or clang)
