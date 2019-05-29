@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+    
+    CMake Guide
+  
+ | Fips Docs</title>
+
+
+
+<link rel="stylesheet" href="/fips/book.min.5c73c46aca2a1bca1dcdff8126636a2cd180236600b29850c511f7cf52195c4a.css">
+
+
+<link rel="icon" href="/fips/favicon.png" type="image/x-icon">
+
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body>
+  <input type="checkbox" style="display: none" id="menu-control" />
+  <main class="flex container">
+
+    <aside class="book-menu fixed">
+      <nav role="navigation">
+<h2 class="book-brand">
+  <a href="http://floooh.github.com/fips/">Fips Docs</a>
+</h2>
+
+
+
+    
+
+  
+  
+
+
+
+
+
+ 
+  
+    
+
+  <ul>
+    
+    
+    <li>
+      
+
+  <a href="/fips/docs/getstarted/" >
+    
+  
+    
+    Get Started
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/build/" >
+    
+  
+    
+    Build Projects
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/troubleshooting/" >
+    
+  
+    
+    Troubleshooting
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/crosscompiling/" >
+    
+  
+    
+    Cross-compiling
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/cmakeguide/"  class="active">
+    
+  
+    
+    CMake Guide
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/imports/" >
+    
+  
+    
+    Imports
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/exports/" >
+    
+  
+    
+    Exports
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/codegen/" >
+    
+  
+    
+    Code Generation
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/dirstructure/" >
+    
+  
+    
+    Directory Structure
+  
+
+  </a>
+
+
+    </li>
+    
+  </ul>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+  
+<script>
+(function() {
+  var menu = document.querySelector('aside.book-menu nav')
+  addEventListener('beforeunload', function(event) {
+    localStorage.setItem('menu.scrollTop', menu.scrollTop)
+  });
+  menu.scrollTop = localStorage.getItem('menu.scrollTop')
+})()
+</script>
+
+
+
+    </aside>
+
+    <div class="book-page">
+      <header class="align-center justify-between book-header">
+  <label for="menu-control">
+    <img src="/fips/svg/menu.svg" alt="Menu" />
+  </label>
+  <strong>
+  
+    
+    CMake Guide
+  
+</strong>
+</header>
+
+      
+<article class="markdown">
+
+<h1 id="fips-cmake-guide">Fips CMake Guide</h1>
+
+<p>Fips projects need to adhere to a few rules in their CMakeLists.txt file
+hierarchy. Fips provides a number of cmake macros, variables and toolchain
+files to simplify working with cmake files and implement some under-the-hood
+magic.</p>
+
+<h3 id="fips-cmake-macros">Fips CMake Macros</h3>
+
+<p>Fips provides the following cmake macros to describe a project structure:</p>
+
+<h4 id="fips-setup-project-proj-name">fips_setup(PROJECT proj_name)</h4>
+
+<p>Initializes the fips build system in a cmake file hierarchy. Must be
+called once in the root CMakeLists.txt before any other fips cmake
+macros.</p>
+
+<p>The PROJECT argument is optional, and if provided, is the name of the
+main project. For backward compatibility, it is still possible to call
+fips_setup() without arguments, and provide the project name later
+with fips_project(). It is also possible to define multi-project builds
+by calling fips_project() multiple times.</p>
+
+<p>If a project imports apps or shared-libs from other fips project,
+fips_setup() <strong>MUST</strong> be called with a PROJECT argument (otherwise
+the imported apps and shared-libs would be created under the default
+cmake project name &lsquo;Project&rsquo;, since the import happened inside
+fips_setup() before the first call to fips_project()).</p>
+
+<h4 id="fips-finish">fips_finish()</h4>
+
+<p>Must be called in the root CMakeLists.txt file after any other fips macros
+and does any work that must happen once after each cmake run. Currently
+this is macro does nothing.</p>
+
+<h4 id="fips-project-name">fips_project(name)</h4>
+
+<p>Starts a new project with the given name. This must be called at least
+once in a hierarchy of CMakeLists.txt files, usually right after
+fips_setup().</p>
+
+<p>Use the fips_project() macro instead of cmake&rsquo;s builtin project() macro</p>
+
+<h4 id="fips-ide-group-name">fips_ide_group(name)</h4>
+
+<p>Start a new project explorer folder in an IDE. This can be used to
+group related build targets for a clearer layout in the IDE&rsquo;s project
+explorer.</p>
+
+<h4 id="fips-add-subdirectory-dir">fips_add_subdirectory(dir)</h4>
+
+<p>Include a child CMakeLists.txt file from a subdirectory. Use this instead
+of cmake&rsquo;s built-in add_subdirectory() macro.</p>
+
+<h4 id="fips-include-directories-dir">fips_include_directories(dir &hellip;)</h4>
+
+<p>Define one or more header search paths. Use this instead of
+cmake&rsquo;s built-in include_directories() macro.</p>
+
+<h4 id="fips-begin-module-name">fips_begin_module(name)</h4>
+
+<p>Begin defining a fips module. Modules are special high-level static link-libraries
+with a few additional features over conventional libs:</p>
+
+<ul>
+<li>can define dependencies to other modules, which are automatically
+resolved when linking apps</li>
+<li>can contain code-generation python scripts which are added as
+custom build targets to the build process</li>
+</ul>
+
+<p>After a fips_begin_module() the following fips macros are valid:</p>
+
+<ul>
+<li>fips_dir()</li>
+<li>fips_files()</li>
+<li>fips_generate()</li>
+<li>fips_deps()</li>
+<li>fips_libs()</li>
+<li>fips_end_module()</li>
+</ul>
+
+<h4 id="fips-end-module">fips_end_module()</h4>
+
+<p>This finishes a fips_begin_module() block.</p>
+
+<h4 id="fips-begin-lib-name">fips_begin_lib(name)</h4>
+
+<p>Begin defining a fips library. A fips library is a collection of source
+files that compile into a static link library. Fips libraries are normally
+used to wrap 3rd-party code that would normally be linked as a pre-compiled
+static link library, but is instead compiled from source code into
+a fips project.</p>
+
+<blockquote>
+<p>NOTE: currently, a fips library is equivalent to a fips module, this
+may change in the future though</p>
+</blockquote>
+
+<p>After a fips_begin_lib() the following fips macros are valid:</p>
+
+<ul>
+<li>fips_dir()</li>
+<li>fips_files()</li>
+<li>fips_generate()</li>
+<li>fips_deps()</li>
+<li>fips_libs()</li>
+<li>fips_end_lib()</li>
+</ul>
+
+<h4 id="fips-end-lib">fips_end_lib()</h4>
+
+<p>This finishes a fips_begin_lib() block.</p>
+
+<h4 id="fips-begin-sharedlib-name">fips_begin_sharedlib(name)</h4>
+
+<p>Begin defining a fips shared library. A fips shared library is a collection of source
+files that compile into a dynamically linkable library (as opposed to static libraries).</p>
+
+<p>After a fips_begin_sharedlib() the following fips macros are valid:</p>
+
+<ul>
+<li>fips_dir()</li>
+<li>fips_files()</li>
+<li>fips_generate()</li>
+<li>fips_deps()</li>
+<li>fips_libs()</li>
+<li>fips_end_sharedlib()</li>
+</ul>
+
+<h4 id="fips-end-sharedlib">fips_end_sharedlib()</h4>
+
+<p>This finishes a fips_begin_sharedlib() block.</p>
+
+<h4 id="fips-begin-app-name-type">fips_begin_app(name type)</h4>
+
+<p>Begin defining a fips application. The <em>type</em> argument can be either &lsquo;windowed&rsquo;
+or &lsquo;cmdline&rsquo;, this only makes a difference on platform with separate
+command-line and UI application types, like Windows (WinMain vs main)
+or OSX (app bundle vs command line tool).</p>
+
+<p>The executable target (and only the executable target) will see the following
+preprocessor definitions:</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// fips_begin_app(bla windowed)
+</span><span class="c1"></span><span class="cp">#define FIPS_APP_WINDOWED (1)
+</span><span class="cp"></span><span class="c1">// fips_begin_app(bla cmdline)
+</span><span class="c1"></span><span class="cp">#define FIPS_APP_CMDLINE (1)</span></code></pre></div>
+<p>On Windows this can be used to select between main() or WinMain()
+as app entry function.</p>
+
+<p>After a fips_begin_app() the following fips macros are valid:</p>
+
+<ul>
+<li>fips_dir()</li>
+<li>fips_files()</li>
+<li>fips_generate()</li>
+<li>fips_deps()</li>
+<li>fips_libs()</li>
+<li>fips_end_app()</li>
+</ul>
+
+<h4 id="fips-end-app">fips_end_app()</h4>
+
+<p>This finishes a fips_begin_app() block.</p>
+
+<h4 id="fips-dir-dir-group-ide-group">fips_dir(dir [GROUP ide_group])</h4>
+
+<p>Defines a source code subdirectory for the following fips_files() statements.
+This is only necessary if source files are located in subdirectories of the
+directory where the current CMakeLists.txt file is located. You don&rsquo;t need
+to provide a fips_dir() statement for files in the same directory as
+their CMakeLists.txt file.</p>
+
+<p>fips will automatically derive an IDE group folder name from the directory
+path, so that the directory structure is reflected in IDE file explorers.
+This behaviour can be overriden with the optional GROUP argument, and
+an explicit group name (or path) can be defined.</p>
+
+<p>This is the default usage of fips_dir, without explicitly overriding
+the IDE group name:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">android</span><span class="p">)</span></code></pre></div>
+<p>This would switch the &lsquo;current source directory&rsquo; to a subdirectory named
+&lsquo;android&rsquo;, and in IDEs these files will be grouped under a folder &lsquo;android&rsquo;
+in the file explorer.</p>
+
+<p>To switch back to the root directory (where the CMakeLists.txt file is located),
+just pass a . as argument:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">.</span><span class="p">)</span></code></pre></div>
+<p>The following example groups files in a very deep directory hierarchy
+under a short group name &ldquo;include&rdquo;:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&#34;include&#34;</span><span class="p">)</span></code></pre></div>
+<p>A GROUP argument can also contain slashes to define a whole group path:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&#34;engine/include&#34;</span><span class="p">)</span></code></pre></div>
+<p>Finally, to not put the files into any IDE group folder, pass a
+&ldquo;.&rdquo; as special GROUP argument:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&#34;.&#34;</span><span class="p">)</span></code></pre></div>
+<p>fips_dir() must be called inside a module, lib, or app definition block.</p>
+
+<h4 id="fips-files-file">fips_files(file &hellip;)</h4>
+
+<p>Add source files in the currently set directory to the current module, lib or app.
+This isn&rsquo;t restricted to C/C++ files, but any file that should show
+up in the IDE project explorer. The actual build process will ignore any
+files with file extensions that cmake doesn&rsquo;t know how to build.</p>
+
+<p>The following file extensions are recognized by the build process:</p>
+
+<ul>
+<li><strong>.cc, .cpp</strong>:    C++ source files (compiled with C++11 support)</li>
+<li><strong>.c</strong>:           C source files</li>
+<li><strong>.m, .mm</strong>:      Objective-C and Objective-C++ source files</li>
+<li><strong>.h, .hh</strong>:      C/C++/Obj-C headers</li>
+<li><strong>.py</strong>:          Python source code generator scripts</li>
+<li><strong>.plist</strong>:       on iOS and MacOS, a file with the extension <strong>.plist</strong> overrides the default Info.plist file generated by fips</li>
+</ul>
+
+<p>fips_files() must be called inside a module, lib, or app definition block.</p>
+
+<h4 id="fips-files-ex-dir-glob-except-glob-group-ide-group-no-recurse-group-folders">fips_files_ex(dir glob&hellip; [EXCEPT glob&hellip;] [GROUP ide_group] [NO_RECURSE|GROUP_FOLDERS])</h4>
+
+<p>Like fips_dir(), but will also do a fips_files() with files found in a directory
+that match an expression from the glob expression list excluding any file that
+is in the <code>EXCEPT</code> glob expression list. You can use <code>NO_RECURSE</code> so it will not
+search files in subdirectories. The flag <code>GROUP_FOLDERS</code> will enable the automatic creation of groups that reflect folders in the filesystem.</p>
+
+<p>To add all files contained in a folder but excluding some types to the group
+&ldquo;everything&rdquo;:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_files_ex</span><span class="p">(</span><span class="s">src/</span> <span class="s">*.*</span> <span class="s">EXCEPT</span> <span class="s">*.rc</span> <span class="s">*.txt</span> <span class="s">GROUP</span> <span class="s2">&#34;everything&#34;</span><span class="p">)</span></code></pre></div>
+<p>Or, if you do want only Objective-C sources for example:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_files_ex</span><span class="p">(</span><span class="s">src/</span> <span class="s">*.m</span> <span class="s">*.mm</span> <span class="s">GROUP</span> <span class="s2">&#34;ObjC&#34;</span><span class="p">)</span></code></pre></div>
+<p>Note: You should avoid using this as CMake will not be able to detect when files
+are added or removed to the filesystem and consequently will not be able to
+reconfigure the project. A good use of this is if it can help porting libraries
+to fips.</p>
+
+<p>fips_files_ex() must be called inside a module, lib, or app definition block.</p>
+
+<h4 id="fips-src-dir-glob-except-glob-group-ide-group-no-recurse-group-folders">fips_src(dir glob&hellip; [EXCEPT glob&hellip;] [GROUP ide_group] [NO_RECURSE|GROUP_FOLDERS])</h4>
+
+<p>Same as fips_files_ex() but with a default list of expressions valid for C/C++
+projects: *.c *.cc *.cpp *.h *.hh *.hpp</p>
+
+<p>So you can easily add any C/C++ sources from the directory &ldquo;src/&rdquo; to the project
+as simply as:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_src</span><span class="p">(</span><span class="s">src</span><span class="p">)</span></code></pre></div>
+<p>fips_src() must be called inside a module, lib, or app definition block.</p>
+
+<h4 id="fips-deps-dep">fips_deps(dep &hellip;)</h4>
+
+<p>Add module or lib dependencies to the current fips app, module or lib. A
+dependency must be the name of another fips module or lib defined
+with fips_begin_module() or fips_begin_lib(). Dependencies added to
+fips modules will be resolved recursively
+when linking apps. Fips will also take care of the dreaded linking order
+problem of GCC where symbols can&rsquo;t be resolved if the
+order of link libraries is wrong or in case of cyclic dependencies.</p>
+
+<p>fips_deps() must be called inside a module, lib, or app definition block.</p>
+
+<blockquote>
+<p>NOTE: dependencies listed in fips_deps() must have been defined before
+in the CMakeLists.txt file hierarchy</p>
+</blockquote>
+
+<h4 id="fips-libs-libs">fips_libs(libs &hellip;)</h4>
+
+<p>Add a static link library dependency to the current fips app, module or libs.
+This is similar to the fips_deps() macro but is used to define a link
+dependency to an existing, precompiled static link library.</p>
+
+<p>fips_libs() must be called inside a module, lib, or app definition block.</p>
+
+<h4 id="fips-libs-debug-libs-fips-libs-release-libs">fips_libs_debug(libs &hellip;), fips_libs_release(libs &hellip;)</h4>
+
+<p>These are rarely needed special variants of <strong>fips_libs()</strong> which add separate
+static link libraries for debug and non-debug compilation modes. This is necessary
+on Visual Studio when trying to link libraries that contain STL code.</p>
+
+<h4 id="fips-generate">fips_generate(&hellip;)</h4>
+
+<p>Defines a code-generation job. Code generation can be used to generate
+C/C++ source files at build time from other input files like JSON,
+XML, YAML, GLSL, &hellip; Code generation is described in detail
+<a href="codegen.html">here</a></p>
+
+<p>fips_generate() must be called inside a module, lib, or app definition block.</p>
+
+<h3 id="the-fips-include-cmake-file">The fips-include.cmake File</h3>
+
+<p>A fips project may contain an optional cmake file called <strong>fips-include.cmake</strong>
+at the root level of a project (same directory level as the root
+CMakeLists.txt file). The fips-include.cmake file should contain all cmake
+definitions that need to be visible when using this fips project as an
+external dependency in another project. Fips will include this file either
+when the project itself is compiled, or the project is imported as an
+external dependency in other projects.</p>
+
+<p>Check out the <a href="https://github.com/floooh/oryol/blob/master/fips-files/include.cmake">fips-include.cmake</a>
+file included in the Oryol 3D engine for a complex example.</p>
+
+<h3 id="fips-predefined-cmake-variables">Fips Predefined CMake Variables</h3>
+
+<p>Fips defines a number of useful cmake variables:</p>
+
+<ul>
+<li><strong>FIPS_POSIX</strong>: target platform is UNIX-ish (basically anything but Windows)</li>
+<li><strong>FIPS_WINDOWS</strong>: target platform is Windows</li>
+<li><strong>FIPS_OSX</strong>: target platform is OSX-ish (either OSX 10.x or iOS)</li>
+<li><strong>FIPS_CLANG</strong>: C++ compiler is clang</li>
+<li><strong>FIPS_GCC</strong>: C++ compiler is GCC</li>
+<li><strong>FIPS_MSVC</strong>: C++ compiler is Visual Studio compiler</li>
+<li><strong>FIPS_LINUX</strong>: target platform is Linux</li>
+<li><strong>FIPS_MACOS</strong>: target platform is OSX 10.x</li>
+<li><strong>FIPS_IOS</strong>: target platform is iOS</li>
+<li><strong>FIPS_WIN32</strong>: target platform is 32-bit Windows</li>
+<li><strong>FIPS_WIN64</strong>: target platform is 64-bit Windows</li>
+<li><strong>FIPS_EMSCRIPTEN</strong>: target platform is emscripten</li>
+<li><strong>FIPS_ANDROID</strong>: target platform is Android</li>
+<li><strong>FIPS_HOST_WINDOWS</strong>: host platform is Windows</li>
+<li><strong>FIPS_HOST_OSX</strong>: host platform is OSX</li>
+<li><strong>FIPS_HOST_LINUX</strong>: host platform is Linux</li>
+<li><strong>FIPS_ROOT_DIR</strong>: absolute path of the fips root directory</li>
+<li><strong>FIPS_PROJECT_DIR</strong>: absolute path of the current project</li>
+<li><strong>FIPS_DEPLOY_DIR</strong>: absolute path of the deployment directory</li>
+<li><strong>FIPS_CONFIG</strong>: name of the current build configuration (e.g. osx-xcode-debug)</li>
+<li><strong>FIPS_IMPORT</strong>: set inside import CMakeLists.txt files</li>
+</ul>
+
+<h3 id="fips-cmake-options">Fips CMake Options</h3>
+
+<p>Fips provides a few build options which can be tweaked by running <strong>./fips config</strong>
+(requires the ccmake or cmake-gui tools to be in the path).</p>
+
+<p>Besides <em>./fips config</em>, cmake options can also be provided in
+a build config YAML file, for instance the following config file
+sets the FIPS_UNITTESTS and FIPS_UNITTESTS_HEADLESS options to ON:</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
+</span><span class="w"></span>platform<span class="p">:</span><span class="w"> </span>emscripten<span class="w"> 
+</span><span class="w"></span>generator<span class="p">:</span><span class="w"> </span>Ninja<span class="w"> 
+</span><span class="w"></span>build_tool<span class="p">:</span><span class="w"> </span>ninja<span class="w">
+</span><span class="w"></span>build_type<span class="p">:</span><span class="w"> </span>Debug<span class="w">
+</span><span class="w"></span>defines<span class="p">:</span><span class="w">
+</span><span class="w">    </span>FIPS_UNITTESTS<span class="p">:</span><span class="w"> </span>ON<span class="w">
+</span><span class="w">    </span>FIPS_UNITTESTS_HEADLESS<span class="p">:</span><span class="w"> </span>ON</code></pre></div>
+<h3 id="cmakelists-txt-samples">CMakeLists.txt Samples</h3>
+
+<p>Here&rsquo;s a very simple root CMakeLists.txt file from the <em>fips-hello-world</em>
+sample project:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8</span><span class="p">)</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="c"># include the fips main cmake file
+</span><span class="c"></span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FIPS_ROOT_DIR</span> <span class="s2">&#34;../fips&#34;</span> <span class="s">ABSOLUTE</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s2">&#34;${FIPS_ROOT_DIR}/cmake/fips.cmake&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_setup</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_project</span><span class="p">(</span><span class="s">fips-hello-world</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">src</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_finish</span><span class="p">()</span></code></pre></div>
+<p>The <em>src</em> subdirectory contains the CMakeLists.txt file which defines
+the actual appliction:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_begin_app</span><span class="p">(</span><span class="s">hello</span> <span class="s">cmdline</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span><span class="s">hello.cc</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_deps</span><span class="p">(</span><span class="s">dep1</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_end_app</span><span class="p">()</span></code></pre></div>
+<p>This is a more complex root CMakeLists.txt file from the Oryol 3D engine:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c">#----------------------------------------------------------
+</span><span class="c">#	oryol cmake root file
+</span><span class="c">#
+</span><span class="c">#	See BUILD.md for details how to build oryol.
+</span><span class="c">#----------------------------------------------------------
+</span><span class="c"></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8</span><span class="p">)</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FIPS_ROOT_DIR</span> <span class="s2">&#34;../fips&#34;</span> <span class="s">ABSOLUTE</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s2">&#34;${FIPS_ROOT_DIR}/cmake/fips.cmake&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="nb">option</span><span class="p">(</span><span class="s">ORYOL_SAMPLES</span> <span class="s2">&#34;Build Oryol samples&#34;</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s">code</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s">code/Modules</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s">code/Ext</span><span class="p">)</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_setup</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_project</span><span class="p">(</span><span class="s">oryol</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Hello</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s">Modules</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Modules</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s">Ext</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Ext</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">ORYOL_SAMPLES</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>   <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s">Samples</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>   <span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Samples</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_finish</span><span class="p">()</span></code></pre></div>
+<p>Next a sample which defines a code module with platform-specific source
+code in subdirectories, and towards the end some dependencies to other
+fips modules:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c">#----------------------------------------------------------
+</span><span class="c">#   oryol Input module
+</span><span class="c">#----------------------------------------------------------
+</span><span class="c"></span><span class="nb">fips_begin_module</span><span class="p">(</span><span class="s">Input</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span><span class="s">Input.cc</span> <span class="s">Input.h</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_dir</span><span class="p">(</span><span class="s">Core</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span>
+        <span class="s">CursorMode.h</span>
+        <span class="s">Gamepad.cc</span> <span class="s">Gamepad.h</span>
+        <span class="s">InputSetup.h</span>
+        <span class="s">Key.cc</span> <span class="s">Key.h</span>
+        <span class="s">Keyboard.cc</span> <span class="s">Keyboard.h</span>
+        <span class="s">Mouse.cc</span> <span class="s">Mouse.h</span>
+        <span class="s">Sensors.h</span>
+        <span class="s">Touchpad.cc</span> <span class="s">Touchpad.h</span>
+        <span class="s">inputMgr.h</span>
+    <span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_dir</span><span class="p">(</span><span class="s">base</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span><span class="s">inputMgrBase.cc</span> <span class="s">inputMgrBase.h</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_dir</span><span class="p">(</span><span class="s">touch</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span>
+        <span class="s">gestureState.h</span>
+        <span class="s">panDetector.cc</span>
+        <span class="s">panDetector.h</span>
+        <span class="s">pinchDetector.cc</span>
+        <span class="s">pinchDetector.h</span>
+        <span class="s">tapDetector.cc</span>
+        <span class="s">tapDetector.h</span>
+        <span class="s">touchEvent.cc</span>
+        <span class="s">touchEvent.h</span>
+    <span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_ANDROID</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>        <span class="nb">fips_dir</span><span class="p">(</span><span class="s">android</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>        <span class="nb">fips_files</span><span class="p">(</span><span class="s">androidInputMgr.cc</span> <span class="s">androidInputMgr.h</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">endif</span><span class="p">()</span><span class="err">
+</span><span class="err"></span>    <span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_EMSCRIPTEN</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>        <span class="nb">fips_dir</span><span class="p">(</span><span class="s">emsc</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>        <span class="nb">fips_files</span><span class="p">(</span><span class="s">emscInputMgr.cc</span> <span class="s">emscInputMgr.h</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">endif</span><span class="p">()</span><span class="err">
+</span><span class="err"></span>    <span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_IOS</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>        <span class="nb">fips_dir</span><span class="p">(</span><span class="s">ios</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>        <span class="nb">fips_files</span><span class="p">(</span><span class="s">iosInputMgr.cc</span> <span class="s">iosInputMgr.h</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">endif</span><span class="p">()</span><span class="err">
+</span><span class="err"></span>    <span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_MACOS</span> <span class="s">OR</span> <span class="s">FIPS_WINDOWS</span> <span class="s">OR</span> <span class="s">FIPS_LINUX</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>        <span class="nb">fips_dir</span><span class="p">(</span><span class="s">glfw</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>        <span class="nb">fips_files</span><span class="p">(</span><span class="s">glfwInputMgr.cc</span> <span class="s">glfwInputMgr.h</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>        <span class="nb">fips_deps</span><span class="p">(</span><span class="s">glfw3</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">endif</span><span class="p">()</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_deps</span><span class="p">(</span><span class="s">Core</span> <span class="s">Gfx</span> <span class="s">Time</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_end_module</span><span class="p">()</span></code></pre></div>
+<p>Finally an example how to wrap a simple C library with a few custom
+C preprocessor defines:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_begin_lib</span><span class="p">(</span><span class="s">zlib</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span>
+        <span class="s">adler32.c</span>
+        <span class="s">compress.c</span>
+        <span class="s">crc32.c</span> <span class="s">crc32.h</span>
+        <span class="s">deflate.c</span> <span class="s">deflate.h</span>
+        <span class="s">infback.c</span> 
+        <span class="s">inffast.c</span> <span class="s">inffast.h</span>
+        <span class="s">inffixed.h</span>
+        <span class="s">inflate.c</span> <span class="s">inflate.h</span>
+        <span class="s">inftrees.c</span> <span class="s">inftrees.h</span>
+        <span class="s">trees.c</span> <span class="s">trees.h</span>
+        <span class="s">uncompr.c</span>
+        <span class="s">zconf.h</span>
+        <span class="s">zlib.h</span>
+        <span class="s">zutil.c</span> <span class="s">zutil.h</span>
+    <span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_NO_FSEEKO</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_CRT_SECURE_NO_DEPRECATE</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_CRT_NONSTDC_NO_DEPRECATE</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_end_lib</span><span class="p">(</span><span class="s">zlib</span><span class="p">)</span></code></pre></div></article>
+
+      
+
+      
+    </div>
+
+    
+  
+  
+  <aside class="book-toc fixed">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#fips-cmake-guide">Fips CMake Guide</a>
+<ul>
+<li>
+<ul>
+<li><a href="#fips-cmake-macros">Fips CMake Macros</a>
+<ul>
+<li><a href="#fips-setup-project-proj-name">fips_setup(PROJECT proj_name)</a></li>
+<li><a href="#fips-finish">fips_finish()</a></li>
+<li><a href="#fips-project-name">fips_project(name)</a></li>
+<li><a href="#fips-ide-group-name">fips_ide_group(name)</a></li>
+<li><a href="#fips-add-subdirectory-dir">fips_add_subdirectory(dir)</a></li>
+<li><a href="#fips-include-directories-dir">fips_include_directories(dir &hellip;)</a></li>
+<li><a href="#fips-begin-module-name">fips_begin_module(name)</a></li>
+<li><a href="#fips-end-module">fips_end_module()</a></li>
+<li><a href="#fips-begin-lib-name">fips_begin_lib(name)</a></li>
+<li><a href="#fips-end-lib">fips_end_lib()</a></li>
+<li><a href="#fips-begin-sharedlib-name">fips_begin_sharedlib(name)</a></li>
+<li><a href="#fips-end-sharedlib">fips_end_sharedlib()</a></li>
+<li><a href="#fips-begin-app-name-type">fips_begin_app(name type)</a></li>
+<li><a href="#fips-end-app">fips_end_app()</a></li>
+<li><a href="#fips-dir-dir-group-ide-group">fips_dir(dir [GROUP ide_group])</a></li>
+<li><a href="#fips-files-file">fips_files(file &hellip;)</a></li>
+<li><a href="#fips-files-ex-dir-glob-except-glob-group-ide-group-no-recurse-group-folders">fips_files_ex(dir glob&hellip; [EXCEPT glob&hellip;] [GROUP ide_group] [NO_RECURSE|GROUP_FOLDERS])</a></li>
+<li><a href="#fips-src-dir-glob-except-glob-group-ide-group-no-recurse-group-folders">fips_src(dir glob&hellip; [EXCEPT glob&hellip;] [GROUP ide_group] [NO_RECURSE|GROUP_FOLDERS])</a></li>
+<li><a href="#fips-deps-dep">fips_deps(dep &hellip;)</a></li>
+<li><a href="#fips-libs-libs">fips_libs(libs &hellip;)</a></li>
+<li><a href="#fips-libs-debug-libs-fips-libs-release-libs">fips_libs_debug(libs &hellip;), fips_libs_release(libs &hellip;)</a></li>
+<li><a href="#fips-generate">fips_generate(&hellip;)</a></li>
+</ul></li>
+<li><a href="#the-fips-include-cmake-file">The fips-include.cmake File</a></li>
+<li><a href="#fips-predefined-cmake-variables">Fips Predefined CMake Variables</a></li>
+<li><a href="#fips-cmake-options">Fips CMake Options</a></li>
+<li><a href="#cmakelists-txt-samples">CMakeLists.txt Samples</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </aside>
+
+
+
+  </main>
+  
+  
+  
+</body>
+
+</html>

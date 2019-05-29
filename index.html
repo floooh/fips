@@ -1,183 +1,345 @@
 <!DOCTYPE html>
-<html>
 
-  <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>About Fips</title>
-  <meta name="description" content="cmake-based high-level build system for multi-platform C/C++ projects
-">
 
-  <link rel="stylesheet" href="/fips/css/main.css">
-  <link rel="canonical" href="http://floooh.github.com/fips/">
+
+
+<html lang="en">
+
+<head>
+	<meta name="generator" content="Hugo 0.55.6" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+    Introduction
+  
+ | Fips Docs</title>
+
+
+
+<link rel="stylesheet" href="/fips/book.min.5c73c46aca2a1bca1dcdff8126636a2cd180236600b29850c511f7cf52195c4a.css">
+
+
+<link rel="icon" href="/fips/favicon.png" type="image/x-icon">
+
+
+<link rel="alternate" type="application/rss+xml" href="http://floooh.github.com/fips/index.xml" title="Fips Docs" />
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
 </head>
 
+<body>
+  <input type="checkbox" style="display: none" id="menu-control" />
+  <main class="flex container">
 
-  <body>
+    <aside class="book-menu fixed">
+      <nav role="navigation">
+<h2 class="book-brand">
+  <a href="http://floooh.github.com/fips/">Fips Docs</a>
+</h2>
 
-    <header class="site-header">
 
-    <!-- this is the 'fork me on github' label -->
-    <a href="https://github.com/floooh/fips"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
 
-    <div class="site-title">
-        fips
-        <span class="site-subtitle">the friendly cmake wrapper</span>
-    </div>
+    
+
+  
+  
+
+
+
+
+
+ 
+  
+    
+
+  <ul>
+    
+    
+    <li>
+      
+
+  <a href="/fips/docs/getstarted/" >
+    
+  
+    
+    Get Started
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/build/" >
+    
+  
+    
+    Build Projects
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/troubleshooting/" >
+    
+  
+    
+    Troubleshooting
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/crosscompiling/" >
+    
+  
+    
+    Cross-compiling
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/cmakeguide/" >
+    
+  
+    
+    CMake Guide
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/imports/" >
+    
+  
+    
+    Imports
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/exports/" >
+    
+  
+    
+    Exports
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/codegen/" >
+    
+  
+    
+    Code Generation
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/dirstructure/" >
+    
+  
+    
+    Directory Structure
+  
+
+  </a>
+
+
+    </li>
+    
+  </ul>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+  
+<script>
+(function() {
+  var menu = document.querySelector('aside.book-menu nav')
+  addEventListener('beforeunload', function(event) {
+    localStorage.setItem('menu.scrollTop', menu.scrollTop)
+  });
+  menu.scrollTop = localStorage.getItem('menu.scrollTop')
+})()
+</script>
+
+
+
+    </aside>
+
+    <div class="book-page">
+      <header class="align-center justify-between book-header">
+  <label for="menu-control">
+    <img src="/fips/svg/menu.svg" alt="Menu" />
+  </label>
+  <strong>
+  
+    Introduction
+  
+</strong>
 </header>
 
+      
+<article class="markdown">
 
+<h1 id="what-is-fips">What is Fips</h1>
 
+<p>Fips is a Python command line tool which provides an &lsquo;Integrated Build
+Environment&rsquo; for C/C++ projects by wiring together existing build tools. It
+enables a workflow similar to Rust&rsquo;s Cargo or Javascript&rsquo;s NPM, but for C/C++
+projects.</p>
 
-    <ul class="navigation">
-    
-        
-        <li class="nav-item">
-            <a href="/fips/index.html">About Fips</a>
-        </li>
-        
-    
-        
-    
-        
-        <li class="nav-item">
-            <a href="/fips/getstarted.html">Get Started</a>
-        </li>
-        
-    
-        
-        <li class="nav-item">
-            <a href="/fips/build.html">Build Projects</a>
-        </li>
-        
-    
-        
-        <li class="nav-item">
-            <a href="/fips/troubleshooting.html">Troubleshooting</a>
-        </li>
-        
-    
-        
-        <li class="nav-item">
-            <a href="/fips/crosscompiling.html">Cross-Compiling</a>
-        </li>
-        
-    
-        
-        <li class="nav-item">
-            <a href="/fips/cmakeguide.html">CMake Guide</a>
-        </li>
-        
-    
-        
-        <li class="nav-item">
-            <a href="/fips/imports.html">Imports</a>
-        </li>
-        
-    
-        
-        <li class="nav-item">
-            <a href="/fips/exports.html">Exports</a>
-        </li>
-        
-    
-        
-        <li class="nav-item">
-            <a href="/fips/codegen.html">Code Generation</a>
-        </li>
-        
-    
-        
-        <li class="nav-item">
-            <a href="/fips/dirstruct.html">Directory Structure</a>
-        </li>
-        
-    
-</ul>
+<h2 id="an-integrated-build-environment">An &lsquo;Integrated Build Environment&rsquo;</h2>
 
-
-
-    <div class="page-content">
-        <div>
-
-  <article>
-    <h1 id="fips-is-like-vagrant-but-for-cmake">fips is like Vagrant, but for cmake.</h1>
-
-<p>Fips simplifies working with many different cmake build configurations just
-like Vagrant simplifies working with many different Virtual Machine
-configurations.</p>
-
-<h3 id="feature-overview">Feature Overview</h3>
-
-<p>Fips is a Python tool which provides an ‘Integrated Build Environment’
-on the command line for multi-platform, modular C/C++ projects by wiring
-together existing build tools.</p>
-
-<h4 id="an-integrated-build-environment">An ‘Integrated Build Environment”</h4>
-
-<p>Fips doesn’t reinvent the wheel by implementing yet-another build system
+<p>Fips doesn&rsquo;t reinvent the wheel by implementing yet-another build system
 from scratch, but instead wires existing build tools together:</p>
 
 <ul>
-  <li><strong>cmake</strong> to describe the project structure and generate project files</li>
-  <li><strong>make, ninja, xcodebuild</strong> as command line build tools</li>
-  <li>IDE support as provided by cmake (i.e. <strong>Visual Studio, Xcode, QtCreator</strong>)</li>
-  <li><strong>git</strong> to resolve external project dependencies</li>
+<li><strong>cmake</strong> to describe the project structure and generate project files</li>
+<li><strong>make, ninja, xcodebuild</strong> as command line build tools</li>
+<li>IDE support as provided by cmake (i.e. <strong>Visual Studio, Xcode, VSCode</strong>)</li>
+<li><strong>git</strong> to fetch external dependencies</li>
+<li><strong>python</strong> to extend fips with new commands and code-generation-scripts</li>
 </ul>
 
-<h4 id="multi-platform-support">Multi-Platform Support</h4>
+<h2 id="multi-and-cross-platform-support">Multi- and Cross-Platform Support</h2>
 
 <p>Fips can build on <strong>Windows, OSX, Linux</strong>, and cross-compile to <strong>iOS,
-emscripten, PNaCl</strong> and <strong>Android</strong>. Fips also takes care of installing 
-the cross-platform SDKs and provides a unified cmake build environment 
+emscripten</strong> and <strong>Android</strong>. Fips also takes care of installing
+the cross-platform SDKs and provides a unified cmake build environment
 for all target platforms. Instead of wrestling with the many different build
-systems used by those cross-platform SDKs you only maintain a single set 
+systems used by those cross-platform SDKs you only maintain a single set
 of cmake files for all target platforms.</p>
 
-<h4 id="build-configuration-management">Build Configuration Management</h4>
+<h2 id="build-configuration-management">Build Configuration Management</h2>
 
-<p>Multi-platform projects often have dozens of different build configurations
+<p>Cross-platform projects often have dozens of different build configurations
 for combinations of target platforms, build tools and build settings.
 Fips makes it easy to work with many different build configurations, and
 keeps the build files for each configuration separated from each other.</p>
 
-<h4 id="dependency-management">Dependency Management</h4>
+<h2 id="dependency-management">Dependency Management</h2>
 
 <p>Fips projects can define exports and imports to and from other fips projects,
 and thus serve as a simple package manager for code modules. External
-projects will be pulled in via git and fips will import external build targets,
-and setup header and library search paths. A project with external dependencies
-will look and feel exactly the same like a completely local project.</p>
+projects will be pulled in via git and fips will import external build
+targets, fips commands, code-generators and setup header and library search
+paths. A project with external dependencies will look and feel exactly the
+same like a completely local project.</p>
 
-<h4 id="code-generation">Code Generation</h4>
+<h2 id="code-generation">Code Generation</h2>
 
 <p>Fips implements a simple yet powerful code generation mechanism by calling
-Python ‘generator scripts’ during the build process.</p>
+Python &lsquo;generator scripts&rsquo; during the build process.</p>
 
-<h4 id="extensible">Extensible</h4>
+<h2 id="extensible">Extensible</h2>
 
 <p>Fips projects can implement their own fips commands, build configurations and
 code generator scripts. This allows projects to implement missing
 fips features and integrate fips with existing workflows and build processes.</p>
 
-<h3 id="what-fips-is-not">What fips is not:</h3>
+<h1 id="what-fips-is-not">What Fips is not:</h1>
 
 <ul>
-  <li>fips is not a build job scheduler like Jenkins, Hudson, msbuild or ant</li>
-  <li>fips is not a distributed build system like Incredibuild</li>
-  <li>fips is not a replacement for cmake, premake or scons</li>
-  <li>fips is not a game asset exporter pipeline</li>
+<li>fips is not a build job scheduler like Jenkins, Hudson, msbuild or ant</li>
+<li>fips is not a distributed build system like Incredibuild</li>
+<li>fips is not a replacement for cmake, premake or scons</li>
 </ul>
+</article>
 
+      
 
-  </article>
-
-</div>
-
+      
     </div>
 
-  </body>
+    
+  
+  
+  <aside class="book-toc fixed">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#what-is-fips">What is Fips</a>
+<ul>
+<li><a href="#an-integrated-build-environment">An &lsquo;Integrated Build Environment&rsquo;</a></li>
+<li><a href="#multi-and-cross-platform-support">Multi- and Cross-Platform Support</a></li>
+<li><a href="#build-configuration-management">Build Configuration Management</a></li>
+<li><a href="#dependency-management">Dependency Management</a></li>
+<li><a href="#code-generation">Code Generation</a></li>
+<li><a href="#extensible">Extensible</a></li>
+</ul></li>
+<li><a href="#what-fips-is-not">What Fips is not:</a></li>
+</ul>
+</nav>
+  </aside>
+
+
+
+  </main>
+  
+  
+  
+</body>
 
 </html>

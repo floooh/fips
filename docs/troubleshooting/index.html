@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+    
+    Troubleshooting
+  
+ | Fips Docs</title>
+
+
+
+<link rel="stylesheet" href="/fips/book.min.5c73c46aca2a1bca1dcdff8126636a2cd180236600b29850c511f7cf52195c4a.css">
+
+
+<link rel="icon" href="/fips/favicon.png" type="image/x-icon">
+
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body>
+  <input type="checkbox" style="display: none" id="menu-control" />
+  <main class="flex container">
+
+    <aside class="book-menu fixed">
+      <nav role="navigation">
+<h2 class="book-brand">
+  <a href="http://floooh.github.com/fips/">Fips Docs</a>
+</h2>
+
+
+
+    
+
+  
+  
+
+
+
+
+
+ 
+  
+    
+
+  <ul>
+    
+    
+    <li>
+      
+
+  <a href="/fips/docs/getstarted/" >
+    
+  
+    
+    Get Started
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/build/" >
+    
+  
+    
+    Build Projects
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/troubleshooting/"  class="active">
+    
+  
+    
+    Troubleshooting
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/crosscompiling/" >
+    
+  
+    
+    Cross-compiling
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/cmakeguide/" >
+    
+  
+    
+    CMake Guide
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/imports/" >
+    
+  
+    
+    Imports
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/exports/" >
+    
+  
+    
+    Exports
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/codegen/" >
+    
+  
+    
+    Code Generation
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/dirstructure/" >
+    
+  
+    
+    Directory Structure
+  
+
+  </a>
+
+
+    </li>
+    
+  </ul>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+  
+<script>
+(function() {
+  var menu = document.querySelector('aside.book-menu nav')
+  addEventListener('beforeunload', function(event) {
+    localStorage.setItem('menu.scrollTop', menu.scrollTop)
+  });
+  menu.scrollTop = localStorage.getItem('menu.scrollTop')
+})()
+</script>
+
+
+
+    </aside>
+
+    <div class="book-page">
+      <header class="align-center justify-between book-header">
+  <label for="menu-control">
+    <img src="/fips/svg/menu.svg" alt="Menu" />
+  </label>
+  <strong>
+  
+    
+    Troubleshooting
+  
+</strong>
+</header>
+
+      
+<article class="markdown">
+
+<h1 id="troubleshooting">Troubleshooting</h1>
+
+<p>If anything goes wrong, &lsquo;./fips clean all&rsquo; and &lsquo;./fips diag&rsquo; are the two
+most useful commands.</p>
+
+<p>&rsquo;./fips clean all&rsquo; deletes all build files created by fips and thus
+resets a project into a clean starting state.</p>
+
+<p>&rsquo;./fips diag&rsquo; runs a number of diagnostic tests and provides useful
+error output:</p>
+<div class="highlight"><pre class="chroma">&gt; ./fips help diag
+fips diag
+fips diag all
+fips diag fips
+fips diag tools
+fips diag configs
+fips diag imports
+    run diagnostics and check for errors
+&gt; _</pre></div>
+<p>&rsquo;./fips diag tools&rsquo; tests whether additional 3rd party tools are present,
+and if not found, explains whether the tools are required or optional,
+and what they are needed for.</p>
+<div class="highlight"><pre class="chroma">&gt; ./fips diag tools
+=== tools:
+git:	found
+cmake:	found
+ccmake:	found
+make:	found
+ninja:	OPTIONAL, NOT FOUND (required for building &#39;*-ninja-*&#39; configs)
+xcodebuild:	found
+java:	found
+ant:	found
+python2:	found
+&gt; _</pre></div>
+<p>&rsquo;./fips diag fips&rsquo; simply checks whether fips itself is up-to-date. If
+not, simply run a &lsquo;git pull&rsquo; from within the fips directory to get the
+latest version.</p>
+<div class="highlight"><pre class="chroma">=== fips:
+  uptodate</pre></div>
+<p>&rsquo;./fips diag configs&rsquo; goes through all existing build config files, checks
+if their content is valid, and whether all required prerequisites are met
+in the current environment to build them (e.g. whether the required build
+tools exist and cross-platform SDKs have been installed):</p>
+<div class="highlight"><pre class="chroma">&gt; ./fips diag configs
+=== configs:
+...
+ios-xcode-debug
+  ok
+ios-xcode-release
+  ok
+linux-make-debug
+  &#39;linux&#39; is not a valid target platform for host &#39;osx&#39;
+linux-make-release
+  &#39;linux&#39; is not a valid target platform for host &#39;osx&#39;
+...
+&gt; _</pre></div></article>
+
+      
+
+      
+    </div>
+
+    
+  
+  
+  <aside class="book-toc fixed">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</nav>
+  </aside>
+
+
+
+  </main>
+  
+  
+  
+</body>
+
+</html>

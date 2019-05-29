@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+    
+    Imports
+  
+ | Fips Docs</title>
+
+
+
+<link rel="stylesheet" href="/fips/book.min.5c73c46aca2a1bca1dcdff8126636a2cd180236600b29850c511f7cf52195c4a.css">
+
+
+<link rel="icon" href="/fips/favicon.png" type="image/x-icon">
+
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body>
+  <input type="checkbox" style="display: none" id="menu-control" />
+  <main class="flex container">
+
+    <aside class="book-menu fixed">
+      <nav role="navigation">
+<h2 class="book-brand">
+  <a href="http://floooh.github.com/fips/">Fips Docs</a>
+</h2>
+
+
+
+    
+
+  
+  
+
+
+
+
+
+ 
+  
+    
+
+  <ul>
+    
+    
+    <li>
+      
+
+  <a href="/fips/docs/getstarted/" >
+    
+  
+    
+    Get Started
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/build/" >
+    
+  
+    
+    Build Projects
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/troubleshooting/" >
+    
+  
+    
+    Troubleshooting
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/crosscompiling/" >
+    
+  
+    
+    Cross-compiling
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/cmakeguide/" >
+    
+  
+    
+    CMake Guide
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/imports/"  class="active">
+    
+  
+    
+    Imports
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/exports/" >
+    
+  
+    
+    Exports
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/codegen/" >
+    
+  
+    
+    Code Generation
+  
+
+  </a>
+
+
+    </li>
+    
+    <li>
+      
+
+  <a href="/fips/docs/dirstructure/" >
+    
+  
+    
+    Directory Structure
+  
+
+  </a>
+
+
+    </li>
+    
+  </ul>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+  
+<script>
+(function() {
+  var menu = document.querySelector('aside.book-menu nav')
+  addEventListener('beforeunload', function(event) {
+    localStorage.setItem('menu.scrollTop', menu.scrollTop)
+  });
+  menu.scrollTop = localStorage.getItem('menu.scrollTop')
+})()
+</script>
+
+
+
+    </aside>
+
+    <div class="book-page">
+      <header class="align-center justify-between book-header">
+  <label for="menu-control">
+    <img src="/fips/svg/menu.svg" alt="Menu" />
+  </label>
+  <strong>
+  
+    
+    Imports
+  
+</strong>
+</header>
+
+      
+<article class="markdown">
+
+<h1 id="importing-external-dependencies">Importing external dependencies</h1>
+
+<p>fips implements a very simple &lsquo;package manager&rsquo; for external code modules. A
+fips project can list a number of &lsquo;imports&rsquo; in its fips.yml file to import
+external projects. A project which uses external dependencies
+will look and feel the same as if all dependencies would reside locally in
+the main project.</p>
+
+<p>Importing external projects has a number of advantages (and one notable
+disadvantage):</p>
+
+<ul>
+<li>generic libraries live in their own github repositories and can easily be
+shared by many projects</li>
+<li>ownership is clearly defined, the owner of an imported project is the
+owner of the git repository which contains the imported project</li>
+<li>if dependency trees become too complex, the result might be &lsquo;dependency hell&rsquo;
+where version conflicts occur when imported projects depend on different
+versions of another project</li>
+</ul>
+
+<p>Care should be taken when working with external dependencies to keep the
+dependency tree reasonably shallow. Do not split a project into too many,
+too granular sub-projects.</p>
+
+<h3 id="fipsification">Fipsification</h3>
+
+<p>fips can only import projects that have at least a fips.yml in their
+project root, and thus has been &lsquo;fipsified&rsquo;. The details and
+different ways of &lsquo;fipsification&rsquo; are described on the <strong>Exports</strong>
+documentation page, for now it is only important to know that the silly term
+&lsquo;fipsified project&rsquo; means a project that has been made compatible with
+fips.</p>
+
+<h3 id="how-to-define-imports">How to define imports</h3>
+
+<p>Simply list imports in your fips.yml file under the section &lsquo;imports&rsquo;.</p>
+
+<p>Here is a very simple example from the <em>fips-hello-world</em> project:</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
+</span><span class="w"></span>imports<span class="p">:</span><span class="w">
+</span><span class="w">    </span>fips-hello-dep1<span class="p">:</span><span class="w">
+</span><span class="w">        </span>git<span class="p">:</span><span class="w">    </span>https<span class="p">:</span>//github.com/floooh/fips-hello-dep1.git</code></pre></div>
+<p>This defines a single import <em>fips-hello-dep1</em> from the github URL
+<em><a href="https://github.com/floooh/fips-hello-dep1.git">https://github.com/floooh/fips-hello-dep1.git</a></em>.</p>
+
+<p>Dependencies can be recursive, for instance the <em>fips-hello-dep1</em>
+project imports another project:</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
+</span><span class="w"></span>imports<span class="p">:</span><span class="w">
+</span><span class="w">    </span>fips-hello-dep2<span class="p">:</span><span class="w">
+</span><span class="w">        </span>git<span class="p">:</span><span class="w">    </span>https<span class="p">:</span>//github.com/floooh/fips-hello-dep2.git</code></pre></div>
+<p>A more complex import section might look like this (from the Oryol 3D engine):</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
+</span><span class="w"></span>imports<span class="p">:</span><span class="w">
+</span><span class="w">    </span>gliml<span class="p">:</span><span class="w">
+</span><span class="w">        </span>git<span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/gliml.git<span class="w">
+</span><span class="w">    </span>fips-glm<span class="p">:</span><span class="w">
+</span><span class="w">        </span>git<span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/fips-glm.git<span class="w">
+</span><span class="w">    </span>fips-unittestpp<span class="p">:</span><span class="w">
+</span><span class="w">        </span>git<span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/fips-unittestpp.git<span class="w">
+</span><span class="w">    </span>fips-zlib<span class="p">:</span><span class="w">
+</span><span class="w">        </span>git<span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/fips-zlib.git<span class="w">
+</span><span class="w">    </span>fips-glfw<span class="p">:</span><span class="w">
+</span><span class="w">        </span>git<span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/fips-glfw.git<span class="w">
+</span><span class="w">    </span>fips-libcurl<span class="p">:</span><span class="w">
+</span><span class="w">        </span>git<span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/fips-libcurl.git</code></pre></div>
+<p>In the future there will be more ways to define imports,
+most likely support for more version control systems like Subversion
+or Mercurial.</p>
+
+<h3 id="importing-specific-versions">Importing specific versions</h3>
+
+<p>It is possible to specify a git branch, tag name or revision when defining an import
+in fips.yml. This is usually a good idea for complex real-world projects
+since it prevents that a build suddenly breaks because an external dependency
+has had an update that breaks existing code:</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
+</span><span class="w"></span>imports<span class="p">:</span><span class="w">
+</span><span class="w">    </span>my-awesome-lib<span class="p">:</span><span class="w">
+</span><span class="w">        </span>git<span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/my-awesome-lib.git<span class="w">
+</span><span class="w">        </span>branch<span class="p">:</span><span class="w"> </span>version-<span class="m">0.0</span>.<span class="m">1</span><span class="w">
+</span><span class="w">    </span>my-other-awesome-lib<span class="p">:</span><span class="w">
+</span><span class="w">        </span>git<span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/my-other-awesome-lib.git<span class="w">
+</span><span class="w">        </span>rev<span class="p">:</span><span class="w"> </span>00f1a6d3</code></pre></div>
+<p>The &lsquo;branch:&rsquo; item can either be a branch or tag name.
+The &lsquo;rev:&rsquo; item should be a valid commit SHA1 reference.</p>
+
+<h3 id="conditional-imports">Conditional Imports</h3>
+
+<p>An import can contain a conditional cmake-expression which must be true
+for the import to happen. For instance to ignore an import on IOS:</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
+</span><span class="w"></span>imports<span class="p">:</span><span class="w">
+</span><span class="w">    </span>my-awesome-lib<span class="p">:</span><span class="w">
+</span><span class="w">        </span>git<span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/my-awesome-lib.git<span class="w">
+</span><span class="w">        </span>cond<span class="p">:</span><span class="w"> </span><span class="s2">&#34;NOT FIPS_IOS&#34;</span></code></pre></div>
+<p>The resulting cmake code to import this dependency will then be surrounded
+with:</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">if<span class="w"> </span>(NOT<span class="w"> </span>FIPS_IOS)<span class="w">
+</span><span class="w">    </span>...actual<span class="w"> </span>import<span class="w"> </span>code<span class="w">
+</span><span class="w"></span>endif()</code></pre></div>
+<h3 id="fetching-imports">Fetching imports</h3>
+
+<p>To fetch external dependencies simply run &lsquo;./fips fetch&rsquo; from within
+the project directory which defines the imports:</p>
+<div class="highlight"><pre class="chroma">&gt; ./fips fetch
+[WARNING] project dir &#39;/Users/floh/projects/fips-hello-dep1&#39; does not exist
+=== dependency: &#39;fips-hello-dep1&#39;:
+Cloning into &#39;fips-hello-dep1&#39;...
+remote: Counting objects: 51, done.
+remote: Compressing objects: 100% (35/35), done.
+remote: Total 51 (delta 13), reused 49 (delta 12)
+Unpacking objects: 100% (51/51), done.
+Checking connectivity... done.
+=== dependency: &#39;fips-hello-dep2&#39;:
+Cloning into &#39;fips-hello-dep2&#39;...
+remote: Counting objects: 57, done.
+remote: Compressing objects: 100% (36/36), done.
+remote: Total 57 (delta 16), reused 56 (delta 15)
+Unpacking objects: 100% (57/57), done.
+Checking connectivity... done.
+&gt; _</pre></div>
+<p>Dependencies will also be automatically be fetched when running &lsquo;./fips clone&rsquo;,
+&lsquo;./fips gen&rsquo;, &lsquo;./fips build&rsquo;, and &lsquo;./fips make&rsquo;. So most of the time, dependency
+fetching will happen automatically when needed.</p>
+
+<h3 id="listing-imports">Listing imports</h3>
+
+<p>To get an overview of the dependency structure of a project, run &lsquo;./fips list imports&rsquo;:</p>
+<div class="highlight"><pre class="chroma">&gt; ./fips list imports
+== imports:
+project &#39;fips-hello-world&#39; imports:
+  &#39;fips-hello-dep1&#39; from &#39;https://github.com/floooh/fips-hello-dep1.git&#39; at branch &#39;master&#39;
+project &#39;fips-hello-dep1&#39; imports:
+  &#39;fips-hello-dep2&#39; from &#39;https://github.com/floooh/fips-hello-dep2.git&#39; at branch &#39;master&#39;
+project &#39;fips-hello-dep2&#39; imports:
+    nothing</pre></div>
+<h3 id="updating-imports">Updating imports</h3>
+
+<p>Imports can be updated with &lsquo;./fips update&rsquo;, updating means, a &lsquo;git pull&rsquo; and
+&lsquo;git submodule update &ndash;recursive&rsquo; will be run on each import, but <strong>only
+if the git repository has no local changes</strong> (uncommitted or unpushed changes),
+otherwise the update for this repo will be skipped (this behaviour prevents
+any unwanted merge commits that could happen in this case during the git pull).</p>
+
+<p>Imports with a pinned revision will work as expected. First the usual update
+procedure will happen, then a &lsquo;git checkout [rev]&rsquo; to go to the right
+revision.</p>
+
+<p>On its own, fips will never automatically update an import, it must always be
+manually invoked by running &lsquo;./fips update&rsquo;. Also note that the toplevel
+directory will not be updated, only the imports.</p>
+
+<p>Fips can tell you if an imported dependency is uptodate (meaning: in
+sync with its remote repository on github) with &lsquo;./fips diag imports&rsquo;:</p>
+<div class="highlight"><pre class="chroma">&gt; ./fips diag imports
+=== imports:
+git status of &#39;fips-hello-dep1&#39;:
+  uptodate
+git status of &#39;fips-hello-dep2&#39;:
+  uptodate</pre></div>
+<p>&rsquo;./fips diag imports&rsquo; catches uncommitted changes, changes which are
+committed but not pushed, and whether the remote repository is ahead of the
+local repository:</p>
+<div class="highlight"><pre class="chroma">=== imports:
+git status of &#39;fips-hello-dep1&#39;:
+[WARNING] &#39;/Users/floh/projects/fips-hello-dep1&#39; has uncommitted changes:
+ M README.md
+
+[WARNING]   &#39;/Users/floh/projects/fips-hello-dep1&#39; is out of sync with remote git repo
+git status of &#39;fips-hello-dep2&#39;:
+  uptodate
+{% endhighlight %}
+
+{% highlight bash %}
+=== imports:
+git status of &#39;fips-hello-dep1&#39;:
+[WARNING] &#39;/Users/floh/projects/fips-hello-dep1&#39; branches out of sync:
+  master: b02b11f6210263c8be058cd415ed47ff58fa64ae
+  origin/master: 3280cfde54dcf7c812ab401e14191815d2d5a342
+[WARNING]   &#39;/Users/floh/projects/fips-hello-dep1&#39; is out of sync with remote git repo
+git status of &#39;fips-hello-dep2&#39;:
+  uptodate</pre></div>
+<p>There&rsquo;s also a less detailed (but faster) diag option which only checks for
+uncommitted or unpushed changes (basically the same check that &lsquo;./fips update&rsquo;
+performs to decide whether it is safe to perform a &lsquo;git pull&rsquo;. To check
+the list of imports for local changes, simply call &lsquo;./fips diag local-changes&rsquo;.</p>
+
+<h3 id="what-s-imported">What&rsquo;s imported</h3>
+
+<p>In general, fips imports what the imported project exports. Exports are also
+defined in the fips.yml file. Exporting from a project is a bit more complex
+then importing, so this is described on its own doc page.</p>
+
+<p>Here&rsquo;s a quick list of what can be imported:</p>
+
+<ul>
+<li><strong>fips modules and libs</strong>: projects can define a list of modules and libs
+from their own CMakeLists.txt hierarchy to be imported in other projects,
+each module/lib directory will also automatically be added to the header
+search path</li>
+<li><strong>header search paths</strong>: projects can export additional header search paths,
+this is especially useful for simple header-only fips projects</li>
+<li><strong>C preprocessor defines</strong>: a fips file can list a number of key/value pairs
+that are handed to the compiler as preprocessor defines</li>
+<li><strong>library search paths</strong>: fips projects can export pre-compiled
+static link libraries</li>
+<li><strong>any cmake statements</strong>: for more complex use cases fips projects
+may contain an optional file called <em>fips-include.cmake</em> in their root directory
+which is included in the top-level CMakeLists.txt file of the importing
+project</li>
+</ul>
+
+<p>Detailed information of how these exports are defined can be found on the
+<strong>Exports</strong> doc page.</p>
+
+<h3 id="selectively-importing-modules">Selectively importing modules</h3>
+
+<p>By default, fips imports all modules of an imported project. Sometimes this
+is overkill when only a few modules from a project are needed. This automatic
+import of modules into a build project can be switched off in the importing
+project&rsquo;s fips.yml file using the &lsquo;no_auto_import&rsquo; policy. Here is an example
+fips.yml file which imports a complex dependency and activates the
+no_auto_import policy:</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
+</span><span class="w"></span>policies<span class="p">:</span><span class="w">
+</span><span class="w">    </span>no_auto_import<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w"></span>imports<span class="p">:</span><span class="w">
+</span><span class="w">    </span>oryol<span class="p">:</span><span class="w">
+</span><span class="w">        </span>git<span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/oryol.git</code></pre></div>
+<p>Not automatically importing modules means that imported modules must be listed
+manually in the root CMakeLists.txt file. For this, fips has created a cmake
+import function for each module called <strong>fips_import_PROJECT_MODULE()</strong>,
+where PROJECT is the project name, and MODULE is the module name that should be
+imported. Any &lsquo;-&rsquo; character in the module or project name must be replaced with
+an &lsquo;_&rsquo; (underscore) character (cmake doesn&rsquo;t accept &lsquo;-&rsquo; in function names).</p>
+
+<p>Manually importing modules can be a lot of trial and error, because the
+entire dependency chain must be manually imported, it&rsquo;s either all
+or nothing with the &lsquo;no_auto_import&rsquo; policy.</p>
+
+<p>Here&rsquo;s a segment from a project&rsquo;s root CMakeLists.txt file with &lsquo;no_auto_import&rsquo;
+enabled as an example:</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_setup</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_project</span><span class="p">(</span><span class="s">yakc</span><span class="p">)</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="c"># manual imports
+</span><span class="c"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;Oryol&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_oryol_Core</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_oryol_Gfx</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_oryol_IO</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_oryol_HTTP</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_oryol_Messaging</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_oryol_Input</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_oryol_IMUI</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_oryol_Resource</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_oryol_Assets</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_oryol_Time</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_oryol_Synth</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;Libs&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_fips_zlib_zlib</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_fips_glfw_glfw3</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_oryol_flextgl</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_oryol_ConvertUTF</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_fips_imgui_imgui</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_import_fips_unittestpp_unittestpp</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="nb">fips_include_directories</span><span class="p">(</span><span class="s">.</span><span class="p">)</span></code></pre></div>
+<h3 id="under-the-hood">Under the hood</h3>
+
+<h4 id="fetching">Fetching</h4>
+
+<p>To speed up importing, fetching doesn&rsquo;t clone the entire git repository,
+instead git is called like this:</p>
+<div class="highlight"><pre class="chroma">&gt; git clone --recursive --branch xxx --single-branch --depth 10 </pre></div>
+<p>It&rsquo;s recommended to use the https protocol to define git URLs so that
+projects can be imported without setting up an SSH key for github,
+this is especially useful when running automated builds:</p>
+
+<blockquote>
+<p>use <strong><a href="https://github.com/floooh/oryol.git">https://github.com/floooh/oryol.git</a></strong> instead of git@github.com:floooh/oryol.git</p>
+</blockquote>
+
+<p>If you actually want to work on the imported projects it is better to git-clone them
+manually using the git SSH protocol (git@github.com/&hellip;).</p>
+
+<h4 id="where-are-imported-projects-located">Where are imported projects located</h4>
+
+<p>Fips stores all imported projects on the same directory level as the
+fips directory itself instead of inside the importing project. This
+makes it easier to share imported projects between multiple
+importing projects, and simplifies working with git.</p>
+
+<h4 id="how-importing-works">How importing works</h4>
+
+<p>Project imports are resolved during &lsquo;./fips gen&rsquo; before
+running cmake (&lsquo;./fips fetch&rsquo; will only git-clone the projects).</p>
+
+<p>During &lsquo;./fips gen&rsquo;, a hidden file <em>.fips-imports.cmake</em> will be
+created in the importing project&rsquo;s root directory which is included
+in the main CMakeLists.txt hierarchy and implements the actual cmake
+import magic. For a simple project like <em>fips-hello-world</em> the file
+looks like this (details may change in newer fips versions):</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c">#
+</span><span class="c"># generated by &#39;fips gen&#39;, don&#39;t edit, don&#39;t add to version control!
+</span><span class="c">#
+</span><span class="c"></span><span class="nb">if</span> <span class="p">(</span><span class="s">EXISTS</span> <span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/fips-include.cmake&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">include</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/fips-include.cmake&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">EXISTS</span> <span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/lib/${FIPS_PLATFORM_NAME}&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">link_directories</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/lib/${FIPS_PLATFORM_NAME}&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/src&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-DTEST_DEFINE_2=</span><span class="s2">&#34;Bla&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-DTEST_DEFINE_1=1</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">macro</span><span class="p">(</span><span class="s">fips_import_fips_hello_dep2_dep2</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">set</span><span class="p">(</span><span class="s">FIPS_IMPORT</span> <span class="s">1</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">add_subdirectory</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/src/dep2&#34;</span> <span class="s2">&#34;fips-hello-dep2_dep2&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">set</span><span class="p">(</span><span class="s">FIPS_IMPORT</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">endmacro</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_AUTO_IMPORT</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;Imports&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_import_fips_hello_dep2_dep2</span><span class="p">()</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">EXISTS</span> <span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/fips-include.cmake&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">include</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/fips-include.cmake&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">EXISTS</span> <span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/lib/${FIPS_PLATFORM_NAME}&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">link_directories</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/lib/${FIPS_PLATFORM_NAME}&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/src&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">macro</span><span class="p">(</span><span class="s">fips_import_fips_hello_dep1_dep1</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">set</span><span class="p">(</span><span class="s">FIPS_IMPORT</span> <span class="s">1</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">add_subdirectory</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/src/dep1&#34;</span> <span class="s2">&#34;fips-hello-dep1_dep1&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">set</span><span class="p">(</span><span class="s">FIPS_IMPORT</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">endmacro</span><span class="p">()</span><span class="err">
+</span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_AUTO_IMPORT</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;Imports&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_import_fips_hello_dep1_dep1</span><span class="p">()</span><span class="err">
+</span><span class="err"></span>    <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span></code></pre></div></article>
+
+      
+
+      
+    </div>
+
+    
+  
+  
+  <aside class="book-toc fixed">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#importing-external-dependencies">Importing external dependencies</a>
+<ul>
+<li>
+<ul>
+<li><a href="#fipsification">Fipsification</a></li>
+<li><a href="#how-to-define-imports">How to define imports</a></li>
+<li><a href="#importing-specific-versions">Importing specific versions</a></li>
+<li><a href="#conditional-imports">Conditional Imports</a></li>
+<li><a href="#fetching-imports">Fetching imports</a></li>
+<li><a href="#listing-imports">Listing imports</a></li>
+<li><a href="#updating-imports">Updating imports</a></li>
+<li><a href="#what-s-imported">What&rsquo;s imported</a></li>
+<li><a href="#selectively-importing-modules">Selectively importing modules</a></li>
+<li><a href="#under-the-hood">Under the hood</a>
+<ul>
+<li><a href="#fetching">Fetching</a></li>
+<li><a href="#where-are-imported-projects-located">Where are imported projects located</a></li>
+<li><a href="#how-importing-works">How importing works</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </aside>
+
+
+
+  </main>
+  
+  
+  
+</body>
+
+</html>
