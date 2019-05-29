@@ -7,11 +7,11 @@ fips is a highlevel build system wrapper written in Python for C/C++ projects.
 
 Read the docs to get a better idea what this means:
 
-http://floooh.github.io/fips/index.html
+http://floooh.github.io/fips/
 
 ### Install Instructions
 
-http://floooh.github.io/fips/getstarted.html
+http://floooh.github.io/fips/docs/getstarted/
 
 ### Public Service Announcements
 
@@ -115,7 +115,7 @@ find the iOS app bundle (for instance to copy asset files).
 
 - **05-Jan-2018**: Import definitions in fips.yml files can now contain an
 expression which is evaluated in cmake. This can be used to include or
-exclude platform-specific includes. [See here for details](http://floooh.github.io/fips/imports.html)
+exclude platform-specific includes. [See here for details](http://floooh.github.io/fips/docs/imports/)
 
 - **04-Jan-2018**: The previously experimental Visual Studio Code support is
 now 'official', [see here for details](http://floooh.github.io/2018/01/04/vscode-fips.html)
@@ -210,7 +210,7 @@ configs \*-vs2013-\* and \*-vs2015-\*.
   advanced uses which allows to manually select modules from imported 
   projects. This is more work but can provide a cleaner project layout
   if only a few modules from imported projects are needed. See the
-  documentation web page for details (http://floooh.github.io/fips/imports.html, 
+  documentation web page for details (http://floooh.github.io/fips/docs/imports/, 
   search for 'Selectively importing modules'). The default behaviour should
   be exactly as before. If anything is broken in your project, please
   don't hesitate to write a ticket :)
@@ -243,7 +243,7 @@ configs \*-vs2013-\* and \*-vs2015-\*.
   into the master branch, code generation is now controlled with the new
   **fips_generate()** cmake macro, see [Oryol
   engine](https://github.com/floooh/oryol) and [code generation doc
-  page](http://floooh.github.io/fips/codegen.html) for details!
+  page](http://floooh.github.io/fips/docs/codegen/) for details!
 
 - **30-Jan-2015**: please note that the NaCl SDK setup script is currently
   broken with Python 2.7.9 (2.7.6 works), this is tracked in the following bug:
