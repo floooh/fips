@@ -283,11 +283,7 @@ generator script.</li>
 
 <p>The most usual form to call fips_generate() is to provide only a FROM and TYPE
 argument:</p>
-
-<p>{% highlight cmake %}
-fips_generate(FROM IOProtocol.yml TYPE MessageProtocol)
-{% endhighlight %}</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_generate</span><span class="p">(</span><span class="s">FROM</span> <span class="s">IOProtocol.yml</span> <span class="s">TYPE</span> <span class="s">MessageProtocol</span><span class="p">)</span></code></pre></div>
 <p>This means that the input file <em>IOProtocol.yml</em> is converted by the generator
 <em>MessageProtocol</em> into the output files <em>IOProtocol.cc</em> and <em>IOProtocol.h</em>.</p>
 
