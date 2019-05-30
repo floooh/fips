@@ -213,9 +213,9 @@ git status of 'fips-hello-dep1':
 [WARNING]   '/Users/floh/projects/fips-hello-dep1' is out of sync with remote git repo
 git status of 'fips-hello-dep2':
   uptodate
-{% endhighlight %}
+```
 
-{% highlight bash %}
+```
 === imports:
 git status of 'fips-hello-dep1':
 [WARNING] '/Users/floh/projects/fips-hello-dep1' branches out of sync:

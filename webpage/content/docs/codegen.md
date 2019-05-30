@@ -44,9 +44,9 @@ Let's go through a few examples:
 The most usual form to call fips_generate() is to provide only a FROM and TYPE
 argument:
 
-{% highlight cmake %}
+```cmake
 fips_generate(FROM IOProtocol.yml TYPE MessageProtocol)
-{% endhighlight %}
+```
 
 This means that the input file _IOProtocol.yml_ is converted by the generator
 _MessageProtocol_ into the output files _IOProtocol.cc_ and _IOProtocol.h_.
