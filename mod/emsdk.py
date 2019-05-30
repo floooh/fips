@@ -109,7 +109,7 @@ def remove_old_sdks(fips_dir):
     if os.path.isdir(old_sdk_path):
         if util.confirm(log.RED + "Delete obsolete emscripten SDK in '{}'?".format(old_sdk_path) + log.DEF):
             log.info("Deleting '{}'...".format(old_sdk_path))
-            shutil.rmtree(old_sdk_path)
+            shutil.rmtree(old_sdk_path, ignore_errors=True)
         else:
             log.info("'No' selected, nothing deleted")
 
