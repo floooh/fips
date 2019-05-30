@@ -249,7 +249,10 @@ def confirm(question) :
     validAnswers={'': False, 'yes': True, 'ye': True, 'y': True, 'no': False, 'n': False }
     while True :
         sys.stdout.write(question + ' [y/N]: ')
-        choice = raw_input().lower()
+        if sys.version_info[0] >= 3:
+            choice = str(input()).lower()
+        else:
+            choice = raw_input().lower()
         if choice in validAnswers :
             return validAnswers[choice]
         else :

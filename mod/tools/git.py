@@ -164,10 +164,10 @@ def update(proj_dir):
         return False
 
 #-------------------------------------------------------------------------------
-def update_ignore_local_changes(proj_dir):
+def update_force_and_ignore_local_changes(proj_dir):
     """same as git.update() but does not check for local changes"""
     check_exists_with_error()
-    res = subprocess.call('git pull', cwd=proj_dir, shell=True)
+    res = subprocess.call('git pull -f', cwd=proj_dir, shell=True)
     if 0 == res:
         update_submodule(proj_dir)
     return 0 == res

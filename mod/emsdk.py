@@ -74,7 +74,7 @@ def clone_or_update_emsdk(fips_dir):
     emsdk_dir = get_emsdk_dir(fips_dir)
     if emsdk_dir_exists(fips_dir):
         log.colored(log.YELLOW, "=== updating emscripten SDK at '{}'".format(emsdk_dir))
-        return git.update_ignore_local_changes(emsdk_dir)
+        return git.update_force_and_ignore_local_changes(emsdk_dir)
     else:
         log.colored(log.YELLOW, "=== cloning emscripten SDK to '{}'".format(emsdk_dir))
         make_dirs(fips_dir)
