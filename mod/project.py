@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import yaml
 
-from mod import log, util, config, dep, template, settings, android
+from mod import log, util, config, dep, template, settings, android, emsdk
 from mod.tools import git, cmake, make, ninja, xcodebuild, xcrun, ccmake, cmake_gui, vscode, clion
 
 #-------------------------------------------------------------------------------
@@ -75,6 +75,9 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
             defines['FIPS_IOS_TEAMID'] = ios_team_id
     if cfg['platform'] == 'osx':
         defines['CMAKE_OSX_SYSROOT'] = xcrun.get_macos_sdk_sysroot()
+    if cfg['platform'] == 'emscripten':
+        defines['EMSCRIPTEN_EMSDK'] = emsdk.get_emsdk_dir(fips_dir)
+        defines['EMSCRIPTEN_ROOT'] = emsdk.get_emscripten_root(fips_dir)
     do_it = force
     if not os.path.isdir(build_dir) :
         os.makedirs(build_dir)

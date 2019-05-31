@@ -1,77 +1,43 @@
 #-------------------------------------------------------------------------------
-#	emscripten.toolchain.cmake
-#	Fips cmake toolchain file for cross-compiling to emscripten.
+#   emscripten.toolchain.cmake
+#   Fips cmake toolchain file for cross-compiling to emscripten.
+#
+#   The following cmake defines must be passed on the command line:
+#
+#   EMSCRIPTEN_EMSDK:   absolute path to the emsdk directory
+#   EMSCRIPTEN_ROOT:    absolute path to the directory with emcc and system/includes
 #-------------------------------------------------------------------------------
-
-#
-# FIXME FIXME FIXME:
-#
-#   emar currently has trouble using a non-standard .emscripten config
-#   file: https://github.com/kripken/emscripten/issues/2886
-#
-#   once this is fixed, set the CMAKE_AR_FLAGS variable to
-#   use the --em-config like the C/CXX compilers.
-#
-
-# define emscripten SDK version
-set(FIPS_EMSCRIPTEN_SDK_VERSION "incoming")
-if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
-    set(EMSC_EMSDK_DIRNAME "../fips-sdks/win/emsdk-portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
-elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
-    set(EMSC_EMSDK_DIRNAME "../fips-sdks/osx/emsdk-portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
-elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
-    set(EMSC_EMSDK_DIRNAME "../fips-sdks/linux/emsdk-portable/emscripten/${FIPS_EMSCRIPTEN_SDK_VERSION}")
-endif()
-
-# find the emscripten SDK and set the "EMSC_HAS_LOCAL_CONFIG" variable
-macro(find_emscripten_sdk)
-    # first check for the official EMSDK, this does not allow to override
-    # the location of the .emscripten config file
-    get_filename_component(EMSCRIPTEN_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}/../${EMSC_EMSDK_DIRNAME}" ABSOLUTE)
-    if (NOT EXISTS "${EMSCRIPTEN_ROOT_PATH}/emcc")
-        message(FATAL_ERROR "Could not find emscripten SDK! Please run 'fips setup emscripten'!")
-    endif()
-endmacro()
-
-# find the emscripten SDK
-find_emscripten_sdk()
-set(EMSCRIPTEN_LLVM_ROOT "${EMSCRIPTEN_ROOT_PATH}/../../clang/fastcomp/build_${FIPS_EMSCRIPTEN_SDK_VERSION}_64/bin")
-
-# Normalize, convert Windows backslashes to forward slashes or CMake will crash.
-get_filename_component(EMSCRIPTEN_ROOT_PATH "${EMSCRIPTEN_ROOT_PATH}" ABSOLUTE)
-get_filename_component(EMSCRIPTEN_LLVM_ROOT "${EMSCRIPTEN_LLVM_ROOT}" ABSOLUTE)
 
 set(FIPS_PLATFORM EMSCRIPTEN)
 set(FIPS_PLATFORM_NAME "emsc")
 set(FIPS_EMSCRIPTEN 1)
 set(FIPS_POSIX 1)
 
+find_package(Java COMPONENTS Runtime)
+
 # tweakable options 
-option(FIPS_EMSCRIPTEN_USE_FS "emscripten: enable FS module" OFF)
-option(FIPS_EMSCRIPTEN_USE_DFE "emscripten: enable Duplicate Function Elimination" OFF)
-option(FIPS_EMSCRIPTEN_USE_WASM "emscripten: enable WebAssembly (experimental)" OFF)
-option(FIPS_EMSCRIPTEN_USE_SAFE_HEAP "emscripten: enable SAFE_HEAP checks" OFF)
-option(FIPS_EMSCRIPTEN_USE_CPU_PROFILER "emscripten: enable the built-in CPU profiler" OFF)
-option(FIPS_EMSCRIPTEN_USE_MEMORY_PROFILER "emscripten: enable the built-in memory profiler" OFF)
-option(FIPS_EMSCRIPTEN_USE_WEBGL2 "emscripten: use WebGL2" OFF)
-option(FIPS_EMSCRIPTEN_USE_CLOSURE "emscripten: run closure compiler on JS code" OFF)
-option(FIPS_EMSCRIPTEN_USE_EMMALLOC "emscripten: use emmalloc allocator" OFF)
-option(FIPS_EMSCRIPTEN_ALLOW_MEMORY_GROWTH "emscripten: allow memory growth" OFF)
-option(FIPS_EMSCRIPTEN_USE_WASM_TRAP_MODE_CLAMP "emscripten: use trap-mode clamp for wasm" ON)
-option(FIPS_EMSCRIPTEN_DEMANGLE "emscripten: compile with libcxxabi-provided demangling support" OFF)
-option(FIPS_EMSCRIPTEN_USE_FETCH "emscripten: use fetch API" OFF)
-option(FIPS_EMSCRIPTEN_USE_MINIMAL_RUNTIME "emscripten: use the minimal JS runtime" OFF)
-set(FIPS_EMSCRIPTEN_TOTAL_MEMORY 134217728 CACHE STRING "emscripten: total heap size in bytes")
-set(FIPS_EMSCRIPTEN_LTO_LEVEL 1 CACHE STRING "emscripten: Link-time-optimization level (0..3)")
-set(FIPS_EMSCRIPTEN_MEM_INIT_METHOD 1 CACHE STRING "emscripten: how to represent initial memory content (0..2)")
-set(FIPS_EMSCRIPTEN_SHELL_HTML "${EMSCRIPTEN_ROOT_PATH}/src/shell.html" CACHE STRING "emscripten: path to shell html file")
-set(EMSCRIPTEN_TOTAL_MEMORY_WORKER 16777216)
+option(FIPS_EMSCRIPTEN_USE_FS "enable FS module" OFF)
+option(FIPS_EMSCRIPTEN_USE_DFE "enable Duplicate Function Elimination" OFF)
+option(FIPS_EMSCRIPTEN_USE_WASM "enable WebAssembly" ON)
+option(FIPS_EMSCRIPTEN_USE_SAFE_HEAP "enable SAFE_HEAP checks" OFF)
+option(FIPS_EMSCRIPTEN_USE_CPU_PROFILER "enable the built-in CPU profiler" OFF)
+option(FIPS_EMSCRIPTEN_USE_MEMORY_PROFILER "enable the built-in memory profiler" OFF)
+option(FIPS_EMSCRIPTEN_USE_WEBGL2 "use WebGL2" OFF)
+option(FIPS_EMSCRIPTEN_USE_CLOSURE "run closure compiler on JS code" OFF)
+option(FIPS_EMSCRIPTEN_USE_EMMALLOC "use emmalloc allocator" OFF)
+option(FIPS_EMSCRIPTEN_ALLOW_MEMORY_GROWTH "allow memory growth" ON)
+option(FIPS_EMSCRIPTEN_USE_WASM_TRAP_MODE_CLAMP "use trap-mode clamp for wasm" ON)
+option(FIPS_EMSCRIPTEN_DEMANGLE "compile with libcxxabi-provided demangling support" OFF)
+option(FIPS_EMSCRIPTEN_USE_FETCH "use fetch API" OFF)
+option(FIPS_EMSCRIPTEN_USE_MINIMAL_RUNTIME "use the minimal JS runtime" OFF)
+set(FIPS_EMSCRIPTEN_TOTAL_MEMORY 8388608 CACHE STRING "initial heap size in bytes")
+set(FIPS_EMSCRIPTEN_LTO_LEVEL 1 CACHE STRING "link-time-optimization level (0..3)")
+set(FIPS_EMSCRIPTEN_MEM_INIT_METHOD 1 CACHE STRING "how to represent initial memory content (0..2)")
+set(FIPS_EMSCRIPTEN_SHELL_HTML "shell.html" CACHE STRING "path to shell html file")
 
 if (FIPS_EMSCRIPTEN_RELATIVE_SHELL_HTML)
-    message("FIPS_EMSCRIPTEN_RELATIVE_SHELL_HTML: ${FIPS_EMSCRIPTEN_RELATIVE_SHELL_HTML}")
     set(FIPS_EMSCRIPTEN_SHELL_HTML "${CMAKE_SOURCE_DIR}/${FIPS_EMSCRIPTEN_RELATIVE_SHELL_HTML}")
 endif()
-message("FIPS_EMSCRIPTEN_SHELL_HTML: ${FIPS_EMSCRIPTEN_SHELL_HTML}")
 
 set(EMSC_COMMON_FLAGS)
 set(EMSC_CXX_FLAGS)
@@ -143,9 +109,11 @@ else()
     set(EMSC_LINKER_FLAGS_RELEASE "${EMSC_LINKER_FLAGS_RELEASE}")
 endif()
 if (FIPS_EMSCRIPTEN_USE_CLOSURE)
-    set(EMSC_LINKER_FLAGS_RELEASE "${EMSC_LINKER_FLAGS_RELEASE} --closure 1")
-else()
-    set(EMSC_LINKER_FLAGS_RELEASE "${EMSC_LINKER_FLAGS_RELEASE} --closure 0")
+    if (Java_FOUND)
+        set(EMSC_LINKER_FLAGS_RELEASE "${EMSC_LINKER_FLAGS_RELEASE} --closure 1")
+    else()
+        message(WARNING "skipping emscripten closure pass because no Java runtime found")
+    endif()
 endif()
 if (FIPS_EMSCRIPTEN_DEMANGLE)
     set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s DEMANGLE_SUPPORT=1")
@@ -160,30 +128,32 @@ endif()
 
 set(EMSC_EXE_LINKER_FLAGS "${EMSC_EXE_LINKER_FLAGS} --shell-file ${FIPS_EMSCRIPTEN_SHELL_HTML}")
 
-set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_VERSION 1)
-set(COMPILING on)
+set(COMPILING ON)
 set(CMAKE_CROSSCOMPILING TRUE)
 set(CMAKE_SYSTEM_PROCESSOR x86)
+set(CMAKE_C_COMPILER_WORKS TRUE)
+set(CMAKE_CXX_COMPILER_WORKS TRUE)
 
 # Find the .emscripten file and cache, this is either setup locally in the
 # emscripten SDK (this is the preferred way and used by 'fips setup emscripten',
 # but it's a brand new feature: https://github.com/juj/emsdk/issues/24)
 # If an SDK-local .emscripten is not found, fall back to ~/.emscripten
-get_filename_component(EMSCRIPTEN_DOT_FILE "${EMSCRIPTEN_ROOT_PATH}/../../.emscripten" ABSOLUTE)
+get_filename_component(EMSCRIPTEN_DOT_FILE "${EMSCRIPTEN_EMSDK}/.emscripten" ABSOLUTE)
 if (EMSCRIPTEN_TRACING)
     # set a separate .emscripten_cache when tracing since this will use an 
     # instrumented dlmalloc.c
-    get_filename_component(EMSCRIPTEN_CACHE "${EMSCRIPTEN_ROOT_PATH}/../../.emscripten_cache_tracing" ABSOLUTE)
+    get_filename_component(EMSCRIPTEN_CACHE "${EMSCRIPTEN_EMSDK}/.emscripten_cache_tracing" ABSOLUTE)
 else()
-    get_filename_component(EMSCRIPTEN_CACHE "${EMSCRIPTEN_ROOT_PATH}/../../.emscripten_cache" ABSOLUTE)
+    get_filename_component(EMSCRIPTEN_CACHE "${EMSCRIPTEN_EMSDK}/.emscripten_cache" ABSOLUTE)
 endif()
 if (EXISTS "${EMSCRIPTEN_DOT_FILE}")
     set(EMSC_COMMON_FLAGS "${EMSC_COMMON_FLAGS} --em-config ${EMSCRIPTEN_DOT_FILE} --cache ${EMSCRIPTEN_CACHE}")
     set(EMSC_AR_FLAGS "${EMSC_AR_FLAGS} --em-config ${EMSCRIPTEN_DOT_FILE}")
 else()
     # no sdk-embedded config found, use the default (~/.emscripten and ~/.emscripten_cache)
-    message(WARNING "Using global emscripten config and cache in '~'!")
+    # message(WARNING "Using global emscripten config and cache in '~'!")
 endif()
 
 # tool suffic (.bat on windows)
@@ -197,20 +167,20 @@ endif()
 set(CMAKE_CONFIGURATION_TYPES Debug Release Profiling)
 
 # specify cross-compilers
-set(CMAKE_C_COMPILER "${EMSCRIPTEN_ROOT_PATH}/emcc${EMCC_SUFFIX}" CACHE PATH "gcc" FORCE)
-set(CMAKE_CXX_COMPILER "${EMSCRIPTEN_ROOT_PATH}/em++${EMCC_SUFFIX}" CACHE PATH "g++" FORCE)
-set(CMAKE_AR "${EMSCRIPTEN_ROOT_PATH}/emar${EMCC_SUFFIX}" CACHE PATH "archive" FORCE)
-set(CMAKE_LINKER "${EMSCRIPTEN_ROOT_PATH}/emcc${EMCC_SUFFIX}" CACHE PATH "linker" FORCE)
-set(CMAKE_RANLIB "${EMSCRIPTEN_ROOT_PATH}/emranlib${EMCC_SUFFIX}" CACHE PATH "ranlib" FORCE)
+set(CMAKE_C_COMPILER "${EMSCRIPTEN_ROOT}/emcc${EMCC_SUFFIX}" CACHE PATH "gcc" FORCE)
+set(CMAKE_CXX_COMPILER "${EMSCRIPTEN_ROOT}/em++${EMCC_SUFFIX}" CACHE PATH "g++" FORCE)
+set(CMAKE_AR "${EMSCRIPTEN_ROOT}/emar${EMCC_SUFFIX}" CACHE PATH "archive" FORCE)
+set(CMAKE_LINKER "${EMSCRIPTEN_ROOT}/emcc${EMCC_SUFFIX}" CACHE PATH "linker" FORCE)
+set(CMAKE_RANLIB "${EMSCRIPTEN_ROOT}/emranlib${EMCC_SUFFIX}" CACHE PATH "ranlib" FORCE)
 
 # only search for libraries and includes in the toolchain
-set(CMAKE_FIND_ROOT_PATH ${EMSCRIPTEN_ROOT_PATH})
+set(CMAKE_FIND_ROOT_PATH ${EMSCRIPTEN_ROOT})
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
-set(CMAKE_SYSTEM_INCLUDE_PATH "${EMSCRIPTEN_ROOT_PATH}/system/include")
+set(CMAKE_SYSTEM_INCLUDE_PATH "${EMSCRIPTEN_ROOT}/system/include")
 
 set(CMAKE_C_USE_RESPONSE_FILE_FOR_LIBRARIES 1)
 set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_LIBRARIES 1)
@@ -267,7 +237,7 @@ set(CMAKE_EXE_LINKER_FLAGS_PROFILING "--profiling ${EMSCRIPTEN_OPT} ${EMSC_LINKE
 set(CMAKE_STATIC_LINKER_FLAGS "${EMSC_AR_FLAGS}")
 
 # dynamic lib linker flags
-set(CMAKE_SHARED_LINKER_FLAGS "-shared ${EMSC_COMMON_FLAGS} ${EMSC_LINKER_FLAGS} -s BUILD_AS_WORKER=1 ")
+set(CMAKE_SHARED_LINKER_FLAGS "-shared ${EMSC_COMMON_FLAGS} ${EMSC_LINKER_FLAGS}")
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${EMSCRIPTEN_OPT} ${EMSC_LINKER_FLAGS_RELEASE}")
 set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${EMSCRIPTEN_OPT} -g")
 set(CMAKE_SHARED_LINKER_FLAGS_PROFILING "--profiling ${EMSCRIPTEN_OPT} ${EMSC_LINKER_FLAGS_RELEASE}")

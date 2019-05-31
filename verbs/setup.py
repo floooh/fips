@@ -4,7 +4,7 @@ setup emscripten
 setup android
 """
 
-from mod import log, emscripten, android
+from mod import log, emsdk, android
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
@@ -13,7 +13,7 @@ def run(fips_dir, proj_dir, args) :
     if len(args) > 0 :
         sdk_name = args[0]
     if sdk_name == 'emscripten' :
-        emscripten.setup(fips_dir, proj_dir)
+        emsdk.install(fips_dir, None)
     elif sdk_name == 'android' :
         android.setup(fips_dir, proj_dir)
     else :
