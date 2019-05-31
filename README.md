@@ -16,12 +16,10 @@ http://floooh.github.io/fips/getstarted.html
 ### Public Service Announcements
 
 - **31-May-2019**: The emscripten SDK integration has been completely rewritten:
-    - adds a new fips verb 'emsdk' for maintaining the emscripten SDK and switching between SDK versions
+    - adds a new fips verb 'emsdk' for installing specific emscripten SDK versions and switching between them
     - by default, installs the latest stable emscripten SDK with precompiled
       binaries, this is a lot faster than installing the 'incoming' SDK
       version which needs to compile LLVM
-    - allow switching between different SDK versions (this is using the
-      incoming version works now)
     - the emscripten cmake toolchain file is no longer hardwired to a specific
       emscripten SDK version
     - the default options in the emscripten cmake toolchain file have been
@@ -34,7 +32,7 @@ http://floooh.github.io/fips/getstarted.html
     ```bash
     # remove all cached emscripten build files
     > ./fips clean all
-    # remove old emscripten SDK files
+    # remove any old emscripten SDK files
     > ./fips emsdk uninstall
     # install and activate new emscripten SDK
     > ./fips emsdk install
@@ -42,7 +40,9 @@ http://floooh.github.io/fips/getstarted.html
     > ./fips help emsdk
     ```
     As before, each fips workspace directory has its own local emscripten SDK installation, you can use 
-    different SDK versions side-by-side in different workspaces and fips won't "pollute" your global environment.
+    different SDK versions side-by-side in different workspaces and fips won't 'pollute' your global environment or interfere with a globally installed
+    emscripten SDK.
+    The command ```./fips setup emscripten``` works as before and is an alias for ```./fips emsdk install```
 
 - **08-May-2019**: Some tweaks to the release-mode compiler- and linker-flags
     for Visual Studio projects: in release mode, link-time code-generation
