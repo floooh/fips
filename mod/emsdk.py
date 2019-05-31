@@ -19,6 +19,7 @@ from mod import log, util
 from mod.tools import git
 
 EMSDK_URL = "https://github.com/emscripten-core/emsdk.git"
+EMSDK_DEFAULT_VERSION = 'latest'
 
 #-------------------------------------------------------------------------------
 def get_sdkroot_dir(fips_dir):
@@ -88,7 +89,7 @@ def list(fips_dir):
 #-------------------------------------------------------------------------------
 def activate(fips_dir, emsdk_version):
     if emsdk_version is None:
-        emsdk_version = 'latest'
+        emsdk_version = EMSDK_DEFAULT_VERSION
     log.colored(log.YELLOW, "=== activating emscripten SDK version '{}'".format(emsdk_version))
     run(fips_dir, "activate --embedded {}".format(emsdk_version))
 
@@ -97,7 +98,7 @@ def install(fips_dir, emsdk_version):
     if not clone_or_update_emsdk(fips_dir):
         log.error('Failed to install or update emscripten SDK')
     if emsdk_version is None:
-        emsdk_version = 'latest'
+        emsdk_version = EMSDK_DEFAULT_VERSION
     log.colored(log.YELLOW, "=== installing emscripten tools for '{}'".format(emsdk_version))
     run(fips_dir, "install --shallow --disable-assertions {}".format(emsdk_version))
     activate(fips_dir, emsdk_version)
