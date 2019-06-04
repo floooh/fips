@@ -1,6 +1,8 @@
 #-------------------------------------------------------------------------------
 #	ios.toolchain.cmake
 #	Fips cmake toolchain file for cross-compiling to iOS from OSX.
+#
+#   NOTE that iOS support requires at least cmake 3.14!
 #-------------------------------------------------------------------------------
 
 set(FIPS_PLATFORM IOS)
@@ -9,17 +11,9 @@ set(FIPS_IOS 1)
 set(FIPS_OSX 1)
 set(FIPS_POSIX 1)
 
-# NOTE I'm not sure if those 2 are necessary, it worked for me
-# without, but not for others
-# See:
-# - https://github.com/floooh/fips/pull/112
-# - https://cmake.org/Bug/view.php?id=15329
-set(CMAKE_MACOSX_BUNDLE YES)
-set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
-
 set(CMAKE_SYSTEM_NAME iOS)
-set(CMAKE_OSX_ARCHITECTURES "armv7 arm64")
 set(CMAKE_OSX_SYSROOT "iphoneos")
+set(CMAKE_OSX_ARCHITECTURES "armv7;arm64")
 set(CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos;-iphonesimulator")
 
 # define configurations
