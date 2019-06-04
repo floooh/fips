@@ -13,7 +13,7 @@ set(FIPS_POSIX 1)
 
 set(CMAKE_SYSTEM_NAME iOS)
 set(CMAKE_OSX_SYSROOT "iphoneos")
-set(CMAKE_OSX_ARCHITECTURES "armv7;arm64")
+set(CMAKE_OSX_ARCHITECTURES "armv7;arm64;x86_64")
 set(CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos;-iphonesimulator")
 
 # define configurations
