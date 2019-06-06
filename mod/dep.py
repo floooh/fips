@@ -321,7 +321,7 @@ def write_imports(fips_dir, proj_dir, cfg_name, imported) :
     :params imported:   the imports dictionary created with 'gather_imports'
     """
 
-    if imported :
+    if imported is not None:
         unique_hdrdirs = []
         unique_libdirs = []
         unique_defines = {}
