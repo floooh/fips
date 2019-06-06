@@ -30,7 +30,7 @@ option(FIPS_EMSCRIPTEN_USE_WASM_TRAP_MODE_CLAMP "use trap-mode clamp for wasm" O
 option(FIPS_EMSCRIPTEN_DEMANGLE "compile with libcxxabi-provided demangling support" OFF)
 option(FIPS_EMSCRIPTEN_USE_FETCH "use fetch API" OFF)
 option(FIPS_EMSCRIPTEN_USE_MINIMAL_RUNTIME "use the minimal JS runtime" OFF)
-set(FIPS_EMSCRIPTEN_TOTAL_MEMORY 8388608 CACHE STRING "initial heap size in bytes")
+set(FIPS_EMSCRIPTEN_TOTAL_MEMORY 33554432 CACHE STRING "initial heap size in bytes")
 set(FIPS_EMSCRIPTEN_LTO_LEVEL 1 CACHE STRING "link-time-optimization level (0..3)")
 set(FIPS_EMSCRIPTEN_MEM_INIT_METHOD 1 CACHE STRING "how to represent initial memory content (0..2)")
 set(FIPS_EMSCRIPTEN_SHELL_HTML "shell.html" CACHE STRING "path to shell html file")
