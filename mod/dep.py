@@ -523,19 +523,21 @@ def _rec_update_imports(fips_dir, proj_dir, handled) :
                 log.colored(log.YELLOW, "=== dependency: '{}':".format(dep_proj_name))
                 dep_ok = False
                 if os.path.isdir(dep_proj_dir) :
-                    # directory did not exist, do a fresh git clone
-                    dep = imports[dep_proj_name]
-                    git_commit = None if 'rev' not in dep else dep['rev']
-                    if git.has_local_changes(dep_proj_dir) :
-                        log.warn("  '{}' has local changes, skipping...".format(dep_proj_dir))
+                    if os.path.isdir("{}/.git".format(dep_proj_dir)) :
+                        dep = imports[dep_proj_name]
+                        git_commit = None if 'rev' not in dep else dep['rev']
+                        if git.has_local_changes(dep_proj_dir) :
+                            log.warn("  '{}' has local changes, skipping...".format(dep_proj_dir))
+                        else :
+                            log.colored(log.BLUE, "  updating '{}'...".format(dep_proj_dir))
+                            git.update(dep_proj_dir)
+                            if git_commit:
+                                log.colored(log.YELLOW, "=== revision: '{}':".format(git_commit))
+                                dep_ok = git.checkout(dep_proj_dir, git_commit)
+                            else:
+                                dep_ok = True
                     else :
-                        log.colored(log.BLUE, "  updating '{}'...".format(dep_proj_dir))
-                        git.update(dep_proj_dir)
-                        if git_commit:
-                            log.colored(log.YELLOW, "=== revision: '{}':".format(git_commit))
-                            dep_ok = git.checkout(dep_proj_dir, git_commit)
-                        else:
-                            dep_ok = True
+                        log.colored(log.BLUE, "  '{}' is not a git repository".format(dep_proj_dir))
                 else :
                     log.warn("  '{}' does not exist, please run 'fips fetch'".format(dep_proj_dir))
                 # recuse
