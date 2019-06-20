@@ -25,6 +25,7 @@ option(FIPS_EMSCRIPTEN_USE_MEMORY_PROFILER "enable the built-in memory profiler"
 option(FIPS_EMSCRIPTEN_USE_WEBGL2 "use WebGL2" OFF)
 option(FIPS_EMSCRIPTEN_USE_CLOSURE "run closure compiler on JS code" OFF)
 option(FIPS_EMSCRIPTEN_USE_EMMALLOC "use emmalloc allocator" OFF)
+option(FIPS_EMSCRIPTEN_USE_EMBIND "use embind" OFF)
 option(FIPS_EMSCRIPTEN_ALLOW_MEMORY_GROWTH "allow memory growth" ON)
 option(FIPS_EMSCRIPTEN_USE_WASM_TRAP_MODE_CLAMP "use trap-mode clamp for wasm" ON)
 option(FIPS_EMSCRIPTEN_DEMANGLE "compile with libcxxabi-provided demangling support" OFF)
@@ -72,6 +73,9 @@ if (FIPS_EMSCRIPTEN_USE_WEBGL2)
 endif()
 if (FIPS_EMSCRIPTEN_USE_EMMALLOC)
     set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s \"MALLOC='emmalloc'\"")
+endif()
+if (FIPS_EMSCRIPTEN_USE_EMBIND)
+    set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} --bind")
 endif()
 if (FIPS_EMSCRIPTEN_USE_FS)
     set(EMSC_LINKER_FLAGS "${EMSC_LINKER_FLAGS} -s NO_FILESYSTEM=0")    
@@ -172,6 +176,9 @@ set(CMAKE_CXX_COMPILER "${EMSCRIPTEN_ROOT}/em++${EMCC_SUFFIX}" CACHE PATH "g++" 
 set(CMAKE_AR "${EMSCRIPTEN_ROOT}/emar${EMCC_SUFFIX}" CACHE PATH "archive" FORCE)
 set(CMAKE_LINKER "${EMSCRIPTEN_ROOT}/emcc${EMCC_SUFFIX}" CACHE PATH "linker" FORCE)
 set(CMAKE_RANLIB "${EMSCRIPTEN_ROOT}/emranlib${EMCC_SUFFIX}" CACHE PATH "ranlib" FORCE)
+
+# override cmake modules with emscripten cmake modules
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${EMSCRIPTEN_ROOT_PATH}/cmake/Modules")
 
 # only search for libraries and includes in the toolchain
 set(CMAKE_FIND_ROOT_PATH ${EMSCRIPTEN_ROOT})
