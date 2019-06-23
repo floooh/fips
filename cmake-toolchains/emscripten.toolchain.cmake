@@ -178,7 +178,7 @@ set(CMAKE_LINKER "${EMSCRIPTEN_ROOT}/emcc${EMCC_SUFFIX}" CACHE PATH "linker" FOR
 set(CMAKE_RANLIB "${EMSCRIPTEN_ROOT}/emranlib${EMCC_SUFFIX}" CACHE PATH "ranlib" FORCE)
 
 # override cmake modules with emscripten cmake modules
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${EMSCRIPTEN_ROOT_PATH}/cmake/Modules")
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${EMSCRIPTEN_ROOT}/cmake/Modules")
 
 # only search for libraries and includes in the toolchain
 set(CMAKE_FIND_ROOT_PATH ${EMSCRIPTEN_ROOT})
