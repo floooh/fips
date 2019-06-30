@@ -15,6 +15,11 @@ http://floooh.github.io/fips/docs/getstarted/
 
 ### Public Service Announcements
 
+- **30-Jun-2019**: ```./fips run [target]``` for emscripten targets is now
+  using npm's http-server module, since this is more feature-complete than
+  python's built-in SimpleHTTPServer. Install with ```npm install http-server -g```
+  and check if fips can find it with ```./fips diag tools```
+
 - **31-May-2019**: The emscripten SDK integration has been completely rewritten:
     - adds a new fips verb 'emsdk' for installing specific emscripten SDK versions and switching between them
     - by default, installs the latest stable emscripten SDK with precompiled

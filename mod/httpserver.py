@@ -1,4 +1,9 @@
-"""wrap SimpleHTTPServer and prevent Ctrl-C stack trace output"""
+"""
+    wrap SimpleHTTPServer and prevent Ctrl-C stack trace output
+
+    NOTE: this is no longer used, instead npm's http-server, because
+    this offers a more fully-features HTTP server.
+"""
 
 import sys
 
