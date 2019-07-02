@@ -28,12 +28,15 @@ endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_vs_apply_options()
-#   Applies the module-specific options set between begin/end
+#   Applies the module-specific options set between begin/end, plus
+#   any other MSVC specific target options.
 #
 macro(fips_vs_apply_options target)
     if (FIPS_MSVC)
         if (NOT ${CurCompileFlags} STREQUAL "")
             set_target_properties(${target} PROPERTIES COMPILE_FLAGS ${CurCompileFlags})
         endif()
+        # set the deploy-directory as the debugger working directory
+        set_target_properties(${target} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${FIPS_PROJECT_DEPLOY_DIR})
     endif()
 endmacro()

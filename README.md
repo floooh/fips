@@ -15,6 +15,11 @@ http://floooh.github.io/fips/docs/getstarted/
 
 ### Public Service Announcements
 
+- **02-Jul-2019**: small quality-of-life improvement when using Visual Studio:
+  the debugger working directory for VS targets is now set to the project's
+  deploy-directory (```fips-deploy/[project]/[config]```), so that debugging
+  behaves the same as running a target via ```fips run [target]```
+
 - **30-Jun-2019**: ```./fips run [target]``` for emscripten targets is now
   using npm's http-server module, since this is more feature-complete than
   python's built-in SimpleHTTPServer. Install with ```npm install http-server -g```
