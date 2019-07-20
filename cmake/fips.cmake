@@ -50,25 +50,34 @@ macro(fips_setup)
         set(CMAKE_CXX_STANDARD 11)
     endif()
 
-    # check for optional main-project name, this is the preferred way to
-    # define the project name, but we better be backward compatible
-    # it is still allowed to call fips_project() afterwards
     #
-    # if a project imports Apps or SharedLibs, fips_setup MUST contain a PROJECT arg
-    set(options)
-    set(oneValueArgs PROJECT)
-    set(multiValueArgs)
-    CMAKE_PARSE_ARGUMENTS(_fs "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
-    if (_fs_UNPARSED_ARGUMENTS)
-        message(FATAL_ERROR "fips_setup(): called with invalid args '${_fg_UNPARSED_ARGUMENTS}'")
+    # cmake 3.15 has added a warning if the top-level cmake file doesn't contain
+    # a project() statement, so we'll expect that the project name is now
+    # set directly before fips_setup() is called, and only support the
+    # PROJECT args for backward compatibility
+    #
+    if (CMAKE_PROJECT_NAME STREQUAL "Project") 
+        message(WARNING "please call project([proj_name]) directly before fips_setup(), cmake is expecting this starting with version 3.15")
+        #
+        # check for optional main-project name, this is the preferred way to
+        # define the project name, but we better be backward compatible
+        # it is still allowed to call fips_project() afterwards
+        #
+        # if a project imports Apps or SharedLibs, fips_setup MUST contain a PROJECT arg
+        set(options)
+        set(oneValueArgs PROJECT)
+        set(multiValueArgs)
+        CMAKE_PARSE_ARGUMENTS(_fs "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+        if (_fs_UNPARSED_ARGUMENTS)
+            message(FATAL_ERROR "fips_setup(): called with invalid args '${_fg_UNPARSED_ARGUMENTS}'")
+        endif()
+        if (_fs_PROJECT)
+            project(${_fs_PROJECT})
+            message("=== fips_setup(PROJECT ${_fs_PROJECT})")
+        else()
+            message("=== fips_setup()")
+        endif()
     endif()
-    if (_fs_PROJECT)
-        project(${_fs_PROJECT})
-        message("=== fips_setup(PROJECT ${_fs_PROJECT})")
-    else()
-        message("=== fips_setup()")
-    endif()
-
     message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
     if (FIPS_ROOT_DIR)

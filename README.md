@@ -15,6 +15,15 @@ http://floooh.github.io/fips/docs/getstarted/
 
 ### Public Service Announcements
 
+- **20-Jul-2019**: Starting with cmake 3.15, cmake will issue a warning if the
+top-level CMakeLists.txt file doesn't contain a verbatim call to ```project()```
+near the top, suppress this warning by changing the ```fips_setup(PROJECT proj_name)```
+statement to:
+    ```cmake
+    project(proj_name)
+    fips_setup()
+    ```
+
 - **02-Jul-2019**: small quality-of-life improvement when using Visual Studio:
   the debugger working directory for VS targets is now set to the project's
   deploy-directory (```fips-deploy/[project]/[config]```), so that debugging

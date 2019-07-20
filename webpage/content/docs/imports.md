@@ -290,8 +290,8 @@ Here's a segment from a project's root CMakeLists.txt file with 'no\_auto\_impor
 enabled as an example:
 
 ```cmake
+project(yakc)
 fips_setup()
-fips_project(yakc)
 
 # manual imports
 fips_ide_group("Oryol")
