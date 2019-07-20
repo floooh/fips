@@ -62,7 +62,7 @@ Setting up the platform SDKs Fips provides simple commands to setup the SDKs for
       <guid>http://floooh.github.com/fips/docs/cmakeguide/</guid>
       <description>Fips CMake Guide Fips projects need to adhere to a few rules in their CMakeLists.txt file hierarchy. Fips provides a number of cmake macros, variables and toolchain files to simplify working with cmake files and implement some under-the-hood magic.
 Fips CMake Macros Fips provides the following cmake macros to describe a project structure:
-fips_setup(PROJECT proj_name) Initializes the fips build system in a cmake file hierarchy. Must be called once in the root CMakeLists.</description>
+fips_setup() Initializes the fips build system in a cmake file hierarchy. Must be called once in the root CMakeLists.</description>
     </item>
     
     <item>

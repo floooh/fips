@@ -255,23 +255,16 @@ magic.</p>
 
 <p>Fips provides the following cmake macros to describe a project structure:</p>
 
-<h4 id="fips-setup-project-proj-name">fips_setup(PROJECT proj_name)</h4>
+<h4 id="fips-setup">fips_setup()</h4>
 
 <p>Initializes the fips build system in a cmake file hierarchy. Must be
 called once in the root CMakeLists.txt before any other fips cmake
 macros.</p>
 
-<p>The PROJECT argument is optional, and if provided, is the name of the
-main project. For backward compatibility, it is still possible to call
-fips_setup() without arguments, and provide the project name later
-with fips_project(). It is also possible to define multi-project builds
-by calling fips_project() multiple times.</p>
-
-<p>If a project imports apps or shared-libs from other fips project,
-fips_setup() <strong>MUST</strong> be called with a PROJECT argument (otherwise
-the imported apps and shared-libs would be created under the default
-cmake project name &lsquo;Project&rsquo;, since the import happened inside
-fips_setup() before the first call to fips_project()).</p>
+<p>You <em>must</em> call the cmake command &lsquo;project([proj_name])&rsquo; before fips_setup()
+to define a project name. Starting with version 3.15, cmake will issue
+a warning if the toplevel CMakeLists.txt file doesn&rsquo;t contain a verbatim
+project() statement.</p>
 
 <h4 id="fips-finish">fips_finish()</h4>
 
@@ -593,12 +586,12 @@ sets the FIPS_UNITTESTS and FIPS_UNITTESTS_HEADLESS options to ON:</p>
 <p>Here&rsquo;s a very simple root CMakeLists.txt file from the <em>fips-hello-world</em>
 sample project:</p>
 <div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">fips-hello-world</span><span class="p">)</span><span class="err">
 </span><span class="err">
 </span><span class="err"></span><span class="c"># include the fips main cmake file
 </span><span class="c"></span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FIPS_ROOT_DIR</span> <span class="s2">&#34;../fips&#34;</span> <span class="s">ABSOLUTE</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s2">&#34;${FIPS_ROOT_DIR}/cmake/fips.cmake&#34;</span><span class="p">)</span><span class="err">
 </span><span class="err">
-</span><span class="err"></span><span class="nb">fips_setup</span><span class="p">()</span><span class="err">
 </span><span class="err"></span><span class="nb">fips_project</span><span class="p">(</span><span class="s">fips-hello-world</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">src</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">fips_finish</span><span class="p">()</span></code></pre></div>
@@ -615,6 +608,7 @@ the actual appliction:</p>
 </span><span class="c">#	See BUILD.md for details how to build oryol.
 </span><span class="c">#----------------------------------------------------------
 </span><span class="c"></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">oryol</span><span class="p">)</span><span class="err">
 </span><span class="err">
 </span><span class="err"></span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FIPS_ROOT_DIR</span> <span class="s2">&#34;../fips&#34;</span> <span class="s">ABSOLUTE</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s2">&#34;${FIPS_ROOT_DIR}/cmake/fips.cmake&#34;</span><span class="p">)</span><span class="err">
@@ -626,7 +620,6 @@ the actual appliction:</p>
 </span><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s">code/Ext</span><span class="p">)</span><span class="err">
 </span><span class="err">
 </span><span class="err"></span><span class="nb">fips_setup</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_project</span><span class="p">(</span><span class="s">oryol</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Hello</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s">Modules</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Modules</span><span class="p">)</span><span class="err">
@@ -731,7 +724,7 @@ C preprocessor defines:</p>
 <ul>
 <li><a href="#fips-cmake-macros">Fips CMake Macros</a>
 <ul>
-<li><a href="#fips-setup-project-proj-name">fips_setup(PROJECT proj_name)</a></li>
+<li><a href="#fips-setup">fips_setup()</a></li>
 <li><a href="#fips-finish">fips_finish()</a></li>
 <li><a href="#fips-project-name">fips_project(name)</a></li>
 <li><a href="#fips-ide-group-name">fips_ide_group(name)</a></li>
