@@ -13,7 +13,7 @@ def run(fips_dir, proj_dir, args) :
         if args[0] == 'clean':
             vscode.cleanup(fips_dir, proj_dir)
         else:
-            log.error("invalid noun '{}' (expected: clean)".format(noun))
+            log.error("invalid noun '{}' (expected: clean)".format(args[0]))
 
 #-------------------------------------------------------------------------------
 def help():
