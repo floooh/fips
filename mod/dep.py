@@ -66,6 +66,8 @@ def get_exports(proj_dir) :
             exports = dic['exports']
     if not 'header-dirs' in exports :
         exports['header-dirs'] = []
+    if not 'platform-header-dirs' in exports :
+        exports['platform-header-dirs'] = {}
     if not 'lib-dirs' in exports :
         exports['lib-dirs'] = []
     if not 'defines' in exports :
@@ -108,6 +110,8 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, result) :
             url:    git-url (not valid for first, top-level project)
             exports:
                 header-dirs: [ ]
+                platform-header-dirs:
+                    dir: cmake-if condition string
                 lib-dirs: [ ]
                 defines: 
                     def-key: def-val
@@ -260,6 +264,7 @@ def gather_imports(fips_dir, proj_dir) :
                 imported[imp_proj_name] = {}
                 imported[imp_proj_name]['modules'] = OrderedDict()
                 imported[imp_proj_name]['hdrdirs'] = []
+                imported[imp_proj_name]['condhdrdirs'] = {}
                 imported[imp_proj_name]['libdirs'] = []
                 imported[imp_proj_name]['defines'] = {}
                 imported[imp_proj_name]['cond'] = imports[imp_proj_name]['cond']
@@ -272,6 +277,15 @@ def gather_imports(fips_dir, proj_dir) :
                     if not os.path.isdir(hdr_path) :
                         log.warn("header search path '{}' not found in project '{}'".format(hdr_path, imp_proj_name))
                     imported[imp_proj_name]['hdrdirs'].append(hdr_path)
+
+                # add platform (conditional) header search paths
+                for imp_hdr in deps[imp_proj_name]['exports']['platform-header-dirs'] :
+                    hdr_path = '{}/{}/{}'.format(ws_dir, imp_proj_name, imp_hdr)
+                    hdr_path = os.path.normpath(hdr_path).replace('\\', '/')
+                    if not os.path.isdir(hdr_path) :
+                        log.warn("platform header search path '{}' not found in project '{}'".format(hdr_path, imp_proj_name))
+                    value = deps[imp_proj_name]['exports']['platform-header-dirs'][imp_hdr]
+                    imported[imp_proj_name]['condhdrdirs'][hdr_path] = value
 
                 # add lib search paths
                 for imp_lib in deps[imp_proj_name]['exports']['lib-dirs'] :
@@ -323,6 +337,7 @@ def write_imports(fips_dir, proj_dir, cfg_name, imported) :
 
     if imported is not None:
         unique_hdrdirs = []
+        unique_condhdrdirs = {}
         unique_libdirs = []
         unique_defines = {}
         unique_modules = {}
@@ -358,6 +373,15 @@ def write_imports(fips_dir, proj_dir, cfg_name, imported) :
                     if hdrdir not in unique_hdrdirs :
                         f.write('include_directories("{}")\n'.format(hdrdir))
                         unique_hdrdirs.append(hdrdir)
+
+                # add conditional header search paths
+                for hdrdir in imported[imp_proj_name]['condhdrdirs'] :
+                    value = imported[imp_proj_name]['condhdrdirs'][hdrdir]
+                    if hdrdir not in unique_condhdrdirs :
+                        unique_condhdrdirs[hdrdir] = value
+                        f.write('if ({})\n'.format(value))
+                        f.write('    include_directories("{}")\n'.format(hdrdir))
+                        f.write('endif()\n')
 
                 # add lib search paths
                 for libdir in imported[imp_proj_name]['libdirs'] :
