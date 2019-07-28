@@ -36,6 +36,17 @@ set(CMAKE_EXE_LINKER_FLAGS_RELEASE "")
 set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
 set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
 
+# stack-checking? enabling this leads may generate binaries
+# that are not backward compatible to older macOS versions
+option(FIPS_OSX_USE_STACK_CHECKING "Enable/disable stack checking" OFF)
+if (FIPS_OSX_USE_STACK_CHECKING)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-stack-check")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-stack-check")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-check")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-check")
+endif()
+
 # ARC on/off?
 option(FIPS_OSX_USE_ARC "Enable/disable Automatic Reference Counting" OFF)
 if (FIPS_OSX_USE_ARC)
