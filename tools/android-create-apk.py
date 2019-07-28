@@ -169,6 +169,10 @@ cmd = [
     '-F', args.path + args.name + '-unaligned.apk',
     'bin'
 ]
+# add the assets folder to the apk if the folder exists
+if os.path.exists(args.path + 'assets') :
+    cmd.insert(6, '-A')
+    cmd.insert(7, 'assets')
 subprocess.call(cmd, cwd=apk_dir)
 cmd = [
     AAPT, 'add', '-v',
