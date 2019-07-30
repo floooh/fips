@@ -79,4 +79,4 @@ def help() :
             "fips valgrind\n"
             "fips valgrind [target]\n"
             "fips valgrind [target] [config]\n" + log.DEF +
-            "   debug a single target in current or named config")
+            "    debug a single target in current or named config")

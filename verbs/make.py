@@ -34,6 +34,6 @@ def help() :
             "fips make\n" 
             "fips make [target]\n"
             "fips make [target] [config]\n" + log.DEF +
-            "   build a single target in current or named config")
+            "    build a single target in current or named config")
     
 

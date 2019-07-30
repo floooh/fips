@@ -24,5 +24,5 @@ def help() :
     log.info(log.YELLOW + 
             "fips build\n" 
             "fips build [config]\n" + log.DEF + 
-            "   perform a build for current or named config")
+            "    perform a build for current or named config")
     

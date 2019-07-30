@@ -38,5 +38,5 @@ def help() :
             "fips run [-- args]\n"
             "fips run [target] [-- args]\n" 
             "fips run [target] [config] [-- args]\n"+ log.DEF +
-            "   run a build target for current or named config")
+            "    run a build target for current or named config")
 
