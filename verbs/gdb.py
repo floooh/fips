@@ -71,4 +71,4 @@ def help() :
             "fips gdb [-- args]\n"
             "fips gdb [target] [-- args]\n"
             "fips gdb [target] [config] [-- args]\n" + log.DEF +
-            "   debug a single target in current or named config")
+            "    debug a single target in current or named config")
