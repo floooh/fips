@@ -10,8 +10,8 @@ from mod.tools import git
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
-    if len(args) > 1 and args[0] == 'fips' :
-        if not git.has_local_changes(fips_dir) :
+    if len(args) > 0 and args[0] == 'fips' :
+        if git.has_local_changes(fips_dir) :
             log.warn("  '{}' has local changes, skipping...".format(fips_dir))
         else :
             log.colored(log.BLUE, "  updating '{}'...".format(fips_dir))
