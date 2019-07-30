@@ -17,7 +17,7 @@ def check_fips(fips_dir) :
     """check whether fips is uptodate"""
     log.colored(log.YELLOW, '=== fips:')
     if git.check_branch_out_of_sync(fips_dir, 'master') :
-        log.warn("'fips' is not update, please run 'git pull' in fips directory!")
+        log.warn("'fips' is not update, please run 'fips update fips'!")
     else :
         log.colored(log.GREEN, '  uptodate')
 
