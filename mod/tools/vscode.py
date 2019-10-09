@@ -15,9 +15,9 @@ def check_exists(fips_dir) :
     """
     try:
         if platform.system() == 'Windows':
-            subprocess.check_output('code -version', shell=True);
+            subprocess.check_output('code --version', shell=True);
         else:
-            subprocess.check_output(['code', '-version'])
+            subprocess.check_output(['code', '--version'])
         return True
     except (OSError, subprocess.CalledProcessError):
         return False
