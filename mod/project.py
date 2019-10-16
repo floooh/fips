@@ -64,7 +64,12 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
     proj_name = util.get_project_name_from_dir(proj_dir)
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
     defines = {}
-    defines['FIPS_USE_CCACHE'] = 'ON' if settings.get(proj_dir, 'ccache') else 'OFF'
+    ccache = settings.get(proj_dir, 'ccache')
+    defines['FIPS_USE_CCACHE'] = 'ON' if ccache else 'OFF'
+    # Both must FIPS_USE_CCACHE and FIPS_USE_SCCACHE get set if we're using
+    # sccache. We act like it's a special mode of operating ccache or something,
+    # instead of a separate program.
+    defines['FIPS_USE_SCCACHE'] = 'ON' if ccache=='sccache' else 'OFF'
     defines['FIPS_AUTO_IMPORT'] = 'OFF' if dep.get_policy(proj_dir, 'no_auto_import') else 'ON'
     if cfg['generator'] in ['Ninja', 'Unix Makefiles']:
         defines['CMAKE_EXPORT_COMPILE_COMMANDS'] = 'ON'

@@ -39,8 +39,10 @@ def run(fips_dir, proj_dir, args) :
                     settings.set(proj_dir, 'ccache', True)
                 elif use_ccache == 'off' :
                     settings.set(proj_dir, 'ccache', False)
+                elif use_ccache == 'sccache' :
+                    settings.set(proj_dir, 'ccache', 'sccache')
                 else :
-                    log.error("value for setting 'ccache' must be 'on' or 'off")
+                    log.error("value for setting 'ccache' must be 'on', 'off', or 'sccache'")
         else :
             settings.set(proj_dir, noun, args[1])
     else :
@@ -53,8 +55,8 @@ def help() :
             "fips set config [config-name]\n"
             "fips set target [target-name]\n" 
             "fips set jobs [num-build-jobs]\n"
-            "fips set ccache [on|off]\n"+ log.DEF +
+            "fips set ccache [on|off|sccache]\n"+ log.DEF +
             "    config: set active build config\n"
             "    target: set active run target\n"
             "    jobs:   set number of parallel build jobs\n"
-            "    ccache: enable/disable using ccache")
+            "    ccache: enable/disable using ccache/sccache")
