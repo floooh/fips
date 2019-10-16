@@ -5,7 +5,34 @@ import sys
 import subprocess
 proj_path = os.path.dirname(os.path.abspath(__file__))
 fips_path = os.path.dirname(proj_path) + '/fips'
+
+CONFIRM_MESSAGE="""\
+Projects using the fips build system expect to be located
+inside a fips workspace. This project does not currently
+appear to be inside a workspace, so we're going to set
+one up located at
+
+    \033[93m'{workspace}'\033[0m
+
+Immediatedly, this requires cloning the fips git repository into
+\033[93m'{fips}'\033[0m, but note that fips will likely
+create further folders when building the project, and no prompt
+will be issued for these. (It is often recommended that you create
+a dedicated directory for your fips workspace).
+
+See \033[92m'http://floooh.github.io/fips'\033[0m for further information.
+
+If you are okay with using \033[93m'{workspace}'\033[0m for this, press enter,
+and we'll begin. Otherwise, press Ctrl+C now.
+"""
 if not os.path.isdir(fips_path) :
+    if 'FIPS_AUTOCONFIRM' not in os.environ:
+        print(CONFIRM_MESSAGE.format(workspace = os.path.dirname(fips_path), fips = fips_path))
+        try :
+            sys.stdin.readline()
+            print("(Note: You may set the FIPS_AUTOCONFIRM environment variable to disable the previous prompt)")
+        except KeyboardInterrupt :
+            sys.exit(1)
     print("\033[93m=== cloning fips build system to '{}':\033[0m".format(fips_path))
     subprocess.call(['git', 'clone', 'https://github.com/floooh/fips.git', fips_path]) 
 sys.path.insert(0,fips_path)
