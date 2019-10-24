@@ -15,6 +15,10 @@ http://floooh.github.io/fips/docs/getstarted/
 
 ### Public Service Announcements
 
+- **24-Oct-2019**: the verbs ```fips build``` and ```fips make``` can now forward
+command line arguments to the underlying build tool, run ```fips help build```
+and ```fips help make``` for details.
+
 - **20-Jul-2019**: Starting with cmake 3.15, cmake will issue a warning if the
 top-level CMakeLists.txt file doesn't contain a verbatim call to ```project()```
 near the top, suppress this warning by changing the ```fips_setup(PROJECT proj_name)```

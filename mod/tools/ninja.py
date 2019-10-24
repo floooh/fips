@@ -46,18 +46,22 @@ def check_exists(fips_dir) :
         return False;
 
 #-------------------------------------------------------------------------------
-def run_build(fips_dir, target, build_dir, num_jobs=1) :
+def run_build(fips_dir, target, build_dir, num_jobs=1, args=None) :
     """build a target
 
     :param target:      name of build target, of None
     :param build_dir:   directory of the build.ninja file
     :param num_jobs:    number of parallel jobs (default: 1)
+    :param args:        string array of additional command line args
     :returns:           True if build was successful
     """
     if not target :
         target = 'all'
     prepare_ninja_tool(fips_dir, build_dir)
-    cmdLine = "{} -j {} {}".format(get_ninja_name(), num_jobs, target)
+    args_str = ''
+    if args is not None:
+        args_str = ' '.join(args)
+    cmdLine = "{} -j {} {} {}".format(get_ninja_name(), num_jobs, args_str, target)
     print(cmdLine)
     res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
     return res == 0

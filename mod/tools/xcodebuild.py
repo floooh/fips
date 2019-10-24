@@ -19,18 +19,22 @@ def check_exists(fips_dir) :
         return False
 
 #------------------------------------------------------------------------------
-def run_build(fips_dir, target, build_type, build_dir, num_jobs=1) :
+def run_build(fips_dir, target, build_type, build_dir, num_jobs=1, args=None) :
     """build a target
 
     :param target:      name of build target, or None
     :param build_type:  CMAKE_BUILD_TYPE string (e.g. Release, Debug)
     :param build_dir:   directory where xcode project file is located
     :param num_jobs:    number of parallel jobs (default: 1)
+    :param args:        optional string array of additional cmdline args
     :returns:           True if xcodebuild returns successful
     """
     if not target :
         target = "ALL_BUILD"
-    cmdLine = 'xcodebuild -jobs {} -configuration {} -target {}'.format(num_jobs, build_type, target)
+    args_str = ''
+    if args is not None:
+        args_str = ' '.join(args)
+    cmdLine = 'xcodebuild -jobs {} -configuration {} -target {} {}'.format(num_jobs, build_type, target, args_str)
     print(cmdLine)
     res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
     return res == 0

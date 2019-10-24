@@ -223,14 +223,15 @@ def make_clean(fips_dir, proj_dir, cfg_name) :
         return True
 
 #-------------------------------------------------------------------------------
-def build(fips_dir, proj_dir, cfg_name, target=None) :
+def build(fips_dir, proj_dir, cfg_name, target=None, build_tool_args=None) :
     """perform a build of config(s) in project
 
-    :param fips_dir:    absolute path of fips
-    :param proj_dir:    absolute path of project dir
-    :param cfg_name:    config name or pattern
-    :param target:      optional target name (build all if None)
-    :returns:           True if build was successful
+    :param fips_dir:        absolute path of fips
+    :param proj_dir:        absolute path of project dir
+    :param cfg_name:        config name or pattern
+    :param target:          optional target name (build all if None)
+    :param build_tool_args: optional string array of cmdline args forwarded to the build tool
+    :returns:               True if build was successful
     """
 
     # prepare
@@ -257,13 +258,13 @@ def build(fips_dir, proj_dir, cfg_name, target=None) :
                 num_jobs = settings.get(proj_dir, 'jobs')
                 result = False
                 if cfg['build_tool'] == make.name :
-                    result = make.run_build(fips_dir, target, build_dir, num_jobs)
+                    result = make.run_build(fips_dir, target, build_dir, num_jobs, build_tool_args)
                 elif cfg['build_tool'] == ninja.name :
-                    result = ninja.run_build(fips_dir, target, build_dir, num_jobs)
+                    result = ninja.run_build(fips_dir, target, build_dir, num_jobs, build_tool_args)
                 elif cfg['build_tool'] == xcodebuild.name :
-                    result = xcodebuild.run_build(fips_dir, target, cfg['build_type'], build_dir, num_jobs)
+                    result = xcodebuild.run_build(fips_dir, target, cfg['build_type'], build_dir, num_jobs, build_tool_args)
                 else :
-                    result = cmake.run_build(fips_dir, target, cfg['build_type'], build_dir, num_jobs)
+                    result = cmake.run_build(fips_dir, target, cfg['build_type'], build_dir, num_jobs, build_tool_args)
 
                 if result :
                     num_valid_configs += 1

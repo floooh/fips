@@ -21,17 +21,20 @@ def check_exists(fips_dir) :
         return False
 
 #-------------------------------------------------------------------------------
-def run_build(fips_dir, target, build_dir, num_jobs=1) :
+def run_build(fips_dir, target, build_dir, num_jobs=1, args=None) :
     """make a build target
 
     :param target:      name of build target, or None
     :param build_dir:   directory where Makefile is located
     :param num_jobs:    number of jobs, default is 1
+    :param args:        string array of additional command line args
     :returns:           True if build was successful
     """
     cmdLine = 'make -j{}'.format(num_jobs)
+    if args is not None:
+        cmdLine += ' ' + ' '.join(args)
     if target is not None :
-        cmdLine += ' ' + target;
+        cmdLine += ' ' + target
     print(cmdLine)
     res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
     return res == 0
