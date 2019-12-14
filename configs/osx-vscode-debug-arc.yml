@@ -1,5 +1,7 @@
 ---
 platform: osx
-generator: Ninja 
+generator: Ninja
 build_tool: vscode_cmake
 build_type: Debug
+defines:
+    FIPS_OSX_USE_ARC: ON
