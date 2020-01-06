@@ -10,7 +10,7 @@ include(CheckLibraryExists)
 option(FIPS_RASPBERRYPI "Set to true if compiling for the Raspberry Pi" OFF)
 
 set(FIPS_PLATFORM Linux)
-if (FIPS_RASPBERRYPI) 
+if (FIPS_RASPBERRYPI)
     set(FIPS_PLATFORM_NAME "linuxraspbian")
 else()
     set(FIPS_PLATFORM_NAME "linux")
@@ -48,7 +48,7 @@ endif()
 
 # 32-bit build on/off?
 if (FIPS_LINUX_MACH32)
-    set(CMAKE_CXX_FLASG "${CMAKE_CXX_FLAGS} -m32")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -m32")
 endif()
