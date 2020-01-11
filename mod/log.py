@@ -5,13 +5,13 @@ import sys
 RED = '\033[31m'
 GREEN = '\033[32m'
 YELLOW = '\033[33m'
-BLUE = '\033[1;36m'
+BLUE = '\033[36m'
 DEF = '\033[39m'
 
 #-------------------------------------------------------------------------------
 def error(msg, fatal=True) :
     """
-    Print error message and exit with error code 10 
+    Print error message and exit with error code 10
     unless 'fatal' is False.
 
     :param msg:     string message
@@ -24,7 +24,7 @@ def error(msg, fatal=True) :
 #-------------------------------------------------------------------------------
 def warn(msg) :
     """print a warning message"""
-    print('{}[WARNING]{} {}'.format(YELLOW, DEF, msg)) 
+    print('{}[WARNING]{} {}'.format(YELLOW, DEF, msg))
 
 #-------------------------------------------------------------------------------
 def ok(item, status) :
