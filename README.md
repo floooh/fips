@@ -16,7 +16,7 @@ http://floooh.github.io/fips/docs/getstarted/
 ### Public Service Announcements
 
 - **11-Jan-2020**: I have created the [fips-utils](https://github.com/fips-libs/fips-utils)
-and started to move some 'non-core' verbs from the fips core repository
+respository and started to move some 'non-core' verbs from the fips core repository
 there. Currently these are: *markdeep, gdb and valgrind*
 
 - **24-Oct-2019**: the verbs ```fips build``` and ```fips make``` can now forward
