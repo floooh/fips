@@ -15,6 +15,10 @@ http://floooh.github.io/fips/docs/getstarted/
 
 ### Public Service Announcements
 
+- **11-Jan-2020**: I have created the [fips-utils](https://github.com/fips-libs/fips-utils)
+and started to move some 'non-core' verbs from the fips core repository
+there. Currently these are: *markdeep, gdb and valgrind*
+
 - **24-Oct-2019**: the verbs ```fips build``` and ```fips make``` can now forward
 command line arguments to the underlying build tool, run ```fips help build```
 and ```fips help make``` for details.
@@ -62,7 +66,7 @@ statement to:
     # show help to get an idea of emsdk features
     > ./fips help emsdk
     ```
-    As before, each fips workspace directory has its own local emscripten SDK installation, you can use 
+    As before, each fips workspace directory has its own local emscripten SDK installation, you can use
     different SDK versions side-by-side in different workspaces and fips won't 'pollute' your global environment or interfere with a globally installed
     emscripten SDK.
     The command ```./fips setup emscripten``` works as before and is an alias for ```./fips emsdk install```
@@ -73,7 +77,7 @@ statement to:
     projects, please open a github ticket, and I'll add something to make
     this optional :)
 
-- **20-Jan-2019**: 
+- **20-Jan-2019**:
     - NaCl and UWP support have been removed (both haven't been maintained for a very long time)
     - remove the builtin unittest support, this was hardwired to UnitTest++ and should
       better be done in project-specific scripts (see Oryol for an example)
@@ -110,7 +114,7 @@ bit (all under a new project subdirectory called ```fips-files/```):
     ```yaml
     ---
     platform: osx
-    generator: Ninja 
+    generator: Ninja
     build_tool: vscode_cmake
     build_type: Debug
     vscode_additional_defines: [ 'CHIPS_IMPL', 'SOKOL_IMPL' ]
@@ -147,8 +151,8 @@ be the same as before, but there are some nice changes under the hood:
   don't need Gradle or Android Studio to build projects, instead
   APKs are created directly by a small python helper script
   called from a cmake post-build job, as a result, Android builds
-  are now also quite a bit faster 
-  - you can now use Android Studio for debugging (tested so far on 
+  are now also quite a bit faster
+  - you can now use Android Studio for debugging (tested so far on
   Mac and Windows), select the ```Profile or debug APK``` option when
   starting Android Studio, and follow the steps (sometimes debugging
   still seems to hang or ignore breakpoints on first start, in this
@@ -172,10 +176,10 @@ exclude platform-specific includes. [See here for details](http://floooh.github.
 - **04-Jan-2018**: The previously experimental Visual Studio Code support is
 now 'official', [see here for details](http://floooh.github.io/2018/01/04/vscode-fips.html)
 
-- **16-Aug-2017**: I found (and fixed) some inconsistent behaviour when 
+- **16-Aug-2017**: I found (and fixed) some inconsistent behaviour when
 the cmake project name is different from the project's directory name,
 this may change the behaviour of cmake- and python-code-generator
-scripts which used the FIPS\_PROJECT\_DEPLOY\_DIR and 
+scripts which used the FIPS\_PROJECT\_DEPLOY\_DIR and
 FIPS\_PROJECT\_BUILD\_DIR (but the previous behaviour was clearly a bug,
 which only manifested itself if the cmake project name and directory
 name differed). See this ticket for details: https://github.com/floooh/fips/issues/154
@@ -196,7 +200,7 @@ then run './fips setup emscripten' again from a project directory)
 - **25-Feb-2017**: what happened in the last year:
   - python3 compatibility contributed by Levente Polyak (thanks!)
   - various Eclipse fixes contributed by Martin Gerhardy (thanks!)
-  - Windows: Cygwin support contributed by Fungos, many thanks! also 
+  - Windows: Cygwin support contributed by Fungos, many thanks! also
     for the many smaller fixes :)
   - new verb './fips update' updates all dependencies (unless
     they have uncommitted or unpushed changes)
@@ -213,33 +217,33 @@ then run './fips setup emscripten' again from a project directory)
     and FIPS\_PROJECT\_DEPLOY\_DIR, these are useful to pass
     as arguments to code generator scripts
   - emscripten: use linker response files when using the UNIX
-    Makefiles generator to workaround command line length limit 
+    Makefiles generator to workaround command line length limit
     on Windows
   - emscripten: on Windows, use the Emscripten SDK incoming
     branch (requires LLVM compilation, but behaviour is now the
     same as on OSX and Linux)
-  - fips\_files\_ex() and related cmake functions now warn if 
+  - fips\_files\_ex() and related cmake functions now warn if
     the globbed file list is empty, previously this generated
     a rather cryptic cmake syntax error message
-  - emscripten: added support for WebAssembly (toolchain flags 
+  - emscripten: added support for WebAssembly (toolchain flags
     and build configs)
   - emscripten: added a config option FIPS\_EMSCRIPTEN\_USE\_WEBGL2
-  - emscripten: added new cmake options 
-    FIPS\_EMSCRIPTEN\_USE\_CPU\_PROFILER and 
+  - emscripten: added new cmake options
+    FIPS\_EMSCRIPTEN\_USE\_CPU\_PROFILER and
     FIPS\_EMSCRIPTEN\_USE\_MEMORY\_PROFILER (these generate a build
     with emscripten's built-in cpu and memory profilers)
   - emscripten: added a FIPS\_EMSCRIPTEN\_USE\_SAFE\_HEAP cmake option
   - emscripten: use the smaller 'shell\_minimal.html' file instead
     of the original file which has a big SVG logo in it
-  - emscripten: use the -s NO\_EXIT\_RUNTIME which slightly 
-    reduces code size 
+  - emscripten: use the -s NO\_EXIT\_RUNTIME which slightly
+    reduces code size
   - Windows UWP support (not in daily use though)
 
 - **26-Feb-2016**: cmake generator definition in fips build config files
-is now more flexible by exposing the cmake -A (generator platform) 
+is now more flexible by exposing the cmake -A (generator platform)
 and -T options (generator toolset), there's now also a 'Default' generator
 which lets cmake select the 'best' build file generator for the platform. All this
-together simplifies the version situation with Visual Studio on Windows. 
+together simplifies the version situation with Visual Studio on Windows.
 Previously, the build config win64-vs2013-debug was used as default config.
 When only VS2015 is installed, generating build files had failed, unless
 the build config win64-vs2015-debug was selected manually. Now there's
@@ -259,16 +263,16 @@ configs \*-vs2013-\* and \*-vs2015-\*.
       rev:    191f59f0
 ```
 - **03-Dec-2015**: I have added a new 'no\_auto\_import' policy/feature for
-  advanced uses which allows to manually select modules from imported 
+  advanced uses which allows to manually select modules from imported
   projects. This is more work but can provide a cleaner project layout
   if only a few modules from imported projects are needed. See the
-  documentation web page for details (http://floooh.github.io/fips/docs/imports/, 
+  documentation web page for details (http://floooh.github.io/fips/docs/imports/,
   search for 'Selectively importing modules'). The default behaviour should
   be exactly as before. If anything is broken in your project, please
   don't hesitate to write a ticket :)
 
 - **13-Oct-2015**: 'fips run' has learned to run Android apps, after building
-  your project with one of the Android build configs, simply do a 
+  your project with one of the Android build configs, simply do a
   'fips run [target]' like on the other platforms. This will (re-)install
   the app, launch it, and then run 'adb logcat' (simply hit Ctrl-C when done)
 
@@ -299,7 +303,7 @@ configs \*-vs2013-\* and \*-vs2015-\*.
 
 - **30-Jan-2015**: please note that the NaCl SDK setup script is currently
   broken with Python 2.7.9 (2.7.6 works), this is tracked in the following bug:
-  https://code.google.com/p/chromium/issues/detail?id=452137  
+  https://code.google.com/p/chromium/issues/detail?id=452137
 
 ### List of Fipsified Projects:
 
