@@ -5,13 +5,25 @@ fips
 
 fips is a highlevel build system wrapper written in Python for C/C++ projects.
 
-Read the docs to get a better idea what this means:
+(this project has nothing to do with the [Federal Information Processing Standard](https://en.wikipedia.org/wiki/FIPS_140-2))
+
+Read the docs to get a better idea what fips is:
 
 http://floooh.github.io/fips/
 
 ### Install Instructions
 
 http://floooh.github.io/fips/docs/getstarted/
+
+### Useful Links:
+
+- **[fips-libs](https://github.com/fips-libs/)**: this is where most
+'fipsification' wrapper projects live, which add a thin wrapper around
+open source projects to turn them into fips-compatible dependencies
+
+- **[fips-libs/fips-utils](https://github.com/fips-libs/fips-utils)**: a
+place for generally useful fips extensions that don't quite fit into
+the fips core repository.
 
 ### Public Service Announcements
 
@@ -305,7 +317,7 @@ configs \*-vs2013-\* and \*-vs2015-\*.
   broken with Python 2.7.9 (2.7.6 works), this is tracked in the following bug:
   https://code.google.com/p/chromium/issues/detail?id=452137
 
-### List of Fipsified Projects:
+### List of Fipsified Projects (OBSOLETE)
 
 Libs and engines:
 
