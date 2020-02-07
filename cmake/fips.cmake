@@ -56,7 +56,7 @@ macro(fips_setup)
     # set directly before fips_setup() is called, and only support the
     # PROJECT args for backward compatibility
     #
-    if (CMAKE_PROJECT_NAME STREQUAL "Project") 
+    if (CMAKE_PROJECT_NAME STREQUAL "Project")
         message(WARNING "please call project([proj_name]) directly before fips_setup(), cmake is expecting this starting with version 3.15")
         #
         # check for optional main-project name, this is the preferred way to
@@ -310,7 +310,7 @@ macro(fips_end_lib)
 
     # set platform- and target-specific compiler options
     fips_vs_apply_options(${CurTargetName})
-    
+
     # add dependencies
     fips_resolve_dependencies(${CurTargetName})
 
@@ -361,7 +361,6 @@ macro(fips_end_app)
         if (FIPS_OSX)
             add_executable(${CurTargetName} MACOSX_BUNDLE ${CurSources})
             fips_osx_add_target_properties(${CurTargetName})
-            fips_copy_osx_dylib_files(${CurTargetName} 1)
         elseif (FIPS_WIN32 OR FIPS_WIN64)
             add_executable(${CurTargetName} WIN32 ${CurSources})
         elseif (FIPS_ANDROID)
@@ -375,9 +374,6 @@ macro(fips_end_app)
             add_library(${CurTargetName} SHARED ${CurSources})
         else()
             add_executable(${CurTargetName} ${CurSources})
-        endif()
-        if (FIPS_OSX)
-            fips_copy_osx_dylib_files(${CurTargetName} 0)
         endif()
     endif()
     fips_apply_target_group(${CurTargetName})
@@ -709,7 +705,7 @@ macro(fips_generate)
         fips_add_target_dependency(${_fg_REQUIRES})
     endif()
     fips_add_file("${_fg_FROM}")
-    fips_add_generator(${CurTargetName} "${_fg_TYPE}" ${_fg_OUT_OF_SOURCE} "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}" "${_fg_ARGS}") 
+    fips_add_generator(${CurTargetName} "${_fg_TYPE}" ${_fg_OUT_OF_SOURCE} "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}" "${_fg_ARGS}")
 endmacro()
 
 #-------------------------------------------------------------------------------

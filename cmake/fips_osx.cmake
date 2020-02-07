@@ -16,27 +16,6 @@ macro(fips_frameworks_osx frameworks)
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_copy_osx_dylib_files(target isbundle)
-#   Copy OSX dynamic link libs to the executables directory.
-#
-macro(fips_copy_osx_dylib_files target isbundle)
-    if (FIPS_OSX)
-        if (${isbundle})
-            set(XCODE_OUTPUT_DIR \${TARGET_BUILD_DIR}/\${FULL_PRODUCT_NAME}/Contents/MacOS)
-        else()
-            set(XCODE_OUTPUT_DIR \${TARGET_BUILD_DIR})
-        endif()
-        foreach (dylib ${CurDylibFiles})
-            set(fullDylibName lib${dylib}.dylib)
-            if (FIPS_CMAKE_VERBOSE)
-                message("Add post build step to copy dylib: ${FIPS_PROJECT_DIR}/lib/osx/${fullDylibName}")
-            endif()
-            add_custom_command(TARGET ${target} POST_BUILD COMMAND pwd\; cp ${FIPS_PROJECT_DIR}/lib/osx/${fullDylibName} ${XCODE_OUTPUT_DIR})
-        endforeach()
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
 #   fips_osx_generate_plist_file(target)
 #
 #   FIXME: need a way to override the plist file from a fips target
@@ -165,7 +144,7 @@ macro(fips_osx_add_target_properties target)
     if (FIPS_OSX)
         fips_osx_generate_plist_file(${target})
         if (FIPS_IOS)
-            set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer")    
+            set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer")
             set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2")
             if (FIPS_IOS_TEAMID)
                 set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ${FIPS_IOS_TEAMID})
