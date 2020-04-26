@@ -233,7 +233,9 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg):
                 path = deploy_dir + '/' + tgt
                 if util.get_host_platform() == 'win':
                     path += '.exe'
-                cwd = os.path.dirname(path)
+                cwd = util.lookup_target_cwd(proj_dir, tgt)
+                if cwd == None:
+                    cwd = os.path.dirname(path)
                 osx_path = path + '.app/Contents/MacOS/' + tgt
                 osx_cwd = os.path.dirname(osx_path)
                 if os.path.isdir(osx_cwd):
