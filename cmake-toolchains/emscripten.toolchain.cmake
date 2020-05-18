@@ -146,24 +146,16 @@ set(CMAKE_SYSTEM_PROCESSOR x86)
 set(CMAKE_C_COMPILER_WORKS TRUE)
 set(CMAKE_CXX_COMPILER_WORKS TRUE)
 
-# Find the .emscripten file and cache, this is either setup locally in the
+# Find the .emscripten file and, this is either setup locally in the
 # emscripten SDK (this is the preferred way and used by 'fips setup emscripten',
 # but it's a brand new feature: https://github.com/juj/emsdk/issues/24)
 # If an SDK-local .emscripten is not found, fall back to ~/.emscripten
 get_filename_component(EMSCRIPTEN_DOT_FILE "${EMSCRIPTEN_EMSDK}/.emscripten" ABSOLUTE)
-if (EMSCRIPTEN_TRACING)
-    # set a separate .emscripten_cache when tracing since this will use an
-    # instrumented dlmalloc.c
-    get_filename_component(EMSCRIPTEN_CACHE "${EMSCRIPTEN_EMSDK}/.emscripten_cache_tracing" ABSOLUTE)
-else()
-    get_filename_component(EMSCRIPTEN_CACHE "${EMSCRIPTEN_EMSDK}/.emscripten_cache" ABSOLUTE)
-endif()
 if (EXISTS "${EMSCRIPTEN_DOT_FILE}")
-    set(EMSC_COMMON_FLAGS "${EMSC_COMMON_FLAGS} --em-config ${EMSCRIPTEN_DOT_FILE} --cache ${EMSCRIPTEN_CACHE}")
+    set(EMSC_COMMON_FLAGS "${EMSC_COMMON_FLAGS} --em-config ${EMSCRIPTEN_DOT_FILE}")
     set(EMSC_AR_FLAGS "${EMSC_AR_FLAGS} --em-config ${EMSCRIPTEN_DOT_FILE}")
 else()
-    # no sdk-embedded config found, use the default (~/.emscripten and ~/.emscripten_cache)
-    # message(WARNING "Using global emscripten config and cache in '~'!")
+    # no sdk-embedded config found, use the default (~/.emscripten)
 endif()
 
 # tool suffic (.bat on windows)
