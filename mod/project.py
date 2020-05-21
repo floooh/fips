@@ -76,7 +76,6 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
     if cfg['platform'] == 'osx':
         defines['CMAKE_OSX_SYSROOT'] = xcrun.get_macos_sdk_sysroot()
     if cfg['platform'] == 'emscripten':
-        defines['EMSCRIPTEN_EMSDK'] = emsdk.get_emsdk_dir(fips_dir)
         defines['EMSCRIPTEN_ROOT'] = emsdk.get_emscripten_root(fips_dir)
     do_it = force
     if not os.path.isdir(build_dir) :
@@ -84,7 +83,7 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
     if not os.path.isfile(build_dir + '/CMakeCache.txt'):
         do_it = True
     if do_it :
-        # if Ninja build tool and on Windows, need to copy 
+        # if Ninja build tool and on Windows, need to copy
         # the precompiled ninja.exe to the build dir
         log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
         log.info("config file: {}".format(cfg['path']))
@@ -137,7 +136,7 @@ def gen(fips_dir, proj_dir, cfg_name) :
 
     if num_valid_configs != len(configs) :
         log.error('{} out of {} configs failed!'.format(len(configs) - num_valid_configs, len(configs)))
-        return False      
+        return False
     else :
         log.colored(log.GREEN, '{} configs generated'.format(num_valid_configs))
         return True
@@ -205,7 +204,7 @@ def make_clean(fips_dir, proj_dir, cfg_name) :
                     result = xcodebuild.run_clean(fips_dir, build_dir)
                 else :
                     result = cmake.run_clean(fips_dir, build_dir)
-                    
+
                 if result :
                     num_valid_configs += 1
                 else :
@@ -217,7 +216,7 @@ def make_clean(fips_dir, proj_dir, cfg_name) :
 
     if num_valid_configs != len(configs) :
         log.error('{} out of {} configs failed!'.format(len(configs) - num_valid_configs, len(configs)))
-        return False      
+        return False
     else :
         log.colored(log.GREEN, '{} configs cleaned'.format(num_valid_configs))
         return True
@@ -277,7 +276,7 @@ def build(fips_dir, proj_dir, cfg_name, target=None, build_tool_args=None) :
 
     if num_valid_configs != len(configs) :
         log.error('{} out of {} configs failed!'.format(len(configs) - num_valid_configs, len(configs)))
-        return False      
+        return False
     else :
         log.colored(log.GREEN, '{} configs built'.format(num_valid_configs))
         return True
@@ -297,7 +296,7 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
     retcode = 10
     proj_name = util.get_project_name_from_dir(proj_dir)
     util.ensure_valid_project_dir(proj_dir)
-    
+
     # load the config(s)
     configs = config.load(fips_dir, proj_dir, cfg_name)
     if configs :
@@ -309,7 +308,7 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
             if not target_cwd :
                 target_cwd = deploy_dir
 
-            if cfg['platform'] == 'emscripten': 
+            if cfg['platform'] == 'emscripten':
                 # special case: emscripten app
                 html_name = target_name + '.html'
                 if util.get_host_platform() == 'osx' :
@@ -355,7 +354,7 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
                 # special case: Mac app
                 cmd_line = '{}/{}.app/Contents/MacOS/{}'.format(deploy_dir, target_name, target_name)
             else :
-                cmd_line = '{}/{}'.format(deploy_dir, target_name) 
+                cmd_line = '{}/{}'.format(deploy_dir, target_name)
             if cmd_line :
                 if target_args :
                     cmd_line += ' ' + ' '.join(target_args)

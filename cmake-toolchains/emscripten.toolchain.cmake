@@ -4,7 +4,6 @@
 #
 #   The following cmake defines must be passed on the command line:
 #
-#   EMSCRIPTEN_EMSDK:   absolute path to the emsdk directory
 #   EMSCRIPTEN_ROOT:    absolute path to the directory with emcc and system/includes
 #-------------------------------------------------------------------------------
 
@@ -145,18 +144,6 @@ set(CMAKE_CROSSCOMPILING TRUE)
 set(CMAKE_SYSTEM_PROCESSOR x86)
 set(CMAKE_C_COMPILER_WORKS TRUE)
 set(CMAKE_CXX_COMPILER_WORKS TRUE)
-
-# Find the .emscripten file and, this is either setup locally in the
-# emscripten SDK (this is the preferred way and used by 'fips setup emscripten',
-# but it's a brand new feature: https://github.com/juj/emsdk/issues/24)
-# If an SDK-local .emscripten is not found, fall back to ~/.emscripten
-get_filename_component(EMSCRIPTEN_DOT_FILE "${EMSCRIPTEN_EMSDK}/.emscripten" ABSOLUTE)
-if (EXISTS "${EMSCRIPTEN_DOT_FILE}")
-    set(EMSC_COMMON_FLAGS "${EMSC_COMMON_FLAGS} --em-config ${EMSCRIPTEN_DOT_FILE}")
-    set(EMSC_AR_FLAGS "${EMSC_AR_FLAGS} --em-config ${EMSCRIPTEN_DOT_FILE}")
-else()
-    # no sdk-embedded config found, use the default (~/.emscripten)
-endif()
 
 # tool suffic (.bat on windows)
 if (CMAKE_HOST_WIN32)
