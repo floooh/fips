@@ -27,6 +27,10 @@ the fips core repository.
 
 ### Public Service Announcements
 
+- **30-May-2020**: I have removed to -Wno-unused-parameter option from the
+GCC and Clang build configs. In hindsight it wasn't a good idea to suppress
+this warning globally.
+
 - **11-Jan-2020**: I have created the [fips-utils](https://github.com/fips-libs/fips-utils)
 respository and started to move some 'non-core' verbs from the fips core repository
 there. Currently these are: *markdeep, gdb and valgrind*
