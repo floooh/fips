@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 #	windows.cmake
-#	fips cmake settings file for Windows platform (supports 32- and 64-bit)
+#	fips cmake settings file for Windows platform with MSVC.
 #-------------------------------------------------------------------------------
 
 # detect 32-bit or 64-bit target platform   

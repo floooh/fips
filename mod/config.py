@@ -64,13 +64,6 @@ def get_toolchain(fips_dir, proj_dir, cfg) :
     :returns:           path to toolchain file or None for non-cross-compiling
     """
 
-    # ignore native target platforms
-    if 'platform' in cfg :
-        if cfg['platform'] in native_platforms :
-            return None
-    else :
-        log.error("config has no 'platform' attribute!'")
-
     # build toolchain file name
     toolchain = None
     if 'cmake-toolchain' in cfg :

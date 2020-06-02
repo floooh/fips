@@ -1,0 +1,6 @@
+---
+platform: win64 
+generator: Ninja
+build_tool: ninja
+build_type: Release
+cmake-toolchain: windows-clang.cmake
