@@ -26,12 +26,12 @@ set(CMAKE_CXX_RESPONSE_FILE_LINK_FLAG "@")
 # C++ flags
 set(CMAKE_CXX_FLAGS "-std=c++11 -fstrict-aliasing -Wno-multichar -Wall -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-missing-field-initializers")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 
 # C flags
 set(CMAKE_C_FLAGS "-fstrict-aliasing -Wno-multichar -Wall -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-missing-field-initializers")
 set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
-set(CMAKE_C_FLAGS_DEBUG "-O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
+set(CMAKE_C_FLAGS_DEBUG "-g -O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 
 # exe linker flags
 set(CMAKE_EXE_LINKER_FLAGS "-llibcmt")
