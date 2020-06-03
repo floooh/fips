@@ -90,12 +90,10 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
         toolchain_path = config.get_toolchain(fips_dir, proj_dir, cfg)
         if toolchain_path :
             log.info("Using Toolchain File: {}".format(toolchain_path))
-        if cfg['build_tool'] == 'ninja' :
-            ninja.prepare_ninja_tool(fips_dir, build_dir)
         cmake_result = cmake.run_gen(cfg, fips_dir, proj_dir, build_dir, toolchain_path, defines)
-        if cfg['build_tool'] == 'vscode_cmake':
+        if vscode.match(cfg['build_tool']):
             vscode.write_workspace_settings(fips_dir, proj_dir, cfg)
-        if cfg['build_tool'] == 'clion':
+        if clion.match(cfg['build_tool']):
             clion.write_workspace_settings(fips_dir, proj_dir, cfg)
         return cmake_result
     else :
@@ -196,11 +194,11 @@ def make_clean(fips_dir, proj_dir, cfg_name) :
 
                 build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
                 result = False
-                if cfg['build_tool'] == make.name :
+                if make.match(cfg['build_tool']):
                     result = make.run_clean(fips_dir, build_dir)
-                elif cfg['build_tool'] == ninja.name :
+                elif ninja.match(cfg['build_tool']):
                     result = ninja.run_clean(fips_dir, build_dir)
-                elif cfg['build_tool'] == xcodebuild.name :
+                elif xcodebuild.match(cfg['build_tool']):
                     result = xcodebuild.run_clean(fips_dir, build_dir)
                 else :
                     result = cmake.run_clean(fips_dir, build_dir)
@@ -256,11 +254,11 @@ def build(fips_dir, proj_dir, cfg_name, target=None, build_tool_args=None) :
                 build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
                 num_jobs = settings.get(proj_dir, 'jobs')
                 result = False
-                if cfg['build_tool'] == make.name :
+                if make.match(cfg['build_tool']):
                     result = make.run_build(fips_dir, target, build_dir, num_jobs, build_tool_args)
-                elif cfg['build_tool'] == ninja.name :
+                elif ninja.match(cfg['build_tool']):
                     result = ninja.run_build(fips_dir, target, build_dir, num_jobs, build_tool_args)
-                elif cfg['build_tool'] == xcodebuild.name :
+                elif xcodebuild.match(cfg['build_tool']):
                     result = xcodebuild.run_build(fips_dir, target, cfg['build_type'], build_dir, num_jobs, build_tool_args)
                 else :
                     result = cmake.run_build(fips_dir, target, cfg['build_type'], build_dir, num_jobs, build_tool_args)

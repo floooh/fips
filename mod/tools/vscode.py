@@ -23,6 +23,10 @@ def check_exists(fips_dir) :
         return False
 
 #------------------------------------------------------------------------------
+def match(build_tool):
+    return build_tool in ['vscode_cmake', 'vscode_ninja']
+
+#------------------------------------------------------------------------------
 def run(proj_dir):
     try:
         proj_name = util.get_project_name_from_dir(proj_dir)

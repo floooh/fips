@@ -22,6 +22,7 @@ build_tools = [
     'xcodebuild',
     'cmake',
     'vscode_cmake',
+    'vscode_ninja',
     'clion'
 ]
 
@@ -198,22 +199,35 @@ def load(fips_dir, proj_dir, pattern) :
     return configs
 
 #-------------------------------------------------------------------------------
-def check_build_tool(fips_dir, tool_name) :
+def missing_build_tools(fips_dir, tool_name) :
     """check if a build tool is installed"""
+    missing = []
     if tool_name == 'cmake' :
-        return cmake.check_exists(fips_dir)
+        if not cmake.check_exists(fips_dir):
+            missing.append(cmake.name)
     elif tool_name == 'make' :
-        return make.check_exists(fips_dir)
+        if not make.check_exists(fips_dir):
+            missing.append(make.name)
     elif tool_name == 'ninja' :
-        return ninja.check_exists(fips_dir)
+        if not ninja.check_exists(fips_dir):
+            missing.append(ninja.name)
     elif tool_name == 'xcodebuild' :
-        return xcodebuild.check_exists(fips_dir)
+        if not xcodebuild.check_exists(fips_dir):
+            missing.append(xcodebuild.name)
     elif tool_name == 'vscode_cmake' :
-        return vscode.check_exists(fips_dir)
+        if not vscode.check_exists(fips_dir):
+            missing.append(vscode.name)
+        if not cmake.check_exists(fips_dir):
+            missing.append(cmake.name)
+    elif tool_name == 'vscode_ninja' :
+        if not vscode.check_exists(fips_dir):
+            missing.append(vscode.name)
+        if not ninja.check_exists(fips_dir):
+            missing.append(ninja.name)
     elif tool_name == 'clion' :
-        return clion.check_exists(fips_dir)
-    else :
-        return False;
+        if not clion.check_exists(fips_dir):
+            missing.append(clion.name)
+    return missing
 
 #-------------------------------------------------------------------------------
 def check_sdk(fips_dir, platform_name) :
@@ -255,8 +269,9 @@ def check_config_valid(fips_dir, proj_dir, cfg, print_errors=False) :
         valid = False
 
     # check if the build tool can be found
-    if not check_build_tool(fips_dir, cfg['build_tool']) :
-        messages.append("build tool '{}' not found".format(cfg['build_tool']))
+    missing_tools = missing_build_tools(fips_dir, cfg['build_tool'])
+    if missing_tools:
+        messages.append("build tool(s) {} not found".format(','.join(missing_tools)))
         valid = False
 
     # check if the toolchain file can be found (if this is a crosscompiling toolchain)

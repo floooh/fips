@@ -37,11 +37,11 @@ def run(fips_dir, proj_dir, args) :
             project.gen(fips_dir, proj_dir, cfg['name'])
 
         # first check if this is a VSCode project
-        if cfg['build_tool'] == 'vscode_cmake':
+        if vscode.match(cfg['build_tool']):
             vscode.run(proj_dir)
             return
         # check if this is a CLion project
-        if cfg['build_tool'] == 'clion':
+        if clion.match(cfg['build_tool']):
             clion.run(proj_dir)
             return
         # try to open as Xcode project

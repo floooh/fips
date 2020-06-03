@@ -1,6 +1,6 @@
 ---
 platform: win64 
 generator: Ninja
-build_tool: vscode_cmake
+build_tool: vscode_ninja
 build_type: Release
 cmake-toolchain: windows-clang.cmake

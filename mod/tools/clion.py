@@ -34,6 +34,10 @@ def check_exists(fips_dir) :
         return False
 
 #------------------------------------------------------------------------------
+def match(build_tool):
+    return build_tool == 'clion'
+
+#------------------------------------------------------------------------------
 def run(proj_dir):
     host = util.get_host_platform()
     if host == 'linux':

@@ -21,6 +21,10 @@ def check_exists(fips_dir) :
         return False
 
 #-------------------------------------------------------------------------------
+def match(build_tool):
+    return build_tool == 'make'
+
+#-------------------------------------------------------------------------------
 def run_build(fips_dir, target, build_dir, num_jobs=1, args=None) :
     """make a build target
 

@@ -47,8 +47,6 @@ def run_gen(cfg, fips_dir, project_dir, build_dir, toolchain_path, defines) :
     if cfg['generator-toolset'] :
         cmdLine += ' -T "{}"'.format(cfg['generator-toolset'])
     cmdLine += ' -DCMAKE_BUILD_TYPE={}'.format(cfg['build_type'])
-    if cfg['build_tool'] == 'ninja' and platform.system() == 'Windows':
-        cmdLine += ' -DCMAKE_MAKE_PROGRAM={}'.format(ninja.get_ninja_tool(fips_dir)) 
     if toolchain_path is not None :
         cmdLine += ' -DCMAKE_TOOLCHAIN_FILE={}'.format(toolchain_path)
     cmdLine += ' -DFIPS_CONFIG={}'.format(cfg['name'])
