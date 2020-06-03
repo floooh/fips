@@ -27,6 +27,13 @@ the fips core repository.
 
 ### Public Service Announcements
 
+- **03-Jun-2020**: 
+  - The embedded precompiled ninja.exe for Windows has been removed. Please use
+    a package manager like scoop.sh to install ninja instead.
+  - A new meta-build-tool 'vscode_ninja' which directly invokes ninja instead
+    of 'cmake --build' when building from inside VSCode.
+  - Some cleanup in the code dealing with the 'build_tool' build config attribute.
+
 - **30-May-2020**: I have removed to -Wno-unused-parameter option from the
 GCC and Clang build configs. In hindsight it wasn't a good idea to suppress
 this warning globally.
