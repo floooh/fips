@@ -35,7 +35,7 @@ set(CMAKE_C_FLAGS_DEBUG "-g -O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 
 # exe linker flags
 set(CMAKE_EXE_LINKER_FLAGS "")
-set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-lllibcmt")
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-llibcmt")
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-g -llibcmtd")
 
 # DLL linker flags
