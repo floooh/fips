@@ -24,24 +24,24 @@ set(CMAKE_C_RESPONSE_FILE_LINK_FLAG "@")
 set(CMAKE_CXX_RESPONSE_FILE_LINK_FLAG "@")
 
 # C++ flags
-set(CMAKE_CXX_FLAGS "-std=c++11 -fstrict-aliasing -Wno-multichar -Wall -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-missing-field-initializers")
+set(CMAKE_CXX_FLAGS "-std=c++11 -fstrict-aliasing -Wno-deprecated-declarations -Wno-multichar -Wall -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-missing-field-initializers")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 
 # C flags
-set(CMAKE_C_FLAGS "-fstrict-aliasing -Wno-multichar -Wall -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-missing-field-initializers")
+set(CMAKE_C_FLAGS "-fstrict-aliasing -Wno-deprecated-declarations -Wno-multichar -Wall -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-missing-field-initializers")
 set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
 set(CMAKE_C_FLAGS_DEBUG "-g -O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 
 # exe linker flags
-set(CMAKE_EXE_LINKER_FLAGS "-llibcmt")
-set(CMAKE_EXE_LINKER_FLAGS_RELEASE "")
-set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-g")
+set(CMAKE_EXE_LINKER_FLAGS "")
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-lllibcmt")
+set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-g -llibcmtd")
 
 # DLL linker flags
-set(CMAKE_SHARED_LINKER_FLAGS "-llibcmt")
-set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "")
-set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-g")
+set(CMAKE_SHARED_LINKER_FLAGS "")
+set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "-llibcmt")
+set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-g -llibcmtd")
 
 # exceptions on/off?
 if (NOT FIPS_EXCEPTIONS)
