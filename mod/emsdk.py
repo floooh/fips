@@ -14,12 +14,21 @@
       be hardwired to a specific version)
 """
 
-import os, sys, subprocess, shutil
+import os, stat, sys, subprocess, shutil
 from mod import log, util
 from mod.tools import git
 
 EMSDK_URL = "https://github.com/emscripten-core/emsdk.git"
 EMSDK_DEFAULT_VERSION = 'latest'
+
+# this is an error callback function for shutil.rmtree to make
+# read-only files writable after rmtree failed to delete them
+#
+# from: https://docs.python.org/3.5/library/shutil.html#rmtree-example
+#
+def remove_readonly(func, path, _):
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
 
 #-------------------------------------------------------------------------------
 def get_sdkroot_dir(fips_dir):
@@ -110,7 +119,7 @@ def remove_old_sdks(fips_dir):
     if os.path.isdir(old_sdk_path):
         if util.confirm(log.RED + "Delete obsolete emscripten SDK in '{}'?".format(old_sdk_path) + log.DEF):
             log.info("Deleting '{}'...".format(old_sdk_path))
-            shutil.rmtree(old_sdk_path, ignore_errors=True)
+            shutil.rmtree(old_sdk_path, onerror=remove_readonly)
         else:
             log.info("'No' selected, nothing deleted")
 
@@ -123,7 +132,7 @@ def uninstall(fips_dir):
     if emsdk_dir_exists(fips_dir):
         if util.confirm(log.RED + "Delete emsdk directory at '{}'?".format(emsdk_dir) + log.DEF):
             log.info("Deleting '{}'...".format(emsdk_dir))
-            shutil.rmtree(emsdk_dir)
+            shutil.rmtree(emsdk_dir, onerror=remove_readonly)
         else:
             log.info("'No' selected, nothing deleted")
     else:
