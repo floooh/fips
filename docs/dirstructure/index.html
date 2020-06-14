@@ -18,7 +18,7 @@
 
 
 
-<link rel="stylesheet" href="/fips/book.min.5c73c46aca2a1bca1dcdff8126636a2cd180236600b29850c511f7cf52195c4a.css">
+<link rel="stylesheet" href="/fips/book.min.bff781db5420417a98b39d5c502a421476ceee7df3af700be24e8554146bfa51.css">
 
 
 <link rel="icon" href="/fips/favicon.png" type="image/x-icon">
@@ -242,26 +242,22 @@ https://github.com/alex-shpak/hugo-book
 </header>
 
       
-<article class="markdown">
-
-<h1 id="directory-structure">Directory Structure</h1>
-
+<article class="markdown"><h1 id="directory-structure">Directory Structure</h1>
 <p>fips creates project directories and a few special directories on the same
 level as the fips directory itself.</p>
-<div class="highlight"><pre class="chroma">┣━━ fips/
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">┣━━ fips/
 ┣━━ fips-build/
 ┣━━ fips-deploy/
 ┣━━ fips-sdks/
 ┣━━ project-1/
 ┣━━ project-2/
-┣━━ .../</pre></div>
-<h3 id="the-fips-build-directory">The fips-build directory</h3>
-
+┣━━ .../
+</code></pre></div><h3 id="the-fips-build-directory">The fips-build directory</h3>
 <p>The <strong>fips-build</strong> directory contains the generated cmake build files,
 separated in subdirectories by project name and config name. The
 content of fips-build is created with the <em>&lsquo;fips gen&rsquo;</em> command (or on the
 fly during <em>&lsquo;fips build&rsquo;</em> or <em>&lsquo;fips make&rsquo;</em>):</p>
-<div class="highlight"><pre class="chroma">┗━━ fips-build/
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">┗━━ fips-build/
     ┣━━ project-1/
     ┃   ┣━━ osx-xcode-debug/
     ┃   ┃   ┣━━ oryol.xcodeproj/
@@ -272,14 +268,13 @@ fly during <em>&lsquo;fips build&rsquo;</em> or <em>&lsquo;fips make&rsquo;</em>
     ┗━━ project-2/
         ┗━━ emsc-make-release/
             ┣━━ Makefile
-            ┗━━ ...</pre></div>
-<h3 id="the-fips-deploy-directory">The fips-deploy directory</h3>
-
+            ┗━━ ...
+</code></pre></div><h3 id="the-fips-deploy-directory">The fips-deploy directory</h3>
 <p>The <strong>fips-deploy</strong> directory contains the built executable files, also
 separated in subdirectories by project and config name. The content of the
 fips-deploy directory is created during the <em>&lsquo;fips build&rsquo;</em> or <em>&lsquo;fips make&rsquo;</em>
 commands:</p>
-<div class="highlight"><pre class="chroma">┗━━ fips-deploy/
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">┗━━ fips-deploy/
     ┣━━ project-1/
     ┃   ┣━━ osx-xcode-debug/
     ┃   ┃   ┣━━ app-1.app
@@ -292,28 +287,24 @@ commands:</p>
     ┗━━ project-2/
         ┗━━ emsc-make-release/
             ┣━━ app-1.html
-            ┗━━ ...</pre></div>
-<p>Both the fips-build and fips-deploy directories contain only generated files,
+            ┗━━ ...
+</code></pre></div><p>Both the fips-build and fips-deploy directories contain only generated files,
 it is not dangerous to completely delete these directories.</p>
-
-<p>The fips command <em>&lsquo;fips clean [config]&rsquo;</em> deletes the generated files for all
+<p>The fips command <em>&lsquo;fips clean [config]'</em> deletes the generated files for all
 configs, the active config, or a named config.</p>
-
 <h3 id="the-fips-sdks-directory">The fips-sdks directory</h3>
-
 <p>The fips-sdks directory contains the platform SDK files installed with:</p>
-<div class="highlight"><pre class="chroma">&gt; fips setup emscripten
-&gt; fips setup android</pre></div>
-<p>The fips-sdks directory structure currently looks like this (details
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; fips setup emscripten
+&gt; fips setup android
+</code></pre></div><p>The fips-sdks directory structure currently looks like this (details
 may change in the future):</p>
-<div class="highlight"><pre class="chroma">┗━━ fips-sdks/
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">┗━━ fips-sdks/
     ┗━━ android
-    ┗━━ emsdk</pre></div>
-<h3 id="special-fips-files">Special fips files</h3>
-
+    ┗━━ emsdk
+</code></pre></div><h3 id="special-fips-files">Special fips files</h3>
 <p>A project needs at least a <strong>fips.yml</strong> file to be recognized as a fips project.
 Most projects have additional fips-specific files and directories:</p>
-<div class="highlight"><pre class="chroma">┗━━ project-1/
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">┗━━ project-1/
     ┣━━ fips.yml 
     ┣━━ fips 
     ┣━━ fips.cmd 
@@ -325,13 +316,11 @@ Most projects have additional fips-specific files and directories:</p>
     ┃   ┗━━ toolchains/
     ┣━━ .fips-settings.yml
     ┣━━ .fips-imports.cmake
-    ┗━━ .fips-gen.py</pre></div>
-<p>All files except <em>fips.yml</em> are optional, all hidden files
-(starting with a &lsquo;.&rsquo;) are maintained by fips and should not be under version
+    ┗━━ .fips-gen.py
+</code></pre></div><p>All files except <em>fips.yml</em> are optional, all hidden files
+(starting with a &lsquo;.') are maintained by fips and should not be under version
 control.</p>
-
 <p>Here&rsquo;s a description of what each file means:</p>
-
 <ul>
 <li><strong>fips.yml</strong>: contains the imports, exports and policy options of the project</li>
 <li><strong>fips</strong>: proxy python script to be able to run fips commands from within
@@ -355,7 +344,7 @@ can be defined in build-configs using the &lsquo;cmake-toolchain&rsquo; attribut
 Toolchain files will be searched in the following order: first in the current
 project, then in imported projects, and finally in the fips directory itself.</li>
 <li><strong>.fips-settings.yml</strong>: hidden file with project-specific fips settings
-generated by <em>&lsquo;fips set [key] [value]&rsquo;</em> or <em>&lsquo;fips unset [key]&rsquo;</em></li>
+generated by <em>&lsquo;fips set [key] [value]'</em> or <em>&lsquo;fips unset [key]'</em></li>
 <li><strong>.fips-imports.cmake</strong>: generated cmake file which contains all imports of
 the project, the .fips-imports.cmake file is created during <em>&lsquo;fips gen&rsquo;</em> and
 other fips commands which implicitly do a cmake run (like <em>&lsquo;fips build&rsquo;</em> or
@@ -375,18 +364,16 @@ the build process</li>
   
   <aside class="book-toc fixed">
     <nav id="TableOfContents">
-<ul>
-<li><a href="#directory-structure">Directory Structure</a>
-<ul>
-<li>
-<ul>
-<li><a href="#the-fips-build-directory">The fips-build directory</a></li>
-<li><a href="#the-fips-deploy-directory">The fips-deploy directory</a></li>
-<li><a href="#the-fips-sdks-directory">The fips-sdks directory</a></li>
-<li><a href="#special-fips-files">Special fips files</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#the-fips-build-directory">The fips-build directory</a></li>
+        <li><a href="#the-fips-deploy-directory">The fips-deploy directory</a></li>
+        <li><a href="#the-fips-sdks-directory">The fips-sdks directory</a></li>
+        <li><a href="#special-fips-files">Special fips files</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </aside>
 

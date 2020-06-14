@@ -7,7 +7,7 @@
 <html lang="en">
 
 <head>
-	<meta name="generator" content="Hugo 0.55.6" />
+	<meta name="generator" content="Hugo 0.72.0" />
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
@@ -18,7 +18,7 @@
 
 
 
-<link rel="stylesheet" href="/fips/book.min.5c73c46aca2a1bca1dcdff8126636a2cd180236600b29850c511f7cf52195c4a.css">
+<link rel="stylesheet" href="/fips/book.min.bff781db5420417a98b39d5c502a421476ceee7df3af700be24e8554146bfa51.css">
 
 
 <link rel="icon" href="/fips/favicon.png" type="image/x-icon">
@@ -242,20 +242,14 @@ https://github.com/alex-shpak/hugo-book
 </header>
 
       
-<article class="markdown">
-
-<h1 id="what-is-fips">What is Fips</h1>
-
+<article class="markdown"><h1 id="what-is-fips">What is Fips</h1>
 <p>Fips is a Python command line tool which provides an &lsquo;Integrated Build
 Environment&rsquo; for C/C++ projects by wiring together existing build tools. It
 enables a workflow similar to Rust&rsquo;s Cargo or Javascript&rsquo;s NPM, but for C/C++
 projects.</p>
-
 <h2 id="an-integrated-build-environment">An &lsquo;Integrated Build Environment&rsquo;</h2>
-
 <p>Fips doesn&rsquo;t reinvent the wheel by implementing yet-another build system
 from scratch, but instead wires existing build tools together:</p>
-
 <ul>
 <li><strong>cmake</strong> to describe the project structure and generate project files</li>
 <li><strong>make, ninja, xcodebuild</strong> as command line build tools</li>
@@ -263,45 +257,33 @@ from scratch, but instead wires existing build tools together:</p>
 <li><strong>git</strong> to fetch external dependencies</li>
 <li><strong>python</strong> to extend fips with new commands and code-generation-scripts</li>
 </ul>
-
-<h2 id="multi-and-cross-platform-support">Multi- and Cross-Platform Support</h2>
-
+<h2 id="multi--and-cross-platform-support">Multi- and Cross-Platform Support</h2>
 <p>Fips can build on <strong>Windows, OSX, Linux</strong>, and cross-compile to <strong>iOS,
 emscripten</strong> and <strong>Android</strong>. Fips also takes care of installing
 the cross-platform SDKs and provides a unified cmake build environment
 for all target platforms. Instead of wrestling with the many different build
 systems used by those cross-platform SDKs you only maintain a single set
 of cmake files for all target platforms.</p>
-
 <h2 id="build-configuration-management">Build Configuration Management</h2>
-
 <p>Cross-platform projects often have dozens of different build configurations
 for combinations of target platforms, build tools and build settings.
 Fips makes it easy to work with many different build configurations, and
 keeps the build files for each configuration separated from each other.</p>
-
 <h2 id="dependency-management">Dependency Management</h2>
-
 <p>Fips projects can define exports and imports to and from other fips projects,
 and thus serve as a simple package manager for code modules. External
 projects will be pulled in via git and fips will import external build
 targets, fips commands, code-generators and setup header and library search
 paths. A project with external dependencies will look and feel exactly the
 same like a completely local project.</p>
-
 <h2 id="code-generation">Code Generation</h2>
-
 <p>Fips implements a simple yet powerful code generation mechanism by calling
 Python &lsquo;generator scripts&rsquo; during the build process.</p>
-
 <h2 id="extensible">Extensible</h2>
-
 <p>Fips projects can implement their own fips commands, build configurations and
 code generator scripts. This allows projects to implement missing
 fips features and integrate fips with existing workflows and build processes.</p>
-
 <h1 id="what-fips-is-not">What Fips is not:</h1>
-
 <ul>
 <li>fips is not a build job scheduler like Jenkins, Hudson, msbuild or ant</li>
 <li>fips is not a distributed build system like Incredibuild</li>
@@ -319,18 +301,14 @@ fips features and integrate fips with existing workflows and build processes.</p
   
   <aside class="book-toc fixed">
     <nav id="TableOfContents">
-<ul>
-<li><a href="#what-is-fips">What is Fips</a>
-<ul>
-<li><a href="#an-integrated-build-environment">An &lsquo;Integrated Build Environment&rsquo;</a></li>
-<li><a href="#multi-and-cross-platform-support">Multi- and Cross-Platform Support</a></li>
-<li><a href="#build-configuration-management">Build Configuration Management</a></li>
-<li><a href="#dependency-management">Dependency Management</a></li>
-<li><a href="#code-generation">Code Generation</a></li>
-<li><a href="#extensible">Extensible</a></li>
-</ul></li>
-<li><a href="#what-fips-is-not">What Fips is not:</a></li>
-</ul>
+  <ul>
+    <li><a href="#an-integrated-build-environment">An &lsquo;Integrated Build Environment&rsquo;</a></li>
+    <li><a href="#multi--and-cross-platform-support">Multi- and Cross-Platform Support</a></li>
+    <li><a href="#build-configuration-management">Build Configuration Management</a></li>
+    <li><a href="#dependency-management">Dependency Management</a></li>
+    <li><a href="#code-generation">Code Generation</a></li>
+    <li><a href="#extensible">Extensible</a></li>
+  </ul>
 </nav>
   </aside>
 

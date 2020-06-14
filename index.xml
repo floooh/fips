@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Introduction on Fips Docs</title>
@@ -16,7 +16,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://floooh.github.com/fips/docs/getstarted/</guid>
-      <description>Get Started You need:  python (2.7.x or 3.x should both work) cmake (any 3.x version should work) a working C/C++ development environment:  on OSX: Xcode + command line tools on Linux: make/gcc (or clang) on Windows: Visual Studio 2013 or better   Get fips fips will create additional directories on the same directory level as the fips directory itself, thus it is recommended to git-clone fips into a separate &amp;lsquo;workspace&amp;rsquo; directory:</description>
+      <description>Get Started You need:  python (2.7.x or 3.x should both work) cmake (any 3.x version should work) a working C/C++ development environment:  on OSX: Xcode + command line tools on Linux: make/gcc (or clang) on Windows: Visual Studio 2013 or better    Get fips fips will create additional directories on the same directory level as the fips directory itself, thus it is recommended to git-clone fips into a separate &amp;lsquo;workspace&amp;rsquo; directory:</description>
     </item>
     
     <item>
@@ -37,9 +37,9 @@
       
       <guid>http://floooh.github.com/fips/docs/troubleshooting/</guid>
       <description>Troubleshooting If anything goes wrong, &amp;lsquo;./fips clean all&amp;rsquo; and &amp;lsquo;./fips diag&amp;rsquo; are the two most useful commands.
-&amp;rsquo;./fips clean all&amp;rsquo; deletes all build files created by fips and thus resets a project into a clean starting state.
-&amp;rsquo;./fips diag&amp;rsquo; runs a number of diagnostic tests and provides useful error output:
-&amp;gt; ./fips help diag fips diag fips diag all fips diag fips fips diag tools fips diag configs fips diag imports run diagnostics and check for errors &amp;gt; _ &amp;rsquo;.</description>
+&amp;lsquo;./fips clean all&amp;rsquo; deletes all build files created by fips and thus resets a project into a clean starting state.
+&amp;lsquo;./fips diag&amp;rsquo; runs a number of diagnostic tests and provides useful error output:
+&amp;gt; ./fips help diag fips diag fips diag all fips diag fips fips diag tools fips diag configs fips diag imports run diagnostics and check for errors &amp;gt; _ &amp;lsquo;.</description>
     </item>
     
     <item>
