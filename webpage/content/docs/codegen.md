@@ -6,9 +6,9 @@ weight: 8
 ---
 # Code Generation
 
-Fips makes it easy to generate C/C++ source code by running Python scripts 
+Fips makes it easy to generate C/C++ source code by running Python scripts
 during the build process. Special care has been taken to make code generation flexible so
-that it is useful for many different scenarios. For instance here are 
+that it is useful for many different scenarios. For instance here are
 a few examples how the Oryol 3D engine uses code generation:
 
 * generate code for serializable message protocols (similar to [Google protobuf](https://code.google.com/p/protobuf/))
@@ -22,6 +22,8 @@ The **fips_generate** cmake macro is used to tell fips how to generate C/C++ sou
 ```cmake
 fips_generate(FROM input_file
               [TYPE generator_type]
+              [SRC_EXT source_file_extension]
+              [HDR_EXT header_file_extension]
               [SOURCE out_source_file]
               [HEADER out_header_file]
               [ARGS args_as_yaml_string])
@@ -29,15 +31,19 @@ fips_generate(FROM input_file
 
 Where:
 
-* **FROM**: Defines an input data file which is handed to the Python generator script 
-as argument, the input file can be anything, for instance JSON, YAML, XML or GLSL. It is 
+* **FROM**: Defines an input data file which is handed to the Python generator script
+as argument, the input file can be anything, for instance JSON, YAML, XML or GLSL. It is
 up to the generator script to make sense of the input file.
 * **TYPE**: Defines the generator that should be used for code generation, this resolves
 to a Python module which is imported and run at build time
 * **SOURCE**: The filename of the generated source code file
 * **HEADER**: The filename of the generated header code file
+* **SRC_EXT**: Optional file extension for the generated source file (default is ".cc")
+* **HDR_EXT**: Optional file extension for the generated header file (default is ".h")
 * **ARGS**: An optional YAML formatted string defining additional arguments to the python
 generator script.
+
+> NOTE that SRC_EXT and HDR_EXT are ignored if SOURCE and/or HEADER is also defined
 
 Let's go through a few examples:
 
@@ -52,17 +58,25 @@ This means that the input file _IOProtocol.yml_ is converted by the generator
 _MessageProtocol_ into the output files _IOProtocol.cc_ and _IOProtocol.h_.
 
 If both the _SOURCE_ and _HEADER_ args are **not** provided, fips will
-automatically generate one _.cc_ source and one _.h_ header file with the same base 
+automatically generate one _.cc_ source and one _.h_ header file with the same base
 name as the _FROM_ file.
 
-To generate output files with different file extensions (or filenames), provide
-them explicitly with the _SOURCE_ and _HEADER_ args, e.g.:
+To generate output files with different file extensions, provide _SRC\_EXT_
+and/or _HDR\_EXT_:
+
+```cmake
+fips_generate(FROM IOProtocol.yml TYPE MessageProtocol SRC_EXT ".cpp" HDR_EXT ".hpp")
+```
+
+To generate output files with different filenames, provide them explicitly with
+the _SOURCE_ and _HEADER_ args, in this case _SRC\_EXT_ and _HDR\_EXT_ are
+ignored:
 
 ```cmake
 fips_generate(FROM IOProtocol.yml
               TYPE MessageProtocol
-              SOURCE IOProtocol.cpp
-              HEADER IOProtocol.hh)
+              SOURCE IOProtocol_Generated.cpp
+              HEADER IOProtocol_Generated.hpp)
 ```
 
 Providing only **one** of _SOURCE_ or _HEADER_ means that the generator
@@ -98,9 +112,9 @@ It is possible to provide additional arguments to the generator script
 in a YAML-formatted string:
 
 ```cmake
-fips_generate(FROM fs_metaballs.sc 
-              TYPE BgfxShaderEmbedded 
-              HEADER fs_metaballs.bin.h 
+fips_generate(FROM fs_metaballs.sc
+              TYPE BgfxShaderEmbedded
+              HEADER fs_metaballs.bin.h
               ARGS "{ type: fs, bla: blub }")
 ```
 
@@ -108,7 +122,7 @@ fips_generate(FROM fs_metaballs.sc
 
 A _generator_ is a Python script which is called to generate C/C++ files.
 
-Fips doesn't come with its own generators, instead it looks in the 
+Fips doesn't come with its own generators, instead it looks in the
 **fips-files/generators** directory in the current project and imported projects
 for generator scripts.
 
@@ -135,7 +149,7 @@ def generate(input, out_src, out_hdr, args) :
 
 Where:
 
-* **input**: is the absolute path to the input file (provided with the _FROM_ cmake 
+* **input**: is the absolute path to the input file (provided with the _FROM_ cmake
 argument of fips_generate())
 * **out_src**: is the absolute path to the output source file, or None (provided with the
 _SOURCE_ cmake argument to fips_generate())
@@ -146,7 +160,7 @@ _ARGS_ cmake argument to fips_generate()
 
 ### Target Platform Detection
 
-Sometimes you'll need to do things differently when cross-compiling to 
+Sometimes you'll need to do things differently when cross-compiling to
 specific target platforms. Use the _getutil.getEnv()_ method with the
 key _target\_platform_ to check the target platform, for instance to check
 for iOS:
@@ -173,12 +187,12 @@ _FIPS\_PLATFORM\_NAME_:
 ### File Dirty Check
 
 Generator scripts should not overwrite the target files if nothing has changed
-in the source file, otherwise they would trigger unnecessary recompiles higher 
+in the source file, otherwise they would trigger unnecessary recompiles higher
 up the source code dependency chain.
 
 fips provides a simple helper function to perform 2 types of dirty checks:
 
-- check the file modification timestamps of input files against the 
+- check the file modification timestamps of input files against the
 modification timestamps of the generated source code files
 - check a _generator version_ embedded in the first few lines of generated
 files
@@ -195,7 +209,7 @@ Let's have a look at a very simple generator script:
 ```python
 """fips imported code generator for testing"""
 
-Version = 2 
+Version = 2
 
 import genutil as util
 
@@ -259,7 +273,7 @@ void test_func() {
 
 The generator in this example doesn't actually use an input file since
 it generates the target files without any parameterization. This very special
-case only works with a Python script in the source tree which serves as 
+case only works with a Python script in the source tree which serves as
 'input file' and calls the above generator 'hello_generator':
 
 ```python
@@ -295,26 +309,26 @@ the build process to load and invoke the code generator scripts.
 file, if they don't exist yet (this is a cmake requirement, all source code
 files added to a build target must exist)
 - add the FROM, SOURCE and HEADER files to the current build target's file list
-- a YAML file will be populated with the information from all fips\_generate() 
-calls at ${CMAKE\_BINARY\_DIR}/fips\_codegen.yml (which is at 
+- a YAML file will be populated with the information from all fips\_generate()
+calls at ${CMAKE\_BINARY\_DIR}/fips\_codegen.yml (which is at
 ./fips-build/[proj-name]/[config-name]/fips\_codegen.yml)
 - set a global flag that the current project has code generation
 
 **in fips\_end\_xxx()**:
 
-- the global 'project has code generation' flag is set, generate a cmake 
+- the global 'project has code generation' flag is set, generate a cmake
 custom target named _ALL\_GENERATE_ which calls the generated '.fips-gen.py' script
 with the also generated fips_codegen.yml file as argument
-- add the ALL\_GENERATE custom build target as dependency to all build targets 
+- add the ALL\_GENERATE custom build target as dependency to all build targets
 with code generation
 
 **during builds**:
 
-- ALL\_GENERATE custom build target will run before any regular build target 
+- ALL\_GENERATE custom build target will run before any regular build target
 which depends on generated code
 - the ALL\_GENERATE target runs the python file '.fips-gen.py' from the
 project root directory with the fips\_codegen.yml file as argument
-- '.fips-gen.py' loads the fips\_codegen.yml file, and imports and runs 
+- '.fips-gen.py' loads the fips\_codegen.yml file, and imports and runs
 code generator python scripts, which will generate the C/C++ source code files
 as needed
 
