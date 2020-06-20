@@ -9,6 +9,8 @@ set(FIPS_MACOS 1)
 set(FIPS_OSX 1)
 set(FIPS_POSIX 1)
 
+set(CMAKE_XCODE_GENERATE_SCHEME 1)
+
 # define configuration types
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 

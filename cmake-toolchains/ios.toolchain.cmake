@@ -15,6 +15,7 @@ set(CMAKE_SYSTEM_NAME iOS)
 set(CMAKE_OSX_SYSROOT "iphoneos")
 set(CMAKE_OSX_ARCHITECTURES "armv7;arm64;x86_64")
 set(CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos;-iphonesimulator")
+set(CMAKE_XCODE_GENERATE_SCHEME 1)
 
 # define configurations
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
