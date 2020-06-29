@@ -80,13 +80,13 @@ def run_build(fips_dir, target, build_type, build_dir, num_jobs=1, args=None) :
     args_str = ''
     if args is not None:
         args_str = ' '.join(args)
-    cmdLine = 'cmake --build . --config {}'.format(build_type)
+    cmdLine = 'cmake --build . --parallel {} --config {}'.format(num_jobs, build_type)
     if target :
         cmdLine += ' --target {}'.format(target)
     if platform.system() == 'Windows' :
-        cmdLine += ' -- /nologo /verbosity:minimal /maxcpucount:{} {}'.format(num_jobs, args_str)
+        cmdLine += ' -- /nologo /verbosity:minimal {}'.format(args_str)
     else :
-        cmdLine += ' -- -j{} {}'.format(num_jobs, args_str)
+        cmdLine += ' -- {}'.format(num_jobs, args_str)
     print(cmdLine)
     res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
     return res == 0
