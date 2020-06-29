@@ -86,7 +86,7 @@ def run_build(fips_dir, target, build_type, build_dir, num_jobs=1, args=None) :
     if platform.system() == 'Windows' :
         cmdLine += ' -- /nologo /verbosity:minimal {}'.format(args_str)
     else :
-        cmdLine += ' -- {}'.format(num_jobs, args_str)
+        cmdLine += ' -- {}'.format(args_str)
     print(cmdLine)
     res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
     return res == 0
