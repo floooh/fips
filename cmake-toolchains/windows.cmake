@@ -29,34 +29,6 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib
 set(CMAKE_C_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib dbghelp.lib wsock32.lib ws2_32.lib rpcrt4.lib wininet.lib")
 
 # define compiler and linker flags
-
-# GENERIC compiler flags:
-#   /WX treat warnings as errors
-#   /GF eliminate duplicate strings
-#   /TP treat files as C++ source
-#   /TC treat files as C source
-#   /fp:fast create fast (not precise) floating point code
-#   /Gm: enable minimal rebuild
-#   /EHsc: slim exception model
-#   /EHa: fat exception model
-#   /MP: use multiple cores
-#
-# DEBUG compiler flags:
-#   /Zi create debugging information PDB file
-#   /Od disable optimizations
-#   /Oy- do not suppress frame pointers (recommended for debugging)
-#   /MTd use statically linked, thread-safe, debug CRT libs
-#
-# RELEASE compiler/linker flags:
-#   /Ox full optimization
-#   /MT use statically linked, thread-safe CRT libs
-#   /GS- no Buffer Security Check
-#   /GL whole-program-optimization
-#   /LTCG use link-time code generation
-#   /INCREMENTAL:NO don't use incremental linking
-#   /OPT:REF dead-code-elimination
-#   /OPT:ICF identical COMDAT folding
-#
 if (FIPS_EXCEPTIONS)
     set(FIPS_VS_EXCEPTION_FLAGS "/EHa")
 else()
@@ -70,14 +42,14 @@ else()
 endif()
 
 set(CMAKE_CXX_FLAGS "${FIPS_VS_EXCEPTION_FLAGS} /MP /WX /TP /DWIN32")
-set(CMAKE_CXX_FLAGS_DEBUG "/Zi /Od /Oy- /D_DEBUG /DFIPS_DEBUG=1")
-set(CMAKE_CXX_FLAGS_RELEASE "/Ox /DNDEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "/Zi /Od /D_DEBUG /DFIPS_DEBUG=1")
+set(CMAKE_CXX_FLAGS_RELEASE "/O2 /DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
 
 set(CMAKE_C_FLAGS "/MP /WX /TC /errorReport:queue /DWIN32")
-set(CMAKE_C_FLAGS_DEBUG "/Zi /Od /Oy- /D_DEBUG /DFIPS_DEBUG=1")
-set(CMAKE_C_FLAGS_RELEASE "/Ox /DNDEBUG ")
+set(CMAKE_C_FLAGS_DEBUG "/Zi /Od /D_DEBUG /DFIPS_DEBUG=1")
+set(CMAKE_C_FLAGS_RELEASE "/O2 /DNDEBUG ")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
 
