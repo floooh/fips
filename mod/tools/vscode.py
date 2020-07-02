@@ -9,18 +9,31 @@ optional = True
 not_found = 'used as IDE with vscode configs'
 
 #------------------------------------------------------------------------------
+def try_exists(exe_name):
+    try:
+        if platform.system() == 'Windows':
+            subprocess.check_output('{} --version'.format(exe_name), shell=True)
+        else:
+            subprocess.check_output([exe_name, '--version'])
+        return True
+    except (OSError, subprocess.CalledProcessError):
+        return False
+
+#------------------------------------------------------------------------------
+def exe_name():
+    if try_exists('code'):
+        return 'code'
+    else:
+        # open source version on RaspberryPi
+        return 'code-oss'
+
+#------------------------------------------------------------------------------
 def check_exists(fips_dir) :
     """test if 'code' is in the path
     :returns:   True if code is in the path
     """
-    try:
-        if platform.system() == 'Windows':
-            subprocess.check_output('code --version', shell=True);
-        else:
-            subprocess.check_output(['code', '--version'])
-        return True
-    except (OSError, subprocess.CalledProcessError):
-        return False
+    if exe_name() != 'code':
+        return try_exists('code-oss')
 
 #------------------------------------------------------------------------------
 def match(build_tool):
@@ -28,11 +41,12 @@ def match(build_tool):
 
 #------------------------------------------------------------------------------
 def run(proj_dir):
+    exe = exe_name()
+    proj_name = util.get_project_name_from_dir(proj_dir)
     try:
-        proj_name = util.get_project_name_from_dir(proj_dir)
-        subprocess.call('code .vscode/{}.code-workspace'.format(proj_name), cwd=proj_dir, shell=True)
+        subprocess.call('{} .vscode/{}.code-workspace'.format(exe, proj_name), cwd=proj_dir, shell=True)
     except OSError:
-        log.error("Failed to run Visual Studio Code as 'code'") 
+        log.error("Failed to run Visual Studio Code as '{}'".format(exe))
 
 #------------------------------------------------------------------------------
 def read_cmake_targets(fips_dir, proj_dir, cfg, types):
@@ -177,7 +191,7 @@ def list_extensions() :
     :returns:   list of extensions
     '''
     try:
-        outp = subprocess.check_output('code --list-extensions', shell=True).decode("utf-8")
+        outp = subprocess.check_output('{} --list-extensions'.format(exe_name()), shell=True).decode("utf-8")
         return outp.splitlines()
     except (OSError, subprocess.CalledProcessError):
         return []
