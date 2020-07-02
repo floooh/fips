@@ -34,6 +34,8 @@ def check_exists(fips_dir) :
     """
     if exe_name() != 'code':
         return try_exists('code-oss')
+    else:
+        return True
 
 #------------------------------------------------------------------------------
 def match(build_tool):
