@@ -77,9 +77,9 @@ endmacro()
 #
 macro(fips_config_postfixes_for_exe target)
     if (FIPS_EMSCRIPTEN)
-        set_target_properties(${target} PROPERTIES RELEASE_POSTFIX .html)
-        set_target_properties(${target} PROPERTIES DEBUG_POSTFIX .html)
-        set_target_properties(${target} PROPERTIES PROFILING_POSTFIX .html)
+        set_target_properties(${target} PROPERTIES RELEASE_POSTFIX ${FIPS_EMSCRIPTEN_POSTFIX})
+        set_target_properties(${target} PROPERTIES DEBUG_POSTFIX ${FIPS_EMSCRIPTEN_POSTFIX})
+        set_target_properties(${target} PROPERTIES PROFILING_POSTFIX ${FIPS_EMSCRIPTEN_POSTFIX})
     endif()
 endmacro(fips_config_postfixes_for_exe)
 
@@ -115,7 +115,7 @@ endfunction()
 
 #-------------------------------------------------------------------------------
 #   fips_addto_targets_list(target type)
-#   Adds a new entry to the targets type list, this is called from 
+#   Adds a new entry to the targets type list, this is called from
 #   the fips_end_xxx() functions.
 #
 function(fips_addto_targets_list target type)
@@ -226,7 +226,7 @@ macro(fips_add_file new_file)
             set(cur_file ${new_file})
         endif()
         get_filename_component(f_ext ${cur_file} EXT)
-        
+
         # determine source group name and
         # add to current source group
         source_group("${CurGroup}" FILES ${cur_file})

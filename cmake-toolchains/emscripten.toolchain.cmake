@@ -35,6 +35,7 @@ option(FIPS_EMSCRIPTEN_USE_LTO "enable link-time optimization" ON)
 set(FIPS_EMSCRIPTEN_TOTAL_MEMORY 33554432 CACHE STRING "initial heap size in bytes")
 set(FIPS_EMSCRIPTEN_MEM_INIT_METHOD 1 CACHE STRING "how to represent initial memory content (0..2)")
 set(FIPS_EMSCRIPTEN_SHELL_HTML "shell.html" CACHE STRING "path to shell html file")
+set(FIPS_EMSCRIPTEN_POSTFIX ".html" CACHE STRING "emscripten output postfix")
 
 if (FIPS_EMSCRIPTEN_RELATIVE_SHELL_HTML)
     set(FIPS_EMSCRIPTEN_SHELL_HTML "${CMAKE_SOURCE_DIR}/${FIPS_EMSCRIPTEN_RELATIVE_SHELL_HTML}")
