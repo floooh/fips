@@ -89,7 +89,7 @@ endmacro(fips_config_postfixes_for_exe)
 #
 function(fips_config_output_directory target)
     if (NOT FIPS_ANDROID)
-        set(dir ${FIPS_DEPLOY_DIR}/${FIPS_PROJECT_NAME}/${FIPS_CONFIG})
+        set(dir ${FIPS_PROJECT_DEPLOY_DIR})
 
         # exes
         set_target_properties(${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${dir})
