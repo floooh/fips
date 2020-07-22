@@ -225,7 +225,8 @@ macro(fips_add_file new_file)
         else()
             set(cur_file ${new_file})
         endif()
-        get_filename_component(f_ext ${cur_file} LAST_EXT)
+        # NOTE: this should be LAST_EXT, but that's only supported since cmake 3.14
+        get_filename_component(f_ext ${cur_file} EXT)
 
         # determine source group name and
         # add to current source group
