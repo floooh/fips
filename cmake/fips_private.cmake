@@ -225,7 +225,7 @@ macro(fips_add_file new_file)
         else()
             set(cur_file ${new_file})
         endif()
-        get_filename_component(f_ext ${cur_file} EXT)
+        get_filename_component(f_ext ${cur_file} LAST_EXT)
 
         # determine source group name and
         # add to current source group
@@ -236,10 +236,22 @@ macro(fips_add_file new_file)
             if (${f_ext} STREQUAL ".m")
                 set_source_files_properties(${cur_file} PROPERTIES LANGUAGE C)
             endif()
+
             # handle plist files special
             if (${f_ext} STREQUAL ".plist")
                 set(FIPS_OSX_PLIST_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${cur_file}")
             endif()
+        endif()
+
+        # workaround for a regression in cmake 3.18 with Visual Studio Generator:
+        #
+        # Explicitely compile .c files as C, because cmake 3.18 changed behaviour
+        # and leaves the detection to Visual Studio, which seems to be broken
+        #
+        # NOTE that the more correct "PROPERTIES LANGUAGE C" doesn't appear to work.
+        #
+        if (FIPS_MSVC AND (${f_ext} STREQUAL ".c"))
+            set_source_files_properties(${cur_file} PROPERTIES COMPILE_OPTIONS "/TC")
         endif()
 
         # add to global tracker variables
