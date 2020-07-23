@@ -244,17 +244,6 @@ macro(fips_add_file new_file)
             endif()
         endif()
 
-        # workaround for a regression in cmake 3.18 with Visual Studio Generator:
-        #
-        # Explicitely compile .c files as C, because cmake 3.18 changed behaviour
-        # and leaves the detection to Visual Studio, which seems to be broken
-        #
-        # NOTE that the more correct "PROPERTIES LANGUAGE C" doesn't appear to work.
-        #
-        if (FIPS_MSVC AND (${f_ext} STREQUAL ".c"))
-            set_source_files_properties(${cur_file} PROPERTIES COMPILE_OPTIONS "/TC")
-        endif()
-
         # add to global tracker variables
         list(APPEND CurSources ${cur_file})
 
