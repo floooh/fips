@@ -232,7 +232,7 @@ macro(fips_add_file new_file)
         # add to current source group
         source_group("${CurGroup}" FILES ${cur_file})
 
-        if (FIPS_OSX)
+        if (FIPS_OSX AND ${f_ext})
             # mark .m as .c file for older cmake versions (bug is fixed in cmake 3.1+)
             if (${f_ext} STREQUAL ".m")
                 set_source_files_properties(${cur_file} PROPERTIES LANGUAGE C)
