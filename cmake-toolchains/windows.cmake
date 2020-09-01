@@ -3,7 +3,7 @@
 #	fips cmake settings file for Windows platform with MSVC.
 #-------------------------------------------------------------------------------
 
-# detect 32-bit or 64-bit target platform   
+# detect 32-bit or 64-bit target platform
 if (CMAKE_CL_64)
     set(FIPS_PLATFORM WIN64)
     set(FIPS_PLATFORM_NAME "win64")
@@ -18,6 +18,12 @@ else()
     set(FIPS_WINDOWS_PLATFORM_NAME "x86")
 endif()
 
+if (${CMAKE_SYSTEM_NAME} STREQUAL "WindowsStore")
+    set(FIPS_UWP 1)
+else()
+    set(FIPS_UWP 0)
+endif()
+
 # Optionally disable link-time code generation
 option(FIPS_MSVC_LTCG "Enable/Disable link-time code generation in release builds" ON)
 
@@ -25,8 +31,13 @@ option(FIPS_MSVC_LTCG "Enable/Disable link-time code generation in release build
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
 # define the standard link libraries
-set(CMAKE_CXX_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib dbghelp.lib wsock32.lib ws2_32.lib rpcrt4.lib wininet.lib")
-set(CMAKE_C_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib dbghelp.lib wsock32.lib ws2_32.lib rpcrt4.lib wininet.lib")
+if (FIPS_UWP)
+    set(CMAKE_CXX_STANDARD_LIBRARIES "WindowsApp.lib")
+    set(CMAKE_C_STANDARD_LIBRARIES "WindowsApp.lib")
+else()
+    set(CMAKE_CXX_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib dbghelp.lib wsock32.lib ws2_32.lib rpcrt4.lib wininet.lib")
+    set(CMAKE_C_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib dbghelp.lib wsock32.lib ws2_32.lib rpcrt4.lib wininet.lib")
+endif()
 
 # define compiler and linker flags
 if (FIPS_EXCEPTIONS)
@@ -35,7 +46,7 @@ else()
     set(FIPS_VS_EXCEPTION_FLAGS "/EHsc")
 endif()
 
-if (FIPS_DYNAMIC_CRT)
+if (FIPS_DYNAMIC_CRT OR FIPS_UWP)
     set(FIPS_VS_CRT_FLAGS "/MD")
 else()
     set(FIPS_VS_CRT_FLAGS "/MT")

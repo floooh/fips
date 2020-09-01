@@ -36,7 +36,7 @@ option(FIPS_LINUX_MACH32 "Enable 32-bit code generation on 64-bit Linux host" OF
 option(FIPS_AUTO_IMPORT "Automatically include all modules from imports" ON)
 option(FIPS_CLANG_ADDRESS_SANITIZER "Enable clang address sanitizer" OFF)
 option(FIPS_CLANG_SAVE_OPTIMIZATION_RECORD "Enable clang -fsave-optimization-record option" OFF)
-
+option(FIPS_DYNAMIC_CRT "Use dynamically linked CRT on Windows" OFF)
 
 #-------------------------------------------------------------------------------
 #   fips_setup()
