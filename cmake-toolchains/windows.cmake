@@ -3,6 +3,8 @@
 #	fips cmake settings file for Windows platform with MSVC.
 #-------------------------------------------------------------------------------
 
+set(FIPS_WINDOWS_STACK_SIZE 4194304 CACHE STRING "Windows process stack size (/STACK:xxx)")
+
 # detect 32-bit or 64-bit target platform
 if (CMAKE_CL_64)
     set(FIPS_PLATFORM WIN64)
@@ -65,7 +67,11 @@ set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
 
 # define exe linker/librarian flags
-set(CMAKE_EXE_LINKER_FLAGS "/STACK:5000000 /machine:${FIPS_WINDOWS_PLATFORM_NAME}")
+set(CMAKE_EXE_LINKER_FLAGS "/STACK:${FIPS_WINDOWS_STACK_SIZE} /machine:${FIPS_WINDOWS_PLATFORM_NAME}")
+# cmake sets INCREMENTAL:YES, but UWP doesn't like that
+if (FIPS_UWP)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /INCREMENTAL:NO")
+endif()
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/DEBUG")
 
 # librarian flags
