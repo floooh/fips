@@ -14,7 +14,7 @@ not_found = 'please install cmake 2.8 or newer'
 #------------------------------------------------------------------------------
 def check_exists(fips_dir, major=2, minor=8) :
     """test if cmake is in the path and has the required version
-    
+
     :returns:   True if cmake found and is the required version
     """
     try:
@@ -32,7 +32,7 @@ def check_exists(fips_dir, major=2, minor=8) :
 #------------------------------------------------------------------------------
 def run_gen(cfg, fips_dir, project_dir, build_dir, toolchain_path, defines) :
     """run cmake tool to generate build files
-    
+
     :param cfg:             a fips config object
     :param project_dir:     absolute path to project (must have root CMakeLists.txt file)
     :param build_dir:       absolute path to build directory (where cmake files are generated)
@@ -83,10 +83,7 @@ def run_build(fips_dir, target, build_type, build_dir, num_jobs=1, args=None) :
     cmdLine = 'cmake --build . --parallel {} --config {}'.format(num_jobs, build_type)
     if target :
         cmdLine += ' --target {}'.format(target)
-    if platform.system() == 'Windows' :
-        cmdLine += ' -- /nologo /verbosity:minimal {}'.format(args_str)
-    else :
-        cmdLine += ' -- {}'.format(args_str)
+    cmdLine += ' -- {}'.format(args_str)
     print(cmdLine)
     res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
     return res == 0
@@ -96,7 +93,7 @@ def run_clean(fips_dir, build_dir) :
     """run cmake in build mode
 
     :param build_dir:   path to the build directory
-    :returns:           True if cmake returns successful    
+    :returns:           True if cmake returns successful
     """
     try :
         res = subprocess.call('cmake --build . --target clean', cwd=build_dir, shell=True)
