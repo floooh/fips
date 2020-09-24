@@ -47,7 +47,7 @@ def run(fips_dir, proj_dir, args) :
         # try to open as Xcode project
         proj = glob.glob(build_dir + '/*.xcodeproj')
         if proj :
-            subprocess.call('open "{}"'.format(proj[0]), shell=True)
+            subprocess.call('xed "{}"'.format(proj[0]), shell=True)
             return
         # try to open as VS project
         proj = glob.glob(build_dir + '/*.sln')
@@ -68,8 +68,8 @@ def run(fips_dir, proj_dir, args) :
 #-------------------------------------------------------------------------------
 def help() :
     """print help for verb 'open'"""
-    log.info(log.YELLOW + 
-            "fips open\n" 
+    log.info(log.YELLOW +
+            "fips open\n"
             "fips open [config]\n" + log.DEF +
             "    open IDE for current or named config")
 
