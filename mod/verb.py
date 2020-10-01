@@ -1,9 +1,14 @@
 """access to verb modules (local and imported"""
 
 import sys
+# FIXME PYTHON2
+is_python3 = sys.version_info > (3,5)
 import os
 import glob
-import imp
+if is_python3:
+    import importlib.util
+else:
+    import imp
 from collections import OrderedDict
 
 from mod import log, util, dep
@@ -35,13 +40,19 @@ def import_verbs_from(proj_name, proj_dir, verb_dir) :
                 verb_module_name = os.path.split(verb_path)[1]
                 verb_module_name = os.path.splitext(verb_module_name)[0]
                 if not verb_module_name.startswith('__') :
-                    fp, pathname, desc = imp.find_module(verb_module_name, [verb_dir])
-                    verb_module = imp.load_module(verb_module_name, fp, pathname, desc)
+                    if is_python3:
+                        spec = importlib.util.spec_from_file_location(verb_module_name, verb_path)
+                        verb_module = importlib.util.module_from_spec(spec)
+                        spec.loader.exec_module(verb_module)
+                    else:
+                        # FIXME: PYTHON2
+                        fp, pathname, desc = imp.find_module(verb_module_name, [verb_dir])
+                        verb_module = imp.load_module(verb_module_name, fp, pathname, desc)
                     verbs[verb_module_name] = verb_module
                     if proj_name not in proj_verbs :
                         proj_verbs[proj_name] = []
                     proj_verbs[proj_name].append(verb_module_name)
-                        
+
 #-------------------------------------------------------------------------------
 def import_verbs(fips_dir, proj_dir) :
     """import verbs from local and imported projects, populates
@@ -61,5 +72,5 @@ def import_verbs(fips_dir, proj_dir) :
             imported_proj_dir = imported_projs[imported_proj_name]['proj_dir']
             import_verbs_from(imported_proj_name, imported_proj_dir, util.get_verbs_dir(imported_proj_dir))
 
-    
+
 

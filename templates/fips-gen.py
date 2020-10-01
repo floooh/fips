@@ -1,13 +1,18 @@
 """
     Code generator template file. This is called from a cmake
-    code generator build target with the full path to a 
+    code generator build target with the full path to a
     yaml file which contains detailed code gen params.
 """
-import sys
 import os
-import imp
+import sys
+# FIXME PYTHON3
+is_python3 = sys.version_info > (3,5)
+if is_python3:
+    import importlib.util
+else:
+    import imp
 
-# template variable will be replaced with 
+# template variable will be replaced with
 # imported generator paths
 gen_paths = [ $genpaths ]
 
@@ -38,8 +43,12 @@ def processFile(attrs) :
     path, script = os.path.split(absPyPath)
     sys.path.insert(0, path)
     moduleName, ext = os.path.splitext(script)
-    fp, pathname, description = imp.find_module(moduleName)
-    module = imp.load_module(moduleName, fp, pathname, description)
+    if is_python3:
+        module = importlib.import_module(moduleName)
+    else:
+        # FIXME PYTHON2
+        fp, pathname, description = imp.find_module(moduleName)
+        module = imp.load_module(moduleName, fp, pathname, description)
     if args :
         module.generate(input, out_src, out_hdr, args)
     else :
