@@ -30,5 +30,5 @@ def help() :
             "fips build [-- build tool args]\n" 
             "fips build [config] [-- build tool args]\n" + log.DEF + 
             "    perform a build for current or named config\n" +
-            "    any args following a -- will be forwarded to the invoked build tool\n")
+            "    any args following a -- will be forwarded to the invoked build tool")
     
