@@ -306,9 +306,11 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
             if not target_cwd :
                 target_cwd = deploy_dir
 
+            cmd_line = None
             if cfg['platform'] == 'emscripten':
                 # special case: emscripten app
                 httpserver.run(fips_dir, proj_dir, target_name, target_cwd)
+                return 0
             elif cfg['platform'] == 'android' :
                 try :
                     adb_path = android.get_adb_path(fips_dir)
@@ -325,7 +327,6 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
                     return 0
                 except KeyboardInterrupt :
                     return 0
-
             elif os.path.isdir('{}/{}.app'.format(deploy_dir, target_name)) :
                 # special case: Mac app
                 cmd_line = '{}/{}.app/Contents/MacOS/{}'.format(deploy_dir, target_name, target_name)
