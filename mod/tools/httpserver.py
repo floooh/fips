@@ -15,7 +15,7 @@ not_found = "required for running emscripten targets (npm install http-server -g
 #-------------------------------------------------------------------------------
 def check_exists(fips_dir) :
     try:
-        out = subprocess.check_output(['http-server', '-h'])
+        subprocess.check_output(['http-server', '-h'], shell=True)
         return True
     except (OSError, subprocess.CalledProcessError):
         return False
