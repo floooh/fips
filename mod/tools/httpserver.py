@@ -4,6 +4,7 @@
     HTTP range requests
 """
 import subprocess
+import platform
 
 from mod import log,util
 
@@ -15,7 +16,10 @@ not_found = "required for running emscripten targets (npm install http-server -g
 #-------------------------------------------------------------------------------
 def check_exists(fips_dir) :
     try:
-        subprocess.check_output(['http-server -h'], shell=True)
+        if platform.system() == 'Windows':
+            subprocess.check_output(['http-server', '-h'], shell=True)
+        else:
+            subprocess.check_output(['http-server', '-h'])
         return True
     except (OSError, subprocess.CalledProcessError):
         return False
