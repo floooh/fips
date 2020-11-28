@@ -2,11 +2,11 @@
 import sys
 
 # log colors
-RED = '\033[31m'
-GREEN = '\033[32m'
-YELLOW = '\033[33m'
-BLUE = '\033[36m'
-DEF = '\033[39m'
+RED = '\033[1;31m'
+GREEN = '\033[1;32m'
+YELLOW = '\033[1;33m'
+BLUE = '\033[1;36m'
+DEF = '\033[0;0m'
 
 #-------------------------------------------------------------------------------
 def error(msg, fatal=True) :
@@ -49,7 +49,7 @@ def optional(item, status) :
     """print a yellow 'optional' message
 
     :param item:    first part of message
-    :param status:  status (colored red)
+    :param status:  status (colored yellow)
     """
     print('{}:\t{}{}{}'.format(item, YELLOW, status, DEF))
 

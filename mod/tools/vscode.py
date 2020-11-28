@@ -179,7 +179,7 @@ def get_vs_header_paths(fips_dir, proj_dir, cfg):
     # next get the used active Visual Studio instance from the cmake cache
     proj_name = util.get_project_name_from_dir(proj_dir)
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
-    outp = subprocess.check_output(['cmake', '-LA', '.'], cwd=build_dir).decode("utf-8")
+    outp = subprocess.check_output(['cmake', '-LA', '-N', '.'], cwd=build_dir).decode("utf-8")
     for line in outp.splitlines():
         if line.startswith('CMAKE_LINKER:FILEPATH='):
             bin_index = line.find('/bin/')
