@@ -195,7 +195,6 @@ macro(fips_setup)
 
     # setup the target group variable, used to group targets into folders in IDEs
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-    set(TARGET_GROUP "")
 
     # check whether python is installed
     find_program(PYTHON "python")
