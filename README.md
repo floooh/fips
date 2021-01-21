@@ -1,7 +1,7 @@
 fips
 ====
 
-![Build Status](https://github.com/floooh/fips/workflows/test/badge.svg)](https://github.com/floooh/fips/actions)|
+[![Build Status](https://github.com/floooh/fips/workflows/test/badge.svg)](https://github.com/floooh/fips/actions)
 
 fips is a highlevel build system wrapper written in Python for C/C++ projects.
 
