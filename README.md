@@ -1,7 +1,7 @@
 fips
 ====
 
-[![Build Status](https://travis-ci.org/floooh/fips.svg?branch=master)](https://travis-ci.org/floooh/fips)
+![Build Status](https://github.com/floooh/fips/workflows/test/badge.svg)](https://github.com/floooh/fips/actions)|
 
 fips is a highlevel build system wrapper written in Python for C/C++ projects.
 
@@ -27,7 +27,7 @@ the fips core repository.
 
 ### Public Service Announcements
 
-- **03-Jun-2020**: 
+- **03-Jun-2020**:
   - The embedded precompiled ninja.exe for Windows has been removed. Please use
     a package manager like scoop.sh to install ninja instead.
   - A new meta-build-tool 'vscode_ninja' which directly invokes ninja instead
