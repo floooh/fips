@@ -1,0 +1,11 @@
+name: test
+
+on: [push, pull_request]
+
+jobs:
+    fips-test:
+        runs-on: ubunutu-latest
+        steps:
+        - uses: actions/checkout@v1
+        - name: test
+          run: test-linux.sh
