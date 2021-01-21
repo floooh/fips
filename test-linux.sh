@@ -58,7 +58,6 @@ python fips clean all
 # test set command
 python fips help set
 python fips set config linux-make-release
-python fips set ccache on
 # test make command
 python fips make hello
 python fips run hello
@@ -69,7 +68,6 @@ python fips update
 # test unset command
 python fips help unset
 python fips unset config
-python fips unset ccache
 # test fips init command
 python fips help init
 mkdir ../test-project
