@@ -11,6 +11,7 @@ macro(fips_android_postbuildstep target)
         COMMAND python ${FIPS_ROOT_DIR}/tools/android-create-apk.py
         --path ${CMAKE_CURRENT_BINARY_DIR}
         --name ${target}
+        --abi ${CMAKE_ANDROID_ARCH_ABI}
         --package org.fips.${target}
         --deploy ${FIPS_DEPLOY_DIR}/${FIPS_PROJECT_NAME}/${FIPS_CONFIG})
 endmacro()
