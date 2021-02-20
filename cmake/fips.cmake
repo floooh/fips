@@ -197,10 +197,13 @@ macro(fips_setup)
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
     # check whether python is installed
-    find_program(PYTHON "python")
-    if (NOT PYTHON)
+    # find_package finds Windows Store installed Python. find_program does not.
+    find_package(Python)
+    if (NOT Python_FOUND)
         message(FATAL_ERROR "Python not found, required for code generation!")
     endif()
+
+    set(PYTHON ${Python_EXECUTABLE})
 
     # write empty YAML property tracking files
     fips_reset_targets_list()
