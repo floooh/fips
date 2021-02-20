@@ -94,7 +94,7 @@ cd ../fips-hello-dep1
 python fips gen
 python fips build
 # clone tests project
-python fips clone https://github.com/fungos/fips-tests.git
+python fips clone https://github.com/fips-libs/fips-tests.git
 cd ../fips-tests
 python fips testrunner linux-make-debug
 python fips testrunner linux-make-release
