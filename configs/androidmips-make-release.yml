@@ -6,4 +6,4 @@ build_type: Release
 cmake-toolchain: android.toolchain.cmake
 defines:
     ANDROID_ABI: mips
-    ANDROID_PLATFORM: android-21
+    ANDROID_PLATFORM: android-28

@@ -1,9 +1,9 @@
 ---
-platform: android 
+platform: android
 generator: Unix Makefiles
 build_tool: make
 build_type: Debug
 cmake-toolchain: android.toolchain.cmake
 defines :
     ANDROID_ABI: x86
-    ANDROID_PLATFORM: android-21
+    ANDROID_PLATFORM: android-28

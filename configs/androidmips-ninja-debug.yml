@@ -1,9 +1,9 @@
 ---
-platform: android 
-generator: Ninja 
+platform: android
+generator: Ninja
 build_tool: ninja
 build_type: Debug
 cmake-toolchain: android.toolchain.cmake
 defines :
     ANDROID_ABI: mips
-    ANDROID_PLATFORM: android-21
+    ANDROID_PLATFORM: android-28

@@ -12,7 +12,7 @@
 #   --deploy    path where the .apk file will be copied to
 #   --name      the target name (result will be target.apk)
 #   --abi       "armeabi-v7a", "mips" or "x86" (default is armeabi-v7a)
-#   --version   the Android SDK platform version (default is "21")
+#   --version   the Android SDK platform version (default is "28")
 #   --package   the APK main package name (e.g. org.fips.bla)
 #
 import sys
@@ -35,7 +35,7 @@ for jre_path in jre_paths:
         RT_JAR = jre_path
         break
 SDK_HOME = os.path.abspath(fips_dir + '/../fips-sdks/android/') + '/'
-BUILD_TOOLS = SDK_HOME + 'build-tools/27.0.3/'
+BUILD_TOOLS = SDK_HOME + 'build-tools/29.0.3/'
 EXE = '.exe' if platform.system() == 'Windows' else ''
 BAT = '.bat' if platform.system() == 'Windows' else ''
 AAPT = BUILD_TOOLS + 'aapt' + EXE
@@ -62,7 +62,7 @@ parser.add_argument('--path', help='path to the cmake build dir', required=True)
 parser.add_argument('--deploy', help='path where resulting APK will be copied to', required=True)
 parser.add_argument('--name', help='cmake target name', required=True)
 parser.add_argument('--abi', help='the NDK ABI string (armeabi-v7a, mips or x86', default='armeabi-v7a')
-parser.add_argument('--version', help='the Android SDK platform version (e.g. 21)', default='21')
+parser.add_argument('--version', help='the Android SDK platform version (e.g. 28)', default='28')
 parser.add_argument('--package', help='the Java package name', required=True)
 args = parser.parse_args()
 
@@ -145,7 +145,7 @@ cmd = [
     '-target', '1.7',
     '-sourcepath', 'src',
     '-bootclasspath', RT_JAR,
-    src_dir + '/R.java' 
+    src_dir + '/R.java'
 ]
 subprocess.call(cmd, cwd=apk_dir)
 
@@ -161,10 +161,10 @@ subprocess.call(cmd, cwd=apk_dir)
 # package the APK
 cmd = [
     AAPT,
-    'package', 
-    '-v', '-f', 
-    '-S', 'res', 
-    '-M', 'AndroidManifest.xml', 
+    'package',
+    '-v', '-f',
+    '-S', 'res',
+    '-M', 'AndroidManifest.xml',
     '-I', SDK_HOME + 'platforms/android-' + args.version + '/android.jar',
     '-F', args.path + args.name + '-unaligned.apk',
     'bin'
@@ -190,7 +190,7 @@ subprocess.call(cmd, cwd=apk_dir)
 keystore_path = args.path + 'debug.keystore'
 if not os.path.exists(keystore_path):
     cmd = [
-        'keytool', '-genkeypair', 
+        'keytool', '-genkeypair',
         '-keystore', keystore_path,
         '-storepass', 'android',
         '-alias', 'androiddebugkey',

@@ -27,6 +27,10 @@ the fips core repository.
 
 ### Public Service Announcements
 
+- **26-Feb-2021**: The Android default platform API level has been bumped from
+  21 to 28 (Android 9 Pie).  Please also re-install the Android SDK/NDK by
+  deleting fips-sdk/android and then ```./fips setup android```
+
 - **03-Jun-2020**:
   - The embedded precompiled ninja.exe for Windows has been removed. Please use
     a package manager like scoop.sh to install ninja instead.
