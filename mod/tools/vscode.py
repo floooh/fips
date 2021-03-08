@@ -442,7 +442,14 @@ def write_code_workspace_file(fips_dir, proj_dir, impex, cfg):
     # add dependencies in reverse order, so that main project is first
     for dep_proj_name in reversed(impex):
         dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
-        ws['folders'].append({ 'path': dep_proj_dir })
+        excluded = False
+        if 'vscode_exclude_from_workspace' in cfg:
+            for exclude_dep in cfg['vscode_exclude_from_workspace']:
+                if dep_proj_name == exclude_dep:
+                    excluded = True
+                    break
+        if not excluded:
+            ws['folders'].append({ 'path': dep_proj_dir })
     proj_name = util.get_project_name_from_dir(proj_dir)
     ws_path = '{}/{}.code-workspace'.format(vscode_dir, proj_name) 
     log.info('  writing {}'.format(ws_path))
