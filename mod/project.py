@@ -367,7 +367,9 @@ def clean(fips_dir, proj_dir, cfg_name) :
                 num_cleaned_configs += 1
 
             if build_dir_exists :
-                shutil.rmtree(build_dir)
+                # NOTE: the ignore_errors=True is because there may be files opened by
+                # other application in Windows
+                shutil.rmtree(build_dir, ignore_errors=True)
                 log.info("  deleted '{}'".format(build_dir))
 
             if deploy_dir_exists :
