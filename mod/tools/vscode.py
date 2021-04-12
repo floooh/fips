@@ -131,7 +131,7 @@ def get_cc_header_paths():
     '''
     if util.get_host_platform() not in ['osx','linux']:
         return []
-    
+
     # write a dummy C source file
     tmp = tempfile.NamedTemporaryFile(delete=False)
     tmp.write(b'int main() {return 0;}')
@@ -271,7 +271,6 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg):
                         'stopAtEntry': stop_at_entry[1],
                         'cwd': cwd,
                         'environment': [],
-                        'externalConsole': False,
                         'preLaunchTask': tgt if pre_launch_build[1] else ''
                     }
                 elif util.get_host_platform() == 'linux':
@@ -283,7 +282,6 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg):
                         'args': [],
                         'stopAtEntry': stop_at_entry[1],
                         'cwd': cwd,
-                        'externalConsole': False,
                         'MIMode': 'gdb',
                         'preLaunchTask': tgt if pre_launch_build[1] else ''
                     }
@@ -296,7 +294,6 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg):
                         'args': [],
                         'stopAtEntry': stop_at_entry[1],
                         'cwd': cwd,
-                        'externalConsole': False,
                         'MIMode': 'lldb',
                         'preLaunchTask': tgt if pre_launch_build[1] else ''
                     }
@@ -391,7 +388,7 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, impex, cfg):
         if inc_paths:
             config_incl_paths.extend(inc_paths)
         config_defines.extend(defines)
-        
+
         if compiler_path:
             c['compilerPath'] = compiler_path
         if has_compile_command_json:
@@ -403,7 +400,7 @@ def write_c_cpp_properties_json(fips_dir, proj_dir, impex, cfg):
             c['browse']['path'] = config_incl_paths
         c['intelliSenseMode'] = intellisense_mode
         props['configurations'].append(c)
-    
+
     # add dependencies in reverse order, so that main project is first
     for dep_proj_name in reversed(impex):
         dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
@@ -426,7 +423,7 @@ def write_cmake_tools_settings(fips_dir, proj_dir, vscode_dir, cfg):
             'FIPS_CONFIG:': cfg['name']
         }
     }
-    settings_path = vscode_dir + '/settings.json' 
+    settings_path = vscode_dir + '/settings.json'
     log.info('  writing {}'.format(settings_path))
     with open(settings_path, 'w') as f:
         json.dump(settings, f, indent=1, separators=(',',':'))
@@ -451,7 +448,7 @@ def write_code_workspace_file(fips_dir, proj_dir, impex, cfg):
         if not excluded:
             ws['folders'].append({ 'path': dep_proj_dir })
     proj_name = util.get_project_name_from_dir(proj_dir)
-    ws_path = '{}/{}.code-workspace'.format(vscode_dir, proj_name) 
+    ws_path = '{}/{}.code-workspace'.format(vscode_dir, proj_name)
     log.info('  writing {}'.format(ws_path))
     with open(ws_path, 'w') as f:
         json.dump(ws, f, indent=1, separators=(',',':'))
