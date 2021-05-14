@@ -142,16 +142,16 @@ def get_giturl_from_url(url) :
 #-------------------------------------------------------------------------------
 def get_gitbranch_from_url(url) :
     """extracts the branch name from an url string
-    (after the optional '#'), returns 'master' if no branch name
+    (after the optional '#'), returns None if no branch name
     specified.
 
     :param url:     an url string, with optional '#' branch name appended
-    :returns:       the extracted branch name, or 'master'
+    :returns:       the extracted branch name, or None
     """
     if '#' in url :
         return url.split('#')[1]
     else :
-        return 'master'
+        return None
 
 #-------------------------------------------------------------------------------
 def get_project_name_from_url(url) :

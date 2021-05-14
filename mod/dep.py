@@ -41,7 +41,7 @@ def get_imports(fips_dir, proj_dir) :
             elif type(imports) is dict :
                 for dep in imports :
                     if not 'branch' in imports[dep] :
-                        imports[dep]['branch'] = 'master'
+                        imports[dep]['branch'] = None
                     if not 'cond' in imports[dep] :
                         imports[dep]['cond'] = None
                     if not 'git' in imports[dep] :
