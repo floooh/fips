@@ -121,7 +121,8 @@ macro(fips_osx_generate_plist_file target)
                 "    <key>CFBundleVersion</key>\n"
                 "    <string>1</string>\n"
                 "    <key>LSMinimumSystemVersion</key>\n"
-                "    <string>\${MACOSX_DEPLOYMENT_TARGET}</string>\n"
+                # NOT A BUG:
+                "    <string>\$(MACOSX_DEPLOYMENT_TARGET)</string>\n"
                 "    <key>NSHighResolutionCapable</key>\n"
                 "    <true/>\n"
                 "    <key>NSAppTransportSecurity</key>\n"
@@ -150,16 +151,19 @@ macro(fips_osx_add_target_properties target)
                 set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ${FIPS_IOS_TEAMID})
             endif()
         endif()
-        set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "fips.${target}")
         set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_ICON_FILE "Icon.png")
         if (FIPS_MACOS)
             set_target_properties(${target} PROPERTIES XCODE_SCHEME_WORKING_DIRECTORY "${FIPS_PROJECT_DEPLOY_DIR}")
         endif()
         if (${CMAKE_GENERATOR} STREQUAL "Xcode")
+            set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER \${PRODUCT_NAME})
+            set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER \${PRODUCT_NAME})
             set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_EXECUTABLE_NAME \${EXECUTABLE_NAME})
             set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_PRODUCT_NAME \${PRODUCT_NAME})
             set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME \${PRODUCT_NAME})
         else()
+            set_target_properties(${target} PROPERTIES XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${target}")
+            set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "${target}")
             set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_PRODUCT_NAME "${target}")
             set_target_properties(${target} PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "${target}")
         endif()
