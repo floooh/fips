@@ -1,6 +1,6 @@
 '''VSCode helper functions'''
 import platform,subprocess, os, yaml, json, inspect, tempfile, glob, shutil
-from mod import util,log,verb,dep
+from mod import util, log, verb, dep
 from mod.tools import cmake
 
 name = 'vscode'
@@ -233,15 +233,22 @@ def write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg):
         json.dump(tasks, f, indent=1, separators=(',',':'))
 
 #-------------------------------------------------------------------------------
-def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg):
+def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings):
     '''write the .vscode/launch.json file'''
     proj_name = util.get_project_name_from_dir(proj_dir)
     exe_targets = read_cmake_targets(fips_dir, proj_dir, cfg, ['app'])
     deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg['name'])
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
 
-    pre_launch_build_options = [('', True), (' [Skip Build]', False)]
-    stop_at_entry_options = [('', False), (' [Stop At Entry]', True)]
+    if proj_settings['vscode-launch-configs'] == "minimal":
+        pre_launch_build_options = [('', True)]
+        stop_at_entry_options = [('', False)]
+    elif proj_settings['vscode-launch-configs'] == "skip-build":
+        pre_launch_build_options = [('', True), (' [Skip Build]', False)]
+        stop_at_entry_options = [('', False)]
+    else:
+        pre_launch_build_options = [('', True), (' [Skip Build]', False)]
+        stop_at_entry_options = [('', False), (' [Stop At Entry]', True)]
 
     launch = {
         'version': '0.2.0',
@@ -470,7 +477,7 @@ def remove_vscode_tasks_launch_files(fips_dir, proj_dir, impex, cfg):
             os.remove(launch_path)
 
 #-------------------------------------------------------------------------------
-def write_workspace_settings(fips_dir, proj_dir, cfg):
+def write_workspace_settings(fips_dir, proj_dir, cfg, proj_settings):
     '''write the VSCode launch.json, tasks.json and
     c_cpp_properties.json files from cmake output files
     '''
@@ -486,7 +493,7 @@ def write_workspace_settings(fips_dir, proj_dir, cfg):
     has_cmake_tools = any('vector-of-bool.cmake-tools' in ext for ext in vscode_extensions)
     remove_vscode_tasks_launch_files(fips_dir, proj_dir, impex, cfg)
     write_tasks_json(fips_dir, proj_dir, vscode_dir, cfg)
-    write_launch_json(fips_dir, proj_dir, vscode_dir, cfg)
+    write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings)
     if has_cmake_tools:
         write_cmake_tools_settings(fips_dir, proj_dir, vscode_dir, cfg)
     else:
