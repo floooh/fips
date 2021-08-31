@@ -1,6 +1,6 @@
 '''VSCode helper functions'''
 import platform,subprocess, os, yaml, json, inspect, tempfile, glob, shutil
-from mod import util,log,verb,dep
+from mod import util, log, verb, dep, settings
 from mod.tools import cmake
 
 name = 'vscode'
@@ -240,8 +240,15 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg):
     deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg['name'])
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
 
-    pre_launch_build_options = [('', True), (' [Skip Build]', False)]
-    stop_at_entry_options = [('', False), (' [Stop At Entry]', True)]
+    if settings.get(proj_dir, "vscode-launch-configs") == "minimal":
+        pre_launch_build_options = [('', True)]
+        stop_at_entry_options = [('', False)]
+    elif settings.get(proj_dir, "vscode-launch-configs") == "skip-build":
+        pre_launch_build_options = [('', True), (' [Skip Build]', False)]
+        stop_at_entry_options = [('', False)]
+    else:    
+        pre_launch_build_options = [('', True), (' [Skip Build]', False)]
+        stop_at_entry_options = [('', False), (' [Stop At Entry]', True)]
 
     launch = {
         'version': '0.2.0',

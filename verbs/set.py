@@ -41,6 +41,11 @@ def run(fips_dir, proj_dir, args) :
                     settings.set(proj_dir, 'ccache', False)
                 else :
                     log.error("value for setting 'ccache' must be 'on' or 'off")
+        elif noun == 'vscode-launch-configs' :
+            if len(args) > 1 and args[1] in ['all', 'minimal', 'skip-build']:
+                settings.set(proj_dir, noun, args[1])
+            else:
+                log.error("expected one of 'all', 'minimal' or 'skip-build'")
         else :
             settings.set(proj_dir, noun, args[1])
     else :
@@ -53,8 +58,10 @@ def help() :
             "fips set config [config-name]\n"
             "fips set target [target-name]\n" 
             "fips set jobs [num-build-jobs]\n"
-            "fips set ccache [on|off]\n"+ log.DEF +
+            "fips set ccache [on|off]\n"
+            "fips set vscode-launch-configs [all|minimal|skip-build]\n" + log.DEF +
             "    config: set active build config\n"
             "    target: set active run target\n"
             "    jobs:   set number of parallel build jobs\n"
-            "    ccache: enable/disable using ccache")
+            "    ccache: enable/disable using ccache\n"
+            "    vscode-launch-configs: set vscode launch configs to generate")
