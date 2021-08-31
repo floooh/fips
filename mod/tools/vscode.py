@@ -240,10 +240,10 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg):
     deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg['name'])
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
 
-    if settings.get(proj_dir, "vscode_launch_configs") == "minimal":
+    if settings.get(proj_dir, "vscode-launch-configs") == "minimal":
         pre_launch_build_options = [('', True)]
         stop_at_entry_options = [('', False)]
-    elif settings.get(proj_dir, "vscode_launch_configs") == "skip_build":
+    elif settings.get(proj_dir, "vscode-launch-configs") == "skip-build":
         pre_launch_build_options = [('', True), (' [Skip Build]', False)]
         stop_at_entry_options = [('', False)]
     else:    
