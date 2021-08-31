@@ -44,12 +44,12 @@ def list_settings(proj_dir) :
     """list settings file content"""
     log.colored(log.YELLOW, '=== settings:')
     if util.is_valid_project_dir(proj_dir) :
-        for key in ['config', 'target', 'jobs', 'ccache', 'iosteam'] :
-            value = settings.get(proj_dir, key)
-            if type(value) is bool :
+        all_settings = settings.get_all_settings(proj_dir)
+        for key, value in all_settings.items():
+            is_default = ' (default value)' if value == settings.get_default(key) else ''
+            if type(value) is bool:
                 value = 'on' if value else 'off'
-            default = ' (default value)' if value == settings.get_default(key) else ''
-            log.info('  {}{}:{} {}{}'.format(log.BLUE, key, log.DEF, value, default))
+            log.info('  {}{}:{} {}{}'.format(log.BLUE, key, log.DEF, value, is_default))
     else :
         log.info('  currently not in a valid project directory')
 
@@ -75,7 +75,7 @@ def list_targets(fips_dir, proj_dir, args) :
                     for tgt in type_targets :
                         log.info('    ' + tgt)
         else :
-            log.info("  can't fetch project target list, please run 'fips gen' first!")  
+            log.info("  can't fetch project target list, please run 'fips gen' first!")
     else :
         log.info('  currently not in a valid project directory')
 
@@ -90,7 +90,7 @@ def list_exports(fips_dir, proj_dir) :
         for dep_proj_name in result :
             cur_dep = result[dep_proj_name]
             log.colored(log.BLUE, "project '{}' exports:".format(dep_proj_name))
-            
+
             cur_modules = cur_dep['exports']['modules']
             cur_hdrs = cur_dep['exports']['header-dirs']
             cur_libs = cur_dep['exports']['lib-dirs']
@@ -147,7 +147,7 @@ def list_imports(fips_dir, proj_dir) :
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
     """list stuff
-    
+
     :param fips_dir:    absolute path to fips
     :param proj_dir:    absolute path to current project
     :param args:        command line args

@@ -92,7 +92,7 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
             log.info("Using Toolchain File: {}".format(toolchain_path))
         cmake_result = cmake.run_gen(cfg, fips_dir, proj_dir, build_dir, toolchain_path, defines)
         if vscode.match(cfg['build_tool']):
-            vscode.write_workspace_settings(fips_dir, proj_dir, cfg)
+            vscode.write_workspace_settings(fips_dir, proj_dir, cfg, settings.get_all_settings(proj_dir))
         if clion.match(cfg['build_tool']):
             clion.write_workspace_settings(fips_dir, proj_dir, cfg)
         return cmake_result

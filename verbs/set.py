@@ -9,6 +9,8 @@ from mod import log, util, settings
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
     """run the 'set' verb"""
+
+    # FIXME: thos shouldn't be as hardwired as it is, see help() function
     if len(args) > 0 :
         noun = args[0]
         if noun == 'config' :
@@ -54,14 +56,12 @@ def run(fips_dir, proj_dir, args) :
 #-------------------------------------------------------------------------------
 def help() :
     """print 'set' help"""
-    log.info(log.YELLOW + 
-            "fips set config [config-name]\n"
-            "fips set target [target-name]\n" 
-            "fips set jobs [num-build-jobs]\n"
-            "fips set ccache [on|off]\n"
-            "fips set vscode-launch-configs [all|minimal|skip-build]\n" + log.DEF +
-            "    config: set active build config\n"
-            "    target: set active run target\n"
-            "    jobs:   set number of parallel build jobs\n"
-            "    ccache: enable/disable using ccache\n"
-            "    vscode-launch-configs: set vscode launch configs to generate")
+    help_str = log.YELLOW
+    for key in settings.valid_settings:
+        help_str += "fips set {} [{}]\n".format(key, settings.value_help[key])
+    help_str += log.DEF
+    for key in settings.valid_settings:
+        help_str += "    {}:\t{}\n".format(key, settings.human_help[key])
+    help_str = help_str[:-1]
+    log.info(help_str)
+

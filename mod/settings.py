@@ -5,6 +5,35 @@ import os.path
 
 from mod import log, util, config
 
+valid_settings = ['config', 'target', 'jobs', 'ccache', 'iosteam', 'vscode-launch-configs']
+
+default_settings = {
+    'config':   config.get_default_config(),
+    'target':   None,
+    'jobs':     util.get_num_cpucores() + 2,
+    'ccache':   False,
+    'iosteam':  None,
+    'vscode-launch-configs': 'all',
+}
+
+value_help = {
+    'config':  'config-name',
+    'target':  'target-name',
+    'jobs':    'num-build-jobs',
+    'ccache':  'on|off',
+    'iosteam': 'apple-team-id',
+    'vscode-launch-configs': 'all|minimal|skip-build'
+}
+
+human_help = {
+    'config':   'set active build config',
+    'target':   'set active run target',
+    'jobs':     'set number of parallel build jobs',
+    'ccache':   'enable/disable using ccache',
+    'iosteam':  'Apple team id for iOS development',
+    'vscode-launch-configs': 'set vscode debugger launch configs to generate'
+}
+
 #-------------------------------------------------------------------------------
 def load(proj_dir) :
     """load the .fips-settings.yml file from project directory
@@ -31,7 +60,7 @@ def save(proj_dir, settings) :
     path = proj_dir + '/.fips-settings.yml'
     with open(path, 'w') as f :
         yaml.dump(settings, f)
-    
+
 #-------------------------------------------------------------------------------
 def get_default(key) :
     """get the default value for a settings key
@@ -39,16 +68,9 @@ def get_default(key) :
     :param key:     settings key
     :returns:       default value, or None if key is invalid
     """
-    if key == 'config' :
-        return config.get_default_config()
-    elif key == 'target' :
-        return None
-    elif key == 'jobs' :
-        # this is what ninja seems to do for default num jobs
-        return util.get_num_cpucores() + 2
-    elif key == 'ccache' :
-        return False
-    else :
+    if key in default_settings:
+        return default_settings[key]
+    else:
         return None
 
 #-------------------------------------------------------------------------------
@@ -110,3 +132,15 @@ def unset(proj_dir, key) :
     proj_name = util.get_project_name_from_dir(proj_dir)
     log.info("'{}' unset in project '{}'".format(key, proj_name))
 
+#-------------------------------------------------------------------------------
+def get_all_settings(proj_dir):
+    """return a dictionary with all setting key/value pairs
+
+    :returns:   dictionary with all settings key/value pairs
+    """
+    util.ensure_valid_project_dir(proj_dir)
+    settings = load(proj_dir)
+    for key in default_settings:
+        if key not in settings:
+            settings[key] = default_settings[key]
+    return settings
