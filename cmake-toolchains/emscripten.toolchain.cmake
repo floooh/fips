@@ -205,7 +205,7 @@ set(CMAKE_WORDS_BIGENDIAN 0)
 set(CMAKE_DL_LIBS)
 
 # c++ compiler flags
-set(CMAKE_CXX_FLAGS "${EMSC_COMMON_FLAGS} ${EMSC_CXX_FLAGS} -std=c++11 -fstrict-aliasing -Wall -Wno-multichar -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue -Wno-inconsistent-missing-override -Wno-warn-absolute-paths -Wno-expansion-to-defined")
+set(CMAKE_CXX_FLAGS "${EMSC_COMMON_FLAGS} ${EMSC_CXX_FLAGS} -fstrict-aliasing -Wall -Wno-multichar -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue -Wno-inconsistent-missing-override -Wno-warn-absolute-paths -Wno-expansion-to-defined")
 set(CMAKE_CXX_FLAGS_RELEASE "${EMSC_COMMON_FLAGS_RELEASE} ${EMSCRIPTEN_OPT} -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 set(CMAKE_CXX_FLAGS_PROFILING "${EMSCRIPTEN_OPT} -DNDEBUG --profiling")

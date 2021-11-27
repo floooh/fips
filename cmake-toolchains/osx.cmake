@@ -22,7 +22,7 @@ endif()
 set(FIPS_OSX_STANDARD_FRAMEWORKS Foundation IOKit)
 
 # compiler flags
-set(CMAKE_CXX_FLAGS "-std=c++11 -fstrict-aliasing -Wno-expansion-to-defined -Wno-multichar -Wall -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-unused-volatile-lvalue -Wno-deprecated-writable-strings")
+set(CMAKE_CXX_FLAGS "-fstrict-aliasing -Wno-expansion-to-defined -Wno-multichar -Wall -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-unused-volatile-lvalue -Wno-deprecated-writable-strings")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1 -ggdb")
 
@@ -35,7 +35,7 @@ set(CMAKE_EXE_LINKER_FLAGS_DEBUG "")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "")
 
 # need to set some flags directly as Xcode attributes
-set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
+set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++14")
 set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
 
 # stack-checking? enabling this leads may generate binaries

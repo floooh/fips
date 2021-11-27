@@ -24,7 +24,7 @@ set(CMAKE_C_RESPONSE_FILE_LINK_FLAG "@")
 set(CMAKE_CXX_RESPONSE_FILE_LINK_FLAG "@")
 
 # C++ flags
-set(CMAKE_CXX_FLAGS "-std=c++11 -fstrict-aliasing -Wno-deprecated-declarations -Wno-multichar -Wall -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-missing-field-initializers")
+set(CMAKE_CXX_FLAGS "-fstrict-aliasing -Wno-deprecated-declarations -Wno-multichar -Wall -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-missing-field-initializers")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
 
