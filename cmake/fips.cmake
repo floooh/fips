@@ -45,11 +45,6 @@ option(FIPS_DYNAMIC_CRT "Use dynamically linked CRT on Windows" OFF)
 #
 macro(fips_setup)
 
-    # default settings
-    if (NOT CMAKE_CXX_STANDARD)
-        set(CMAKE_CXX_STANDARD 11)
-    endif()
-
     #
     # cmake 3.15 has added a warning if the top-level cmake file doesn't contain
     # a project() statement, so we'll expect that the project name is now
