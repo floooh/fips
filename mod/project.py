@@ -6,7 +6,7 @@ import subprocess
 import yaml
 
 from mod import log, util, config, dep, template, settings, android, emsdk
-from mod.tools import git, cmake, make, ninja, xcodebuild, xcrun, ccmake, cmake_gui, vscode, clion, httpserver
+from mod.tools import git, cmake, make, ninja, xcodebuild, xcrun, ccmake, cmake_gui, vscode, clion, httpserver, wasmtime
 
 #-------------------------------------------------------------------------------
 def init(fips_dir, proj_name) :
@@ -308,8 +308,10 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
 
             cmd_line = None
             if cfg['platform'] == 'emscripten':
-                # special case: emscripten app
-                httpserver.run(fips_dir, proj_dir, target_name, target_cwd)
+                if 'defines' in cfg and 'FIPS_EMSCRIPTEN_USE_WASI' in cfg['defines'] and cfg['defines']['FIPS_EMSCRIPTEN_USE_WASI']:
+                    wasmtime.run(proj_dir, deploy_dir, target_name, target_args, target_cwd)
+                else:
+                    httpserver.run(fips_dir, proj_dir, target_name, target_cwd)
                 return 0
             elif cfg['platform'] == 'android' :
                 try :
