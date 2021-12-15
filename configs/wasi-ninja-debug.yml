@@ -1,12 +1,6 @@
 ---
-platform: emscripten 
+platform: wasisdk 
 generator: Ninja 
 build_tool: ninja
 build_type: Debug
-cmake-toolchain: emscripten.toolchain.cmake
-defines:
-    FIPS_EMSCRIPTEN_USE_WASM: ON
-    FIPS_EMSCRIPTEN_USE_WASI: ON
-    FIPS_EMSCRIPTEN_ALLOW_MEMORY_GROWTH: OFF
-
- 
+cmake-toolchain: wasisdk.toolchain.cmake

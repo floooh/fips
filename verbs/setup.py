@@ -4,7 +4,7 @@ setup emscripten
 setup android
 """
 
-from mod import log, emsdk, android
+from mod import log, emsdk, android, wasisdk
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
@@ -15,7 +15,9 @@ def run(fips_dir, proj_dir, args) :
     if sdk_name == 'emscripten' :
         emsdk.install(fips_dir, None)
     elif sdk_name == 'android' :
-        android.setup(fips_dir, proj_dir)
+        android.setup(fips_dir)
+    elif sdk_name == 'wasisdk':
+        wasisdk.setup(fips_dir)
     else :
         log.error("invalid SDK name (must be 'emscripten' or 'android')")
 
@@ -25,6 +27,7 @@ def help() :
     log.info(log.YELLOW +
              "fips setup emscripten\n"
              "fips setup android\n"
+             "fips setup wasisdk\n"
              + log.DEF +
              "    setup cross-platform SDK") 
     

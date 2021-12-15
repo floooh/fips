@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import yaml
 
-from mod import log, util, config, dep, template, settings, android, emsdk
+from mod import log, util, config, dep, template, settings, android, emsdk, wasisdk
 from mod.tools import git, cmake, make, ninja, xcodebuild, xcrun, ccmake, cmake_gui, vscode, clion, httpserver, wasmtime
 
 #-------------------------------------------------------------------------------
@@ -77,6 +77,8 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
         defines['CMAKE_OSX_SYSROOT'] = xcrun.get_macos_sdk_sysroot()
     if cfg['platform'] == 'emscripten':
         defines['EMSCRIPTEN_ROOT'] = emsdk.get_emscripten_root(fips_dir)
+    if cfg['platform'] == 'wasisdk':
+        defines['WASISDK_ROOT'] = wasisdk.get_wasisdk_root(fips_dir)
     do_it = force
     if not os.path.isdir(build_dir) :
         os.makedirs(build_dir)
@@ -308,11 +310,9 @@ def run(fips_dir, proj_dir, cfg_name, target_name, target_args, target_cwd) :
 
             cmd_line = None
             if cfg['platform'] == 'emscripten':
-                if 'defines' in cfg and 'FIPS_EMSCRIPTEN_USE_WASI' in cfg['defines'] and cfg['defines']['FIPS_EMSCRIPTEN_USE_WASI']:
-                    wasmtime.run(proj_dir, deploy_dir, target_name, target_args, target_cwd)
-                else:
-                    httpserver.run(fips_dir, proj_dir, target_name, target_cwd)
-                return 0
+                httpserver.run(fips_dir, proj_dir, target_name, target_cwd)
+            elif cfg['platform'] == 'wasisdk':
+                wasmtime.run(proj_dir, deploy_dir, target_name, target_args, target_cwd)
             elif cfg['platform'] == 'android' :
                 try :
                     adb_path = android.get_adb_path(fips_dir)
