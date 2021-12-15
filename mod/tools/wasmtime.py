@@ -15,5 +15,6 @@ def check_exists(fips_dir):
 
 #-------------------------------------------------------------------------------
 def run(proj_dir, deploy_dir, target_name, target_args, target_cwd):
-    cmd_line = 'wasmtime --dir={} --dir={} {}/{}.wasm {}'.format(proj_dir, target_cwd, deploy_dir, target_name, ' '.join(target_args))
+    cmd_line = 'wasmtime --dir . {}/{}.wasm -- {}'.format(deploy_dir, target_name, ' '.join(target_args))
+    print('> {}'.format(cmd_line))
     subprocess.call(cmd_line, shell=True)
