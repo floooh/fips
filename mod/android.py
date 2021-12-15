@@ -98,7 +98,7 @@ def strip_whitespace(bin_str) :
     return bin_str
 
 #-------------------------------------------------------------------------------
-def setup(fips_dir, proj_dir) :
+def setup(fips_dir) :
     """setup the Android SDK and NDK"""
     log.colored(log.YELLOW, '=== setup Android SDK/NDK :')
 

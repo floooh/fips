@@ -14,7 +14,7 @@
       be hardwired to a specific version)
 """
 
-import os, stat, sys, subprocess, shutil
+import os, stat, subprocess, shutil
 from mod import log, util
 from mod.tools import git
 
@@ -126,7 +126,7 @@ def remove_old_sdks(fips_dir):
 #-------------------------------------------------------------------------------
 def uninstall(fips_dir):
     emsdk_dir = get_emsdk_dir(fips_dir)
-    log.colored(log.YELLOW, "=== uninstalling emscripten SDK".format(emsdk_dir))
+    log.colored(log.YELLOW, "=== uninstalling emscripten SDK")
     # check for any "old" SDK installation
     remove_old_sdks(fips_dir)
     if emsdk_dir_exists(fips_dir):
