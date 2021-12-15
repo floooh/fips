@@ -32,7 +32,7 @@ if (NOT FIPS_RTTI)
     set(WASISDK_CXX_FLAGS "${WASISDK_CXX_FLAGS} -fno-rtti")
 endif()
 
-set(WASI_OPT "-O3")
+set(WASISDK_OPT "-O3")
 
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_VERSION 1)
@@ -48,7 +48,7 @@ set(CMAKE_CONFIGURATION_TYPES Debug Release Profiling)
 # specify cross-compilers
 set(CMAKE_C_COMPILER "${WASISDK_ROOT}/bin/clang" CACHE PATH "gcc" FORCE)
 set(CMAKE_CXX_COMPILER "${WASISDK_ROOT}/bin/clang++" CACHE PATH "g++" FORCE)
-set(CMAKE_AR "${WASISDK_ROOT}/bin/ar$" CACHE PATH "archive" FORCE)
+set(CMAKE_AR "${WASISDK_ROOT}/bin/ar" CACHE PATH "archive" FORCE)
 set(CMAKE_LINKER "${WASISDK_ROOT}/bin/clang" CACHE PATH "linker" FORCE)
 set(CMAKE_RANLIB "${WASISDK_ROOT}/bin/ranlib" CACHE PATH "ranlib" FORCE)
 
@@ -95,31 +95,31 @@ set(CMAKE_WORDS_BIGENDIAN 0)
 set(CMAKE_DL_LIBS)
 
 # c++ compiler flags
-set(CMAKE_CXX_FLAGS "${WASI_COMMON_FLAGS} ${WASI_CXX_FLAGS} -fstrict-aliasing -Wall -Wno-multichar -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue -Wno-inconsistent-missing-override -Wno-expansion-to-defined")
-set(CMAKE_CXX_FLAGS_RELEASE "${WASI_COMMON_FLAGS_RELEASE} ${WASI_OPT} -DNDEBUG")
+set(CMAKE_CXX_FLAGS "${WASISDK_COMMON_FLAGS} ${WASISDK_CXX_FLAGS} -fstrict-aliasing -Wall -Wno-multichar -Wextra -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue -Wno-inconsistent-missing-override -Wno-expansion-to-defined")
+set(CMAKE_CXX_FLAGS_RELEASE "${WASISDK_COMMON_FLAGS_RELEASE} ${WASISDK_OPT} -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
-set(CMAKE_CXX_FLAGS_PROFILING "${WASI_OPT} -DNDEBUG --profiling")
+set(CMAKE_CXX_FLAGS_PROFILING "${WASISDK_OPT} -DNDEBUG --profiling")
 
 # c compiler flags
-set(CMAKE_C_FLAGS "${WASI_COMMON_FLAGS} -fstrict-aliasing -Wall -Wextra -Wno-multichar -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue -Wno-expansion-to-defined")
-set(CMAKE_C_FLAGS_RELEASE "${WASI_OPT} ${WASI_COMMON_FLAGS_RELEASE} -DNDEBUG")
+set(CMAKE_C_FLAGS "${WASISDK_COMMON_FLAGS} -fstrict-aliasing -Wall -Wextra -Wno-multichar -Wno-unknown-pragmas -Wno-ignored-qualifiers -Wno-long-long -Wno-overloaded-virtual -Wno-deprecated-writable-strings -Wno-unused-volatile-lvalue -Wno-expansion-to-defined")
+set(CMAKE_C_FLAGS_RELEASE "${WASISDK_OPT} ${WASISDK_COMMON_FLAGS_RELEASE} -DNDEBUG")
 set(CMAKE_C_FLAGS_DEBUG "-O0 -g -D_DEBUG_ -D_DEBUG -DFIPS_DEBUG=1")
-set(CMAKE_C_FLAGS_PROFILING "${WASI_OPT} -DNDEBUG --profiling")
+set(CMAKE_C_FLAGS_PROFILING "${WASISDK_OPT} -DNDEBUG --profiling")
 
 # linker flags
-set(CMAKE_EXE_LINKER_FLAGS "${WASI_COMMON_FLAGS} ${WASI_LINKER_FLAGS} ${WASI_EXE_LINKER_FLAGS}")
-set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${WASI_OPT} ${WASI_COMMON_FLAGS_RELEASE} ${WASI_LINKER_FLAGS_RELEASE}")
+set(CMAKE_EXE_LINKER_FLAGS "${WASISDK_COMMON_FLAGS} ${WASISDK_LINKER_FLAGS} ${WASISDK_EXE_LINKER_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${WASISDK_OPT} ${WASISDK_COMMON_FLAGS_RELEASE} ${WASISDK_LINKER_FLAGS_RELEASE}")
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-O0 -g")
-set(CMAKE_EXE_LINKER_FLAGS_PROFILING "--profiling ${WASI_OPT} ${WASI_LINKER_FLAGS_RELEASE}")
+set(CMAKE_EXE_LINKER_FLAGS_PROFILING "--profiling ${WASISDK_OPT} ${WASISDK_LINKER_FLAGS_RELEASE}")
 
 # static library flags (for CMAKE_AR)
-set(CMAKE_STATIC_LINKER_FLAGS "${WASI_AR_FLAGS}")
+set(CMAKE_STATIC_LINKER_FLAGS "${WASISDK_AR_FLAGS}")
 
 # dynamic lib linker flags
-set(CMAKE_SHARED_LINKER_FLAGS "-shared ${WASI_COMMON_FLAGS} ${WASI_LINKER_FLAGS}")
-set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${WASI_OPT} ${WASI_COMMON_FLAGS_RELEASE} ${WASI_LINKER_FLAGS_RELEASE}")
-set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${WASI_OPT} -g")
-set(CMAKE_SHARED_LINKER_FLAGS_PROFILING "--profiling ${WASI_OPT} ${WASI_LINKER_FLAGS_RELEASE}")
+set(CMAKE_SHARED_LINKER_FLAGS "-shared ${WASISDK_COMMON_FLAGS} ${WASISDK_LINKER_FLAGS}")
+set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${WASISDK_OPT} ${WASISDK_COMMON_FLAGS_RELEASE} ${WASISDK_LINKER_FLAGS_RELEASE}")
+set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${WASISDK_OPT} -g")
+set(CMAKE_SHARED_LINKER_FLAGS_PROFILING "--profiling ${WASISDK_OPT} ${WASISDK_LINKER_FLAGS_RELEASE}")
 
 # update cache variables for cmake gui
 set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}" CACHE STRING "Config Type" FORCE)
