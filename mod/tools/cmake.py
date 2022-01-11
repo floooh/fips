@@ -1,10 +1,7 @@
 """wrapper for cmake tool"""
 import subprocess
-from subprocess import PIPE
-import platform
 
-from mod import log,util
-from mod.tools import ninja
+from mod import log
 
 name = 'cmake'
 platforms = ['linux', 'osx', 'win']
@@ -30,7 +27,7 @@ def check_exists(fips_dir, major=2, minor=8) :
         return False
 
 #------------------------------------------------------------------------------
-def run_gen(cfg, fips_dir, project_dir, build_dir, toolchain_path, defines) :
+def run_gen(cfg, fips_dir, project_dir, build_dir, local_build, toolchain_path, defines) :
     """run cmake tool to generate build files
 
     :param cfg:             a fips config object
@@ -50,6 +47,10 @@ def run_gen(cfg, fips_dir, project_dir, build_dir, toolchain_path, defines) :
     if toolchain_path is not None :
         cmdLine += ' -DCMAKE_TOOLCHAIN_FILE={}'.format(toolchain_path)
     cmdLine += ' -DFIPS_CONFIG={}'.format(cfg['name'])
+    if local_build:
+        cmdLine += ' -DFIPS_LOCAL_BUILD=ON'
+    else:
+        cmdLine += ' -DFIPS_LOCAL_BUILD=OFF'
     if cfg['defines'] is not None :
         for key in cfg['defines'] :
             val = cfg['defines'][key]

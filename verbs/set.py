@@ -43,6 +43,15 @@ def run(fips_dir, proj_dir, args) :
                     settings.set(proj_dir, 'ccache', False)
                 else :
                     log.error("value for setting 'ccache' must be 'on' or 'off")
+        elif noun == 'local':
+            if len(args) > 1:
+                is_local = args[1]
+                if is_local == 'on':
+                    settings.set(proj_dir, 'local', True)
+                elif is_local == 'off':
+                    settings.set(proj_dir, 'local', False)
+                else:
+                    log.error("value for setting 'local' must be 'on' or 'off'")
         elif noun == 'vscode-launch-configs' :
             if len(args) > 1 and args[1] in ['all', 'minimal', 'skip-build']:
                 settings.set(proj_dir, noun, args[1])

@@ -12,6 +12,7 @@ default_settings = {
     'target':   None,
     'jobs':     util.get_num_cpucores() + 2,
     'ccache':   False,
+    'local':    False,
     'iosteam':  None,
     'vscode-launch-configs': 'all',
 }
@@ -21,6 +22,7 @@ value_help = {
     'target':  'target-name',
     'jobs':    'num-build-jobs',
     'ccache':  'on|off',
+    'local':   'on|off',
     'iosteam': 'apple-team-id',
     'vscode-launch-configs': 'all|minimal|skip-build'
 }
@@ -30,6 +32,7 @@ human_help = {
     'target':   'set active run target',
     'jobs':     'set number of parallel build jobs',
     'ccache':   'enable/disable using ccache',
+    'local':    'place build files in project directory (useful for CI/CD)',
     'iosteam':  'Apple team id for iOS development',
     'vscode-launch-configs': 'set vscode debugger launch configs to generate'
 }
@@ -110,7 +113,7 @@ def set(proj_dir, key, value) :
 
     proj_name = util.get_project_name_from_dir(proj_dir)
     if type(value) is bool :
-        value_str = 'on' if value else 'off';
+        value_str = 'on' if value else 'off'
     else :
         value_str = str(value)
     log.info("'{}' set to '{}' in project '{}'".format(key, value_str, proj_name))

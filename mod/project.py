@@ -26,7 +26,7 @@ def init(fips_dir, proj_name) :
         for f in ['CMakeLists.txt', 'fips', 'fips.cmd', 'fips.yml'] :
             template.copy_template_file(fips_dir, proj_dir, f, templ_values)
         os.chmod(proj_dir + '/fips', 0o744)
-        gitignore_entries = ['.fips-*', '*.pyc', '.vscode/', '.idea/']
+        gitignore_entries = ['.fips-*', 'fips-files/build/', 'fips-files/deploy/', '*.pyc', '.vscode/', '.idea/']
         template.write_git_ignore(proj_dir, gitignore_entries)
     else :
         log.error("project dir '{}' does not exist".format(proj_dir))
@@ -62,6 +62,7 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
     """private: generate build files for one config"""
 
     proj_name = util.get_project_name_from_dir(proj_dir)
+    deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg['name'])
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
     defines = {}
     defines['FIPS_USE_CCACHE'] = 'ON' if settings.get(proj_dir, 'ccache') else 'OFF'
@@ -92,7 +93,8 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
         toolchain_path = config.get_toolchain(fips_dir, proj_dir, cfg)
         if toolchain_path :
             log.info("Using Toolchain File: {}".format(toolchain_path))
-        cmake_result = cmake.run_gen(cfg, fips_dir, proj_dir, build_dir, toolchain_path, defines)
+        is_local_build = settings.get(proj_dir, 'local')
+        cmake_result = cmake.run_gen(cfg, fips_dir, proj_dir, build_dir, is_local_build, toolchain_path, defines)
         if vscode.match(cfg['build_tool']):
             vscode.write_workspace_settings(fips_dir, proj_dir, cfg, settings.get_all_settings(proj_dir))
         if clion.match(cfg['build_tool']):

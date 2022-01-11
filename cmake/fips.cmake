@@ -9,8 +9,13 @@ endif()
 
 get_filename_component(FIPS_PROJECT_DIR "." ABSOLUTE)
 get_filename_component(FIPS_PROJECT_NAME ${FIPS_PROJECT_DIR} NAME)
-get_filename_component(FIPS_DEPLOY_DIR "${FIPS_ROOT_DIR}/../fips-deploy" ABSOLUTE)
-get_filename_component(FIPS_BUILD_DIR "${FIPS_ROOT_DIR}/../fips-build" ABSOLUTE)
+if (FIPS_LOCAL_BUILD)
+    get_filename_component(FIPS_DEPLOY_DIR "${FIPS_PROJECT_DIR}/fips-files/deploy" ABSOLUTE)
+    get_filename_component(FIPS_BUILD_DIR "${FIPS_PROJECT_DIR}/fips-files/build" ABSOLUTE)
+else()
+    get_filename_component(FIPS_DEPLOY_DIR "${FIPS_ROOT_DIR}/../fips-deploy" ABSOLUTE)
+    get_filename_component(FIPS_BUILD_DIR "${FIPS_ROOT_DIR}/../fips-build" ABSOLUTE)
+endif()
 
 include(CMakeParseArguments)
 

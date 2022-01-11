@@ -51,8 +51,13 @@ def get_build_dir(fips_dir, proj_name, cfg) :
     :param cfg:         build config name (or config object for backward compatibility)
     :returns:           absolute path of build directory
     """
+    from mod import settings
     cfg_name = cfg if type(cfg) == str else cfg['name']
-    return '{}/fips-build/{}/{}'.format(get_workspace_dir(fips_dir), proj_name, cfg_name)
+    proj_dir = get_project_dir(fips_dir, proj_name)
+    if settings.get(proj_dir, 'local'):
+        return '{}/fips-files/build/{}/{}'.format(proj_dir, proj_name, cfg_name)
+    else:
+        return '{}/fips-build/{}/{}'.format(get_workspace_dir(fips_dir), proj_name, cfg_name)
 
 #-------------------------------------------------------------------------------
 def get_deploy_dir(fips_dir, proj_name, cfg) :
@@ -63,8 +68,13 @@ def get_deploy_dir(fips_dir, proj_name, cfg) :
     :param cfg:         build config name (or config object for backward compatibility)
     :returns:           absolute path of deploy directory
     """
+    from mod import settings
     cfg_name = cfg if type(cfg) == str else cfg['name']
-    return '{}/fips-deploy/{}/{}'.format(get_workspace_dir(fips_dir), proj_name, cfg_name)
+    proj_dir = get_project_dir(fips_dir, proj_name)
+    if settings.get(proj_dir, 'local'):
+        return '{}/fips-files/deploy/{}/{}'.format(proj_dir, proj_name, cfg_name)
+    else:
+        return '{}/fips-deploy/{}/{}'.format(get_workspace_dir(fips_dir), proj_name, cfg_name)
 
 #-------------------------------------------------------------------------------
 def get_fips_dir(proj_dir, name):
