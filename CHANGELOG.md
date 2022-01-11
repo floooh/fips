@@ -7,7 +7,7 @@
   eventually it would make sense to move under ```fips-files/deps``` as well.
   Currently this change is mainly useful for CI/CD services which don't allow
   to access build output outside the project directory. To activate this
-  'local-build-mode' run ```./fips set local on``` in the build. To deactivate,
+  'local-build-mode' run ```./fips set local on``` in the project directory. To deactivate,
   either run ```./fips set local off``` or ```./fips unset local```.
 
 - **26-Feb-2021**: The Android default platform API level has been bumped from
