@@ -15,7 +15,7 @@ set(CMAKE_XCODE_GENERATE_SCHEME 1)
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
 if (FIPS_OSX_UNIVERSAL)
-    set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")
+    set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
 endif()
 
 # FIXME: define standard frame works that are always linked
