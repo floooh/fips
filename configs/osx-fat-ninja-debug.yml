@@ -4,4 +4,4 @@ generator: Ninja
 build_tool: ninja
 build_type: Debug
 defines:
-    CMAKE_OSX_ARCHITECTURES: arm64;x86_64
+    FIPS_OSX_UNIVERSAL: ON
