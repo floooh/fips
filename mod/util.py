@@ -42,8 +42,28 @@ def get_project_dir(fips_dir, proj_name) :
     return get_workspace_dir(fips_dir) + '/' + proj_name
 
 #-------------------------------------------------------------------------------
+def get_build_root_dir(fips_dir, proj_name):
+    """get absolute path to the build root directory"""
+    from mod import settings
+    proj_dir = get_project_dir(fips_dir, proj_name)
+    if settings.get(proj_dir, 'local'):
+        return '{}/fips-files/build'.format(proj_dir)
+    else:
+        return '{}/fips-build'.format(get_workspace_dir(fips_dir))
+
+#-------------------------------------------------------------------------------
+def get_deploy_root_dir(fips_dir, proj_name):
+    """get absolute path to the build root directory"""
+    from mod import settings
+    proj_dir = get_project_dir(fips_dir, proj_name)
+    if settings.get(proj_dir, 'local'):
+        return '{}/fips-files/deploy'.format(proj_dir)
+    else:
+        return '{}/fips-deploy'.format(get_workspace_dir(fips_dir))
+    
+#-------------------------------------------------------------------------------
 def get_build_dir(fips_dir, proj_name, cfg) :
-    """get absolute path to build directory in same workspace as fips for 
+    """get absolute path to project build directory in same workspace as fips for 
     given configuration
 
     :param fips_dir:    absolute path of fips
@@ -51,30 +71,20 @@ def get_build_dir(fips_dir, proj_name, cfg) :
     :param cfg:         build config name (or config object for backward compatibility)
     :returns:           absolute path of build directory
     """
-    from mod import settings
     cfg_name = cfg if type(cfg) == str else cfg['name']
-    proj_dir = get_project_dir(fips_dir, proj_name)
-    if settings.get(proj_dir, 'local'):
-        return '{}/fips-files/build/{}/{}'.format(proj_dir, proj_name, cfg_name)
-    else:
-        return '{}/fips-build/{}/{}'.format(get_workspace_dir(fips_dir), proj_name, cfg_name)
+    return '{}/{}/{}'.format(get_build_root_dir(fips_dir, proj_name), proj_name, cfg_name)
 
 #-------------------------------------------------------------------------------
 def get_deploy_dir(fips_dir, proj_name, cfg) :
-    """get absolute path to deploy directory in same workspace as fips
+    """get absolute path to project deploy directory in same workspace as fips
 
     :param fips_dir:    absolute path of fips
     :param proj_name:   project name
     :param cfg:         build config name (or config object for backward compatibility)
     :returns:           absolute path of deploy directory
     """
-    from mod import settings
     cfg_name = cfg if type(cfg) == str else cfg['name']
-    proj_dir = get_project_dir(fips_dir, proj_name)
-    if settings.get(proj_dir, 'local'):
-        return '{}/fips-files/deploy/{}/{}'.format(proj_dir, proj_name, cfg_name)
-    else:
-        return '{}/fips-deploy/{}/{}'.format(get_workspace_dir(fips_dir), proj_name, cfg_name)
+    return '{}/{}/{}'.format(get_deploy_root_dir(fips_dir, proj_name), proj_name, cfg_name)
 
 #-------------------------------------------------------------------------------
 def get_fips_dir(proj_dir, name):
