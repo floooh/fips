@@ -238,8 +238,12 @@ macro(fips_add_file new_file)
 
         if (FIPS_OSX)
             # mark .m as .c file for older cmake versions (bug is fixed in cmake 3.1+)
-            if ("${f_ext}" STREQUAL ".m")
-                set_source_files_properties(${cur_file} PROPERTIES LANGUAGE C)
+            # breaks in CMake 3.20+
+            # see: https://cmake.org/cmake/help/latest/policy/CMP0119.html#policy:CMP0119
+            if(${CMAKE_VERSION} VERSION_LESS "3.1.0")
+                if ("${f_ext}" STREQUAL ".m")
+                    set_source_files_properties(${cur_file} PROPERTIES LANGUAGE C)
+                endif()
             endif()
 
             # handle plist files special
