@@ -48,10 +48,20 @@ else()
     set(FIPS_VS_EXCEPTION_FLAGS "/EHsc")
 endif()
 
-if (FIPS_DYNAMIC_CRT OR FIPS_UWP)
-    set(FIPS_VS_CRT_FLAGS "/MD")
+# CMake 3.15 has a different way to setup MT / MD flags
+# see: https://cmake.org/cmake/help/latest/variable/CMAKE_MSVC_RUNTIME_LIBRARY.html#variable:CMAKE_MSVC_RUNTIME_LIBRARY
+if (${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.15)
+    if (FIPS_DYNAMIC_CRT OR FIPS_UWP)
+        set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+    else()
+        set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    endif()
 else()
-    set(FIPS_VS_CRT_FLAGS "/MT")
+    if (FIPS_DYNAMIC_CRT OR FIPS_UWP)
+        set(FIPS_VS_CRT_FLAGS "/MD")
+    else()
+        set(FIPS_VS_CRT_FLAGS "/MT")
+    endif()
 endif()
 
 set(CMAKE_CXX_FLAGS "${FIPS_VS_EXCEPTION_FLAGS} /MP /DWIN32")
