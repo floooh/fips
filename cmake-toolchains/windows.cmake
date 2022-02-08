@@ -48,23 +48,37 @@ else()
     set(FIPS_VS_EXCEPTION_FLAGS "/EHsc")
 endif()
 
-if (FIPS_DYNAMIC_CRT OR FIPS_UWP)
-    set(FIPS_VS_CRT_FLAGS "/MD")
-else()
-    set(FIPS_VS_CRT_FLAGS "/MT")
-endif()
-
+# define C++ flags
 set(CMAKE_CXX_FLAGS "${FIPS_VS_EXCEPTION_FLAGS} /MP /DWIN32")
 set(CMAKE_CXX_FLAGS_DEBUG "/Zi /Od /D_DEBUG /DFIPS_DEBUG=1")
 set(CMAKE_CXX_FLAGS_RELEASE "/O2 /DNDEBUG /WX")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
 
+# define C flags
 set(CMAKE_C_FLAGS "/MP /DWIN32")
 set(CMAKE_C_FLAGS_DEBUG "/Zi /Od /D_DEBUG /DFIPS_DEBUG=1")
 set(CMAKE_C_FLAGS_RELEASE "/O2 /DNDEBUG /WX")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
+
+# define static (/MT) or dynamic (/MD) linking for MSVC runtime library
+cmake_policy(GET CMP0091 has_policy_cmp0091)
+if ("${has_policy_cmp0091}" STREQUAL "NEW")
+    # CMake 3.15+
+    # see: https://cmake.org/cmake/help/latest/variable/CMAKE_MSVC_RUNTIME_LIBRARY.html
+    if (FIPS_DYNAMIC_CRT OR FIPS_UWP)
+        set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+    else()
+        set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    endif()
+else()
+    if (FIPS_DYNAMIC_CRT OR FIPS_UWP)
+        set(FIPS_VS_CRT_FLAGS "/MD")
+    else()
+        set(FIPS_VS_CRT_FLAGS "/MT")
+    endif()
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${FIPS_VS_CRT_FLAGS}d")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${FIPS_VS_CRT_FLAGS}")
+endif()
 
 # define exe linker/librarian flags
 set(CMAKE_EXE_LINKER_FLAGS "/STACK:${FIPS_WINDOWS_STACK_SIZE} /machine:${FIPS_WINDOWS_PLATFORM_NAME}")
