@@ -283,7 +283,7 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings):
                 elif util.get_host_platform() == 'linux':
                     c = {
                         'name': tgt + pre_launch_build[0] + stop_at_entry[0],
-                        'type': 'cppdbg',
+                        'type': proj_settings['vscode-debug-type'],
                         'request': 'launch',
                         'program': path,
                         'args': [],
@@ -295,7 +295,7 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings):
                 else:
                     c = {
                         'name': tgt + pre_launch_build[0] + stop_at_entry[0],
-                        'type': 'cppdbg',
+                        'type': proj_settings['vscode-debug-type'],
                         'request': 'launch',
                         'program': path,
                         'args': [],

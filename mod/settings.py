@@ -15,6 +15,7 @@ default_settings = {
     'local':    False,
     'iosteam':  None,
     'vscode-launch-configs': 'all',
+    'vscode-debug-type': 'cppdbg',
 }
 
 value_help = {
@@ -24,7 +25,8 @@ value_help = {
     'ccache':  'on|off',
     'local':   'on|off',
     'iosteam': 'apple-team-id',
-    'vscode-launch-configs': 'all|minimal|skip-build'
+    'vscode-launch-configs': 'all|minimal|skip-build',
+    'vscode-debug-type': 'cppdbg|lldb',
 }
 
 human_help = {
