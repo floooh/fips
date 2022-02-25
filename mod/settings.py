@@ -26,7 +26,7 @@ value_help = {
     'local':   'on|off',
     'iosteam': 'apple-team-id',
     'vscode-launch-configs': 'all|minimal|skip-build',
-    'vscode-debug-type': 'cppdbg|lldb',
+    'vscode-debug-type': 'default|lldb',
 }
 
 human_help = {
@@ -37,7 +37,7 @@ human_help = {
     'local':    'place build files in project directory (useful for CI/CD)',
     'iosteam':  'Apple team id for iOS development',
     'vscode-launch-configs': 'set vscode debugger launch configs to generate',
-    'vscode-debug-type': 'set vscode debugger type: default(cppdbg) or lldb for CodeLLDB extension',
+    'vscode-debug-type': 'set vscode debugger type (lldb for CodeLLDB extension)',
 }
 
 #-------------------------------------------------------------------------------
