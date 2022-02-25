@@ -36,7 +36,8 @@ human_help = {
     'ccache':   'enable/disable using ccache',
     'local':    'place build files in project directory (useful for CI/CD)',
     'iosteam':  'Apple team id for iOS development',
-    'vscode-launch-configs': 'set vscode debugger launch configs to generate'
+    'vscode-launch-configs': 'set vscode debugger launch configs to generate',
+    'vscode-debug-type': 'set vscode debugger type: default(cppdbg) or lldb for CodeLLDB extension',
 }
 
 #-------------------------------------------------------------------------------
