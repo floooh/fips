@@ -1,49 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
-    <loc>http://floooh.github.com/fips/docs/getstarted/</loc>
+    <loc>http://floooh.github.io/fips/docs/getstarted/</loc>
+  </url><url>
+    <loc>http://floooh.github.io/fips/docs/build/</loc>
+  </url><url>
+    <loc>http://floooh.github.io/fips/docs/troubleshooting/</loc>
+  </url><url>
+    <loc>http://floooh.github.io/fips/docs/crosscompiling/</loc>
+  </url><url>
+    <loc>http://floooh.github.io/fips/docs/cmakeguide/</loc>
+  </url><url>
+    <loc>http://floooh.github.io/fips/docs/imports/</loc>
+  </url><url>
+    <loc>http://floooh.github.io/fips/docs/exports/</loc>
+  </url><url>
+    <loc>http://floooh.github.io/fips/docs/codegen/</loc>
+  </url><url>
+    <loc>http://floooh.github.io/fips/docs/dirstructure/</loc>
+  </url><url>
+    <loc>http://floooh.github.io/fips/docs/</loc>
+  </url><url>
+    <loc>http://floooh.github.io/fips/</loc>
   </url>
-  
-  <url>
-    <loc>http://floooh.github.com/fips/docs/build/</loc>
-  </url>
-  
-  <url>
-    <loc>http://floooh.github.com/fips/docs/troubleshooting/</loc>
-  </url>
-  
-  <url>
-    <loc>http://floooh.github.com/fips/docs/crosscompiling/</loc>
-  </url>
-  
-  <url>
-    <loc>http://floooh.github.com/fips/docs/cmakeguide/</loc>
-  </url>
-  
-  <url>
-    <loc>http://floooh.github.com/fips/docs/imports/</loc>
-  </url>
-  
-  <url>
-    <loc>http://floooh.github.com/fips/docs/exports/</loc>
-  </url>
-  
-  <url>
-    <loc>http://floooh.github.com/fips/docs/codegen/</loc>
-  </url>
-  
-  <url>
-    <loc>http://floooh.github.com/fips/docs/dirstructure/</loc>
-  </url>
-  
-  <url>
-    <loc>http://floooh.github.com/fips/docs/</loc>
-  </url>
-  
-  <url>
-    <loc>http://floooh.github.com/fips/</loc>
-  </url>
-  
 </urlset>

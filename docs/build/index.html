@@ -18,7 +18,7 @@
 
 
 
-<link rel="stylesheet" href="/fips/book.min.bff781db5420417a98b39d5c502a421476ceee7df3af700be24e8554146bfa51.css">
+<link rel="stylesheet" href="/fips/book.min.a40af3dc8c0a4d2d9dd31b0865c32c72becf072fcbd75fa08f4d97e7a027e555.css">
 
 
 <link rel="icon" href="/fips/favicon.png" type="image/x-icon">
@@ -39,7 +39,7 @@ https://github.com/alex-shpak/hugo-book
     <aside class="book-menu fixed">
       <nav role="navigation">
 <h2 class="book-brand">
-  <a href="http://floooh.github.com/fips/">Fips Docs</a>
+  <a href="http://floooh.github.io/fips/">Fips Docs</a>
 </h2>
 
 
@@ -245,26 +245,26 @@ https://github.com/alex-shpak/hugo-book
 <article class="markdown"><h1 id="build-projects">Build Projects</h1>
 <p>To build the default build configuration of a &lsquo;fipsified&rsquo; project for your
 host platform, simply run &lsquo;./fips build&rsquo; in its root directory:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; cd ~/fips-workspace
-&gt; git clone https://github.com/floooh/fips-hello-world.git
-&gt; cd fips-hello-world
-&gt; ./fips build
-...
-&gt; _
-</code></pre></div><p>By default, a non-optimized <em>debug</em> version will be built, to build
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; cd ~/fips-workspace
+</span></span><span class="line"><span class="cl">&gt; git clone https://github.com/floooh/fips-hello-world.git
+</span></span><span class="line"><span class="cl">&gt; cd fips-hello-world
+</span></span><span class="line"><span class="cl">&gt; ./fips build
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">&gt; _
+</span></span></code></pre></div><p>By default, a non-optimized <em>debug</em> version will be built, to build
 an optimized <em>release</em> version append the configuration name that is
 right for your host platform:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback"># on OSX:
-&gt; ./fips build osx-xcode-release
-...
-# on Linux:
-&gt; ./fips build linux-make-release
-...
-# on Windows:
-&gt; ./fips build win64-vstudio-release
-...
-&gt; _
-</code></pre></div><h3 id="build-configs">Build Configs</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># on OSX:
+</span></span><span class="line"><span class="cl">&gt; ./fips build osx-xcode-release
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl"># on Linux:
+</span></span><span class="line"><span class="cl">&gt; ./fips build linux-make-release
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl"># on Windows:
+</span></span><span class="line"><span class="cl">&gt; ./fips build win64-vstudio-release
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">&gt; _
+</span></span></code></pre></div><h3 id="build-configs">Build Configs</h3>
 <p>Build configs like <em>osx-xcode-release</em> are the core feature of fips. A
 build config tells cmake how to compile the project:</p>
 <ul>
@@ -274,34 +274,34 @@ build config tells cmake how to compile the project:</p>
 <li>additional cmake options to customize a build</li>
 </ul>
 <p>To get a list of build configurations, run &lsquo;./fips list configs&rsquo;:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips list configs
-from /Users/floh/projects/fips/configs:
-  android-make-debug
-  android-make-release
-  android-ninja-debug
-  android-ninja-release
-...
-  win32-vstudio-debug
-  win32-vstudio-release
-  win64-vstudio-debug
-  win64-vstudio-release
-&gt; _
-</code></pre></div><p>There are dozens of build configs, but not all are supported on every
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips list configs
+</span></span><span class="line"><span class="cl">from /Users/floh/projects/fips/configs:
+</span></span><span class="line"><span class="cl">  android-make-debug
+</span></span><span class="line"><span class="cl">  android-make-release
+</span></span><span class="line"><span class="cl">  android-ninja-debug
+</span></span><span class="line"><span class="cl">  android-ninja-release
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">  win32-vstudio-debug
+</span></span><span class="line"><span class="cl">  win32-vstudio-release
+</span></span><span class="line"><span class="cl">  win64-vstudio-debug
+</span></span><span class="line"><span class="cl">  win64-vstudio-release
+</span></span><span class="line"><span class="cl">&gt; _
+</span></span></code></pre></div><p>There are dozens of build configs, but not all are supported on every
 host platform, to test which build configs are supported, run
 &lsquo;./fips diag configs&rsquo;:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips diag configs
-=== configs:
-android-make-debug
-  ok
-android-make-release
-  ok
-android-ninja-debug
-  build tool &#39;ninja&#39; not found
-android-ninja-release
-  build tool &#39;ninja&#39; not found
-...
-&gt; _
-</code></pre></div><p>In this example, the build configurations which use the &lsquo;ninja&rsquo; build tool
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips diag configs
+</span></span><span class="line"><span class="cl">=== configs:
+</span></span><span class="line"><span class="cl">android-make-debug
+</span></span><span class="line"><span class="cl">  ok
+</span></span><span class="line"><span class="cl">android-make-release
+</span></span><span class="line"><span class="cl">  ok
+</span></span><span class="line"><span class="cl">android-ninja-debug
+</span></span><span class="line"><span class="cl">  build tool &#39;ninja&#39; not found
+</span></span><span class="line"><span class="cl">android-ninja-release
+</span></span><span class="line"><span class="cl">  build tool &#39;ninja&#39; not found
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">&gt; _
+</span></span></code></pre></div><p>In this example, the build configurations which use the &rsquo;ninja&rsquo; build tool
 can not be used because ninja is currently not installed (see also &lsquo;./fips
 diag tools&rsquo;).</p>
 <h3 id="active-config">Active Config</h3>
@@ -310,36 +310,36 @@ be used if a fips command expects a config name, but none is given.
 Use &lsquo;./fips set config [config-name]&rsquo; if you
 want to compile the release version of a project instead of the default
 debug version whenever &lsquo;./fips build&rsquo; is run:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback"># on OSX:
-&gt; ./fips set config osx-xcode-release
-&#39;config&#39; set to &#39;osx-xcode-release&#39; in project &#39;fips-hello-world&#39;
-&gt; ./fips build
-...
-# on Linux:
-&gt; ./fips set config linux-make-release
-&#39;config&#39; set to &#39;linux-make-release&#39; in project &#39;fips-hello-world&#39;
-&gt; ./fips build
-...
-# on Windows:
-&gt; ./fips set config win64-vstudio-release 
-&#39;config&#39; set to &#39;win64-vstudio-release&#39; in project &#39;fips-hello-world&#39;
-&gt; ./fips build
-...
-&gt; _
-</code></pre></div><p>Run &lsquo;./fips list settings&rsquo; to check what the currently active config is:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips list settings
-=== settings:
-  config: osx-xcode-release
-  target: None (default value)
-</code></pre></div><p>To revert back to the default config, run &lsquo;./fips unset config&rsquo;:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips unset config
-&#39;config&#39; unset in project &#39;fips-hello-world&#39;
-&gt; ./fips list settings
-=== settings:
-  config: osx-xcode-debug (default value)
-  target: None (default value)
-&gt; _
-</code></pre></div><h3 id="build-targets">Build Targets</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># on OSX:
+</span></span><span class="line"><span class="cl">&gt; ./fips set config osx-xcode-release
+</span></span><span class="line"><span class="cl">&#39;config&#39; set to &#39;osx-xcode-release&#39; in project &#39;fips-hello-world&#39;
+</span></span><span class="line"><span class="cl">&gt; ./fips build
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl"># on Linux:
+</span></span><span class="line"><span class="cl">&gt; ./fips set config linux-make-release
+</span></span><span class="line"><span class="cl">&#39;config&#39; set to &#39;linux-make-release&#39; in project &#39;fips-hello-world&#39;
+</span></span><span class="line"><span class="cl">&gt; ./fips build
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl"># on Windows:
+</span></span><span class="line"><span class="cl">&gt; ./fips set config win64-vstudio-release 
+</span></span><span class="line"><span class="cl">&#39;config&#39; set to &#39;win64-vstudio-release&#39; in project &#39;fips-hello-world&#39;
+</span></span><span class="line"><span class="cl">&gt; ./fips build
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">&gt; _
+</span></span></code></pre></div><p>Run &lsquo;./fips list settings&rsquo; to check what the currently active config is:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips list settings
+</span></span><span class="line"><span class="cl">=== settings:
+</span></span><span class="line"><span class="cl">  config: osx-xcode-release
+</span></span><span class="line"><span class="cl">  target: None (default value)
+</span></span></code></pre></div><p>To revert back to the default config, run &lsquo;./fips unset config&rsquo;:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips unset config
+</span></span><span class="line"><span class="cl">&#39;config&#39; unset in project &#39;fips-hello-world&#39;
+</span></span><span class="line"><span class="cl">&gt; ./fips list settings
+</span></span><span class="line"><span class="cl">=== settings:
+</span></span><span class="line"><span class="cl">  config: osx-xcode-debug (default value)
+</span></span><span class="line"><span class="cl">  target: None (default value)
+</span></span><span class="line"><span class="cl">&gt; _
+</span></span></code></pre></div><h3 id="build-targets">Build Targets</h3>
 <p>Projects are usually made of several build targets, of which fips has 3
 types:</p>
 <ul>
@@ -355,32 +355,32 @@ targets.</p>
 <p>To get a list of targets in the current project, run &lsquo;./fips list targets&rsquo;
 from the project root directory. For this to work, cmake must have generated
 build files before via &lsquo;./fips gen&rsquo;:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips gen
-...
-&gt; ./fips list targets
-=== targets:
-  config: osx-xcode-debug
-  lib:
-  module:
-    dep1
-    dep2
-  app:
-    hello
-&gt; _ 
-</code></pre></div><p>A specific target can be built with &lsquo;./fips make [target]':</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips make hello
-...
-&gt; _
-</code></pre></div><p>App targets can be run with &lsquo;./fips run [target]':</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips run hello
-=== run &#39;hello&#39; (config: osx-xcode-debug, project: fips-hello-world):
-Hello World!
-Hello from dep1
-Hello from dep2!
-Imported string define: Bla
-Imported int define: 1
-&gt; _
-</code></pre></div></article>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips gen
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">&gt; ./fips list targets
+</span></span><span class="line"><span class="cl">=== targets:
+</span></span><span class="line"><span class="cl">  config: osx-xcode-debug
+</span></span><span class="line"><span class="cl">  lib:
+</span></span><span class="line"><span class="cl">  module:
+</span></span><span class="line"><span class="cl">    dep1
+</span></span><span class="line"><span class="cl">    dep2
+</span></span><span class="line"><span class="cl">  app:
+</span></span><span class="line"><span class="cl">    hello
+</span></span><span class="line"><span class="cl">&gt; _ 
+</span></span></code></pre></div><p>A specific target can be built with &lsquo;./fips make [target]&rsquo;:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips make hello
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">&gt; _
+</span></span></code></pre></div><p>App targets can be run with &lsquo;./fips run [target]&rsquo;:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips run hello
+</span></span><span class="line"><span class="cl">=== run &#39;hello&#39; (config: osx-xcode-debug, project: fips-hello-world):
+</span></span><span class="line"><span class="cl">Hello World!
+</span></span><span class="line"><span class="cl">Hello from dep1
+</span></span><span class="line"><span class="cl">Hello from dep2!
+</span></span><span class="line"><span class="cl">Imported string define: Bla
+</span></span><span class="line"><span class="cl">Imported int define: 1
+</span></span><span class="line"><span class="cl">&gt; _
+</span></span></code></pre></div></article>
 
       
 

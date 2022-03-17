@@ -18,7 +18,7 @@
 
 
 
-<link rel="stylesheet" href="/fips/book.min.bff781db5420417a98b39d5c502a421476ceee7df3af700be24e8554146bfa51.css">
+<link rel="stylesheet" href="/fips/book.min.a40af3dc8c0a4d2d9dd31b0865c32c72becf072fcbd75fa08f4d97e7a027e555.css">
 
 
 <link rel="icon" href="/fips/favicon.png" type="image/x-icon">
@@ -39,7 +39,7 @@ https://github.com/alex-shpak/hugo-book
     <aside class="book-menu fixed">
       <nav role="navigation">
 <h2 class="book-brand">
-  <a href="http://floooh.github.com/fips/">Fips Docs</a>
+  <a href="http://floooh.github.io/fips/">Fips Docs</a>
 </h2>
 
 
@@ -253,46 +253,46 @@ https://github.com/alex-shpak/hugo-book
 other target platforms are supported on all 3 host platforms (OSX, Linux, Windows).</p>
 <h3 id="setting-up-the-platform-sdks">Setting up the platform SDKs</h3>
 <p>Fips provides simple commands to setup the SDKs for Android and emscripten:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips setup emscripten
-&gt; ./fips setup android
-</code></pre></div><p>This will download, unpack and setup the respective SDKs into a directory
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips setup emscripten
+</span></span><span class="line"><span class="cl">&gt; ./fips setup android
+</span></span></code></pre></div><p>This will download, unpack and setup the respective SDKs into a directory
 <em>fips-sdks</em> next to the fips directory.</p>
 <blockquote>
 <p>NOTE: there is currently no way to use an SDK installed to another location</p>
 </blockquote>
 <p>You should also run &lsquo;fips diag tools&rsquo; to make sure that all required
 tools are in the path:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips diag tools
-...
-</code></pre></div><h3 id="testing-cross-compilation">Testing cross-compilation</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips diag tools
+</span></span><span class="line"><span class="cl">...
+</span></span></code></pre></div><h3 id="testing-cross-compilation">Testing cross-compilation</h3>
 <p>Cross-compilation requires a portable code base, in the case of Android this
 is a bit non-trivial (e.g. the canonical C &lsquo;Hello World&rsquo; doesn&rsquo;t
 work). Let&rsquo;s use the Oryol 3D engine for testing:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips clone oryol
-&gt; cd ../oryol
-</code></pre></div><p>First let&rsquo;s try whether <strong>emscripten</strong> compilation works:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips set config emsc-make-release
-&gt; ./fips build
-...
-&gt; ./fips run Triangle
-</code></pre></div><p>The last command should open the default web browser and a local http server.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips clone oryol
+</span></span><span class="line"><span class="cl">&gt; cd ../oryol
+</span></span></code></pre></div><p>First let&rsquo;s try whether <strong>emscripten</strong> compilation works:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips set config emsc-make-release
+</span></span><span class="line"><span class="cl">&gt; ./fips build
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">&gt; ./fips run Triangle
+</span></span></code></pre></div><p>The last command should open the default web browser and a local http server.
 It may be necessary to refresh the page in case the http server needs too long
 to start.</p>
 <p>Same for <strong>Android</strong>, note that Android provides 3 types of config, one for each
 CPU type.</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips build android-make-release
-&gt; ./fips build androidx86-make-release
-&gt; ./fips build androidmips-make-release
-
-&gt; NOTE: Android MIPS is not yet fully supported on Oryol!
-</code></pre></div><p>Finally iOS: this works a bit differently since iOS compiling and debugging
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips build android-make-release
+</span></span><span class="line"><span class="cl">&gt; ./fips build androidx86-make-release
+</span></span><span class="line"><span class="cl">&gt; ./fips build androidmips-make-release
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&gt; NOTE: Android MIPS is not yet fully supported on Oryol!
+</span></span></code></pre></div><p>Finally iOS: this works a bit differently since iOS compiling and debugging
 works best directly in Xcode. Instead of a command line build, we only
 generate the Xcode project files, and then start Xcode:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips set config ios-xcode-debug
-&gt; ./fips set iosteam XYZW123456
-&gt; ./fips gen
-&gt; ./fips open
-</code></pre></div><p>Note the <strong>./fips set iosteam XYZW123456</strong> before the first call to <strong>./fips gen</strong>.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips set config ios-xcode-debug
+</span></span><span class="line"><span class="cl">&gt; ./fips set iosteam XYZW123456
+</span></span><span class="line"><span class="cl">&gt; ./fips gen
+</span></span><span class="line"><span class="cl">&gt; ./fips open
+</span></span></code></pre></div><p>Note the <strong>./fips set iosteam XYZW123456</strong> before the first call to <strong>./fips gen</strong>.
 This sets the <em>iOS Development Team ID</em> for each target in the Xcode project,
 so you don&rsquo;t need to do this manually each time you generate the solution.
 The team id will be written to the local file <em>.fips-settings.yml</em> in the project

@@ -2,29 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Introduction on Fips Docs</title>
-    <link>http://floooh.github.com/fips/</link>
+    <link>http://floooh.github.io/fips/</link>
     <description>Recent content in Introduction on Fips Docs</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    
-	<atom:link href="http://floooh.github.com/fips/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <language>en-us</language><atom:link href="http://floooh.github.io/fips/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Get Started</title>
-      <link>http://floooh.github.com/fips/docs/getstarted/</link>
+      <link>http://floooh.github.io/fips/docs/getstarted/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://floooh.github.com/fips/docs/getstarted/</guid>
+      <guid>http://floooh.github.io/fips/docs/getstarted/</guid>
       <description>Get Started You need:  python (2.7.x or 3.x should both work) cmake (any 3.x version should work) a working C/C++ development environment:  on OSX: Xcode + command line tools on Linux: make/gcc (or clang) on Windows: Visual Studio 2013 or better    Get fips fips will create additional directories on the same directory level as the fips directory itself, thus it is recommended to git-clone fips into a separate &amp;lsquo;workspace&amp;rsquo; directory:</description>
     </item>
     
     <item>
       <title>Build Projects</title>
-      <link>http://floooh.github.com/fips/docs/build/</link>
+      <link>http://floooh.github.io/fips/docs/build/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://floooh.github.com/fips/docs/build/</guid>
+      <guid>http://floooh.github.io/fips/docs/build/</guid>
       <description>Build Projects To build the default build configuration of a &amp;lsquo;fipsified&amp;rsquo; project for your host platform, simply run &amp;lsquo;./fips build&amp;rsquo; in its root directory:
 &amp;gt; cd ~/fips-workspace &amp;gt; git clone https://github.com/floooh/fips-hello-world.git &amp;gt; cd fips-hello-world &amp;gt; ./fips build ... &amp;gt; _ By default, a non-optimized debug version will be built, to build an optimized release version append the configuration name that is right for your host platform:
 # on OSX: &amp;gt; .</description>
@@ -32,10 +28,10 @@
     
     <item>
       <title>Troubleshooting</title>
-      <link>http://floooh.github.com/fips/docs/troubleshooting/</link>
+      <link>http://floooh.github.io/fips/docs/troubleshooting/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://floooh.github.com/fips/docs/troubleshooting/</guid>
+      <guid>http://floooh.github.io/fips/docs/troubleshooting/</guid>
       <description>Troubleshooting If anything goes wrong, &amp;lsquo;./fips clean all&amp;rsquo; and &amp;lsquo;./fips diag&amp;rsquo; are the two most useful commands.
 &amp;lsquo;./fips clean all&amp;rsquo; deletes all build files created by fips and thus resets a project into a clean starting state.
 &amp;lsquo;./fips diag&amp;rsquo; runs a number of diagnostic tests and provides useful error output:
@@ -44,10 +40,10 @@
     
     <item>
       <title>Cross-compiling</title>
-      <link>http://floooh.github.com/fips/docs/crosscompiling/</link>
+      <link>http://floooh.github.io/fips/docs/crosscompiling/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://floooh.github.com/fips/docs/crosscompiling/</guid>
+      <guid>http://floooh.github.io/fips/docs/crosscompiling/</guid>
       <description>Cross-Compiling Fips provides easy cross-compiling support to the following platforms:
  iOS Android emscripten  Cross-compilation to iOS is only supported on the OSX host platform. All other target platforms are supported on all 3 host platforms (OSX, Linux, Windows).
 Setting up the platform SDKs Fips provides simple commands to setup the SDKs for Android and emscripten:
@@ -56,10 +52,10 @@ Setting up the platform SDKs Fips provides simple commands to setup the SDKs for
     
     <item>
       <title>CMake Guide</title>
-      <link>http://floooh.github.com/fips/docs/cmakeguide/</link>
+      <link>http://floooh.github.io/fips/docs/cmakeguide/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://floooh.github.com/fips/docs/cmakeguide/</guid>
+      <guid>http://floooh.github.io/fips/docs/cmakeguide/</guid>
       <description>Fips CMake Guide Fips projects need to adhere to a few rules in their CMakeLists.txt file hierarchy. Fips provides a number of cmake macros, variables and toolchain files to simplify working with cmake files and implement some under-the-hood magic.
 Fips CMake Macros Fips provides the following cmake macros to describe a project structure:
 fips_setup() Initializes the fips build system in a cmake file hierarchy. Must be called once in the root CMakeLists.</description>
@@ -67,10 +63,10 @@ fips_setup() Initializes the fips build system in a cmake file hierarchy. Must b
     
     <item>
       <title>Imports</title>
-      <link>http://floooh.github.com/fips/docs/imports/</link>
+      <link>http://floooh.github.io/fips/docs/imports/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://floooh.github.com/fips/docs/imports/</guid>
+      <guid>http://floooh.github.io/fips/docs/imports/</guid>
       <description>Importing external dependencies fips implements a very simple &amp;lsquo;package manager&amp;rsquo; for external code modules. A fips project can list a number of &amp;lsquo;imports&amp;rsquo; in its fips.yml file to import external projects. A project which uses external dependencies will look and feel the same as if all dependencies would reside locally in the main project.
 Importing external projects has a number of advantages (and one notable disadvantage):
  generic libraries live in their own github repositories and can easily be shared by many projects ownership is clearly defined, the owner of an imported project is the owner of the git repository which contains the imported project if dependency trees become too complex, the result might be &amp;lsquo;dependency hell&amp;rsquo; where version conflicts occur when imported projects depend on different versions of another project  Care should be taken when working with external dependencies to keep the dependency tree reasonably shallow.</description>
@@ -78,30 +74,30 @@ Importing external projects has a number of advantages (and one notable disadvan
     
     <item>
       <title>Exports</title>
-      <link>http://floooh.github.com/fips/docs/exports/</link>
+      <link>http://floooh.github.io/fips/docs/exports/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://floooh.github.com/fips/docs/exports/</guid>
-      <description>Exporting from fips projects A fipsified project can provide different types of &amp;lsquo;exports&amp;rsquo; to other fips projects:
- code modules header search paths pre-compiled static libs C/C++ preprocessor defines a cmake include which is included in root CMakeLists.txt files of importing projects new fips commands build configs code generator scripts  Exporting Code Modules Projects can export modules defined with the fips_begin_module() and fips_begin_lib() commands in under the &amp;lsquo;exports&amp;rsquo; section of the fips.</description>
+      <guid>http://floooh.github.io/fips/docs/exports/</guid>
+      <description>Exporting from fips projects A fipsified project can provide different types of &amp;rsquo;exports&amp;rsquo; to other fips projects:
+ code modules header search paths pre-compiled static libs C/C++ preprocessor defines a cmake include which is included in root CMakeLists.txt files of importing projects new fips commands build configs code generator scripts  Exporting Code Modules Projects can export modules defined with the fips_begin_module() and fips_begin_lib() commands in under the &amp;rsquo;exports&amp;rsquo; section of the fips.</description>
     </item>
     
     <item>
       <title>Code Generation</title>
-      <link>http://floooh.github.com/fips/docs/codegen/</link>
+      <link>http://floooh.github.io/fips/docs/codegen/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://floooh.github.com/fips/docs/codegen/</guid>
+      <guid>http://floooh.github.io/fips/docs/codegen/</guid>
       <description>Code Generation Fips makes it easy to generate C/C++ source code by running Python scripts during the build process. Special care has been taken to make code generation flexible so that it is useful for many different scenarios. For instance here are a few examples how the Oryol 3D engine uses code generation:
  generate code for serializable message protocols (similar to Google protobuf) embed image files into header files and generate a sprite sheet library GLSL shader editing with IDE error integration (see this blog post and video)  Using Code Generation The fips_generate cmake macro is used to tell fips how to generate C/C++ source code:</description>
     </item>
     
     <item>
       <title>Directory Structure</title>
-      <link>http://floooh.github.com/fips/docs/dirstructure/</link>
+      <link>http://floooh.github.io/fips/docs/dirstructure/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://floooh.github.com/fips/docs/dirstructure/</guid>
+      <guid>http://floooh.github.io/fips/docs/dirstructure/</guid>
       <description>Directory Structure fips creates project directories and a few special directories on the same level as the fips directory itself.
 ┣━━ fips/ ┣━━ fips-build/ ┣━━ fips-deploy/ ┣━━ fips-sdks/ ┣━━ project-1/ ┣━━ project-2/ ┣━━ .../ The fips-build directory The fips-build directory contains the generated cmake build files, separated in subdirectories by project name and config name. The content of fips-build is created with the &amp;lsquo;fips gen&amp;rsquo; command (or on the fly during &amp;lsquo;fips build&amp;rsquo; or &amp;lsquo;fips make&amp;rsquo;):</description>
     </item>

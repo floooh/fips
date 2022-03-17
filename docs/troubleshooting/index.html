@@ -18,7 +18,7 @@
 
 
 
-<link rel="stylesheet" href="/fips/book.min.bff781db5420417a98b39d5c502a421476ceee7df3af700be24e8554146bfa51.css">
+<link rel="stylesheet" href="/fips/book.min.a40af3dc8c0a4d2d9dd31b0865c32c72becf072fcbd75fa08f4d97e7a027e555.css">
 
 
 <link rel="icon" href="/fips/favicon.png" type="image/x-icon">
@@ -39,7 +39,7 @@ https://github.com/alex-shpak/hugo-book
     <aside class="book-menu fixed">
       <nav role="navigation">
 <h2 class="book-brand">
-  <a href="http://floooh.github.com/fips/">Fips Docs</a>
+  <a href="http://floooh.github.io/fips/">Fips Docs</a>
 </h2>
 
 
@@ -249,53 +249,53 @@ most useful commands.</p>
 resets a project into a clean starting state.</p>
 <p>&lsquo;./fips diag&rsquo; runs a number of diagnostic tests and provides useful
 error output:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips help diag
-fips diag
-fips diag all
-fips diag fips
-fips diag tools
-fips diag configs
-fips diag imports
-    run diagnostics and check for errors
-&gt; _
-</code></pre></div><p>&lsquo;./fips diag tools&rsquo; tests whether additional 3rd party tools are present,
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips help diag
+</span></span><span class="line"><span class="cl">fips diag
+</span></span><span class="line"><span class="cl">fips diag all
+</span></span><span class="line"><span class="cl">fips diag fips
+</span></span><span class="line"><span class="cl">fips diag tools
+</span></span><span class="line"><span class="cl">fips diag configs
+</span></span><span class="line"><span class="cl">fips diag imports
+</span></span><span class="line"><span class="cl">    run diagnostics and check for errors
+</span></span><span class="line"><span class="cl">&gt; _
+</span></span></code></pre></div><p>&lsquo;./fips diag tools&rsquo; tests whether additional 3rd party tools are present,
 and if not found, explains whether the tools are required or optional,
 and what they are needed for.</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips diag tools
-=== tools:
-git:	found
-cmake:	found
-ccmake:	found
-make:	found
-ninja:	OPTIONAL, NOT FOUND (required for building &#39;*-ninja-*&#39; configs)
-xcodebuild:	found
-java:	found
-ant:	found
-python2:	found
-&gt; _
-</code></pre></div><p>&lsquo;./fips diag fips&rsquo; simply checks whether fips itself is up-to-date. If
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips diag tools
+</span></span><span class="line"><span class="cl">=== tools:
+</span></span><span class="line"><span class="cl">git:	found
+</span></span><span class="line"><span class="cl">cmake:	found
+</span></span><span class="line"><span class="cl">ccmake:	found
+</span></span><span class="line"><span class="cl">make:	found
+</span></span><span class="line"><span class="cl">ninja:	OPTIONAL, NOT FOUND (required for building &#39;*-ninja-*&#39; configs)
+</span></span><span class="line"><span class="cl">xcodebuild:	found
+</span></span><span class="line"><span class="cl">java:	found
+</span></span><span class="line"><span class="cl">ant:	found
+</span></span><span class="line"><span class="cl">python2:	found
+</span></span><span class="line"><span class="cl">&gt; _
+</span></span></code></pre></div><p>&lsquo;./fips diag fips&rsquo; simply checks whether fips itself is up-to-date. If
 not, simply run a &lsquo;git pull&rsquo; from within the fips directory to get the
 latest version.</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">=== fips:
-  uptodate
-</code></pre></div><p>&lsquo;./fips diag configs&rsquo; goes through all existing build config files, checks
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">=== fips:
+</span></span><span class="line"><span class="cl">  uptodate
+</span></span></code></pre></div><p>&lsquo;./fips diag configs&rsquo; goes through all existing build config files, checks
 if their content is valid, and whether all required prerequisites are met
 in the current environment to build them (e.g. whether the required build
 tools exist and cross-platform SDKs have been installed):</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips diag configs
-=== configs:
-...
-ios-xcode-debug
-  ok
-ios-xcode-release
-  ok
-linux-make-debug
-  &#39;linux&#39; is not a valid target platform for host &#39;osx&#39;
-linux-make-release
-  &#39;linux&#39; is not a valid target platform for host &#39;osx&#39;
-...
-&gt; _
-</code></pre></div></article>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips diag configs
+</span></span><span class="line"><span class="cl">=== configs:
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">ios-xcode-debug
+</span></span><span class="line"><span class="cl">  ok
+</span></span><span class="line"><span class="cl">ios-xcode-release
+</span></span><span class="line"><span class="cl">  ok
+</span></span><span class="line"><span class="cl">linux-make-debug
+</span></span><span class="line"><span class="cl">  &#39;linux&#39; is not a valid target platform for host &#39;osx&#39;
+</span></span><span class="line"><span class="cl">linux-make-release
+</span></span><span class="line"><span class="cl">  &#39;linux&#39; is not a valid target platform for host &#39;osx&#39;
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">&gt; _
+</span></span></code></pre></div></article>
 
       
 

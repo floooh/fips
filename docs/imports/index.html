@@ -18,7 +18,7 @@
 
 
 
-<link rel="stylesheet" href="/fips/book.min.bff781db5420417a98b39d5c502a421476ceee7df3af700be24e8554146bfa51.css">
+<link rel="stylesheet" href="/fips/book.min.a40af3dc8c0a4d2d9dd31b0865c32c72becf072fcbd75fa08f4d97e7a027e555.css">
 
 
 <link rel="icon" href="/fips/favicon.png" type="image/x-icon">
@@ -39,7 +39,7 @@ https://github.com/alex-shpak/hugo-book
     <aside class="book-menu fixed">
       <nav role="navigation">
 <h2 class="book-brand">
-  <a href="http://floooh.github.com/fips/">Fips Docs</a>
+  <a href="http://floooh.github.io/fips/">Fips Docs</a>
 </h2>
 
 
@@ -272,34 +272,34 @@ fips.</p>
 <h3 id="how-to-define-imports">How to define imports</h3>
 <p>Simply list imports in your fips.yml file under the section &lsquo;imports&rsquo;.</p>
 <p>Here is a very simple example from the <em>fips-hello-world</em> project:</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
-</span><span class="w"></span><span class="k">imports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">fips-hello-dep1</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">git</span><span class="p">:</span><span class="w">    </span>https<span class="p">:</span>//github.com/floooh/fips-hello-dep1.git<span class="w">
-</span></code></pre></div><p>This defines a single import <em>fips-hello-dep1</em> from the github URL
-_<a href="https://github.com/floooh/fips-hello-dep1.git_">https://github.com/floooh/fips-hello-dep1.git_</a>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">imports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">fips-hello-dep1</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">git</span><span class="p">:</span><span class="w">    </span><span class="l">https://github.com/floooh/fips-hello-dep1.git</span><span class="w">
+</span></span></span></code></pre></div><p>This defines a single import <em>fips-hello-dep1</em> from the github URL
+<em><a href="https://github.com/floooh/fips-hello-dep1.git">https://github.com/floooh/fips-hello-dep1.git</a></em>.</p>
 <p>Dependencies can be recursive, for instance the <em>fips-hello-dep1</em>
 project imports another project:</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
-</span><span class="w"></span><span class="k">imports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">fips-hello-dep2</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">git</span><span class="p">:</span><span class="w">    </span>https<span class="p">:</span>//github.com/floooh/fips-hello-dep2.git<span class="w">
-</span></code></pre></div><p>A more complex import section might look like this (from the Oryol 3D engine):</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
-</span><span class="w"></span><span class="k">imports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">gliml</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">git</span><span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/gliml.git<span class="w">
-</span><span class="w">    </span><span class="k">fips-glm</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">git</span><span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/fips-glm.git<span class="w">
-</span><span class="w">    </span><span class="k">fips-unittestpp</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">git</span><span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/fips-unittestpp.git<span class="w">
-</span><span class="w">    </span><span class="k">fips-zlib</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">git</span><span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/fips-zlib.git<span class="w">
-</span><span class="w">    </span><span class="k">fips-glfw</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">git</span><span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/fips-glfw.git<span class="w">
-</span><span class="w">    </span><span class="k">fips-libcurl</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">git</span><span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/fips-libcurl.git<span class="w">
-</span></code></pre></div><p>In the future there will be more ways to define imports,
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">imports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">fips-hello-dep2</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">git</span><span class="p">:</span><span class="w">    </span><span class="l">https://github.com/floooh/fips-hello-dep2.git</span><span class="w">
+</span></span></span></code></pre></div><p>A more complex import section might look like this (from the Oryol 3D engine):</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">imports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">gliml</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">git</span><span class="p">:</span><span class="w"> </span><span class="l">https://github.com/floooh/gliml.git</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">fips-glm</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">git</span><span class="p">:</span><span class="w"> </span><span class="l">https://github.com/floooh/fips-glm.git</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">fips-unittestpp</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">git</span><span class="p">:</span><span class="w"> </span><span class="l">https://github.com/floooh/fips-unittestpp.git</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">fips-zlib</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">git</span><span class="p">:</span><span class="w"> </span><span class="l">https://github.com/floooh/fips-zlib.git</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">fips-glfw</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">git</span><span class="p">:</span><span class="w"> </span><span class="l">https://github.com/floooh/fips-glfw.git</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">fips-libcurl</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">git</span><span class="p">:</span><span class="w"> </span><span class="l">https://github.com/floooh/fips-libcurl.git</span><span class="w">
+</span></span></span></code></pre></div><p>In the future there will be more ways to define imports,
 most likely support for more version control systems like Subversion
 or Mercurial.</p>
 <h3 id="importing-specific-versions">Importing specific versions</h3>
@@ -307,63 +307,63 @@ or Mercurial.</p>
 in fips.yml. This is usually a good idea for complex real-world projects
 since it prevents that a build suddenly breaks because an external dependency
 has had an update that breaks existing code:</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
-</span><span class="w"></span><span class="k">imports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">my-awesome-lib</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">git</span><span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/my-awesome-lib.git<span class="w">
-</span><span class="w">        </span><span class="k">branch</span><span class="p">:</span><span class="w"> </span>version<span class="m">-0.0.1</span><span class="w">
-</span><span class="w">    </span><span class="k">my-other-awesome-lib</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">git</span><span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/my-other-awesome-lib.git<span class="w">
-</span><span class="w">        </span><span class="k">rev</span><span class="p">:</span><span class="w"> </span>00f1a6d3<span class="w">
-</span></code></pre></div><p>The &lsquo;branch:&rsquo; item can either be a branch or tag name.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">imports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">my-awesome-lib</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">git</span><span class="p">:</span><span class="w"> </span><span class="l">https://github.com/floooh/my-awesome-lib.git</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">branch</span><span class="p">:</span><span class="w"> </span><span class="l">version-0.0.1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">my-other-awesome-lib</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">git</span><span class="p">:</span><span class="w"> </span><span class="l">https://github.com/floooh/my-other-awesome-lib.git</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l">00f1a6d3</span><span class="w">
+</span></span></span></code></pre></div><p>The &lsquo;branch:&rsquo; item can either be a branch or tag name.
 The &lsquo;rev:&rsquo; item should be a valid commit SHA1 reference.</p>
 <h3 id="conditional-imports">Conditional Imports</h3>
 <p>An import can contain a conditional cmake-expression which must be true
 for the import to happen. For instance to ignore an import on IOS:</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
-</span><span class="w"></span><span class="k">imports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">my-awesome-lib</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">git</span><span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/my-awesome-lib.git<span class="w">
-</span><span class="w">        </span><span class="k">cond</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;NOT FIPS_IOS&#34;</span><span class="w">
-</span></code></pre></div><p>The resulting cmake code to import this dependency will then be surrounded
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">imports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">my-awesome-lib</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">git</span><span class="p">:</span><span class="w"> </span><span class="l">https://github.com/floooh/my-awesome-lib.git</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">cond</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;NOT FIPS_IOS&#34;</span><span class="w">
+</span></span></span></code></pre></div><p>The resulting cmake code to import this dependency will then be surrounded
 with:</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">if<span class="w"> </span>(NOT<span class="w"> </span>FIPS_IOS)<span class="w">
-</span><span class="w">    </span>...actual<span class="w"> </span>import<span class="w"> </span>code<span class="w">
-</span><span class="w"></span>endif()<span class="w">
-</span></code></pre></div><h3 id="fetching-imports">Fetching imports</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">if (NOT FIPS_IOS)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">...actual import code</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">endif()</span><span class="w">
+</span></span></span></code></pre></div><h3 id="fetching-imports">Fetching imports</h3>
 <p>To fetch external dependencies simply run &lsquo;./fips fetch&rsquo; from within
 the project directory which defines the imports:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips fetch
-[WARNING] project dir &#39;/Users/floh/projects/fips-hello-dep1&#39; does not exist
-=== dependency: &#39;fips-hello-dep1&#39;:
-Cloning into &#39;fips-hello-dep1&#39;...
-remote: Counting objects: 51, done.
-remote: Compressing objects: 100% (35/35), done.
-remote: Total 51 (delta 13), reused 49 (delta 12)
-Unpacking objects: 100% (51/51), done.
-Checking connectivity... done.
-=== dependency: &#39;fips-hello-dep2&#39;:
-Cloning into &#39;fips-hello-dep2&#39;...
-remote: Counting objects: 57, done.
-remote: Compressing objects: 100% (36/36), done.
-remote: Total 57 (delta 16), reused 56 (delta 15)
-Unpacking objects: 100% (57/57), done.
-Checking connectivity... done.
-&gt; _
-</code></pre></div><p>Dependencies will also be automatically be fetched when running &lsquo;./fips clone&rsquo;,
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips fetch
+</span></span><span class="line"><span class="cl">[WARNING] project dir &#39;/Users/floh/projects/fips-hello-dep1&#39; does not exist
+</span></span><span class="line"><span class="cl">=== dependency: &#39;fips-hello-dep1&#39;:
+</span></span><span class="line"><span class="cl">Cloning into &#39;fips-hello-dep1&#39;...
+</span></span><span class="line"><span class="cl">remote: Counting objects: 51, done.
+</span></span><span class="line"><span class="cl">remote: Compressing objects: 100% (35/35), done.
+</span></span><span class="line"><span class="cl">remote: Total 51 (delta 13), reused 49 (delta 12)
+</span></span><span class="line"><span class="cl">Unpacking objects: 100% (51/51), done.
+</span></span><span class="line"><span class="cl">Checking connectivity... done.
+</span></span><span class="line"><span class="cl">=== dependency: &#39;fips-hello-dep2&#39;:
+</span></span><span class="line"><span class="cl">Cloning into &#39;fips-hello-dep2&#39;...
+</span></span><span class="line"><span class="cl">remote: Counting objects: 57, done.
+</span></span><span class="line"><span class="cl">remote: Compressing objects: 100% (36/36), done.
+</span></span><span class="line"><span class="cl">remote: Total 57 (delta 16), reused 56 (delta 15)
+</span></span><span class="line"><span class="cl">Unpacking objects: 100% (57/57), done.
+</span></span><span class="line"><span class="cl">Checking connectivity... done.
+</span></span><span class="line"><span class="cl">&gt; _
+</span></span></code></pre></div><p>Dependencies will also be automatically be fetched when running &lsquo;./fips clone&rsquo;,
 &lsquo;./fips gen&rsquo;, &lsquo;./fips build&rsquo;, and &lsquo;./fips make&rsquo;. So most of the time, dependency
 fetching will happen automatically when needed.</p>
 <h3 id="listing-imports">Listing imports</h3>
 <p>To get an overview of the dependency structure of a project, run &lsquo;./fips list imports&rsquo;:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips list imports
-== imports:
-project &#39;fips-hello-world&#39; imports:
-  &#39;fips-hello-dep1&#39; from &#39;https://github.com/floooh/fips-hello-dep1.git&#39; at branch &#39;master&#39;
-project &#39;fips-hello-dep1&#39; imports:
-  &#39;fips-hello-dep2&#39; from &#39;https://github.com/floooh/fips-hello-dep2.git&#39; at branch &#39;master&#39;
-project &#39;fips-hello-dep2&#39; imports:
-    nothing
-</code></pre></div><h3 id="updating-imports">Updating imports</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips list imports
+</span></span><span class="line"><span class="cl">== imports:
+</span></span><span class="line"><span class="cl">project &#39;fips-hello-world&#39; imports:
+</span></span><span class="line"><span class="cl">  &#39;fips-hello-dep1&#39; from &#39;https://github.com/floooh/fips-hello-dep1.git&#39; at branch &#39;master&#39;
+</span></span><span class="line"><span class="cl">project &#39;fips-hello-dep1&#39; imports:
+</span></span><span class="line"><span class="cl">  &#39;fips-hello-dep2&#39; from &#39;https://github.com/floooh/fips-hello-dep2.git&#39; at branch &#39;master&#39;
+</span></span><span class="line"><span class="cl">project &#39;fips-hello-dep2&#39; imports:
+</span></span><span class="line"><span class="cl">    nothing
+</span></span></code></pre></div><h3 id="updating-imports">Updating imports</h3>
 <p>Imports can be updated with &lsquo;./fips update&rsquo;, updating means, a &lsquo;git pull&rsquo; and
 &lsquo;git submodule update &ndash;recursive&rsquo; will be run on each import, but <strong>only
 if the git repository has no local changes</strong> (uncommitted or unpushed changes),
@@ -377,32 +377,32 @@ manually invoked by running &lsquo;./fips update&rsquo;. Also note that the topl
 directory will not be updated, only the imports.</p>
 <p>Fips can tell you if an imported dependency is uptodate (meaning: in
 sync with its remote repository on github) with &lsquo;./fips diag imports&rsquo;:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; ./fips diag imports
-=== imports:
-git status of &#39;fips-hello-dep1&#39;:
-  uptodate
-git status of &#39;fips-hello-dep2&#39;:
-  uptodate
-</code></pre></div><p>&lsquo;./fips diag imports&rsquo; catches uncommitted changes, changes which are
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; ./fips diag imports
+</span></span><span class="line"><span class="cl">=== imports:
+</span></span><span class="line"><span class="cl">git status of &#39;fips-hello-dep1&#39;:
+</span></span><span class="line"><span class="cl">  uptodate
+</span></span><span class="line"><span class="cl">git status of &#39;fips-hello-dep2&#39;:
+</span></span><span class="line"><span class="cl">  uptodate
+</span></span></code></pre></div><p>&lsquo;./fips diag imports&rsquo; catches uncommitted changes, changes which are
 committed but not pushed, and whether the remote repository is ahead of the
 local repository:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">=== imports:
-git status of &#39;fips-hello-dep1&#39;:
-[WARNING] &#39;/Users/floh/projects/fips-hello-dep1&#39; has uncommitted changes:
- M README.md
-
-[WARNING]   &#39;/Users/floh/projects/fips-hello-dep1&#39; is out of sync with remote git repo
-git status of &#39;fips-hello-dep2&#39;:
-  uptodate
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">=== imports:
-git status of &#39;fips-hello-dep1&#39;:
-[WARNING] &#39;/Users/floh/projects/fips-hello-dep1&#39; branches out of sync:
-  master: b02b11f6210263c8be058cd415ed47ff58fa64ae
-  origin/master: 3280cfde54dcf7c812ab401e14191815d2d5a342
-[WARNING]   &#39;/Users/floh/projects/fips-hello-dep1&#39; is out of sync with remote git repo
-git status of &#39;fips-hello-dep2&#39;:
-  uptodate
-</code></pre></div><p>There&rsquo;s also a less detailed (but faster) diag option which only checks for
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">=== imports:
+</span></span><span class="line"><span class="cl">git status of &#39;fips-hello-dep1&#39;:
+</span></span><span class="line"><span class="cl">[WARNING] &#39;/Users/floh/projects/fips-hello-dep1&#39; has uncommitted changes:
+</span></span><span class="line"><span class="cl"> M README.md
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[WARNING]   &#39;/Users/floh/projects/fips-hello-dep1&#39; is out of sync with remote git repo
+</span></span><span class="line"><span class="cl">git status of &#39;fips-hello-dep2&#39;:
+</span></span><span class="line"><span class="cl">  uptodate
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">=== imports:
+</span></span><span class="line"><span class="cl">git status of &#39;fips-hello-dep1&#39;:
+</span></span><span class="line"><span class="cl">[WARNING] &#39;/Users/floh/projects/fips-hello-dep1&#39; branches out of sync:
+</span></span><span class="line"><span class="cl">  master: b02b11f6210263c8be058cd415ed47ff58fa64ae
+</span></span><span class="line"><span class="cl">  origin/master: 3280cfde54dcf7c812ab401e14191815d2d5a342
+</span></span><span class="line"><span class="cl">[WARNING]   &#39;/Users/floh/projects/fips-hello-dep1&#39; is out of sync with remote git repo
+</span></span><span class="line"><span class="cl">git status of &#39;fips-hello-dep2&#39;:
+</span></span><span class="line"><span class="cl">  uptodate
+</span></span></code></pre></div><p>There&rsquo;s also a less detailed (but faster) diag option which only checks for
 uncommitted or unpushed changes (basically the same check that &lsquo;./fips update&rsquo;
 performs to decide whether it is safe to perform a &lsquo;git pull&rsquo;. To check
 the list of imports for local changes, simply call &lsquo;./fips diag local-changes&rsquo;.</p>
@@ -433,16 +433,16 @@ project</li>
 <p>By default, fips imports all modules of an imported project. Sometimes this
 is overkill when only a few modules from a project are needed. This automatic
 import of modules into a build project can be switched off in the importing
-project&rsquo;s fips.yml file using the &lsquo;no_auto_import&rsquo; policy. Here is an example
+project&rsquo;s fips.yml file using the &rsquo;no_auto_import&rsquo; policy. Here is an example
 fips.yml file which imports a complex dependency and activates the
 no_auto_import policy:</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
-</span><span class="w"></span><span class="k">policies</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">no_auto_import</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w"></span><span class="k">imports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">oryol</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">git</span><span class="p">:</span><span class="w"> </span>https<span class="p">:</span>//github.com/floooh/oryol.git<span class="w">
-</span></code></pre></div><p>Not automatically importing modules means that imported modules must be listed
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">policies</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">no_auto_import</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">imports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">oryol</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">git</span><span class="p">:</span><span class="w"> </span><span class="l">https://github.com/floooh/oryol.git</span><span class="w">
+</span></span></span></code></pre></div><p>Not automatically importing modules means that imported modules must be listed
 manually in the root CMakeLists.txt file. For this, fips has created a cmake
 import function for each module called <strong>fips_import_PROJECT_MODULE()</strong>,
 where PROJECT is the project name, and MODULE is the module name that should be
@@ -450,41 +450,41 @@ imported. Any &lsquo;-&rsquo; character in the module or project name must be re
 an &lsquo;_&rsquo; (underscore) character (cmake doesn&rsquo;t accept &lsquo;-&rsquo; in function names).</p>
 <p>Manually importing modules can be a lot of trial and error, because the
 entire dependency chain must be manually imported, it&rsquo;s either all
-or nothing with the &lsquo;no_auto_import&rsquo; policy.</p>
-<p>Here&rsquo;s a segment from a project&rsquo;s root CMakeLists.txt file with &lsquo;no_auto_import&rsquo;
+or nothing with the &rsquo;no_auto_import&rsquo; policy.</p>
+<p>Here&rsquo;s a segment from a project&rsquo;s root CMakeLists.txt file with &rsquo;no_auto_import&rsquo;
 enabled as an example:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">project</span><span class="p">(</span><span class="s">yakc</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_setup</span><span class="p">()</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="c"># manual imports
-</span><span class="c"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;Oryol&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_oryol_Core</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_oryol_Gfx</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_oryol_IO</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_oryol_HTTP</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_oryol_Messaging</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_oryol_Input</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_oryol_IMUI</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_oryol_Resource</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_oryol_Assets</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_oryol_Time</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_oryol_Synth</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;Libs&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_fips_zlib_zlib</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_fips_glfw_glfw3</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_oryol_flextgl</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_oryol_ConvertUTF</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_fips_imgui_imgui</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_import_fips_unittestpp_unittestpp</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_include_directories</span><span class="p">(</span><span class="s">.</span><span class="p">)</span><span class="err">
-</span></code></pre></div><h3 id="under-the-hood">Under the hood</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">yakc</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_setup</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># manual imports
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;Oryol&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_oryol_Core</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_oryol_Gfx</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_oryol_IO</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_oryol_HTTP</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_oryol_Messaging</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_oryol_Input</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_oryol_IMUI</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_oryol_Resource</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_oryol_Assets</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_oryol_Time</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_oryol_Synth</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;Libs&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_fips_zlib_zlib</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_fips_glfw_glfw3</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_oryol_flextgl</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_oryol_ConvertUTF</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_fips_imgui_imgui</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_fips_unittestpp_unittestpp</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_include_directories</span><span class="p">(</span><span class="s">.</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><h3 id="under-the-hood">Under the hood</h3>
 <h4 id="fetching">Fetching</h4>
 <p>To speed up importing, fetching doesn&rsquo;t clone the entire git repository,
 instead git is called like this:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; git clone --recursive --branch xxx --single-branch --depth 10 
-</code></pre></div><p>It&rsquo;s recommended to use the https protocol to define git URLs so that
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; git clone --recursive --branch xxx --single-branch --depth 10 
+</span></span></code></pre></div><p>It&rsquo;s recommended to use the https protocol to define git URLs so that
 projects can be imported without setting up an SSH key for github,
 this is especially useful when running automated builds:</p>
 <blockquote>
@@ -505,46 +505,46 @@ created in the importing project&rsquo;s root directory which is included
 in the main CMakeLists.txt hierarchy and implements the actual cmake
 import magic. For a simple project like <em>fips-hello-world</em> the file
 looks like this (details may change in newer fips versions):</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c">#
-</span><span class="c"># generated by &#39;fips gen&#39;, don&#39;t edit, don&#39;t add to version control!
-</span><span class="c">#
-</span><span class="c"></span><span class="nb">if</span> <span class="p">(</span><span class="s">EXISTS</span> <span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/fips-include.cmake&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">include</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/fips-include.cmake&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">EXISTS</span> <span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/lib/${FIPS_PLATFORM_NAME}&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">link_directories</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/lib/${FIPS_PLATFORM_NAME}&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/src&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-DTEST_DEFINE_2=</span><span class="s2">&#34;Bla&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-DTEST_DEFINE_1=1</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">macro</span><span class="p">(</span><span class="s">fips_import_fips_hello_dep2_dep2</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">set</span><span class="p">(</span><span class="s">FIPS_IMPORT</span> <span class="s">1</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">add_subdirectory</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/src/dep2&#34;</span> <span class="s2">&#34;fips-hello-dep2_dep2&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">set</span><span class="p">(</span><span class="s">FIPS_IMPORT</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">endmacro</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_AUTO_IMPORT</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;Imports&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_import_fips_hello_dep2_dep2</span><span class="p">()</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">EXISTS</span> <span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/fips-include.cmake&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">include</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/fips-include.cmake&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">EXISTS</span> <span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/lib/${FIPS_PLATFORM_NAME}&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">link_directories</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/lib/${FIPS_PLATFORM_NAME}&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/src&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">macro</span><span class="p">(</span><span class="s">fips_import_fips_hello_dep1_dep1</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">set</span><span class="p">(</span><span class="s">FIPS_IMPORT</span> <span class="s">1</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">add_subdirectory</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/src/dep1&#34;</span> <span class="s2">&#34;fips-hello-dep1_dep1&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">set</span><span class="p">(</span><span class="s">FIPS_IMPORT</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">endmacro</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_AUTO_IMPORT</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;Imports&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_import_fips_hello_dep1_dep1</span><span class="p">()</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
-</span></code></pre></div></article>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c">#
+</span></span></span><span class="line"><span class="cl"><span class="c"># generated by &#39;fips gen&#39;, don&#39;t edit, don&#39;t add to version control!
+</span></span></span><span class="line"><span class="cl"><span class="c">#
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">if</span> <span class="p">(</span><span class="s">EXISTS</span> <span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/fips-include.cmake&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">include</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/fips-include.cmake&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">EXISTS</span> <span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/lib/${FIPS_PLATFORM_NAME}&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">link_directories</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/lib/${FIPS_PLATFORM_NAME}&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/src&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-DTEST_DEFINE_2=</span><span class="s2">&#34;Bla&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-DTEST_DEFINE_1=1</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">macro</span><span class="p">(</span><span class="s">fips_import_fips_hello_dep2_dep2</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">set</span><span class="p">(</span><span class="s">FIPS_IMPORT</span> <span class="s">1</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">add_subdirectory</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep2/src/dep2&#34;</span> <span class="s2">&#34;fips-hello-dep2_dep2&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">set</span><span class="p">(</span><span class="s">FIPS_IMPORT</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endmacro</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_AUTO_IMPORT</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;Imports&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_import_fips_hello_dep2_dep2</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">EXISTS</span> <span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/fips-include.cmake&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">include</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/fips-include.cmake&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">EXISTS</span> <span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/lib/${FIPS_PLATFORM_NAME}&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">link_directories</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/lib/${FIPS_PLATFORM_NAME}&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/src&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">macro</span><span class="p">(</span><span class="s">fips_import_fips_hello_dep1_dep1</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">set</span><span class="p">(</span><span class="s">FIPS_IMPORT</span> <span class="s">1</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">add_subdirectory</span><span class="p">(</span><span class="s2">&#34;/Users/floh/projects/fips-hello-dep1/src/dep1&#34;</span> <span class="s2">&#34;fips-hello-dep1_dep1&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">set</span><span class="p">(</span><span class="s">FIPS_IMPORT</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endmacro</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_AUTO_IMPORT</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;Imports&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_import_fips_hello_dep1_dep1</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span></code></pre></div></article>
 
       
 

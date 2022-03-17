@@ -18,7 +18,7 @@
 
 
 
-<link rel="stylesheet" href="/fips/book.min.bff781db5420417a98b39d5c502a421476ceee7df3af700be24e8554146bfa51.css">
+<link rel="stylesheet" href="/fips/book.min.a40af3dc8c0a4d2d9dd31b0865c32c72becf072fcbd75fa08f4d97e7a027e555.css">
 
 
 <link rel="icon" href="/fips/favicon.png" type="image/x-icon">
@@ -39,7 +39,7 @@ https://github.com/alex-shpak/hugo-book
     <aside class="book-menu fixed">
       <nav role="navigation">
 <h2 class="book-brand">
-  <a href="http://floooh.github.com/fips/">Fips Docs</a>
+  <a href="http://floooh.github.io/fips/">Fips Docs</a>
 </h2>
 
 
@@ -338,11 +338,11 @@ command-line and UI application types, like Windows (WinMain vs main)
 or OSX (app bundle vs command line tool).</p>
 <p>The executable target (and only the executable target) will see the following
 preprocessor definitions:</p>
-<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// fips_begin_app(bla windowed)
-</span><span class="c1"></span><span class="cp">#define FIPS_APP_WINDOWED (1)
-</span><span class="cp"></span><span class="c1">// fips_begin_app(bla cmdline)
-</span><span class="c1"></span><span class="cp">#define FIPS_APP_CMDLINE (1)
-</span></code></pre></div><p>On Windows this can be used to select between main() or WinMain()
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// fips_begin_app(bla windowed)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#define FIPS_APP_WINDOWED (1)
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1">// fips_begin_app(bla cmdline)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#define FIPS_APP_CMDLINE (1)
+</span></span></span></code></pre></div><p>On Windows this can be used to select between main() or WinMain()
 as app entry function.</p>
 <p>After a fips_begin_app() the following fips macros are valid:</p>
 <ul>
@@ -367,22 +367,22 @@ This behaviour can be overriden with the optional GROUP argument, and
 an explicit group name (or path) can be defined.</p>
 <p>This is the default usage of fips_dir, without explicitly overriding
 the IDE group name:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">android</span><span class="p">)</span><span class="err">
-</span></code></pre></div><p>This would switch the &lsquo;current source directory&rsquo; to a subdirectory named
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">android</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>This would switch the &lsquo;current source directory&rsquo; to a subdirectory named
 &lsquo;android&rsquo;, and in IDEs these files will be grouped under a folder &lsquo;android&rsquo;
 in the file explorer.</p>
 <p>To switch back to the root directory (where the CMakeLists.txt file is located),
 just pass a . as argument:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">.</span><span class="p">)</span><span class="err">
-</span></code></pre></div><p>The following example groups files in a very deep directory hierarchy
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">.</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>The following example groups files in a very deep directory hierarchy
 under a short group name &ldquo;include&rdquo;:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&#34;include&#34;</span><span class="p">)</span><span class="err">
-</span></code></pre></div><p>A GROUP argument can also contain slashes to define a whole group path:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&#34;engine/include&#34;</span><span class="p">)</span><span class="err">
-</span></code></pre></div><p>Finally, to not put the files into any IDE group folder, pass a
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&#34;include&#34;</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>A GROUP argument can also contain slashes to define a whole group path:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&#34;engine/include&#34;</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>Finally, to not put the files into any IDE group folder, pass a
 &ldquo;.&rdquo; as special GROUP argument:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&#34;.&#34;</span><span class="p">)</span><span class="err">
-</span></code></pre></div><p>fips_dir() must be called inside a module, lib, or app definition block.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">fips_dir</span><span class="p">(</span><span class="s">some/deep/dir/hierarchy/include</span> <span class="s">GROUP</span> <span class="s2">&#34;.&#34;</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>fips_dir() must be called inside a module, lib, or app definition block.</p>
 <h4 id="fips_filesfile-">fips_files(file &hellip;)</h4>
 <p>Add source files in the currently set directory to the current module, lib or app.
 This isn&rsquo;t restricted to C/C++ files, but any file that should show
@@ -405,10 +405,10 @@ is in the <code>EXCEPT</code> glob expression list. You can use <code>NO_RECURSE
 search files in subdirectories. The flag <code>GROUP_FOLDERS</code> will enable the automatic creation of groups that reflect folders in the filesystem.</p>
 <p>To add all files contained in a folder but excluding some types to the group
 &ldquo;everything&rdquo;:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_files_ex</span><span class="p">(</span><span class="s">src/</span> <span class="s">*.*</span> <span class="s">EXCEPT</span> <span class="s">*.rc</span> <span class="s">*.txt</span> <span class="s">GROUP</span> <span class="s2">&#34;everything&#34;</span><span class="p">)</span><span class="err">
-</span></code></pre></div><p>Or, if you do want only Objective-C sources for example:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_files_ex</span><span class="p">(</span><span class="s">src/</span> <span class="s">*.m</span> <span class="s">*.mm</span> <span class="s">GROUP</span> <span class="s2">&#34;ObjC&#34;</span><span class="p">)</span><span class="err">
-</span></code></pre></div><p>Note: You should avoid using this as CMake will not be able to detect when files
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">fips_files_ex</span><span class="p">(</span><span class="s">src/</span> <span class="s">*.*</span> <span class="s">EXCEPT</span> <span class="s">*.rc</span> <span class="s">*.txt</span> <span class="s">GROUP</span> <span class="s2">&#34;everything&#34;</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>Or, if you do want only Objective-C sources for example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">fips_files_ex</span><span class="p">(</span><span class="s">src/</span> <span class="s">*.m</span> <span class="s">*.mm</span> <span class="s">GROUP</span> <span class="s2">&#34;ObjC&#34;</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>Note: You should avoid using this as CMake will not be able to detect when files
 are added or removed to the filesystem and consequently will not be able to
 reconfigure the project. A good use of this is if it can help porting libraries
 to fips.</p>
@@ -418,8 +418,8 @@ to fips.</p>
 projects: *.c *.cc *.cpp *.h *.hh *.hpp</p>
 <p>So you can easily add any C/C++ sources from the directory &ldquo;src/&rdquo; to the project
 as simply as:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_src</span><span class="p">(</span><span class="s">src</span><span class="p">)</span><span class="err">
-</span></code></pre></div><p>fips_src() must be called inside a module, lib, or app definition block.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">fips_src</span><span class="p">(</span><span class="s">src</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>fips_src() must be called inside a module, lib, or app definition block.</p>
 <h4 id="fips_depsdep-">fips_deps(dep &hellip;)</h4>
 <p>Add module or lib dependencies to the current fips app, module or lib. A
 dependency must be the name of another fips module or lib defined
@@ -489,139 +489,139 @@ file included in the Oryol 3D engine for a complex example.</p>
 <p>Besides <em>./fips config</em>, cmake options can also be provided in
 a build config YAML file, for instance the following config file
 sets the FIPS_UNITTESTS and FIPS_UNITTESTS_HEADLESS options to ON:</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">---<span class="w">
-</span><span class="w"></span><span class="k">platform</span><span class="p">:</span><span class="w"> </span>emscripten<span class="w"> 
-</span><span class="w"></span><span class="k">generator</span><span class="p">:</span><span class="w"> </span>Ninja<span class="w"> 
-</span><span class="w"></span><span class="k">build_tool</span><span class="p">:</span><span class="w"> </span>ninja<span class="w">
-</span><span class="w"></span><span class="k">build_type</span><span class="p">:</span><span class="w"> </span>Debug<span class="w">
-</span><span class="w"></span><span class="k">defines</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">FIPS_UNITTESTS</span><span class="p">:</span><span class="w"> </span>ON<span class="w">
-</span><span class="w">    </span><span class="k">FIPS_UNITTESTS_HEADLESS</span><span class="p">:</span><span class="w"> </span>ON<span class="w">
-</span></code></pre></div><h3 id="cmakeliststxt-samples">CMakeLists.txt Samples</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l">emscripten </span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">generator</span><span class="p">:</span><span class="w"> </span><span class="l">Ninja </span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">build_tool</span><span class="p">:</span><span class="w"> </span><span class="l">ninja</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">build_type</span><span class="p">:</span><span class="w"> </span><span class="l">Debug</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">defines</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">FIPS_UNITTESTS</span><span class="p">:</span><span class="w"> </span><span class="kc">ON</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">FIPS_UNITTESTS_HEADLESS</span><span class="p">:</span><span class="w"> </span><span class="kc">ON</span><span class="w">
+</span></span></span></code></pre></div><h3 id="cmakeliststxt-samples">CMakeLists.txt Samples</h3>
 <p>Here&rsquo;s a very simple root CMakeLists.txt file from the <em>fips-hello-world</em>
 sample project:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">fips-hello-world</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="c"># include the fips main cmake file
-</span><span class="c"></span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FIPS_ROOT_DIR</span> <span class="s2">&#34;../fips&#34;</span> <span class="s">ABSOLUTE</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s2">&#34;${FIPS_ROOT_DIR}/cmake/fips.cmake&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_project</span><span class="p">(</span><span class="s">fips-hello-world</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">src</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_finish</span><span class="p">()</span><span class="err">
-</span></code></pre></div><p>The <em>src</em> subdirectory contains the CMakeLists.txt file which defines
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">fips-hello-world</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># include the fips main cmake file
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FIPS_ROOT_DIR</span> <span class="s2">&#34;../fips&#34;</span> <span class="s">ABSOLUTE</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s2">&#34;${FIPS_ROOT_DIR}/cmake/fips.cmake&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_project</span><span class="p">(</span><span class="s">fips-hello-world</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">src</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_finish</span><span class="p">()</span><span class="err">
+</span></span></span></code></pre></div><p>The <em>src</em> subdirectory contains the CMakeLists.txt file which defines
 the actual appliction:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_begin_app</span><span class="p">(</span><span class="s">hello</span> <span class="s">cmdline</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span><span class="s">hello.cc</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_deps</span><span class="p">(</span><span class="s">dep1</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_end_app</span><span class="p">()</span><span class="err">
-</span></code></pre></div><p>This is a more complex root CMakeLists.txt file from the Oryol 3D engine:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c">#----------------------------------------------------------
-</span><span class="c">#	oryol cmake root file
-</span><span class="c">#
-</span><span class="c">#	See BUILD.md for details how to build oryol.
-</span><span class="c">#----------------------------------------------------------
-</span><span class="c"></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">oryol</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FIPS_ROOT_DIR</span> <span class="s2">&#34;../fips&#34;</span> <span class="s">ABSOLUTE</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s2">&#34;${FIPS_ROOT_DIR}/cmake/fips.cmake&#34;</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">option</span><span class="p">(</span><span class="s">ORYOL_SAMPLES</span> <span class="s2">&#34;Build Oryol samples&#34;</span> <span class="s">ON</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s">code</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s">code/Modules</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s">code/Ext</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_setup</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Hello</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s">Modules</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Modules</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s">Ext</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Ext</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">ORYOL_SAMPLES</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>   <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s">Samples</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>   <span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Samples</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_finish</span><span class="p">()</span><span class="err">
-</span></code></pre></div><p>Next a sample which defines a code module with platform-specific source
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">fips_begin_app</span><span class="p">(</span><span class="s">hello</span> <span class="s">cmdline</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span><span class="s">hello.cc</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_deps</span><span class="p">(</span><span class="s">dep1</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_end_app</span><span class="p">()</span><span class="err">
+</span></span></span></code></pre></div><p>This is a more complex root CMakeLists.txt file from the Oryol 3D engine:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c">#----------------------------------------------------------
+</span></span></span><span class="line"><span class="cl"><span class="c">#	oryol cmake root file
+</span></span></span><span class="line"><span class="cl"><span class="c">#
+</span></span></span><span class="line"><span class="cl"><span class="c">#	See BUILD.md for details how to build oryol.
+</span></span></span><span class="line"><span class="cl"><span class="c">#----------------------------------------------------------
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">oryol</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">get_filename_component</span><span class="p">(</span><span class="s">FIPS_ROOT_DIR</span> <span class="s2">&#34;../fips&#34;</span> <span class="s">ABSOLUTE</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include</span><span class="p">(</span><span class="s2">&#34;${FIPS_ROOT_DIR}/cmake/fips.cmake&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">option</span><span class="p">(</span><span class="s">ORYOL_SAMPLES</span> <span class="s2">&#34;Build Oryol samples&#34;</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s">code</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s">code/Modules</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s">code/Ext</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_setup</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Hello</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s">Modules</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Modules</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s">Ext</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Ext</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">if</span> <span class="p">(</span><span class="s">ORYOL_SAMPLES</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>   <span class="nb">fips_ide_group</span><span class="p">(</span><span class="s">Samples</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>   <span class="nb">fips_add_subdirectory</span><span class="p">(</span><span class="s">code/Samples</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_finish</span><span class="p">()</span><span class="err">
+</span></span></span></code></pre></div><p>Next a sample which defines a code module with platform-specific source
 code in subdirectories, and towards the end some dependencies to other
 fips modules:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c">#----------------------------------------------------------
-</span><span class="c">#   oryol Input module
-</span><span class="c">#----------------------------------------------------------
-</span><span class="c"></span><span class="nb">fips_begin_module</span><span class="p">(</span><span class="s">Input</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span><span class="s">Input.cc</span> <span class="s">Input.h</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_dir</span><span class="p">(</span><span class="s">Core</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span>
-        <span class="s">CursorMode.h</span>
-        <span class="s">Gamepad.cc</span> <span class="s">Gamepad.h</span>
-        <span class="s">InputSetup.h</span>
-        <span class="s">Key.cc</span> <span class="s">Key.h</span>
-        <span class="s">Keyboard.cc</span> <span class="s">Keyboard.h</span>
-        <span class="s">Mouse.cc</span> <span class="s">Mouse.h</span>
-        <span class="s">Sensors.h</span>
-        <span class="s">Touchpad.cc</span> <span class="s">Touchpad.h</span>
-        <span class="s">inputMgr.h</span>
-    <span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_dir</span><span class="p">(</span><span class="s">base</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span><span class="s">inputMgrBase.cc</span> <span class="s">inputMgrBase.h</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_dir</span><span class="p">(</span><span class="s">touch</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span>
-        <span class="s">gestureState.h</span>
-        <span class="s">panDetector.cc</span>
-        <span class="s">panDetector.h</span>
-        <span class="s">pinchDetector.cc</span>
-        <span class="s">pinchDetector.h</span>
-        <span class="s">tapDetector.cc</span>
-        <span class="s">tapDetector.h</span>
-        <span class="s">touchEvent.cc</span>
-        <span class="s">touchEvent.h</span>
-    <span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_ANDROID</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>        <span class="nb">fips_dir</span><span class="p">(</span><span class="s">android</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>        <span class="nb">fips_files</span><span class="p">(</span><span class="s">androidInputMgr.cc</span> <span class="s">androidInputMgr.h</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">endif</span><span class="p">()</span><span class="err">
-</span><span class="err"></span>    <span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_EMSCRIPTEN</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>        <span class="nb">fips_dir</span><span class="p">(</span><span class="s">emsc</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>        <span class="nb">fips_files</span><span class="p">(</span><span class="s">emscInputMgr.cc</span> <span class="s">emscInputMgr.h</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">endif</span><span class="p">()</span><span class="err">
-</span><span class="err"></span>    <span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_IOS</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>        <span class="nb">fips_dir</span><span class="p">(</span><span class="s">ios</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>        <span class="nb">fips_files</span><span class="p">(</span><span class="s">iosInputMgr.cc</span> <span class="s">iosInputMgr.h</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">endif</span><span class="p">()</span><span class="err">
-</span><span class="err"></span>    <span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_MACOS</span> <span class="s">OR</span> <span class="s">FIPS_WINDOWS</span> <span class="s">OR</span> <span class="s">FIPS_LINUX</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>        <span class="nb">fips_dir</span><span class="p">(</span><span class="s">glfw</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>        <span class="nb">fips_files</span><span class="p">(</span><span class="s">glfwInputMgr.cc</span> <span class="s">glfwInputMgr.h</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>        <span class="nb">fips_deps</span><span class="p">(</span><span class="s">glfw3</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">endif</span><span class="p">()</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_deps</span><span class="p">(</span><span class="s">Core</span> <span class="s">Gfx</span> <span class="s">Time</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_end_module</span><span class="p">()</span><span class="err">
-</span></code></pre></div><p>Finally an example how to wrap a simple C library with a few custom
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c">#----------------------------------------------------------
+</span></span></span><span class="line"><span class="cl"><span class="c">#   oryol Input module
+</span></span></span><span class="line"><span class="cl"><span class="c">#----------------------------------------------------------
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">fips_begin_module</span><span class="p">(</span><span class="s">Input</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span><span class="s">Input.cc</span> <span class="s">Input.h</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_dir</span><span class="p">(</span><span class="s">Core</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s">CursorMode.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">Gamepad.cc</span> <span class="s">Gamepad.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">InputSetup.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">Key.cc</span> <span class="s">Key.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">Keyboard.cc</span> <span class="s">Keyboard.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">Mouse.cc</span> <span class="s">Mouse.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">Sensors.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">Touchpad.cc</span> <span class="s">Touchpad.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">inputMgr.h</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_dir</span><span class="p">(</span><span class="s">base</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span><span class="s">inputMgrBase.cc</span> <span class="s">inputMgrBase.h</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_dir</span><span class="p">(</span><span class="s">touch</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s">gestureState.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">panDetector.cc</span>
+</span></span><span class="line"><span class="cl">        <span class="s">panDetector.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">pinchDetector.cc</span>
+</span></span><span class="line"><span class="cl">        <span class="s">pinchDetector.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">tapDetector.cc</span>
+</span></span><span class="line"><span class="cl">        <span class="s">tapDetector.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">touchEvent.cc</span>
+</span></span><span class="line"><span class="cl">        <span class="s">touchEvent.h</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_ANDROID</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>        <span class="nb">fips_dir</span><span class="p">(</span><span class="s">android</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>        <span class="nb">fips_files</span><span class="p">(</span><span class="s">androidInputMgr.cc</span> <span class="s">androidInputMgr.h</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_EMSCRIPTEN</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>        <span class="nb">fips_dir</span><span class="p">(</span><span class="s">emsc</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>        <span class="nb">fips_files</span><span class="p">(</span><span class="s">emscInputMgr.cc</span> <span class="s">emscInputMgr.h</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_IOS</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>        <span class="nb">fips_dir</span><span class="p">(</span><span class="s">ios</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>        <span class="nb">fips_files</span><span class="p">(</span><span class="s">iosInputMgr.cc</span> <span class="s">iosInputMgr.h</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">if</span> <span class="p">(</span><span class="s">FIPS_MACOS</span> <span class="s">OR</span> <span class="s">FIPS_WINDOWS</span> <span class="s">OR</span> <span class="s">FIPS_LINUX</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>        <span class="nb">fips_dir</span><span class="p">(</span><span class="s">glfw</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>        <span class="nb">fips_files</span><span class="p">(</span><span class="s">glfwInputMgr.cc</span> <span class="s">glfwInputMgr.h</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>        <span class="nb">fips_deps</span><span class="p">(</span><span class="s">glfw3</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_deps</span><span class="p">(</span><span class="s">Core</span> <span class="s">Gfx</span> <span class="s">Time</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_end_module</span><span class="p">()</span><span class="err">
+</span></span></span></code></pre></div><p>Finally an example how to wrap a simple C library with a few custom
 C preprocessor defines:</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">fips_begin_lib</span><span class="p">(</span><span class="s">zlib</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span>
-        <span class="s">adler32.c</span>
-        <span class="s">compress.c</span>
-        <span class="s">crc32.c</span> <span class="s">crc32.h</span>
-        <span class="s">deflate.c</span> <span class="s">deflate.h</span>
-        <span class="s">infback.c</span> 
-        <span class="s">inffast.c</span> <span class="s">inffast.h</span>
-        <span class="s">inffixed.h</span>
-        <span class="s">inflate.c</span> <span class="s">inflate.h</span>
-        <span class="s">inftrees.c</span> <span class="s">inftrees.h</span>
-        <span class="s">trees.c</span> <span class="s">trees.h</span>
-        <span class="s">uncompr.c</span>
-        <span class="s">zconf.h</span>
-        <span class="s">zlib.h</span>
-        <span class="s">zutil.c</span> <span class="s">zutil.h</span>
-    <span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_NO_FSEEKO</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_CRT_SECURE_NO_DEPRECATE</span><span class="p">)</span><span class="err">
-</span><span class="err"></span>    <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_CRT_NONSTDC_NO_DEPRECATE</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">fips_end_lib</span><span class="p">(</span><span class="s">zlib</span><span class="p">)</span><span class="err">
-</span></code></pre></div></article>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">fips_begin_lib</span><span class="p">(</span><span class="s">zlib</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">fips_files</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s">adler32.c</span>
+</span></span><span class="line"><span class="cl">        <span class="s">compress.c</span>
+</span></span><span class="line"><span class="cl">        <span class="s">crc32.c</span> <span class="s">crc32.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">deflate.c</span> <span class="s">deflate.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">infback.c</span> 
+</span></span><span class="line"><span class="cl">        <span class="s">inffast.c</span> <span class="s">inffast.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">inffixed.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">inflate.c</span> <span class="s">inflate.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">inftrees.c</span> <span class="s">inftrees.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">trees.c</span> <span class="s">trees.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">uncompr.c</span>
+</span></span><span class="line"><span class="cl">        <span class="s">zconf.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">zlib.h</span>
+</span></span><span class="line"><span class="cl">        <span class="s">zutil.c</span> <span class="s">zutil.h</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_NO_FSEEKO</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_CRT_SECURE_NO_DEPRECATE</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span>    <span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_CRT_NONSTDC_NO_DEPRECATE</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_end_lib</span><span class="p">(</span><span class="s">zlib</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div></article>
 
       
 
