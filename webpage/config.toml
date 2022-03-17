@@ -1,4 +1,4 @@
-baseURL = "http://floooh.github.com/fips/"
+baseURL = "http://floooh.github.io/fips/"
 languageCode = "en-us"
 title = "Fips Docs"
 disableKinds = ['taxonomy', 'taxonomyTerm']
