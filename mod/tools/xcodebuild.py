@@ -9,11 +9,11 @@ not_found = 'please install Xcode and Xcode cmd line tools'
 #------------------------------------------------------------------------------
 def check_exists(fips_dir) :
     """test if xcodebuild is in the path
-    
+
     :returns:   True if xcodebuild is in the path
     """
     try :
-        subprocess.check_output(['xcodebuild', '-version'])
+        subprocess.check_output(['xcodebuild', '-version'], stderr=subprocess.DEVNULL)
         return True
     except (OSError, subprocess.CalledProcessError) :
         return False
@@ -40,7 +40,7 @@ def run_build(fips_dir, target, build_type, build_dir, num_jobs=1, args=None) :
         args_str = ' '.join(args)
     cmdLine = 'xcodebuild -jobs {} -configuration {} -target {} {}'.format(num_jobs, build_type, target, args_str)
     print(cmdLine)
-    res = subprocess.call(cmdLine, cwd=build_dir, shell=True)
+    res = subprocess.call(cmdLine, cwd=build_dir, shell=True, stderr=subprocess.DEVNULL)
     return res == 0
 
 #------------------------------------------------------------------------------
@@ -51,9 +51,9 @@ def run_clean(fips_dir, build_dir) :
     :returns:           True if xcodebuild returns successful
     """
     try :
-        res = subprocess.call('xcodebuild clean', cwd=build_dir, shell=True)
+        res = subprocess.call('xcodebuild clean', cwd=build_dir, shell=True, stderr=subprocess.DEVNULL)
         return res == 0
     except (OSError, subprocess.CalledProcessError) :
         return False
 
-    
+
