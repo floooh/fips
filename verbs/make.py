@@ -35,11 +35,11 @@ def run(fips_dir, proj_dir, args) :
 #-------------------------------------------------------------------------------
 def help() :
     """print 'make' help"""
-    log.info(log.YELLOW + 
-            "fips make [-- build tool args]\n" 
+    log.info(log.YELLOW +
+            "fips make clean\n"
+            "fips make [-- build tool args]\n"
             "fips make [target] [-- build tool args]\n"
             "fips make [target] [config] [-- build tool args]\n" + log.DEF +
             "    build a single target in current or named config\n" +
             "    any args following a -- will be forwarded to the invoked build tool")
-    
 
