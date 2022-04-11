@@ -21,14 +21,22 @@ def run(fips_dir, proj_dir, args) :
         cfg_name = args[0]
     if not cfg_name :
         cfg_name = settings.get(proj_dir, 'config')
-    project.build(fips_dir, proj_dir, cfg_name, None, build_tool_args)
+    if cfg_name == 'clean' :
+        if len(args) > 1:
+            cfg_name = args[1]
+        else :
+            cfg_name = settings.get(proj_dir, 'config')
+        project.make_clean(fips_dir, proj_dir, cfg_name)
+    else :
+        project.build(fips_dir, proj_dir, cfg_name, None, build_tool_args)
 
 #-------------------------------------------------------------------------------
 def help() :
     """print build help"""
-    log.info(log.YELLOW + 
-            "fips build [-- build tool args]\n" 
-            "fips build [config] [-- build tool args]\n" + log.DEF + 
+    log.info(log.YELLOW +
+            "fips build clean [config]\n"
+            "fips build [-- build tool args]\n"
+            "fips build [config] [-- build tool args]\n" + log.DEF +
             "    perform a build for current or named config\n" +
             "    any args following a -- will be forwarded to the invoked build tool")
-    
+
