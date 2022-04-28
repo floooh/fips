@@ -1,0 +1,7 @@
+---
+platform: win64
+generator: Visual Studio 17 2022
+generator-platform: x64
+generator-toolset: ClangCL
+build_tool: cmake
+build_type: Debug

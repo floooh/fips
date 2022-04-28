@@ -130,11 +130,15 @@ macro(fips_setup)
         set(FIPS_HOST_LINUX 1)
     endif()
 
-    # detect compiler
+    # detect compiler and frontend
     message("CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
     if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
         set(FIPS_CLANG 1)
         message("Detected C++ Compiler: Clang (FIPS_CLANG)")
+        if ("${CMAKE_CXX_COMPILER_FRONTEND_VARIANT}" MATCHES "MSVC")
+            message("Detected frontend: MSVC (FIPS_CLANGCL)")
+            set(FIPS_CLANGCL 1)
+        endif ()
     elseif (${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
         set(FIPS_GCC 1)
         message("Detected C++ Compiler: GCC (FIPS_GCC)")
