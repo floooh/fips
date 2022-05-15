@@ -1,13 +1,22 @@
 '''CLion helper functions'''
-import subprocess, os, shutil
+import sys, subprocess, os, shutil
 from mod import util, log, verb, dep
 from mod.tools import cmake
-from shutil import which
+if sys.version_info.major == 2:
+    from distutils.spawn import find_executable
+else:
+    from shutil import which
 
 name = 'clion'
 platforms = ['osx','linux','win']
 optional = True
 not_found = 'used as IDE with clion configs'
+
+def has_exe(path):
+    if sys.version_info.major == 2:
+        return find_executable(path)
+    else:
+        return which(path)
 
 #------------------------------------------------------------------------------
 def check_exists(fips_dir) :
@@ -20,7 +29,7 @@ def check_exists(fips_dir) :
         # or added to the path using the "create launcher" command in CLion, which would by default
         # create a symlink from clion.sh to /usr/local/bin/clion.
         # This will also pick up CLion if it was installed using snap.
-        if which("clion.sh") is not None or which("clion") is not None:
+        if has_exe("clion.sh") is not None or has_exe("clion") is not None:
             return True
         else:
             return False
