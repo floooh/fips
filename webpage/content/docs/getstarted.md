@@ -91,7 +91,6 @@ cmake:	found
 ccmake:	found
 make:	found
 ninja:	OPTIONAL, NOT FOUND (required for building '*-ninja-*' configs)
-xcodebuild:	found
 java:	found
 ant:	found
 python2:	found

@@ -1,6 +1,6 @@
 ---
 platform: osx 
 generator: Xcode 
-build_tool: xcodebuild
+build_tool: cmake
 build_type: Release
 

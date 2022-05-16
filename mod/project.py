@@ -6,7 +6,7 @@ import subprocess
 import yaml
 
 from mod import log, util, config, dep, template, settings, android, emsdk, wasisdk
-from mod.tools import git, cmake, make, ninja, xcodebuild, xcrun, ccmake, cmake_gui, vscode, clion, httpserver, wasmtime
+from mod.tools import git, cmake, make, ninja, xcrun, ccmake, cmake_gui, vscode, clion, httpserver, wasmtime
 
 #-------------------------------------------------------------------------------
 def init(fips_dir, proj_name) :
@@ -195,18 +195,8 @@ def make_clean(fips_dir, proj_dir, cfg_name) :
             config_valid, _ = config.check_config_valid(fips_dir, proj_dir, cfg, print_errors=True)
             if config_valid :
                 log.colored(log.YELLOW, "=== cleaning: {}".format(cfg['name']))
-
                 build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
-                result = False
-                if make.match(cfg['build_tool']):
-                    result = make.run_clean(fips_dir, build_dir)
-                elif ninja.match(cfg['build_tool']):
-                    result = ninja.run_clean(fips_dir, build_dir)
-                elif xcodebuild.match(cfg['build_tool']):
-                    result = xcodebuild.run_clean(fips_dir, build_dir)
-                else :
-                    result = cmake.run_clean(fips_dir, build_dir)
-
+                result = cmake.run_clean(fips_dir, build_dir)
                 if result :
                     num_valid_configs += 1
                 else :
@@ -257,16 +247,7 @@ def build(fips_dir, proj_dir, cfg_name, target=None, build_tool_args=None) :
                 # select and run build tool
                 build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
                 num_jobs = settings.get(proj_dir, 'jobs')
-                result = False
-                if make.match(cfg['build_tool']):
-                    result = make.run_build(fips_dir, target, build_dir, num_jobs, build_tool_args)
-                elif ninja.match(cfg['build_tool']):
-                    result = ninja.run_build(fips_dir, target, build_dir, num_jobs, build_tool_args)
-                elif xcodebuild.match(cfg['build_tool']):
-                    result = xcodebuild.run_build(fips_dir, target, cfg['build_type'], build_dir, num_jobs, build_tool_args)
-                else :
-                    result = cmake.run_build(fips_dir, target, cfg['build_type'], build_dir, num_jobs, build_tool_args)
-
+                result = cmake.run_build(fips_dir, target, cfg['build_type'], build_dir, num_jobs, build_tool_args)
                 if result :
                     num_valid_configs += 1
                 else :
