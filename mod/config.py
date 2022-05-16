@@ -5,7 +5,7 @@ import glob
 import yaml
 from collections import OrderedDict
 from mod import log, util, dep
-from mod.tools import cmake, make, ninja, xcodebuild, vscode, clion
+from mod.tools import cmake, make, ninja, vscode, clion
 from mod import emsdk, android
 
 # non-cross-compiling platforms
@@ -19,11 +19,11 @@ native_platforms = [
 build_tools = [
     'make',
     'ninja',
-    'xcodebuild',
     'cmake',
     'vscode_cmake',
     'vscode_ninja',
-    'clion'
+    'clion',
+    'xcodebuild'    # deprecated, but still allowed in build config files
 ]
 
 default_config = {
@@ -211,9 +211,6 @@ def missing_build_tools(fips_dir, tool_name) :
     elif tool_name == 'ninja' :
         if not ninja.check_exists(fips_dir):
             missing.append(ninja.name)
-    elif tool_name == 'xcodebuild' :
-        if not xcodebuild.check_exists(fips_dir):
-            missing.append(xcodebuild.name)
     elif tool_name == 'vscode_cmake' :
         if not vscode.check_exists(fips_dir):
             missing.append(vscode.name)

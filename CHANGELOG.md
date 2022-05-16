@@ -1,5 +1,12 @@
 ## Fips Changelog
 
+- **16-May-2022**: fips will now always call ```cmake --build``` instead of
+  invoking the build tools ```make```, ```ninja``` or ```xcodebuild``` directly.
+  This should "just work" and not require any changes on your project.
+
+- **15-May-2022**: a python2 vs python3 compatibility fix to workaround the deprecated
+  distutils.spawn.find_executable() function
+
 - **11-Jan-2022**: A new setting ```local=[on|off]``` (default: off). If this
   is on, the build- and deploy-directories will be moved into the project
   directory under ```fips-files/build``` and ```fips-files/deploy```. External
