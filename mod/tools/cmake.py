@@ -1,7 +1,7 @@
 """wrapper for cmake tool"""
 import subprocess
 
-from mod import log
+from mod import log, util
 
 name = 'cmake'
 platforms = ['linux', 'osx', 'win']
@@ -81,7 +81,11 @@ def run_build(fips_dir, target, build_type, build_dir, num_jobs=1, args=None) :
     args_str = ''
     if args is not None:
         args_str = ' '.join(args)
-    cmdLine = 'cmake --build . --parallel {} --config {}'.format(num_jobs, build_type)
+    if util.get_host_platform() == 'win':
+        # builds faster on windows (MSVC) without --parallel
+        cmdLine = 'cmake --build . --config {}'.format(build_type)
+    else:
+        cmdLine = 'cmake --build . --parallel {} --config {}'.format(num_jobs, build_type)
     if target :
         cmdLine += ' --target {}'.format(target)
     cmdLine += ' -- {}'.format(args_str)
