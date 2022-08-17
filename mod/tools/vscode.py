@@ -264,10 +264,9 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings):
                 if cwd == None:
                     cwd = os.path.dirname(path)
                 osx_path = path + '.app/Contents/MacOS/' + tgt
-                osx_cwd = os.path.dirname(osx_path)
-                if os.path.isdir(osx_cwd):
+                osx_dir = os.path.dirname(osx_path)
+                if os.path.isdir(osx_dir):
                     path = osx_path
-                    cwd = osx_cwd
                 if util.get_host_platform() == 'win':
                     c = {
                         'name': tgt + pre_launch_build[0] + stop_at_entry[0],
