@@ -1,7 +1,8 @@
 """wrapper for cmake tool"""
-import subprocess
+import subprocess, json, os
 
 from mod import log, util
+from mod import config
 
 name = 'cmake'
 platforms = ['linux', 'osx', 'win']
@@ -105,3 +106,78 @@ def run_clean(fips_dir, build_dir) :
         return res == 0
     except (OSError, subprocess.CalledProcessError) :
         return False
+
+#------------------------------------------------------------------------------
+def write_presets(cfg, fips_dir, proj_dir, build_dir, local_build, toolchain_path, defines) :
+    """write a CMakeUserPresets.json file
+
+    :param cfg:             a fips config object
+    :param project_dir:     absolute path to project (must have root CMakeLists.txt file)
+    :param build_dir:       absolute path to build directory (where cmake files are generated)
+    :param toolchain:       toolchain path or None
+    :returns:               True if cmake returned successful
+    """
+
+    # either modify existing presets file, or create a fresh one
+    cmake_presets_filename = f'{proj_dir}/CMakeUserPresets.json'
+    if os.path.exists(cmake_presets_filename):
+        with open(cmake_presets_filename, 'r') as f:
+            cmake_presets = json.load(f)
+    else:
+        cmake_presets = {
+            'version': 3,
+            'cmakeMinimumRequired': {
+                'major': 3,
+                'minor': 21,
+                'patch': 0
+            },
+            'configurePresets': [],
+            'buildPresets': [
+                {
+                    'name': 'default',
+                    'configurePreset': 'default'
+                }
+            ]
+        }
+
+    # setup a new preset
+    preset = {
+        'name': cfg['name'],
+        'displayName': cfg['name'],
+        'binaryDir': build_dir,
+    }
+    if cfg['generator'] != 'Default':
+        preset['generator'] = cfg['generator']
+    if 'cmake-toolchain' in cfg:
+        preset['toolchainFile'] = config.get_toolchain(fips_dir, proj_dir, cfg)
+    if cfg['generator-platform'] :
+        preset['architecture'] = cfg['generator-platform']
+    if cfg['generator-toolset'] :
+        preset['toolset'] = cfg['toolset']
+    preset['cacheVariables'] = {
+        'CMAKE_BUILD_TYPE': cfg['build_type'],
+        'FIPS_CONFIG': cfg['name'],
+        'FIPS_LOCAL_BUILD': 'ON' if local_build else 'OFF',
+    }
+    if cfg['defines'] is not None:
+        for key in cfg['defines']:
+            val = cfg['defines'][key]
+            if type(val) is bool:
+                preset['cacheVariables'][key] = 'ON' if val else 'OFF'
+            elif type(val) is int:
+                preset['cacheVariables'][key] = str(val)
+            else :
+                preset['cacheVariables'][key] = val
+    for key in defines :
+        preset['cacheVariables'][key] = defines[key]
+
+    # either overwrite existing preset, or append
+    for i, existing_preset in enumerate(cmake_presets['configurePresets']):
+        if existing_preset['name'] == preset['name']:
+            cmake_presets['configurePresets'][i] = preset
+            break
+    else:
+        cmake_presets['configurePresets'].append(preset)
+
+    with open(f'{proj_dir}/CMakeUserPresets.json', 'w') as f:
+        f.write(json.dumps(cmake_presets, indent=2))

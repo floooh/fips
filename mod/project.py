@@ -95,6 +95,7 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
             log.info("Using Toolchain File: {}".format(toolchain_path))
         is_local_build = settings.get(proj_dir, 'local')
         cmake_result = cmake.run_gen(cfg, fips_dir, proj_dir, build_dir, is_local_build, toolchain_path, defines)
+        cmake.write_presets(cfg, fips_dir, proj_dir, build_dir, is_local_build, toolchain_path, defines)
         if vscode.match(cfg['build_tool']):
             vscode.write_workspace_settings(fips_dir, proj_dir, cfg, settings.get_all_settings(proj_dir))
         if clion.match(cfg['build_tool']):
@@ -382,4 +383,3 @@ def get_target_list(fips_dir, proj_dir, cfg_name) :
         return util.get_cfg_target_list(fips_dir, proj_dir, configs[0])
     else :
         log.error("No valid configs found for '{}'".format(cfg_name))
-
