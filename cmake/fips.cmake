@@ -29,7 +29,6 @@ include("${FIPS_ROOT_DIR}/cmake/fips_generators.cmake")
 #   define top-level options for the whole project
 #-------------------------------------------------------------------------------
 option(FIPS_CMAKE_VERBOSE "Verbose messages during cmake runs" OFF)
-option(FIPS_NO_ASSERTS_IN_RELEASE "Remove asserts in release-mode" OFF)
 option(FIPS_EXCEPTIONS "Enable C++ exceptions" OFF)
 option(FIPS_RTTI "Enable C++ RTTI" OFF)
 option(FIPS_ALLOCATOR_DEBUG "Enable allocator debugging code (slow)" OFF)
@@ -730,4 +729,3 @@ macro(fips_include_directories dir)
         include_directories(${cur_dir})
     endforeach()
 endmacro()
-
