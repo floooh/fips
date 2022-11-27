@@ -26,7 +26,7 @@ def init(fips_dir, proj_name) :
         for f in ['CMakeLists.txt', 'fips', 'fips.cmd', 'fips.yml'] :
             template.copy_template_file(fips_dir, proj_dir, f, templ_values)
         os.chmod(proj_dir + '/fips', 0o744)
-        gitignore_entries = ['.fips-*', 'fips-files/build/', 'fips-files/deploy/', '*.pyc', '.vscode/', '.idea/']
+        gitignore_entries = ['.fips-*', 'fips-files/build/', 'fips-files/deploy/', '*.pyc', '.vscode/', '.idea/', 'CMakeUserPresets.json']
         template.write_git_ignore(proj_dir, gitignore_entries)
     else :
         log.error("project dir '{}' does not exist".format(proj_dir))
