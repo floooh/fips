@@ -25,7 +25,7 @@ def fix_path(path) :
 #-------------------------------------------------------------------------------
 def get_workspace_dir(fips_dir) :
     """get workspace (parent) dir from fips dir
-    
+
     :param fips_dir:    absolute path to fips
     :returns:           absolute path to workspace (parent dir of fips)
     """
@@ -60,10 +60,10 @@ def get_deploy_root_dir(fips_dir, proj_name):
         return '{}/fips-files/deploy'.format(proj_dir)
     else:
         return '{}/fips-deploy'.format(get_workspace_dir(fips_dir))
-    
+
 #-------------------------------------------------------------------------------
 def get_build_dir(fips_dir, proj_name, cfg) :
-    """get absolute path to project build directory in same workspace as fips for 
+    """get absolute path to project build directory in same workspace as fips for
     given configuration
 
     :param fips_dir:    absolute path of fips
@@ -115,7 +115,7 @@ def get_configs_dir(proj_dir):
     None if no such directory exists.
 
     :param proj_dir:    absolute path of project directory
-    :returns:           absolute path of configs dir, or None 
+    :returns:           absolute path of configs dir, or None
     """
     return get_fips_dir(proj_dir, 'configs')
 
@@ -307,32 +307,6 @@ def get_cfg_target_list(fips_dir, proj_dir, cfg):
         return True, targets
     else :
         return False, []
-
-#-------------------------------------------------------------------------------
-def get_cfg_headersdirs_by_target(fips_dir, proj_dir, cfg):
-    proj_name = get_project_name_from_dir(proj_dir)
-    build_dir = get_build_dir(fips_dir, proj_name, cfg)
-    path = build_dir + '/fips_headerdirs.yml'
-    if os.path.isfile(path):
-        headerdirs = {}
-        with open(path) as f:
-            headerdirs = yaml.load(f)
-        return True, headerdirs
-    else:
-        return False,{}
-
-#-------------------------------------------------------------------------------
-def get_cfg_defines_by_target(fips_dir, proj_dir, cfg):
-    proj_name = get_project_name_from_dir(proj_dir)
-    build_dir = get_build_dir(fips_dir, proj_name, cfg)
-    path = build_dir + '/fips_defines.yml'
-    if os.path.isfile(path):
-        defines = {}
-        with open(path) as f:
-            defines = yaml.load(f)
-        return True,defines
-    else:
-        return False,{}
 
 #-------------------------------------------------------------------------------
 def get_num_cpucores():
