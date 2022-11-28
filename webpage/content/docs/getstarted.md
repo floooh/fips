@@ -9,12 +9,13 @@ weight: 1
 
 ### You need:
 
-* python (2.7.x or 3.x should both work)
-* cmake (any 3.x version should work)
+* python (3.x preferred, even though 2.x might still work)
+* cmake (3.21.0 or newer)
 * a working C/C++ development environment:
     * on **OSX**: Xcode + command line tools
     * on **Linux**: make/gcc (or clang)
-    * on **Windows**: Visual Studio 2013 or better
+    * on **Windows**: VS2015 or better
+    * alternatively, VSCode with the C/C++ and CMakeTools extension is supported on all platforms
 
 ### Get fips
 
@@ -80,7 +81,7 @@ fips diag imports
 ### Get required tools
 
 Run './fips diag tools' to check for required tools, install any that are
-listed as 'NOT FOUND'. The list of required tools may differ depending on 
+listed as 'NOT FOUND'. The list of required tools may differ depending on
 your host platform.
 
 ```
@@ -97,7 +98,7 @@ python2:	found
 > _
 ```
 
-> NOTE that some tools are optional and only required for specific 
+> NOTE that some tools are optional and only required for specific
 build configurations
 
 ### Setup new project
@@ -109,14 +110,13 @@ A new fips project can be setup by running './fips init path/to/project'. This w
     ┗━━ fips/
     ┃   ┗━━ ...
     ┗━━ project-1/
-        ┣━━ fips.yml 
-        ┣━━ fips 
-        ┣━━ fips.cmd 
-        ┣━━ CMakeLists.txt 
+        ┣━━ fips.yml
+        ┣━━ fips
+        ┣━━ fips.cmd
+        ┣━━ CMakeLists.txt
         ┗━━ .gitignore
 ```
 
-> NOTE fips will look for the folder in the root of the fipsified project (in this case the fips-workspace created above) and not in the fips folder itself. 
+> NOTE fips will look for the folder in the root of the fipsified project (in this case the fips-workspace created above) and not in the fips folder itself.
 
 From now on you can run all fips commands directly in the new project's directory.
-
