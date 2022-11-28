@@ -1,5 +1,16 @@
 ## Fips Changelog
 
+- **28-Nov-2022**: fips now uses the cmake-presets feature for communicating
+  arguments to cmake instead of command line args. This basically means that
+  'fips gen' now writes a CMakeUserPresets.json file to the project root
+  directory, and then just calls 'cmake --preset'. This new approach also
+  allowed to simplify the VSCode integration dramatically. Fips now expects
+  that the 'CMake Tools' VSCode extension is installed, this will detect
+  the generated CMakeUserPresets.json file, and all the rest happens
+  automatically (most importantly, Intellisense configuration is now
+  much more robust). For building the currently selected target press F7,
+  for debugging F5, and for launching without debugger, Shift-F5.
+
 - **16-May-2022**: fips will now always call ```cmake --build``` instead of
   invoking the build tools ```make```, ```ninja``` or ```xcodebuild``` directly.
   This should "just work" and not require any changes on your project.
@@ -321,4 +332,3 @@ configs \*-vs2013-\* and \*-vs2015-\*.
 - **30-Jan-2015**: please note that the NaCl SDK setup script is currently
   broken with Python 2.7.9 (2.7.6 works), this is tracked in the following bug:
   https://code.google.com/p/chromium/issues/detail?id=452137
-
