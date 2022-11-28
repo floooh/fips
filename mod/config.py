@@ -14,7 +14,7 @@ native_platforms = [
     'linux',
     'win32',
     'win64'
-] 
+]
 
 build_tools = [
     'make',
@@ -71,7 +71,7 @@ def get_toolchain(fips_dir, proj_dir, cfg) :
         toolchain = cfg['cmake-toolchain']
     else :
         toolchain = '{}.toolchain.cmake'.format(cfg['platform'])
-    
+
     # look for toolchain file in current project directory
     toolchain_dir = util.get_toolchains_dir(proj_dir)
     toolchain_path = None
@@ -91,7 +91,7 @@ def get_toolchain(fips_dir, proj_dir, cfg) :
             if toolchain_path and os.path.isfile(toolchain_path):
                 return toolchain_path
         else :
-            # toolchain is not in current project or imported projects, 
+            # toolchain is not in current project or imported projects,
             # try the fips directory
             toolchain_path = '{}/cmake-toolchains/{}'.format(fips_dir, toolchain)
             if os.path.isfile(toolchain_path) :
@@ -100,7 +100,7 @@ def get_toolchain(fips_dir, proj_dir, cfg) :
     return None
 
 #-------------------------------------------------------------------------------
-def exists(pattern, proj_dirs) : 
+def exists(pattern, proj_dirs) :
     """test if at least one matching config exists
 
     :param pattern:     config name pattern (e.g. 'linux-make-*')
@@ -254,7 +254,7 @@ def check_config_valid(fips_dir, proj_dir, cfg, print_errors=False) :
         if field not in cfg :
             messages.append("missing field '{}' in '{}'".format(field, cfg['path']))
             valid = False
-    
+
     # check if the target platform SDK is installed
     if not check_sdk(fips_dir, cfg['platform']) :
         messages.append("platform sdk for '{}' not installed (see './fips help setup')".format(cfg['platform']))
@@ -283,4 +283,3 @@ def check_config_valid(fips_dir, proj_dir, cfg, print_errors=False) :
             log.error(msg, False)
 
     return (valid, messages)
-
