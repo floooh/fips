@@ -154,6 +154,7 @@ def write_code_workspace_file(fips_dir, proj_dir, impex, cfg):
             'cmake.debugConfig': { 'cwd': deploy_dir },
             'cmake.autoSelectActiveFolder': False,
             'cmake.ignoreCMakeListsMissing': True,
+            'cmake.configureOnOpen': False,
         }
     }
     # add dependencies in reverse order, so that main project is first
