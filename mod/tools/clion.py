@@ -29,7 +29,7 @@ def check_exists(fips_dir) :
             return False
     elif host == 'osx':
         try:
-            subprocess.check_output("mdfind -name CLion.app | grep 'CLion'", shell=True)
+            subprocess.check_output("mdfind kind:app CLion.app | grep 'CLion'", shell=True)
             return True
         except (OSError, subprocess.CalledProcessError):
             return False
