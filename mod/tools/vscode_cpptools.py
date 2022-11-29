@@ -1,5 +1,6 @@
 '''this is just a dummy tool to check if the VSCode C/C++ Extension is installed'''
 import subprocess
+import platform
 
 name = 'vscode-cpptools'
 platforms = ['osx','linux','win']
@@ -11,10 +12,11 @@ def check_exists(fips_dir) :
     """
     Checks if the VSCode MS C/C++ extension is installed
     """
-    try :
-        res = subprocess.check_output(['code', '--list-extensions'],
-            stderr=subprocess.STDOUT,
-            universal_newlines=True) # return string not binary for python 2/3 compatibility
-    except (OSError, subprocess.CalledProcessError) :
+    try:
+        if platform.system() == 'Windows':
+            res = subprocess.check_output('code --list-extensions', shell=True).decode('utf-8')
+        else:
+            res = subprocess.check_output(['code', '--list-extensions']).decode('utf-8')
+        return 'ms-vscode.cpptools' in res
+    except (OSError, subprocess.CalledProcessError):
         return False
-    return 'ms-vscode.cpptools' in res
