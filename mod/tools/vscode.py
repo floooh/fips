@@ -1,7 +1,6 @@
 '''VSCode helper functions'''
-import platform,subprocess, os, json, inspect, shutil, copy
-from mod import util, log, verb, dep
-from mod.tools import cmake
+import platform, subprocess, os, json, shutil, copy
+from mod import util, log, dep
 
 name = 'vscode'
 platforms = ['osx','linux','win']
