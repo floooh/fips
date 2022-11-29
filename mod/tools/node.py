@@ -1,5 +1,6 @@
 """wrapper for node.js, only check_exists"""
 import subprocess
+from mod import log
 
 name = 'node'
 platforms = ['linux']
@@ -12,7 +13,7 @@ def check_exists(fips_dir) :
         out = subprocess.check_output(['node', '--version']).decode("utf-8")
         if not out.startswith('v') :
             log.warn("this doesn't look like a proper node.js 'node'")
-            return False 
+            return False
         return True
     except (OSError, subprocess.CalledProcessError) :
         return False

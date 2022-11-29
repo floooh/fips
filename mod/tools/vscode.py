@@ -67,7 +67,7 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings):
         'args': [],
 
     }
-    host_platform = util.get_host_platform();
+    host_platform = util.get_host_platform()
     if host_platform == 'win':
         launch_config['type'] = 'cppvsdbg'
     elif host_platform == 'linux':

@@ -17,7 +17,6 @@ def init(fips_dir, proj_name) :
     :param proj_name:   project directory name (dir must exist)
     :returns:           True if the project was successfully initialized
     """
-    ws_dir = util.get_workspace_dir(fips_dir)
     proj_dir = util.get_project_dir(fips_dir, proj_name)
     if os.path.isdir(proj_dir) :
         templ_values = {

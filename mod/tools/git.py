@@ -15,7 +15,7 @@ clone_depth = 10
 #-------------------------------------------------------------------------------
 def check_exists(fips_dir=None) :
     """test if git is in the path
-    
+
     :returns:   True if git is in the path
     """
     try :
@@ -34,7 +34,7 @@ def check_exists_with_error():
 #-------------------------------------------------------------------------------
 def clone(url, branch, depth, name, cwd) :
     """git clone a remote git repo
-    
+
     :param url:     the git url to clone from
     :param branch:  branch name (can be None)
     :param depth:   how deep to clone
@@ -94,7 +94,7 @@ def commit_allow_empty(proj_dir, msg):
 #-------------------------------------------------------------------------------
 def push(proj_dir):
     """runs a 'git push' in the provided git repo
-    
+
     :param proj_dir:    path to git repo
     """
     check_exists_with_error()
@@ -108,8 +108,7 @@ def has_local_changes(proj_dir):
     """checks if a git repo has uncommitted or unpushed changes (basically
     anything which would make a git pull unsafe"""
     check_exists_with_error()
-    output = subprocess.check_output('git status --porcelain', 
-            cwd=proj_dir, shell=True).decode("utf-8")
+    output = subprocess.check_output('git status --porcelain', cwd=proj_dir, shell=True).decode("utf-8")
     if output:
         return True
     # get current branch name and tracked remote if exists, this has
@@ -176,7 +175,7 @@ def update_force_and_ignore_local_changes(proj_dir):
 def get_branches(proj_dir) :
     """get a dictionary with all local branch names of a git repo as keys,
     and their remote branch names as value
-    
+
     :param proj_dir:    a git repo dir
     :returns:           dictionary of all local and remote branches
     """
@@ -304,7 +303,7 @@ def check_out_of_sync(proj_dir) :
                     branches_out_of_sync = True
                 log.info("  {}: {}".format(local_branch, local_rev))
                 log.info("  {}: {}".format(remote_branch, remote_rev))
-                    
+
     return out_of_sync
 
 #-------------------------------------------------------------------------------
