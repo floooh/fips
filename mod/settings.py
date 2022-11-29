@@ -5,7 +5,7 @@ import os.path
 
 from mod import log, util, config
 
-valid_settings = ['config', 'target', 'jobs', 'ccache', 'iosteam', 'vscode-launch-configs']
+valid_settings = ['config', 'target', 'jobs', 'ccache', 'iosteam']
 
 default_settings = {
     'config':   config.get_default_config(),
@@ -14,7 +14,6 @@ default_settings = {
     'ccache':   False,
     'local':    False,
     'iosteam':  None,
-    'vscode-launch-configs': 'all',
 }
 
 value_help = {
@@ -24,7 +23,6 @@ value_help = {
     'ccache':  'on|off',
     'local':   'on|off',
     'iosteam': 'apple-team-id',
-    'vscode-launch-configs': 'all|minimal|skip-build'
 }
 
 human_help = {
@@ -34,7 +32,6 @@ human_help = {
     'ccache':   'enable/disable using ccache',
     'local':    'place build files in project directory (useful for CI/CD)',
     'iosteam':  'Apple team id for iOS development',
-    'vscode-launch-configs': 'set vscode debugger launch configs to generate'
 }
 
 #-------------------------------------------------------------------------------
