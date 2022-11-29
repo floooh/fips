@@ -34,15 +34,6 @@ def run(fips_dir, proj_dir, args) :
                     log.error("value for setting 'jobs' must be a number")
             else :
                 log.error('expected number of build jobs value')
-        elif noun == 'ccache' :
-            if len(args) > 1 :
-                use_ccache = args[1]
-                if use_ccache == 'on' :
-                    settings.set(proj_dir, 'ccache', True)
-                elif use_ccache == 'off' :
-                    settings.set(proj_dir, 'ccache', False)
-                else :
-                    log.error("value for setting 'ccache' must be 'on' or 'off")
         elif noun == 'local':
             if len(args) > 1:
                 is_local = args[1]

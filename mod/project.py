@@ -62,7 +62,6 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
     proj_name = util.get_project_name_from_dir(proj_dir)
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
     defines = {}
-    defines['FIPS_USE_CCACHE'] = 'ON' if settings.get(proj_dir, 'ccache') else 'OFF'
     defines['FIPS_AUTO_IMPORT'] = 'OFF' if dep.get_policy(proj_dir, 'no_auto_import') else 'ON'
     if cfg['platform'] == 'ios':
         defines['CMAKE_OSX_SYSROOT'] = xcrun.get_ios_sdk_sysroot()

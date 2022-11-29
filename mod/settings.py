@@ -5,13 +5,12 @@ import os.path
 
 from mod import log, util, config
 
-valid_settings = ['config', 'target', 'jobs', 'ccache', 'iosteam']
+valid_settings = ['config', 'target', 'jobs', 'iosteam']
 
 default_settings = {
     'config':   config.get_default_config(),
     'target':   None,
     'jobs':     util.get_num_cpucores() + 2,
-    'ccache':   False,
     'local':    False,
     'iosteam':  None,
 }
@@ -20,7 +19,6 @@ value_help = {
     'config':  'config-name',
     'target':  'target-name',
     'jobs':    'num-build-jobs',
-    'ccache':  'on|off',
     'local':   'on|off',
     'iosteam': 'apple-team-id',
 }
@@ -29,7 +27,6 @@ human_help = {
     'config':   'set active build config',
     'target':   'set active run target',
     'jobs':     'set number of parallel build jobs',
-    'ccache':   'enable/disable using ccache',
     'local':    'place build files in project directory (useful for CI/CD)',
     'iosteam':  'Apple team id for iOS development',
 }
