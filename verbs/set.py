@@ -4,7 +4,7 @@ set config [config-name]
 set target [target-name]
 """
 
-from mod import log, util, settings
+from mod import log, settings
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :

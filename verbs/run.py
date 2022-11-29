@@ -5,7 +5,7 @@ run [target] [config]
 """
 
 import sys
-from mod import log, util, config, project, settings
+from mod import log, util, project, settings
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
@@ -34,9 +34,9 @@ def run(fips_dir, proj_dir, args) :
 #-------------------------------------------------------------------------------
 def help() :
     """print run help"""
-    log.info(log.YELLOW + 
+    log.info(log.YELLOW +
             "fips run [-- args]\n"
-            "fips run [target] [-- args]\n" 
+            "fips run [target] [-- args]\n"
             "fips run [target] [config] [-- args]\n"+ log.DEF +
             "    run a build target for current or named config")
 

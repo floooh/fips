@@ -1,7 +1,6 @@
 '''CLion helper functions'''
 import sys, subprocess, os, shutil
-from mod import util, log, verb, dep
-from mod.tools import cmake
+from mod import util, log
 if sys.version_info.major == 2:
     from distutils.spawn import find_executable as which
 else:

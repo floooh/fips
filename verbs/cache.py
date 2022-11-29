@@ -7,14 +7,14 @@ cache [config-name]
 """
 
 import os, sys, subprocess
-from mod import log, util, project, settings
+from mod import log, util, settings
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
-    
+
     if not util.is_valid_project_dir(proj_dir) :
         log.error('must be run in a project directory')
-    
+
     proj_name = util.get_project_name_from_dir(proj_dir)
 
     cfg_name = None
@@ -38,9 +38,9 @@ def run(fips_dir, proj_dir, args) :
 #-------------------------------------------------------------------------------
 def help() :
     """print cache help"""
-    log.info(log.YELLOW + 
-            "fips cache\n" 
-            "fips cache [config]\n" + log.DEF + 
+    log.info(log.YELLOW +
+            "fips cache\n"
+            "fips cache [config]\n" + log.DEF +
             "   open the CMakeCache file with your default text editor")
-    
+
 

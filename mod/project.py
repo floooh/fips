@@ -3,10 +3,9 @@
 import os
 import shutil
 import subprocess
-import yaml
 
 from mod import log, util, config, dep, template, settings, android, emsdk, wasisdk
-from mod.tools import git, cmake, make, ninja, xcrun, ccmake, cmake_gui, vscode, clion, httpserver, wasmtime
+from mod.tools import git, cmake, xcrun, ccmake, cmake_gui, vscode, clion, httpserver, wasmtime
 
 #-------------------------------------------------------------------------------
 def init(fips_dir, proj_name) :

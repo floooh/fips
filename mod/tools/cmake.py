@@ -1,8 +1,7 @@
 """wrapper for cmake tool"""
-import subprocess, json, os
+import subprocess, json
 
 from mod import log, util
-from mod import config
 
 name = 'cmake'
 platforms = ['linux', 'osx', 'win']

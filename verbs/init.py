@@ -3,7 +3,7 @@
 init [project]
 """
 
-from mod import log, project, registry
+from mod import log, project
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
@@ -22,5 +22,5 @@ def help() :
              + log.DEF +
              "    initialize a project directory as fips project")
 
-    
+
 
