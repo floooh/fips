@@ -33,4 +33,4 @@ def check_exists(fips_dir) :
 
 #-------------------------------------------------------------------------------
 def match(build_tool):
-    return build_tool in ['ninja', 'vscode_ninja']
+    return build_tool in ['ninja', 'vscode']

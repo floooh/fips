@@ -1,5 +1,13 @@
 ## Fips Changelog
 
+- **29-Nov-2022**: The separate config 'build_tools' vscode_cmake and
+  vscode_ninja have been removed, both have been merged into just 'vscode'.
+  VSCode build configs on Windows now *must* specify a generator,
+  this is because of an incompatibility between cmake's defaults,
+  and the CMake Tools VSCode extension defaults (if no generator is specified,
+  cmake selects the latest installed Visual Studio version on Windows, but
+  the CMake Tools extension always selects Ninja - hilarity ensues)
+
 - **28-Nov-2022**: fips now uses the cmake-presets feature for communicating
   arguments to cmake instead of command line args. This basically means that
   'fips gen' now writes a CMakeUserPresets.json file to the project root

@@ -20,8 +20,7 @@ build_tools = [
     'make',
     'ninja',
     'cmake',
-    'vscode_cmake',
-    'vscode_ninja',
+    'vscode',
     'clion',
     'xcodebuild'    # deprecated, but still allowed in build config files
 ]
@@ -211,12 +210,7 @@ def missing_build_tools(fips_dir, tool_name) :
     elif tool_name == 'ninja' :
         if not ninja.check_exists(fips_dir):
             missing.append(ninja.name)
-    elif tool_name == 'vscode_cmake' :
-        if not vscode.check_exists(fips_dir):
-            missing.append(vscode.name)
-        if not cmake.check_exists(fips_dir):
-            missing.append(cmake.name)
-    elif tool_name == 'vscode_ninja' :
+    elif tool_name == 'vscode' :
         if not vscode.check_exists(fips_dir):
             missing.append(vscode.name)
         if not ninja.check_exists(fips_dir):
