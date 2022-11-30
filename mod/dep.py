@@ -23,22 +23,7 @@ def get_imports(fips_dir, proj_dir) :
 
         # warn if this is an old-style list instead of new style dict
         if imports :
-            if type(imports) is list :
-                log.warn("imports in '{}/fips.yml' uses obsolete array format".format(proj_dir))
-
-                # convert old style to new dict format
-                # FIXME: should be removed after a while
-                new_imports = {}
-                for dep in imports :
-                    dep_url = registry.get_url(fips_dir, dep)
-                    if not util.is_git_url(dep_url) :
-                        log.error("'{}' cannot be resolved into a git url (in project '{}')".format(dep_url, proj_name))
-                    dep_proj_name = util.get_project_name_from_url(dep_url)
-                    new_imports[dep_proj_name] = {}
-                    new_imports[dep_proj_name]['git']    = util.get_giturl_from_url(dep_url)
-                    new_imports[dep_proj_name]['branch'] = util.get_gitbranch_from_url(dep_url)
-                imports = new_imports
-            elif type(imports) is dict :
+            if type(imports) is dict :
                 for dep in imports :
                     if not 'branch' in imports[dep] :
                         imports[dep]['branch'] = None
@@ -136,7 +121,6 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, result) :
     :returns:           bool success, and modified result dictionary
     """
     success = True
-    ws_dir = util.get_workspace_dir(fips_dir)
     proj_name = util.get_project_name_from_dir(proj_dir)
     if proj_name not in result :
         imports = get_imports(fips_dir, proj_dir)
@@ -144,7 +128,6 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, result) :
         for dep_proj_name in imports :
             if dep_proj_name not in result :
                 dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
-                dep_url = imports[dep_proj_name]['git']
                 success, result = _rec_get_all_imports_exports(fips_dir, dep_proj_dir, result)
                 # break recursion on error
                 if not success :
@@ -540,7 +523,6 @@ def check_local_changes(fips_dir, proj_dir) :
 def _rec_update_imports(fips_dir, proj_dir, handled) :
     """same as _rec_fetch_imports() but for updating the imported projects
     """
-    ws_dir = util.get_workspace_dir(fips_dir)
     proj_name = util.get_project_name_from_dir(proj_dir)
     if proj_name not in handled :
         handled.append(proj_name)
