@@ -200,7 +200,7 @@ def _rec_fetch_imports(fips_dir, proj_dir, handled) :
                     log.info("dir '{}' exists".format(dep_proj_dir))
                     dep_ok = True
 
-                # recuse
+                # recurse
                 if dep_ok :
                     handled = _rec_fetch_imports(fips_dir, dep_proj_dir, handled)
 
@@ -551,7 +551,7 @@ def _rec_update_imports(fips_dir, proj_dir, handled) :
                         log.colored(log.BLUE, "  '{}' is not a git repository".format(dep_proj_dir))
                 else :
                     log.warn("  '{}' does not exist, please run 'fips fetch'".format(dep_proj_dir))
-                # recuse
+                # recurse
                 if dep_ok :
                     handled = _rec_update_imports(fips_dir, dep_proj_dir, handled)
     # done, return the new handled array
