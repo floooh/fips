@@ -30,7 +30,6 @@ def run(fips_dir, proj_dir, args) :
     else :
         log.error('no target provided')
 
-
 #-------------------------------------------------------------------------------
 def help() :
     """print run help"""
@@ -39,4 +38,3 @@ def help() :
             "fips run [target] [-- args]\n"
             "fips run [target] [config] [-- args]\n"+ log.DEF +
             "    run a build target for current or named config")
-

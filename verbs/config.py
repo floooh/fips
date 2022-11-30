@@ -21,10 +21,8 @@ def run(fips_dir, proj_dir, args) :
 #-------------------------------------------------------------------------------
 def help() :
     """print config help"""
-    log.info(log.YELLOW + 
-            "fips config\n" 
-            "fips config [config]\n" + log.DEF + 
+    log.info(log.YELLOW +
+            "fips config\n"
+            "fips config [config]\n" + log.DEF +
             "    configure the current or named build config\n"
             "    (runs ccmake or cmake-gui)")
-    
-

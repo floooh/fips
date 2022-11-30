@@ -21,6 +21,3 @@ def help() :
              "fips init [project]\n"
              + log.DEF +
              "    initialize a project directory as fips project")
-
-
-

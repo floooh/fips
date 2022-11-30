@@ -80,8 +80,6 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
     if not os.path.isfile(build_dir + '/CMakeCache.txt'):
         do_it = True
     if do_it :
-        # if Ninja build tool and on Windows, need to copy
-        # the precompiled ninja.exe to the build dir
         log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
         log.info("config file: {}".format(cfg['path']))
         toolchain_path = config.get_toolchain(fips_dir, proj_dir, cfg)
@@ -109,7 +107,6 @@ def gen(fips_dir, proj_dir, cfg_name) :
 
     # prepare
     dep.fetch_imports(fips_dir, proj_dir)
-    proj_name = util.get_project_name_from_dir(proj_dir)
     util.ensure_valid_project_dir(proj_dir)
     dep.gather_and_write_imports(fips_dir, proj_dir, cfg_name)
 

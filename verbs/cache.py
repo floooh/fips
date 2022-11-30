@@ -42,5 +42,3 @@ def help() :
             "fips cache\n"
             "fips cache [config]\n" + log.DEF +
             "   open the CMakeCache file with your default text editor")
-
-

@@ -10,7 +10,7 @@ from mod import log, settings
 def run(fips_dir, proj_dir, args) :
     """run the 'set' verb"""
 
-    # FIXME: thos shouldn't be as hardwired as it is, see help() function
+    # FIXME: those shouldn't be as hardwired as it is, see help() function
     if len(args) > 0 :
         noun = args[0]
         if noun == 'config' :
@@ -59,4 +59,3 @@ def help() :
         help_str += "    {}:\t{}\n".format(key, settings.human_help[key])
     help_str = help_str[:-1]
     log.info(help_str)
-
