@@ -179,7 +179,7 @@ def load(fips_dir, proj_dir, pattern) :
                 cfg['folder'] = folder
                 cfg['name'] = os.path.splitext(fname)[0]
                 if 'generator' not in cfg :
-                    cfg['generator'] = 'Default'
+                    cfg['generator'] = None
                 if 'generator-platform' not in cfg :
                     cfg['generator-platform'] = None
                 if 'generator-toolset' not in cfg :
@@ -257,6 +257,11 @@ def check_config_valid(fips_dir, proj_dir, cfg, print_errors=False) :
     # check if build tool is valid
     if not valid_build_tool(cfg['build_tool']) :
         messages.append("invalid build_tool name '{}' in '{}'".format(cfg['build_tool'], cfg['path']))
+        valid = False
+
+    # check if Windows vscode configs have a generator set
+    if (cfg['platform'] in ['win32', 'win64']) and cfg['build_tool'].startswith('vscode') and (cfg['generator'] is None):
+        messages.append("vscode build configs on Windows must define a specific generator")
         valid = False
 
     # check if the build tool can be found

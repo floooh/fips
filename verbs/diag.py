@@ -42,6 +42,7 @@ def check_configs(fips_dir, proj_dir) :
     """find configs and check if they are valid"""
     log.colored(log.YELLOW, '=== configs:')
     configs = config.load(fips_dir, proj_dir, '*')
+    num_errors = 0
     for cfg in configs :
         log.colored(log.BLUE, cfg['name'])
         valid, errors = config.check_config_valid(fips_dir, proj_dir, cfg)
@@ -49,7 +50,12 @@ def check_configs(fips_dir, proj_dir) :
             log.colored(log.GREEN, '  ok')
         else :
             for error in errors :
-                log.info('  {}'.format(error))
+                log.error('  {}'.format(error), False)
+                num_errors += 1
+    if num_errors > 0:
+        log.colored(log.RED, '\n{} build config problem(s) found.\n'.format(num_errors))
+    else:
+        log.colored(log.GREEN, "\n Build configs all ok.\n")
 
 #-------------------------------------------------------------------------------
 def check_imports(fips_dir, proj_dir) :

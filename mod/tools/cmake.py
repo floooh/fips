@@ -135,7 +135,7 @@ def write_presets(cfg, fips_dir, proj_dir, build_dir, local_build, toolchain_pat
         'binaryDir': build_dir,
     }
 
-    if cfg['generator'] != 'Default':
+    if cfg['generator'] is not None:
         config_preset['generator'] = cfg['generator']
     if cfg['generator-platform'] :
         config_preset['architecture'] = cfg['generator-platform']
