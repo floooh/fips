@@ -11,6 +11,9 @@ Read the docs to get a better idea what fips is:
 
 http://floooh.github.io/fips/
 
+Also, please have a look at the [CHANGELOG](https://github.com/floooh/fips/blob/master/CHANGELOG.md) to
+keep track of detail changes which may not be mentioned in the documention.
+
 ### Install Instructions
 
 http://floooh.github.io/fips/docs/getstarted/
