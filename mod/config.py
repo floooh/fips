@@ -14,14 +14,13 @@ native_platforms = [
     'linux',
     'win32',
     'win64'
-] 
+]
 
 build_tools = [
     'make',
     'ninja',
     'cmake',
-    'vscode_cmake',
-    'vscode_ninja',
+    'vscode',
     'clion',
     'xcodebuild'    # deprecated, but still allowed in build config files
 ]
@@ -71,7 +70,7 @@ def get_toolchain(fips_dir, proj_dir, cfg) :
         toolchain = cfg['cmake-toolchain']
     else :
         toolchain = '{}.toolchain.cmake'.format(cfg['platform'])
-    
+
     # look for toolchain file in current project directory
     toolchain_dir = util.get_toolchains_dir(proj_dir)
     toolchain_path = None
@@ -91,7 +90,7 @@ def get_toolchain(fips_dir, proj_dir, cfg) :
             if toolchain_path and os.path.isfile(toolchain_path):
                 return toolchain_path
         else :
-            # toolchain is not in current project or imported projects, 
+            # toolchain is not in current project or imported projects,
             # try the fips directory
             toolchain_path = '{}/cmake-toolchains/{}'.format(fips_dir, toolchain)
             if os.path.isfile(toolchain_path) :
@@ -100,7 +99,7 @@ def get_toolchain(fips_dir, proj_dir, cfg) :
     return None
 
 #-------------------------------------------------------------------------------
-def exists(pattern, proj_dirs) : 
+def exists(pattern, proj_dirs) :
     """test if at least one matching config exists
 
     :param pattern:     config name pattern (e.g. 'linux-make-*')
@@ -180,7 +179,7 @@ def load(fips_dir, proj_dir, pattern) :
                 cfg['folder'] = folder
                 cfg['name'] = os.path.splitext(fname)[0]
                 if 'generator' not in cfg :
-                    cfg['generator'] = 'Default'
+                    cfg['generator'] = None
                 if 'generator-platform' not in cfg :
                     cfg['generator-platform'] = None
                 if 'generator-toolset' not in cfg :
@@ -211,12 +210,7 @@ def missing_build_tools(fips_dir, tool_name) :
     elif tool_name == 'ninja' :
         if not ninja.check_exists(fips_dir):
             missing.append(ninja.name)
-    elif tool_name == 'vscode_cmake' :
-        if not vscode.check_exists(fips_dir):
-            missing.append(vscode.name)
-        if not cmake.check_exists(fips_dir):
-            missing.append(cmake.name)
-    elif tool_name == 'vscode_ninja' :
+    elif tool_name == 'vscode' :
         if not vscode.check_exists(fips_dir):
             missing.append(vscode.name)
         if not ninja.check_exists(fips_dir):
@@ -254,7 +248,7 @@ def check_config_valid(fips_dir, proj_dir, cfg, print_errors=False) :
         if field not in cfg :
             messages.append("missing field '{}' in '{}'".format(field, cfg['path']))
             valid = False
-    
+
     # check if the target platform SDK is installed
     if not check_sdk(fips_dir, cfg['platform']) :
         messages.append("platform sdk for '{}' not installed (see './fips help setup')".format(cfg['platform']))
@@ -263,6 +257,11 @@ def check_config_valid(fips_dir, proj_dir, cfg, print_errors=False) :
     # check if build tool is valid
     if not valid_build_tool(cfg['build_tool']) :
         messages.append("invalid build_tool name '{}' in '{}'".format(cfg['build_tool'], cfg['path']))
+        valid = False
+
+    # check if Windows vscode configs have a generator set
+    if (cfg['platform'] in ['win32', 'win64']) and cfg['build_tool'].startswith('vscode') and (cfg['generator'] is None):
+        messages.append("vscode build configs on Windows must define a specific generator")
         valid = False
 
     # check if the build tool can be found
@@ -283,4 +282,3 @@ def check_config_valid(fips_dir, proj_dir, cfg, print_errors=False) :
             log.error(msg, False)
 
     return (valid, messages)
-

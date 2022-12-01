@@ -7,8 +7,8 @@ diag imports    -- check all imports
 diag            -- same as 'diag all'
 """
 
-from mod.tools import git, cmake, ccmake, cmake_gui, vscode, clion
-from mod.tools import make, ninja, xcrun, java, javac, node, ccache, wasmtime
+from mod.tools import git, cmake, ccmake, cmake_gui, vscode, vscode_cpptools, vscode_cmaketools, clion
+from mod.tools import make, ninja, xcrun, java, javac, node, wasmtime
 from mod.tools import httpserver
 from mod import config, util, log, dep
 
@@ -25,7 +25,7 @@ def check_fips(fips_dir) :
 def check_tools(fips_dir) :
     """check whether required command line tools can be found"""
     log.colored(log.YELLOW, '=== tools:')
-    tools = [ git, cmake, ccmake, cmake_gui, make, ninja, xcrun, javac, java, node, ccache, vscode, clion, httpserver, wasmtime ]
+    tools = [ git, cmake, ccmake, cmake_gui, make, ninja, xcrun, javac, java, node, vscode, vscode_cpptools, vscode_cmaketools, clion, httpserver, wasmtime ]
     platform = util.get_host_platform()
     for tool in tools:
         if platform in tool.platforms :
@@ -41,8 +41,8 @@ def check_tools(fips_dir) :
 def check_configs(fips_dir, proj_dir) :
     """find configs and check if they are valid"""
     log.colored(log.YELLOW, '=== configs:')
-    dirs = [ fips_dir ]
     configs = config.load(fips_dir, proj_dir, '*')
+    num_errors = 0
     for cfg in configs :
         log.colored(log.BLUE, cfg['name'])
         valid, errors = config.check_config_valid(fips_dir, proj_dir, cfg)
@@ -50,7 +50,12 @@ def check_configs(fips_dir, proj_dir) :
             log.colored(log.GREEN, '  ok')
         else :
             for error in errors :
-                log.info('  {}'.format(error))
+                log.error('  {}'.format(error), False)
+                num_errors += 1
+    if num_errors > 0:
+        log.colored(log.RED, '\n{} build config problem(s) found.\n'.format(num_errors))
+    else:
+        log.colored(log.GREEN, "\n Build configs all ok.\n")
 
 #-------------------------------------------------------------------------------
 def check_imports(fips_dir, proj_dir) :
@@ -113,4 +118,3 @@ def help() :
              "fips diag local-changes\n"
              + log.DEF +
              "    run diagnostics and check for errors")
-

@@ -1,5 +1,52 @@
 ## Fips Changelog
 
+- **01-Dec-2022**: A general code cleanup, modernization and simplification session:
+    - fips now uses the cmake-presets in cmake 3.21 and later for communicating
+      build config arguments to cmake. Running './fips gen' will write
+      a CMakeUserPresets.json file to the project root (it makes sense to
+      add this to .gitignore), and then just call cmake with a preset instead
+      of passing build options on the command line. The main advantage of this
+      new approach is that it better integrates with IDEs which support
+      build configuration from cmake presets (such as VSCode with the CMake Tools
+      extension).
+    - ...this means the minimal required cmake version is now 3.21, which in
+      turn will enable a couple for simplifications in the future
+    - VSCode support has been totally rewritten. This now expects the
+      [CMake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)
+      extension to be installed for proper build configuration. On starting,
+      CMake Tools will discover the CMakeUserPresets.json file, and will
+      configure the C/C++ build process accordingly. A nice side effect
+      is that Intellisense is now much more robust (because it automatically
+      knows about all header search paths and preprocessor defines used in the
+      build).
+    - Relevant VSCode hotkeys:
+        - F7 to build currently selected target
+        - F5 to debug the currently selected target
+        - Shift-F5 to run the current target without debugging
+    - Some breaking cleanup work in the vscode build config files: the
+      'build_tool' vscode_cmake and vscode_ninja have been consolidated
+      into just 'vscode'. To check which build configs need updating,
+      just run './fips diag configs' in your project and look for
+      'invalid build tool name' warnings.
+    - Another required build config change for vscode build configs is that
+      a specific Visual Studio generator must be defined in the build config.
+      Again, to find build configs which require fixing, run './fips diag configs'
+    - The VSCode support no longer writes the .vscode/c_cpp_properties.json and .vscode/tasks.json
+      files, and also no longer writes to the .vscode directory of dependencies. It
+      still writes a launch.json file though (because currently the debugger integration
+      of CMake Tools seems to be broken on macOS)
+    - Builtin ccache support has been removed, this can easily be done manually
+      in a project's CMakeLists.txt file without involving fips
+    - Removed support for a very old format to define dependencies in fips.yml, this now
+      generates an error instead of a 'silent fallback'.
+    - Removed the FIPS_NO_ASSERTS_IN_RELEASE cmake option, this wasn't used
+      anymore in the cmake scripts.
+    - The cmake scripts no longer write support files with header search paths
+      and preprocessor defines, those were only needed by the 'old' VSCode support.
+    - The httpserver.py source was removed, this wasn't used anymore for a long time.
+    - General cleanup (mainly remove unused variables and imports) with the help
+      of Pylance, and cleanup white space.
+
 - **16-May-2022**: fips will now always call ```cmake --build``` instead of
   invoking the build tools ```make```, ```ninja``` or ```xcodebuild``` directly.
   This should "just work" and not require any changes on your project.
@@ -321,4 +368,3 @@ configs \*-vs2013-\* and \*-vs2015-\*.
 - **30-Jan-2015**: please note that the NaCl SDK setup script is currently
   broken with Python 2.7.9 (2.7.6 works), this is tracked in the following bug:
   https://code.google.com/p/chromium/issues/detail?id=452137
-

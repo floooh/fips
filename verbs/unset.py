@@ -13,7 +13,7 @@ def run(fips_dir, proj_dir, args) :
         noun = args[0]
         settings.unset(proj_dir, noun)
     else :
-        log.error("expected noun: {}".format(', '.join(valid_nouns)))
+        log.error("expected one of [{}] after 'unset".format('|'.join(settings.valid_settings)))
 
 #-------------------------------------------------------------------------------
 def help() :

@@ -2,5 +2,5 @@
 platform: win64
 generator: Visual Studio 17
 generator-platform: x64
-build_tool: vscode
-build_type: Release
+build_tool: cmake
+build_type: Debug

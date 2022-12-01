@@ -42,4 +42,3 @@ def help() :
             "fips make [target] [config] [-- build tool args]\n" + log.DEF +
             "    build a single target in current or named config\n" +
             "    any args following a -- will be forwarded to the invoked build tool")
-

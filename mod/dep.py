@@ -23,22 +23,7 @@ def get_imports(fips_dir, proj_dir) :
 
         # warn if this is an old-style list instead of new style dict
         if imports :
-            if type(imports) is list :
-                log.warn("imports in '{}/fips.yml' uses obsolete array format".format(proj_dir))
-                
-                # convert old style to new dict format
-                # FIXME: should be removed after a while
-                new_imports = {}
-                for dep in imports :
-                    dep_url = registry.get_url(fips_dir, dep)
-                    if not util.is_git_url(dep_url) :
-                        log.error("'{}' cannot be resolved into a git url (in project '{}')".format(dep_url, proj_name))
-                    dep_proj_name = util.get_project_name_from_url(dep_url)
-                    new_imports[dep_proj_name] = {}
-                    new_imports[dep_proj_name]['git']    = util.get_giturl_from_url(dep_url)
-                    new_imports[dep_proj_name]['branch'] = util.get_gitbranch_from_url(dep_url)
-                imports = new_imports
-            elif type(imports) is dict :
+            if type(imports) is dict :
                 for dep in imports :
                     if not 'branch' in imports[dep] :
                         imports[dep]['branch'] = None
@@ -105,7 +90,7 @@ def get_policy(proj_dir, policy) :
 def _rec_get_all_imports_exports(fips_dir, proj_dir, result) :
     """recursively get all imported projects, their exported and
     imported modules in a dictionary object:
-        
+
         project-1:
             url:    git-url (not valid for first, top-level project)
             exports:
@@ -113,7 +98,7 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, result) :
                 conditional-header-dirs:
                     dir: cmake-if condition string
                 lib-dirs: [ ]
-                defines: 
+                defines:
                     def-key: def-val
                     ...
                 modules :
@@ -136,7 +121,6 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, result) :
     :returns:           bool success, and modified result dictionary
     """
     success = True
-    ws_dir = util.get_workspace_dir(fips_dir)
     proj_name = util.get_project_name_from_dir(proj_dir)
     if proj_name not in result :
         imports = get_imports(fips_dir, proj_dir)
@@ -144,7 +128,6 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, result) :
         for dep_proj_name in imports :
             if dep_proj_name not in result :
                 dep_proj_dir = util.get_project_dir(fips_dir, dep_proj_name)
-                dep_url = imports[dep_proj_name]['git']
                 success, result = _rec_get_all_imports_exports(fips_dir, dep_proj_dir, result)
                 # break recursion on error
                 if not success :
@@ -152,8 +135,8 @@ def _rec_get_all_imports_exports(fips_dir, proj_dir, result) :
 
         result[proj_name] = {}
         result[proj_name]['proj_dir'] = proj_dir
-        result[proj_name]['imports'] = imports 
-        result[proj_name]['exports'] = exports 
+        result[proj_name]['imports'] = imports
+        result[proj_name]['exports'] = exports
 
     # done
     return success, result
@@ -217,7 +200,7 @@ def _rec_fetch_imports(fips_dir, proj_dir, handled) :
                     log.info("dir '{}' exists".format(dep_proj_dir))
                     dep_ok = True
 
-                # recuse
+                # recurse
                 if dep_ok :
                     handled = _rec_fetch_imports(fips_dir, dep_proj_dir, handled)
 
@@ -250,9 +233,9 @@ def gather_imports(fips_dir, proj_dir) :
 
     unique_defines = {}
     unique_modules = {}
-    
+
     if success :
-        
+
         # for each project:
         for proj_name in deps :
 
@@ -260,7 +243,7 @@ def gather_imports(fips_dir, proj_dir) :
             exports = deps[proj_name]['exports']
             # for each imported project:
             for imp_proj_name in sorted(imports) :
-                
+
                 imported[imp_proj_name] = {}
                 imported[imp_proj_name]['modules'] = OrderedDict()
                 imported[imp_proj_name]['hdrdirs'] = []
@@ -308,7 +291,7 @@ def gather_imports(fips_dir, proj_dir) :
                     if imp_def in unique_defines :
                         if unique_defines[imp_def] != value :
                             log.warn("C define collision: '{}={}' in '{}' collides with '{}={}' in earlier import".format(
-                                imp_def, value, imp_proj_name, imp_def, unique_defines[define]))
+                                imp_def, value, imp_proj_name, imp_def, unique_defines[imp_def]))
                         unique_defines[imp_def] = value
 
                 # for each imported module:
@@ -355,10 +338,10 @@ def write_imports(fips_dir, proj_dir, cfg_name, imported) :
         import_tmp_filename = import_filename + '.tmp'
         with open(import_tmp_filename, 'w') as f :
             f.write("#\n# generated by 'fips gen', don't edit, don't add to version control!\n#\n")
-            
+
             for imp_proj_name in imported :
                 imp_proj_dir = util.get_project_dir(fips_dir, imp_proj_name)
-                
+
                 if imported[imp_proj_name]['cond']:
                     f.write('if ({})\n'.format(imported[imp_proj_name]['cond']))
 
@@ -425,7 +408,7 @@ def write_imports(fips_dir, proj_dir, cfg_name, imported) :
                     f.write('if (FIPS_AUTO_IMPORT)\n')
                     group = "Imports"
                     if imported[imp_proj_name]['group'] :
-                        group += "/" + imported[imp_proj_name]['group']                        
+                        group += "/" + imported[imp_proj_name]['group']
                     if len(imported[imp_proj_name]['modules']) > 3 :
                         group += "/" + imp_proj_name
                     f.write('    fips_ide_group("{}")\n'.format(group))
@@ -433,7 +416,7 @@ def write_imports(fips_dir, proj_dir, cfg_name, imported) :
                         f.write('    {}()\n'.format(import_func))
                     f.write('    fips_ide_group("")\n')
                     f.write('endif()\n')
-                
+
                 if imported[imp_proj_name]['cond']:
                     f.write('endif()\n')
 
@@ -457,9 +440,9 @@ def write_imports(fips_dir, proj_dir, cfg_name, imported) :
     for imp_proj_name in imported :
         gen_dir = util.get_generators_dir(util.get_project_dir(fips_dir, imp_proj_name))
         if gen_dir:
-            gen_search_paths += '"' + gen_dir + '",\n' 
+            gen_search_paths += '"' + gen_dir + '",\n'
     proj_name = util.get_project_name_from_dir(proj_dir)
-    build_dir = util.get_build_dir(fips_dir, proj_name, cfg_name); 
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg_name);
     if not os.path.isdir(build_dir):
         os.makedirs(build_dir)
     template.copy_template_file(fips_dir, build_dir, 'fips-gen.py', { 'genpaths': gen_search_paths}, True)
@@ -540,7 +523,6 @@ def check_local_changes(fips_dir, proj_dir) :
 def _rec_update_imports(fips_dir, proj_dir, handled) :
     """same as _rec_fetch_imports() but for updating the imported projects
     """
-    ws_dir = util.get_workspace_dir(fips_dir)
     proj_name = util.get_project_name_from_dir(proj_dir)
     if proj_name not in handled :
         handled.append(proj_name)
@@ -569,7 +551,7 @@ def _rec_update_imports(fips_dir, proj_dir, handled) :
                         log.colored(log.BLUE, "  '{}' is not a git repository".format(dep_proj_dir))
                 else :
                     log.warn("  '{}' does not exist, please run 'fips fetch'".format(dep_proj_dir))
-                # recuse
+                # recurse
                 if dep_ok :
                     handled = _rec_update_imports(fips_dir, dep_proj_dir, handled)
     # done, return the new handled array

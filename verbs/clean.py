@@ -20,16 +20,12 @@ def run(fips_dir, proj_dir, args) :
     if cfg_name == 'all' :
         cfg_name = '*'
     project.clean(fips_dir, proj_dir, cfg_name)
-    
+
 #-------------------------------------------------------------------------------
 def help() :
     """print 'clean' help"""
-    log.info(log.YELLOW + 
-            "fips clean\n" 
+    log.info(log.YELLOW +
+            "fips clean\n"
             "fips clean all\n"
-            "fips clean [config]\n" + log.DEF + 
+            "fips clean [config]\n" + log.DEF +
             "    clean generated build files for config")
-    
-        
-        
-    

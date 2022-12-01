@@ -193,5 +193,3 @@ def help() :
              "fips list targets [config]\n"
              + log.DEF +
              "    list available configs, build-tools, etc...")
-
-

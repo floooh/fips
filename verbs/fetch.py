@@ -22,9 +22,7 @@ def run(fips_dir, proj_dir, args) :
 #-------------------------------------------------------------------------------
 def help() :
     """print fetch help"""
-    log.info(log.YELLOW + 
-            "fips fetch\n" 
+    log.info(log.YELLOW +
+            "fips fetch\n"
             "fips fetch [proj]\n" + log.DEF +
-            "    fetch external dependencies for current or named project") 
-
-
+            "    fetch external dependencies for current or named project")

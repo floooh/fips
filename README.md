@@ -11,6 +11,9 @@ Read the docs to get a better idea what fips is:
 
 http://floooh.github.io/fips/
 
+Also, please have a look at the [CHANGELOG](https://github.com/floooh/fips/blob/master/CHANGELOG.md) to
+keep track of detail changes which may not be mentioned in the documention.
+
 ### Install Instructions
 
 http://floooh.github.io/fips/docs/getstarted/
@@ -63,19 +66,3 @@ Test projects:
 - **fips-hello-world**:   https://github.com/floooh/fips-hello-world.git
 - **fips-hello-dep1**:    https://github.com/floooh/fips-hello-dep1.git
 - **fips-hello-dep2**:    https://github.com/floooh/fips-hello-dep2.git
-
-### Progress
-
-fips is currently heavily **work in progress**, everything may change or
-break at any time.
-
-I'm trying to put up progress videos from time to time:
-
-- first progress video: https://www.youtube.com/watch?v=6F_AecDqRIY
-- 2nd progress video: https://www.youtube.com/watch?v=W0MYjpR0G8c
-- 3rd progress video: https://www.youtube.com/watch?v=3bQrYYaYU4w
-- 4th progress video: https://vimeo.com/115050871
-- using fips with Oryol 3D engine: https://www.youtube.com/watch?v=LaC4Sqatyts
-- compiling and debugging in QtCreator and CLion IDEs: https://www.youtube.com/watch?v=Sp5TywYeNzE
-- building a standalone Oryol app: https://www.youtube.com/watch?v=z8nwrGh2Zsc
-

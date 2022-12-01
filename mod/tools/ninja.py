@@ -1,7 +1,6 @@
 """wrapper for ninja build tool"""
 import subprocess
 import platform
-import shutil
 
 name = 'ninja'
 platforms = ['linux', 'osx', 'win']
@@ -23,7 +22,7 @@ def get_ninja_tool(fips_dir) :
 #------------------------------------------------------------------------------
 def check_exists(fips_dir) :
     """test if ninja is in the path
-    
+
     :returns: True if ninja is in the path
     """
     try:
@@ -34,4 +33,4 @@ def check_exists(fips_dir) :
 
 #-------------------------------------------------------------------------------
 def match(build_tool):
-    return build_tool in ['ninja', 'vscode_ninja']
+    return build_tool in ['ninja', 'vscode']

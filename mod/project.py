@@ -3,10 +3,9 @@
 import os
 import shutil
 import subprocess
-import yaml
 
 from mod import log, util, config, dep, template, settings, android, emsdk, wasisdk
-from mod.tools import git, cmake, make, ninja, xcrun, ccmake, cmake_gui, vscode, clion, httpserver, wasmtime
+from mod.tools import git, cmake, xcrun, ccmake, cmake_gui, vscode, clion, httpserver, wasmtime
 
 #-------------------------------------------------------------------------------
 def init(fips_dir, proj_name) :
@@ -17,7 +16,6 @@ def init(fips_dir, proj_name) :
     :param proj_name:   project directory name (dir must exist)
     :returns:           True if the project was successfully initialized
     """
-    ws_dir = util.get_workspace_dir(fips_dir)
     proj_dir = util.get_project_dir(fips_dir, proj_name)
     if os.path.isdir(proj_dir) :
         templ_values = {
@@ -26,7 +24,7 @@ def init(fips_dir, proj_name) :
         for f in ['CMakeLists.txt', 'fips', 'fips.cmd', 'fips.yml'] :
             template.copy_template_file(fips_dir, proj_dir, f, templ_values)
         os.chmod(proj_dir + '/fips', 0o744)
-        gitignore_entries = ['.fips-*', 'fips-files/build/', 'fips-files/deploy/', '*.pyc', '.vscode/', '.idea/']
+        gitignore_entries = ['.fips-*', 'fips-files/build/', 'fips-files/deploy/', '*.pyc', '.vscode/', '.idea/', 'CMakeUserPresets.json']
         template.write_git_ignore(proj_dir, gitignore_entries)
     else :
         log.error("project dir '{}' does not exist".format(proj_dir))
@@ -62,13 +60,9 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
     """private: generate build files for one config"""
 
     proj_name = util.get_project_name_from_dir(proj_dir)
-    deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg['name'])
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
     defines = {}
-    defines['FIPS_USE_CCACHE'] = 'ON' if settings.get(proj_dir, 'ccache') else 'OFF'
     defines['FIPS_AUTO_IMPORT'] = 'OFF' if dep.get_policy(proj_dir, 'no_auto_import') else 'ON'
-    if cfg['generator'] in ['Ninja', 'Unix Makefiles']:
-        defines['CMAKE_EXPORT_COMPILE_COMMANDS'] = 'ON'
     if cfg['platform'] == 'ios':
         defines['CMAKE_OSX_SYSROOT'] = xcrun.get_ios_sdk_sysroot()
         ios_team_id = settings.get(proj_dir, 'iosteam')
@@ -86,8 +80,6 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
     if not os.path.isfile(build_dir + '/CMakeCache.txt'):
         do_it = True
     if do_it :
-        # if Ninja build tool and on Windows, need to copy
-        # the precompiled ninja.exe to the build dir
         log.colored(log.YELLOW, "=== generating: {}".format(cfg['name']))
         log.info("config file: {}".format(cfg['path']))
         toolchain_path = config.get_toolchain(fips_dir, proj_dir, cfg)
@@ -115,7 +107,6 @@ def gen(fips_dir, proj_dir, cfg_name) :
 
     # prepare
     dep.fetch_imports(fips_dir, proj_dir)
-    proj_name = util.get_project_name_from_dir(proj_dir)
     util.ensure_valid_project_dir(proj_dir)
     dep.gather_and_write_imports(fips_dir, proj_dir, cfg_name)
 
@@ -382,4 +373,3 @@ def get_target_list(fips_dir, proj_dir, cfg_name) :
         return util.get_cfg_target_list(fips_dir, proj_dir, configs[0])
     else :
         log.error("No valid configs found for '{}'".format(cfg_name))
-

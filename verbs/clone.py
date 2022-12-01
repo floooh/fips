@@ -3,14 +3,14 @@
 clone [git-url]
 """
 
-from mod import log, util, project, registry, dep
+from mod import log, project, registry
 
 #-------------------------------------------------------------------------------
 def run(fips_dir, proj_dir, args) :
     """run the get verb"""
     if len(args) > 0 :
         name = args[0]
-        
+
         # check project registry to resolve git url
         if registry.exists(fips_dir, name) :
             url = registry.lookup_url(fips_dir, name)
@@ -28,5 +28,3 @@ def help() :
     log.info(log.YELLOW + "fips clone [project]\n" + log.DEF +
              "    fetch a project directory from a git repo, project is either\n"
              "    a direct git-url, or a project name in the fips registry")
-             
-

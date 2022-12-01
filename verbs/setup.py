@@ -29,6 +29,4 @@ def help() :
              "fips setup android\n"
              "fips setup wasisdk\n"
              + log.DEF +
-             "    setup cross-platform SDK") 
-    
-        
+             "    setup cross-platform SDK")

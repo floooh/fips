@@ -5,36 +5,30 @@ import os.path
 
 from mod import log, util, config
 
-valid_settings = ['config', 'target', 'jobs', 'ccache', 'iosteam', 'vscode-launch-configs']
+valid_settings = ['config', 'target', 'jobs', 'iosteam']
 
 default_settings = {
     'config':   config.get_default_config(),
     'target':   None,
     'jobs':     util.get_num_cpucores() + 2,
-    'ccache':   False,
     'local':    False,
     'iosteam':  None,
-    'vscode-launch-configs': 'all',
 }
 
 value_help = {
     'config':  'config-name',
     'target':  'target-name',
     'jobs':    'num-build-jobs',
-    'ccache':  'on|off',
     'local':   'on|off',
     'iosteam': 'apple-team-id',
-    'vscode-launch-configs': 'all|minimal|skip-build'
 }
 
 human_help = {
     'config':   'set active build config',
     'target':   'set active run target',
     'jobs':     'set number of parallel build jobs',
-    'ccache':   'enable/disable using ccache',
     'local':    'place build files in project directory (useful for CI/CD)',
     'iosteam':  'Apple team id for iOS development',
-    'vscode-launch-configs': 'set vscode debugger launch configs to generate'
 }
 
 #-------------------------------------------------------------------------------

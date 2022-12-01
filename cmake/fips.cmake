@@ -29,12 +29,10 @@ include("${FIPS_ROOT_DIR}/cmake/fips_generators.cmake")
 #   define top-level options for the whole project
 #-------------------------------------------------------------------------------
 option(FIPS_CMAKE_VERBOSE "Verbose messages during cmake runs" OFF)
-option(FIPS_NO_ASSERTS_IN_RELEASE "Remove asserts in release-mode" OFF)
 option(FIPS_EXCEPTIONS "Enable C++ exceptions" OFF)
 option(FIPS_RTTI "Enable C++ RTTI" OFF)
 option(FIPS_ALLOCATOR_DEBUG "Enable allocator debugging code (slow)" OFF)
 option(FIPS_COMPILE_VERBOSE "Enable very verbose compilation" OFF)
-option(FIPS_USE_CCACHE "Enable ccache when building with gcc or clang" OFF)
 option(FIPS_PROFILING "Enable app profiling/tracing" OFF)
 option(FIPS_OSX_UNIVERSAL "Enable generation of universal binaries on OS X" OFF)
 option(FIPS_LINUX_MACH32 "Enable 32-bit code generation on 64-bit Linux host" OFF)
@@ -173,22 +171,6 @@ macro(fips_setup)
     message("FIPS_PLATFORM: " ${FIPS_PLATFORM})
     message("FIPS_PLATFORM_NAME: ${FIPS_PLATFORM_NAME}")
 
-    # enable ccache??
-    if (FIPS_USE_CCACHE)
-        find_program(CCACHE "ccache")
-        if (CCACHE)
-            if (NOT FIPS_EMSCRIPTEN)
-                message("Using ccache")
-                set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ${CCACHE})
-                set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ${CCACHE})
-            else()
-                message("ccache disabled on emscripten")
-            endif()
-        else()
-            message(WARNING "ccache enabled but not found")
-        endif()
-    endif()
-
     # setup standard link directories
     fips_setup_link_directories()
 
@@ -206,8 +188,6 @@ macro(fips_setup)
 
     # write empty YAML property tracking files
     fips_reset_targets_list()
-    fips_reset_headerdirs_list()
-    fips_reset_defines_list()
 
     # initialize code generation
     fips_begin_gen()
@@ -283,8 +263,6 @@ macro(fips_end_module)
 
     # track some target properties in YAML files
     fips_addto_targets_list(${CurTargetName} "module")
-    fips_addto_headerdirs_list(${CurTargetName})
-    fips_addto_defines_list(${CurTargetName})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -320,8 +298,6 @@ macro(fips_end_lib)
 
     # track some target properties in YAML files
     fips_addto_targets_list(${CurTargetName} "lib")
-    fips_addto_headerdirs_list(${CurTargetName})
-    fips_addto_defines_list(${CurTargetName})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -402,8 +378,6 @@ macro(fips_end_app)
 
     # track some target properties in YAML files
     fips_addto_targets_list(${CurTargetName} "app")
-    fips_addto_headerdirs_list(${CurTargetName})
-    fips_addto_defines_list(${CurTargetName})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -450,8 +424,6 @@ macro(fips_end_sharedlib)
 
     # track some target properties in YAML files
     fips_addto_targets_list(${CurTargetName} "sharedlib")
-    fips_addto_headerdirs_list(${CurTargetName})
-    fips_addto_defines_list(${CurTargetName})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -730,4 +702,3 @@ macro(fips_include_directories dir)
         include_directories(${cur_dir})
     endforeach()
 endmacro()
-
