@@ -1,8 +1,51 @@
 #-------------------------------------------------------------------------------
-#   fips_osx.cmake
-#   OSX/IOS specific cmake functions.
-#   FIXME: OSX framework resolution doesn't seem to work
+#   fips_platform.cmake
+#   Platform specific helper functions
 #-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+#   fips_vs_warning_level(1..4)
+#   Set a module-specific warning level for Visual Studio, simply set this
+#   within a 'begin/end' pair.
+#
+#   FIXME: remove this
+#
+macro(fips_vs_warning_level level)
+    if (FIPS_MSVC)
+        set(CurCompileFlags "${CurCompileFlags} /W${level}")
+    endif()
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_vs_disable_warning(warnings ...)
+#   Disable a specific Visual Sutdio warning
+#
+#   FIXME: remove this
+#
+macro(fips_vs_disable_warnings warnings)
+    if (FIPS_MSVC)
+        foreach (warning ${ARGV})
+            set(CurCompileFlags "${CurCompileFlags} /wd${warning}")
+        endforeach()
+    endif()
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_vs_apply_options()
+#   Applies the module-specific options set between begin/end, plus
+#   any other MSVC specific target options.
+#
+#   FIXME: remove this
+#
+macro(fips_vs_apply_options target)
+    if (FIPS_MSVC)
+        if (NOT ${CurCompileFlags} STREQUAL "")
+            set_target_properties(${target} PROPERTIES COMPILE_FLAGS ${CurCompileFlags})
+        endif()
+        # set the deploy-directory as the debugger working directory
+        set_target_properties(${target} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${FIPS_PROJECT_DEPLOY_DIR})
+    endif()
+endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_frameworks_osx(frameworks ...)
@@ -18,8 +61,9 @@ endmacro()
 #-------------------------------------------------------------------------------
 #   fips_osx_generate_plist_file(target)
 #
-#   FIXME: need a way to override the plist file from a fips target
-#   description.
+#   NOTE: the generated plist file can simply be overriden by adding
+#   a .plist file to the target file list (this will then be stored in
+#   FIPS_OSX_PLIST_PATH variable)
 #
 macro(fips_osx_generate_plist_file target)
     if (FIPS_IOS)
@@ -170,5 +214,16 @@ macro(fips_osx_add_target_properties target)
     endif()
 endmacro()
 
-
-
+#-------------------------------------------------------------------------------
+#   fips_android_postbuildstep
+#
+macro(fips_android_postbuildstep target)
+    add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND ${PYTHON} ${FIPS_ROOT_DIR}/tools/android-create-apk.py
+        --path ${CMAKE_CURRENT_BINARY_DIR}
+        --name ${target}
+        --abi ${CMAKE_ANDROID_ARCH_ABI}
+        --version ${ANDROID_PLATFORM_LEVEL}
+        --package org.fips.${target}
+        --deploy ${FIPS_DEPLOY_DIR}/${FIPS_PROJECT_NAME}/${FIPS_CONFIG})
+endmacro()

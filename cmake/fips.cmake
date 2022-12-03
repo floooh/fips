@@ -20,9 +20,7 @@ endif()
 include(CMakeParseArguments)
 
 include("${FIPS_ROOT_DIR}/cmake/fips_private.cmake")
-include("${FIPS_ROOT_DIR}/cmake/fips_windows.cmake")
-include("${FIPS_ROOT_DIR}/cmake/fips_android.cmake")
-include("${FIPS_ROOT_DIR}/cmake/fips_osx.cmake")
+include("${FIPS_ROOT_DIR}/cmake/fips_platform.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_generators.cmake")
 
 #-------------------------------------------------------------------------------

@@ -39,7 +39,7 @@ tools are in the path:
 
 ### Testing cross-compilation
 
-Cross-compilation requires a portable code base, in the case of Android this 
+Cross-compilation requires a portable code base, in the case of Android this
 is a bit non-trivial (e.g. the canonical C 'Hello World' doesn't
 work). Let's use the Oryol 3D engine for testing:
 
@@ -73,7 +73,7 @@ CPU type.
 ```
 
 Finally iOS: this works a bit differently since iOS compiling and debugging
-works best directly in Xcode. Instead of a command line build, we only 
+works best directly in Xcode. Instead of a command line build, we only
 generate the Xcode project files, and then start Xcode:
 
 ```
@@ -101,7 +101,7 @@ Cross-compiling currently has a few caveats:
 
 * it is currently not possible to use existing SDKs in other filesystem locations
 * the _emscripten_ SDK always uses the _incoming_ branch, not the _master_ branch
-* for Android, 'universal binaries' containing ARM, X86 and MIPS binaries are 
+* for Android, 'universal binaries' containing ARM, X86 and MIPS binaries are
   currently not supported
 
 Cross-compiling build settings are defined in cmake toolchain files in:
@@ -129,9 +129,7 @@ Fips build configs can support completely new platforms by setting the
 
 For some target platforms, cmake generates additional files during the cmake run:
 
-On **Android**, a Java wrapper application directory and AndroidManifest.xml 
+On **Android**, a Java wrapper application directory and AndroidManifest.xml
 file is created (see fips/cmake/fips_android.cmake).
 
-On **iOS**, a .plist file is generated (see fips/cmake/fips_osx.cmake).
-
-
+On **iOS**, a .plist file is generated (see fips/cmake/fips_platform.cmake).
