@@ -1,101 +1,100 @@
 #!/bin/sh
 git --version
-python --version
+python3 --version
 # test fips command itself
-python fips
+python3 fips
 # clone hello world project
-python fips clone https://github.com/floooh/fips-hello-world.git
+python3 fips clone https://github.com/floooh/fips-hello-world.git
 cd ../fips-hello-world
 # test help command
-python fips help
-python fips help clone
-python fips help config
-python fips help open
-python fips help setup
+python3 fips help
+python3 fips help clone
+python3 fips help config
+python3 fips help open
+python3 fips help setup
 # test list command
-python fips help list
-python fips list
-python fips list all
-python fips list configs
-python fips list build-tools
-python fips list registry
-python fips list settings
-python fips list exports
-python fips list imports
-python fips list targets
+python3 fips help list
+python3 fips list
+python3 fips list all
+python3 fips list configs
+python3 fips list build-tools
+python3 fips list registry
+python3 fips list settings
+python3 fips list exports
+python3 fips list imports
+python3 fips list targets
 # test diag command
-python fips help diag
-python fips diag
-python fips diag all
-python fips diag fips
-python fips diag tools
-python fips diag configs
-python fips diag imports
+python3 fips help diag
+python3 fips diag
+python3 fips diag all
+python3 fips diag fips
+python3 fips diag tools
+python3 fips diag configs
+python3 fips diag imports
 # test fetch command
-python fips help fetch
-python fips fetch
-python fips fetch fips-hello-dep2
+python3 fips help fetch
+python3 fips fetch
+python3 fips fetch fips-hello-dep2
 # test gen command
-python fips help gen
-python fips gen
-python fips gen linux-make-release
-python fips list targets
+python3 fips help gen
+python3 fips gen
+python3 fips gen linux-make-release
+python3 fips list targets
 # test build command
-python fips help build
-python fips build
-python fips build linux-make-release
+python3 fips help build
+python3 fips build
+python3 fips build linux-make-release
 # test run command
-python fips help run
-python fips run hello
-python fips run hello -- arg0 arg1 arg2
-python fips run hello linux-make-release
-python fips run hello linux-make-release -- arg0 arg1 arg2
+python3 fips help run
+python3 fips run hello
+python3 fips run hello -- arg0 arg1 arg2
+python3 fips run hello linux-make-release
+python3 fips run hello linux-make-release -- arg0 arg1 arg2
 # test clean command
-python fips help clean
-python fips clean
-python fips clean linux-make-release
-python fips clean all
+python3 fips help clean
+python3 fips clean
+python3 fips clean linux-make-release
+python3 fips clean all
 # test set command
-python fips help set
-python fips set config linux-make-release
+python3 fips help set
+python3 fips set config linux-make-release
 # test make command
-python fips make hello
-python fips run hello
-python fips make hello linux-make-debug
-python fips run hello linux-make-debug
+python3 fips make hello
+python3 fips run hello
+python3 fips make hello linux-make-debug
+python3 fips run hello linux-make-debug
 # test the update command
-python fips update
+python3 fips update
 # test unset command
-python fips help unset
-python fips unset config
+python3 fips help unset
+python3 fips unset config
 # test fips init command
-python fips help init
+python3 fips help init
 mkdir ../test-project
-python fips init test-project
+python3 fips init test-project
 # run imported commands
-python fips help fips-hello-test
-python fips fips-hello-test
-python fips help fips-hello-dep1
-python fips fips-hello-dep1
+python3 fips help fips-hello-test
+python3 fips fips-hello-test
+python3 fips help fips-hello-dep1
+python3 fips fips-hello-dep1
 # test setting current target and num make jobs
-python fips clean all
-python fips set target hello
-python fips set jobs 1
-python fips set config linux-make-release
-python fips list settings
-python fips make
-python fips run
-python fips unset config
-python fips unset target
-python fips unset jobs
-python fips list settings
+python3 fips clean all
+python3 fips set target hello
+python3 fips set jobs 1
+python3 fips set config linux-make-release
+python3 fips list settings
+python3 fips make
+python3 fips run
+python3 fips unset config
+python3 fips unset target
+python3 fips unset jobs
+python3 fips list settings
 # test shared lib (in fips-hello-dep1)
 cd ../fips-hello-dep1
-python fips gen
-python fips build
+python3 fips gen
+python3 fips build
 # clone tests project
-python fips clone https://github.com/fips-libs/fips-tests.git
+python3 fips clone https://github.com/fips-libs/fips-tests.git
 cd ../fips-tests
-python fips testrunner linux-make-debug
-python fips testrunner linux-make-release
-
+python3 fips testrunner linux-make-debug
+python3 fips testrunner linux-make-release
