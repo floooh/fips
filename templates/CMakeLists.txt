@@ -9,6 +9,6 @@ include("$${FIPS_ROOT_DIR}/cmake/fips.cmake")
 
 # include_directories(src)
 fips_setup()
-# fips_add_subdirectory(src/...)
-# fips_add_subdirectory(src/...)
+# add_subdirectory(src/...)
+# add_subdirectory(src/...)
 fips_finish()

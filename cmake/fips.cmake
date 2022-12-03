@@ -22,6 +22,7 @@ include(CMakeParseArguments)
 include("${FIPS_ROOT_DIR}/cmake/fips_private.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_platform.cmake")
 include("${FIPS_ROOT_DIR}/cmake/fips_generators.cmake")
+include("${FIPS_ROOT_DIR}/cmake/fips_deprecated.cmake")
 
 #-------------------------------------------------------------------------------
 #   define top-level options for the whole project
@@ -204,13 +205,6 @@ macro(fips_setup)
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_finish()
-#
-macro(fips_finish)
-    message("\n\n### fips_finish() IS DEPRECATED, PLEASE REMOVE THE CALL FROM YOUR CMakeLists.txt file\n\n")
-endmacro()
-
-#-------------------------------------------------------------------------------
 #   fips_ide_group(group)
 #   Define the IDE group name for the following targets.
 #
@@ -220,7 +214,6 @@ endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_begin_lib(name)
-#   fips_begin_module(name)
 #
 #   Begin defining a static link library. fips_end_module() is a backward
 #   compatibility alias for fips_begin_lib()
@@ -231,9 +224,6 @@ macro(fips_begin_lib name)
         message("Library: name=" ${name})
     endif()
     fips_reset(${name})
-endmacro()
-macro(fips_begin_module name)
-    fips_begin_lib(${name})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -257,9 +247,6 @@ macro(fips_end_lib)
 
     # track some target properties in YAML files
     fips_addto_targets_list(${CurTargetName} "lib")
-endmacro()
-macro(fips_end_module)
-    fips_end_lib()
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -638,11 +625,4 @@ macro(fips_generate)
     endif()
     fips_add_file("${_fg_FROM}")
     fips_add_generator(${CurTargetName} "${_fg_TYPE}" ${_fg_OUT_OF_SOURCE} "${_fg_FROM}" "${_fg_SOURCE}" "${_fg_HEADER}" "${_fg_ARGS}")
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_add_subdirectory(dir)
-#
-macro(fips_add_subdirectory dir)
-    add_subdirectory(${dir})
 endmacro()

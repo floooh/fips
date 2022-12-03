@@ -26,14 +26,6 @@ to define a project name. Starting with version 3.15, cmake will issue
 a warning if the toplevel CMakeLists.txt file doesn't contain a verbatim
 project() statement.
 
-#### fips\_finish()
-
-Must be called in the root CMakeLists.txt file after any other fips macros
-and does any work that must happen once after each cmake run. Currently
-this is macro does nothing.
-
-Use the fips\_project() macro instead of cmake's builtin project() macro
-
 #### fips\_ide\_group(name)
 
 Start a new project explorer folder in an IDE. This can be used to
@@ -45,39 +37,10 @@ explorer.
 Include a child CMakeLists.txt file from a subdirectory. Use this instead
 of cmake's built-in add\_subdirectory() macro.
 
-#### fips\_begin\_module(name)
-
-Begin defining a fips module. Modules are special high-level static link-libraries
-with a few additional features over conventional libs:
-
-* can define dependencies to other modules, which are automatically
-  resolved when linking apps
-* can contain code-generation python scripts which are added as
-  custom build targets to the build process
-
-After a fips\_begin\_module() the following fips macros are valid:
-
-* fips\_dir()
-* fips\_files()
-* fips\_generate()
-* fips\_deps()
-* fips\_libs()
-* fips\_end\_module()
-
-#### fips\_end\_module()
-
-This finishes a fips\_begin\_module() block.
-
 #### fips\_begin\_lib(name)
 
 Begin defining a fips library. A fips library is a collection of source
-files that compile into a static link library. Fips libraries are normally
-used to wrap 3rd-party code that would normally be linked as a pre-compiled
-static link library, but is instead compiled from source code into
-a fips project.
-
-> NOTE: currently, a fips library is equivalent to a fips module, this
-may change in the future though
+files that compile into a static link library.
 
 After a fips\_begin\_lib() the following fips macros are valid:
 
@@ -365,7 +328,7 @@ project(fips-hello-world)
 get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
 include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
 
-fips_add_subdirectory(src)
+add_subdirectory(src)
 fips_finish()
 ```
 
@@ -400,14 +363,14 @@ include_directories(code/Modules)
 include_directories(code/Ext)
 
 fips_setup()
-fips_add_subdirectory(code/Hello)
+add_subdirectory(code/Hello)
 fips_ide_group(Modules)
-fips_add_subdirectory(code/Modules)
+add_subdirectory(code/Modules)
 fips_ide_group(Ext)
-fips_add_subdirectory(code/Ext)
+add_subdirectory(code/Ext)
 if (ORYOL_SAMPLES)
    fips_ide_group(Samples)
-   fips_add_subdirectory(code/Samples)
+   add_subdirectory(code/Samples)
 endif()
 fips_finish()
 ```
