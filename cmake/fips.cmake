@@ -219,43 +219,11 @@ macro(fips_ide_group group)
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_begin_module(module)
-#   Begin defining an fips module.
-#
-macro(fips_begin_module name)
-    set(name ${name})
-    if (FIPS_CMAKE_VERBOSE)
-        message("Module: name=" ${name})
-    endif()
-    fips_reset(${name})
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_end_module(module)
-#   End defining an fips module, the interesting stuff happens here.
-#
-macro(fips_end_module)
-
-    # add library target
-    add_library(${CurTargetName} ${CurSources})
-    fips_apply_target_group(${CurTargetName})
-
-    # set platform- and target-specific compiler options
-    fips_vs_apply_options(${CurTargetName})
-
-    # add dependencies
-    fips_resolve_dependencies(${CurTargetName})
-
-    # handle generators (post-target)
-    fips_handle_generators(${CurTargetName})
-
-    # track some target properties in YAML files
-    fips_addto_targets_list(${CurTargetName} "module")
-endmacro()
-
-#-------------------------------------------------------------------------------
 #   fips_begin_lib(name)
-#   Begin defining a static link library
+#   fips_begin_module(name)
+#
+#   Begin defining a static link library. fips_end_module() is a backward
+#   compatibility alias for fips_begin_lib()
 #
 macro(fips_begin_lib name)
     set(name ${name})
@@ -264,9 +232,12 @@ macro(fips_begin_lib name)
     endif()
     fips_reset(${name})
 endmacro()
+macro(fips_begin_module name)
+    fips_begin_lib(${name})
+endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_end_library(name)
+#   fips_end_lib(name)
 #   End defining a static link library.
 #
 macro(fips_end_lib)
@@ -286,6 +257,9 @@ macro(fips_end_lib)
 
     # track some target properties in YAML files
     fips_addto_targets_list(${CurTargetName} "lib")
+endmacro()
+macro(fips_end_module)
+    fips_end_lib()
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -415,29 +389,20 @@ macro(fips_end_sharedlib)
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_deps(deps ...)
-#   Add one or more dependencies to the current target. The dependencies
-#   must be cmake build targets defined with fips_begin/end_module()
-#   or fips_begin/end_lib(). Dependencies can also be added to fips modules
-#   or libs, they will then be resolved recursively in the app linking stage.
-#
-macro(fips_deps deps)
-    foreach(dep ${ARGV})
-        list(APPEND CurDependencies ${dep})
-    endforeach()
-endmacro()
-
-#-------------------------------------------------------------------------------
 #   fips_libs(libs ...)
+#   fips_deps(libs ...)
+#
 #   Add one or more static link library dependencies to the current target.
-#   The current target can also be a fips module or lib. Dependencies added
-#   with fips_libs() will be resolved recursively in the app linking stage
-#   (see fips_deps()).
+#   (note that fips_deps() is simply an alias of fips_libs).
 #
 macro(fips_libs libs)
     foreach(lib ${ARGV})
         list(APPEND CurLinkLibs ${lib})
     endforeach()
+endmacro()
+macro(fips_deps libs)
+    set(_libs ${libs} ${ARGN})
+    fips_libs("${_libs}")
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -680,13 +645,4 @@ endmacro()
 #
 macro(fips_add_subdirectory dir)
     add_subdirectory(${dir})
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_include_directories(dir)
-#
-macro(fips_include_directories dir)
-    foreach (cur_dir ${ARGV})
-        include_directories(${cur_dir})
-    endforeach()
 endmacro()

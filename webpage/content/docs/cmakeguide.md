@@ -32,29 +32,18 @@ Must be called in the root CMakeLists.txt file after any other fips macros
 and does any work that must happen once after each cmake run. Currently
 this is macro does nothing.
 
-#### fips\_project(name)
-
-Starts a new project with the given name. This must be called at least
-once in a hierarchy of CMakeLists.txt files, usually right after 
-fips\_setup(). 
-
 Use the fips\_project() macro instead of cmake's builtin project() macro
 
 #### fips\_ide\_group(name)
 
-Start a new project explorer folder in an IDE. This can be used to 
-group related build targets for a clearer layout in the IDE's project 
+Start a new project explorer folder in an IDE. This can be used to
+group related build targets for a clearer layout in the IDE's project
 explorer.
 
 #### fips\_add\_subdirectory(dir)
 
 Include a child CMakeLists.txt file from a subdirectory. Use this instead
 of cmake's built-in add\_subdirectory() macro.
-
-#### fips\_include\_directories(dir ...)
-
-Define one or more header search paths. Use this instead of
-cmake's built-in include\_directories() macro.
 
 #### fips\_begin\_module(name)
 
@@ -63,7 +52,7 @@ with a few additional features over conventional libs:
 
 * can define dependencies to other modules, which are automatically
   resolved when linking apps
-* can contain code-generation python scripts which are added as 
+* can contain code-generation python scripts which are added as
   custom build targets to the build process
 
 After a fips\_begin\_module() the following fips macros are valid:
@@ -82,7 +71,7 @@ This finishes a fips\_begin\_module() block.
 #### fips\_begin\_lib(name)
 
 Begin defining a fips library. A fips library is a collection of source
-files that compile into a static link library. Fips libraries are normally 
+files that compile into a static link library. Fips libraries are normally
 used to wrap 3rd-party code that would normally be linked as a pre-compiled
 static link library, but is instead compiled from source code into
 a fips project.
@@ -128,7 +117,7 @@ or 'cmdline', this only makes a difference on platform with separate
 command-line and UI application types, like Windows (WinMain vs main)
 or OSX (app bundle vs command line tool).
 
-The executable target (and only the executable target) will see the following 
+The executable target (and only the executable target) will see the following
 preprocessor definitions:
 
 ```c
@@ -138,7 +127,7 @@ preprocessor definitions:
 #define FIPS_APP_CMDLINE (1)
 ```
 
-On Windows this can be used to select between main() or WinMain() 
+On Windows this can be used to select between main() or WinMain()
 as app entry function.
 
 After a fips\_begin\_app() the following fips macros are valid:
@@ -159,12 +148,12 @@ This finishes a fips\_begin\_app() block.
 Defines a source code subdirectory for the following fips\_files() statements.
 This is only necessary if source files are located in subdirectories of the
 directory where the current CMakeLists.txt file is located. You don't need
-to provide a fips\_dir() statement for files in the same directory as 
+to provide a fips\_dir() statement for files in the same directory as
 their CMakeLists.txt file.
 
 fips will automatically derive an IDE group folder name from the directory
 path, so that the directory structure is reflected in IDE file explorers.
-This behaviour can be overriden with the optional GROUP argument, and 
+This behaviour can be overriden with the optional GROUP argument, and
 an explicit group name (or path) can be defined.
 
 This is the default usage of fips\_dir, without explicitly overriding
@@ -198,7 +187,7 @@ A GROUP argument can also contain slashes to define a whole group path:
 fips_dir(some/deep/dir/hierarchy/include GROUP "engine/include")
 ```
 
-Finally, to not put the files into any IDE group folder, pass a 
+Finally, to not put the files into any IDE group folder, pass a
 "." as special GROUP argument:
 
 ```cmake
@@ -232,7 +221,7 @@ that match an expression from the glob expression list excluding any file that
 is in the ```EXCEPT``` glob expression list. You can use ```NO_RECURSE``` so it will not
 search files in subdirectories. The flag ```GROUP_FOLDERS``` will enable the automatic creation of groups that reflect folders in the filesystem.
 
-To add all files contained in a folder but excluding some types to the group 
+To add all files contained in a folder but excluding some types to the group
 "everything":
 
 ```cmake
@@ -246,8 +235,8 @@ fips_files_ex(src/ *.m *.mm GROUP "ObjC")
 ```
 
 Note: You should avoid using this as CMake will not be able to detect when files
-are added or removed to the filesystem and consequently will not be able to 
-reconfigure the project. A good use of this is if it can help porting libraries 
+are added or removed to the filesystem and consequently will not be able to
+reconfigure the project. A good use of this is if it can help porting libraries
 to fips.
 
 fips\_files\_ex() must be called inside a module, lib, or app definition block.
@@ -270,7 +259,7 @@ fips\_src() must be called inside a module, lib, or app definition block.
 
 Add module or lib dependencies to the current fips app, module or lib. A
 dependency must be the name of another fips module or lib defined
-with fips\_begin\_module() or fips\_begin\_lib(). Dependencies added to 
+with fips\_begin\_module() or fips\_begin\_lib(). Dependencies added to
 fips modules will be resolved recursively
 when linking apps. Fips will also take care of the dreaded linking order
 problem of GCC where symbols can't be resolved if the
@@ -285,13 +274,13 @@ fips\_deps() must be called inside a module, lib, or app definition block.
 
 Add a static link library dependency to the current fips app, module or libs.
 This is similar to the fips\_deps() macro but is used to define a link
-dependency to an existing, precompiled static link library. 
+dependency to an existing, precompiled static link library.
 
 fips\_libs() must be called inside a module, lib, or app definition block.
 
 #### fips\_libs\_debug(libs ...), fips\_libs\_release(libs ...)
 
-These are rarely needed special variants of **fips\_libs()** which add separate 
+These are rarely needed special variants of **fips\_libs()** which add separate
 static link libraries for debug and non-debug compilation modes. This is necessary
 on Visual Studio when trying to link libraries that contain STL code.
 
@@ -299,7 +288,7 @@ on Visual Studio when trying to link libraries that contain STL code.
 
 Defines a code-generation job. Code generation can be used to generate
 C/C++ source files at build time from other input files like JSON,
-XML, YAML, GLSL, ... Code generation is described in detail 
+XML, YAML, GLSL, ... Code generation is described in detail
 [here](codegen.html)
 
 fips\_generate() must be called inside a module, lib, or app definition block.
@@ -323,7 +312,7 @@ Fips defines a number of useful cmake variables:
 
 * **FIPS\_POSIX**: target platform is UNIX-ish (basically anything but Windows)
 * **FIPS\_WINDOWS**: target platform is Windows
-* **FIPS\_OSX**: target platform is OSX-ish (either OSX 10.x or iOS) 
+* **FIPS\_OSX**: target platform is OSX-ish (either OSX 10.x or iOS)
 * **FIPS\_CLANG**: C++ compiler is clang
 * **FIPS\_GCC**: C++ compiler is GCC
 * **FIPS\_MSVC**: C++ compiler is Visual Studio compiler
@@ -354,8 +343,8 @@ sets the FIPS\_UNITTESTS and FIPS\_UNITTESTS\_HEADLESS options to ON:
 
 ```yaml
 ---
-platform: emscripten 
-generator: Ninja 
+platform: emscripten
+generator: Ninja
 build_tool: ninja
 build_type: Debug
 defines:
@@ -376,7 +365,6 @@ project(fips-hello-world)
 get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
 include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
 
-fips_project(fips-hello-world)
 fips_add_subdirectory(src)
 fips_finish()
 ```
@@ -491,7 +479,7 @@ fips_begin_lib(zlib)
         compress.c
         crc32.c crc32.h
         deflate.c deflate.h
-        infback.c 
+        infback.c
         inffast.c inffast.h
         inffixed.h
         inflate.c inflate.h
