@@ -185,10 +185,10 @@ macro(fips_setup)
     set(PYTHON ${Python_EXECUTABLE})
 
     # write empty YAML property tracking files
-    fips_reset_targets_list()
+    fips_init_targets_list()
 
     # initialize code generation
-    fips_begin_gen()
+    fips_init_codegen()
 
     # load project-local fips-include.cmake if exists
     if (EXISTS "${FIPS_PROJECT_DIR}/fips-include.cmake")
@@ -218,12 +218,15 @@ endmacro()
 #   Begin defining a static link library. fips_end_module() is a backward
 #   compatibility alias for fips_begin_lib()
 #
-macro(fips_begin_lib name)
-    set(name ${name})
+macro(fips_begin_lib target)
     if (FIPS_CMAKE_VERBOSE)
-        message("Library: name=" ${name})
+        message("lib: name=" ${target})
     endif()
-    fips_reset(${name})
+    fips_reset(${target})
+    add_library(${target})
+    fips_apply_target_ide_group(${target})
+    fips_msvc_add_target_properties(${target})
+    fips_add_to_targets_list(${target} "app")
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -231,36 +234,46 @@ endmacro()
 #   End defining a static link library.
 #
 macro(fips_end_lib)
-
-    # add library target
-    add_library(${CurTargetName} ${CurSources})
-    fips_apply_target_group(${CurTargetName})
-
-    # set platform- and target-specific compiler options
-    fips_vs_apply_options(${CurTargetName})
-
-    # add dependencies
-    fips_resolve_dependencies(${CurTargetName})
-
-    # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
-
-    # track some target properties in YAML files
-    fips_addto_targets_list(${CurTargetName} "lib")
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_begin_app(name type)
-#   Begin an fips command line app.
+#   fips_begin_app(target type)
+#   Start defining a new app.
 #   Type can be "windowed" or "cmdline", default is "cmdline".
 #
-macro(fips_begin_app name type)
+macro(fips_begin_app target type)
+    if (FIPS_CMAKE_VERBOSE)
+        message("app: name=" ${target} " type=" ${type})
+    endif()
     if (${type} STREQUAL "windowed" OR ${type} STREQUAL "cmdline")
-        fips_reset(${name})
-        set(CurAppType ${type})
-        if (FIPS_CMAKE_VERBOSE)
-            message("App: name=" ${CurTargetName} " type=" ${CurAppType})
+        fips_reset(${target})
+        if (${type} STREQUAL "windowed")
+            if (FIPS_OSX)
+                add_executable(${target} MACOSX_BUNDLE)
+                fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
+            elseif (FIPS_WIN32 OR FIPS_WIN64)
+                add_executable(${target} WIN32)
+            elseif (FIPS_ANDROID)
+                add_library(${target} SHARED)
+            else()
+                add_executable(${target})
+            endif()
+            target_compile_definitions(${target} PRIVATE FIPS_APP_WINDOWED=1)
+        else()
+            if (FIPS_ANDROID)
+                add_library(${target} SHARED)
+            else()
+                add_executable(${target})
+            endif()
+            target_compile_definitions(${target} PRIVATE FIPS_APP_CMDLINE=1)
         endif()
+        fips_apply_target_ide_group(${target})
+        fips_config_output_directory(${target})
+        fips_config_postfixes_for_exe(${target})
+        fips_msvc_add_target_properties(${target})
+        fips_android_postbuildstep(${target})
+        fips_add_to_targets_list(${target} "app")
     else()
         message(FATAL_ERROR "type must be \"windowed\" or \"cmdline\"!")
     endif()
@@ -271,73 +284,27 @@ endmacro()
 #   End defining an application.
 #
 macro(fips_end_app)
-
-    # add standard frameworks and libs
-    if (FIPS_OSX)
-        fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
-    endif()
-
-    if (NOT CurSources)
-        message(FATAL_ERROR "No sources in target: ${CurTargetName} !!!")
-    endif()
-
-    # add executable target
-    if (${CurAppType} STREQUAL "windowed")
-        # a windowed application
-        if (FIPS_OSX)
-            add_executable(${CurTargetName} MACOSX_BUNDLE ${CurSources})
-            fips_osx_add_target_properties(${CurTargetName})
-        elseif (FIPS_WIN32 OR FIPS_WIN64)
-            add_executable(${CurTargetName} WIN32 ${CurSources})
-        elseif (FIPS_ANDROID)
-            add_library(${CurTargetName} SHARED ${CurSources})
-        else()
-            add_executable(${CurTargetName} ${CurSources})
-        endif()
-    else()
-        # a command line application
-        if (FIPS_ANDROID)
-            add_library(${CurTargetName} SHARED ${CurSources})
-        else()
-            add_executable(${CurTargetName} ${CurSources})
-        endif()
-    endif()
-    fips_apply_target_group(${CurTargetName})
-
-    # set platform- and target-specific compiler options
-    fips_vs_apply_options(${CurTargetName})
-
-    # FIPS_APP_WINDOWED or FIPS_APP_CMDLINE defines
-    fips_apply_executable_type_defines(${CurTargetName} ${CurAppType})
-
-    # android specific stuff
-    if (FIPS_ANDROID)
-        fips_android_postbuildstep(${CurTargetName})
-    endif()
-
-    # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
-
-    # add dependencies
-    fips_resolve_dependencies(${CurTargetName})
-
-    # setup executable output directory and postfixes (_debug, etc...)
-    fips_config_output_directory(${CurTargetName})
-    fips_config_postfixes_for_exe(${CurTargetName})
-
-    # track some target properties in YAML files
-    fips_addto_targets_list(${CurTargetName} "app")
+    fips_osx_add_target_properties(${CurTargetName})
 endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_begin_sharedlib(name)
 #   Begin a fips shared library.
 #
-macro(fips_begin_sharedlib name)
-    fips_reset(${name})
+macro(fips_begin_sharedlib target)
     if (FIPS_CMAKE_VERBOSE)
-        message("Shared Lib: name=" ${CurTargetName})
+        message("shared lib: name=" ${target})
     endif()
+    fips_reset(${target})
+    add_library(${target} SHARED)
+    if (FIPS_OSX)
+        fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
+    endif()
+    fips_apply_target_ide_group(${target})
+    fips_msvc_add_target_properties(${target})
+    fips_config_output_directory(${target})
+    fips_add_to_targets_list(${target} "app")
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -345,34 +312,7 @@ endmacro()
 #   End defining a shared library.
 #
 macro(fips_end_sharedlib)
-
-    # add standard frameworks and libs
-    if (FIPS_OSX)
-        fips_frameworks_osx(${FIPS_OSX_STANDARD_FRAMEWORKS})
-    endif()
-
-    if (NOT CurSources)
-        message(FATAL_ERROR "No sources in target: ${CurTargetName} !!!")
-    endif()
-
-    # add shared lib target
-    add_library(${CurTargetName} SHARED ${CurSources})
-    fips_apply_target_group(${CurTargetName})
-
-    # set platform- and target-specific compiler options
-    fips_vs_apply_options(${CurTargetName})
-
-    # handle generators (post-target)
     fips_handle_generators(${CurTargetName})
-
-    # add dependencies
-    fips_resolve_dependencies(${CurTargetName})
-
-    # setup executable output directory and postfixes (_debug, etc...)
-    fips_config_output_directory(${CurTargetName})
-
-    # track some target properties in YAML files
-    fips_addto_targets_list(${CurTargetName} "sharedlib")
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -384,7 +324,7 @@ endmacro()
 #
 macro(fips_libs libs)
     foreach(lib ${ARGV})
-        list(APPEND CurLinkLibs ${lib})
+        target_link_libraries(${CurTargetName} ${lib})
     endforeach()
 endmacro()
 macro(fips_deps libs)
@@ -402,7 +342,7 @@ endmacro()
 #
 macro(fips_libs_debug libs)
     foreach(lib ${ARGV})
-        list(APPEND CurLinkLibsDebug ${lib})
+        target_link_libraries(${target} debug ${lib})
     endforeach()
 endmacro()
 
@@ -413,7 +353,7 @@ endmacro()
 #
 macro(fips_libs_release libs)
     foreach(lib ${ARGV})
-        list(APPEND CurLinkLibsRelease ${lib})
+        target_link_libraries(${target} optimized ${lib})
     endforeach()
 endmacro()
 
