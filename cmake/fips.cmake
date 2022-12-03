@@ -29,7 +29,6 @@ include("${FIPS_ROOT_DIR}/cmake/fips_generators.cmake")
 option(FIPS_CMAKE_VERBOSE "Verbose messages during cmake runs" OFF)
 option(FIPS_EXCEPTIONS "Enable C++ exceptions" OFF)
 option(FIPS_RTTI "Enable C++ RTTI" OFF)
-option(FIPS_ALLOCATOR_DEBUG "Enable allocator debugging code (slow)" OFF)
 option(FIPS_COMPILE_VERBOSE "Enable very verbose compilation" OFF)
 option(FIPS_PROFILING "Enable app profiling/tracing" OFF)
 option(FIPS_OSX_UNIVERSAL "Enable generation of universal binaries on OS X" OFF)
@@ -217,15 +216,6 @@ endmacro()
 #
 macro(fips_ide_group group)
     set(FIPS_TARGET_GROUP ${group})
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_project(proj)
-#   Starts a new project.
-#
-macro(fips_project proj)
-    message("=== fips_project(${proj})")
-    project(${proj})
 endmacro()
 
 #-------------------------------------------------------------------------------
