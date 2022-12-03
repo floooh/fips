@@ -207,7 +207,7 @@ endmacro()
 #   fips_finish()
 #
 macro(fips_finish)
-    # nothing to do, reserved for future use
+    message("\n\n### fips_finish() IS DEPRECATED, PLEASE REMOVE THE CALL FROM YOUR CMakeLists.txt file\n\n")
 endmacro()
 
 #-------------------------------------------------------------------------------
