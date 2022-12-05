@@ -32,14 +32,9 @@ Start a new project explorer folder in an IDE. This can be used to
 group related build targets for a clearer layout in the IDE's project
 explorer.
 
-#### fips\_add\_subdirectory(dir)
-
-Include a child CMakeLists.txt file from a subdirectory. Use this instead
-of cmake's built-in add\_subdirectory() macro.
-
 #### fips\_begin\_lib(name)
 
-Begin defining a fips library. A fips library is a collection of source
+Begin defining a static link library. A fips library is a collection of source
 files that compile into a static link library.
 
 After a fips\_begin\_lib() the following fips macros are valid:
@@ -51,6 +46,9 @@ After a fips\_begin\_lib() the following fips macros are valid:
 * fips\_libs()
 * fips\_end\_lib()
 
+fips_begin_lib() creates a cmake target, this means you can also call any of
+the ```target_*``` cmake commands inside fips_begin_lib()/fips_end_lib.
+
 #### fips\_end\_lib()
 
 This finishes a fips\_begin\_lib() block.
@@ -60,7 +58,7 @@ This finishes a fips\_begin\_lib() block.
 Begin defining a fips shared library. A fips shared library is a collection of source
 files that compile into a dynamically linkable library (as opposed to static libraries).
 
-After a fips\_begin\_sharedlib() the following fips macros are valid:
+After a fips\_begin\_sharedlib() the following fips macros and cmake commands are valid:
 
 * fips\_dir()
 * fips\_files()
@@ -68,6 +66,9 @@ After a fips\_begin\_sharedlib() the following fips macros are valid:
 * fips\_deps()
 * fips\_libs()
 * fips\_end\_sharedlib()
+
+fips_begin_sharedlib() creates a cmake target, this means you can also call any of
+the ```target_*``` cmake commands inside fips_begin_sharedlib()/fips_end_sharedlib.
 
 #### fips\_end\_sharedlib()
 
@@ -101,6 +102,9 @@ After a fips\_begin\_app() the following fips macros are valid:
 * fips\_deps()
 * fips\_libs()
 * fips\_end\_app()
+
+As with the other begin/end macros, the cmake ```target_*``` commands can
+be called within a begin/end block.
 
 #### fips\_end\_app()
 
@@ -218,28 +222,13 @@ fips_src(src)
 
 fips\_src() must be called inside a module, lib, or app definition block.
 
+#### fips\_libs(libs ...)
 #### fips\_deps(dep ...)
 
-Add module or lib dependencies to the current fips app, module or lib. A
-dependency must be the name of another fips module or lib defined
-with fips\_begin\_module() or fips\_begin\_lib(). Dependencies added to
-fips modules will be resolved recursively
-when linking apps. Fips will also take care of the dreaded linking order
-problem of GCC where symbols can't be resolved if the
-order of link libraries is wrong or in case of cyclic dependencies.
+Adds static link library dependencies to the current build target.
 
-fips\_deps() must be called inside a module, lib, or app definition block.
-
-> NOTE: dependencies listed in fips\_deps() must have been defined before
-> in the CMakeLists.txt file hierarchy
-
-#### fips\_libs(libs ...)
-
-Add a static link library dependency to the current fips app, module or libs.
-This is similar to the fips\_deps() macro but is used to define a link
-dependency to an existing, precompiled static link library.
-
-fips\_libs() must be called inside a module, lib, or app definition block.
+fips_deps is an alias of fips_libs, and fips_libs is an alias for
+```target_link_libraries(${target} ${libs})```.
 
 #### fips\_libs\_debug(libs ...), fips\_libs\_release(libs ...)
 
@@ -321,15 +310,15 @@ Here's a very simple root CMakeLists.txt file from the _fips-hello-world_
 sample project:
 
 ```cmake
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.21)
 project(fips-hello-world)
 
 # include the fips main cmake file
 get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
 include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
+fips_setup()
 
 add_subdirectory(src)
-fips_finish()
 ```
 
 The _src_ subdirectory contains the CMakeLists.txt file which defines
@@ -342,119 +331,33 @@ fips_begin_app(hello cmdline)
 fips_end_app()
 ```
 
-This is a more complex root CMakeLists.txt file from the Oryol 3D engine:
+...and the 'dep1' dependency could look like this:
 
 ```cmake
-#----------------------------------------------------------
-#	oryol cmake root file
-#
-#	See BUILD.md for details how to build oryol.
-#----------------------------------------------------------
-cmake_minimum_required(VERSION 2.8)
-project(oryol)
-
-get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
-include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
-
-option(ORYOL_SAMPLES "Build Oryol samples" ON)
-
-include_directories(code)
-include_directories(code/Modules)
-include_directories(code/Ext)
-
-fips_setup()
-add_subdirectory(code/Hello)
-fips_ide_group(Modules)
-add_subdirectory(code/Modules)
-fips_ide_group(Ext)
-add_subdirectory(code/Ext)
-if (ORYOL_SAMPLES)
-   fips_ide_group(Samples)
-   add_subdirectory(code/Samples)
-endif()
-fips_finish()
+fips_begin_lib(dep1)
+    fips_files(dep1.cc)
+fips_end_lib()
 ```
 
-Next a sample which defines a code module with platform-specific source
-code in subdirectories, and towards the end some dependencies to other
-fips modules:
+...libraries can themselve have dependencies, those are then resolved in the
+correct order in the executable target link step:
 
 ```cmake
-#----------------------------------------------------------
-#   oryol Input module
-#----------------------------------------------------------
-fips_begin_module(Input)
-    fips_files(Input.cc Input.h)
-    fips_dir(Core)
-    fips_files(
-        CursorMode.h
-        Gamepad.cc Gamepad.h
-        InputSetup.h
-        Key.cc Key.h
-        Keyboard.cc Keyboard.h
-        Mouse.cc Mouse.h
-        Sensors.h
-        Touchpad.cc Touchpad.h
-        inputMgr.h
-    )
-    fips_dir(base)
-    fips_files(inputMgrBase.cc inputMgrBase.h)
-    fips_dir(touch)
-    fips_files(
-        gestureState.h
-        panDetector.cc
-        panDetector.h
-        pinchDetector.cc
-        pinchDetector.h
-        tapDetector.cc
-        tapDetector.h
-        touchEvent.cc
-        touchEvent.h
-    )
-    if (FIPS_ANDROID)
-        fips_dir(android)
-        fips_files(androidInputMgr.cc androidInputMgr.h)
-    endif()
-    if (FIPS_EMSCRIPTEN)
-        fips_dir(emsc)
-        fips_files(emscInputMgr.cc emscInputMgr.h)
-    endif()
-    if (FIPS_IOS)
-        fips_dir(ios)
-        fips_files(iosInputMgr.cc iosInputMgr.h)
-    endif()
-    if (FIPS_MACOS OR FIPS_WINDOWS OR FIPS_LINUX)
-        fips_dir(glfw)
-        fips_files(glfwInputMgr.cc glfwInputMgr.h)
-        fips_deps(glfw3)
-    endif()
-    fips_deps(Core Gfx Time)
-fips_end_module()
+fips_begin_lib(dep1)
+    fips_files(dep1.cc)
+    fips_deps(dep2)
+fips_end_lib()
 ```
 
-Finally an example how to wrap a simple C library with a few custom
-C preprocessor defines:
+Vanilla cmake target-commands can be placed inside the begin/end:
 
 ```cmake
-fips_begin_lib(zlib)
-    fips_files(
-        adler32.c
-        compress.c
-        crc32.c crc32.h
-        deflate.c deflate.h
-        infback.c
-        inffast.c inffast.h
-        inffixed.h
-        inflate.c inflate.h
-        inftrees.c inftrees.h
-        trees.c trees.h
-        uncompr.c
-        zconf.h
-        zlib.h
-        zutil.c zutil.h
-    )
-    add_definitions(-D_NO_FSEEKO)
-    add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
-    add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)
-fips_end_lib(zlib)
+fips_begin_lib(dep1)
+    fips_files(dep1.cc)
+    fips_deps(dep2)
+    # disable some MSVC specific warnings:
+    if (FIPS_MSVC)
+        target_compile_options(dep1 PRIVATE /wd4312)
+    endif()
+fips_end_lib()
 ```
