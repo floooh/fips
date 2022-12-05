@@ -1,8 +1,20 @@
 #-------------------------------------------------------------------------------
-#   fips_osx.cmake
-#   OSX/IOS specific cmake functions.
-#   FIXME: OSX framework resolution doesn't seem to work
+#   fips_platform.cmake
+#   Platform specific helper functions
 #-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+#   fips_vs_apply_options()
+#   Applies the module-specific options set between begin/end, plus
+#   any other MSVC specific target options.
+#
+#   FIXME: remove this
+#
+macro(fips_msvc_add_target_properties target)
+    if (FIPS_MSVC)
+        set_target_properties(${target} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${FIPS_PROJECT_DEPLOY_DIR})
+    endif()
+endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_frameworks_osx(frameworks ...)
@@ -11,15 +23,19 @@
 #
 macro(fips_frameworks_osx frameworks)
     foreach (fw ${ARGV})
-        list(APPEND CurFrameworks ${fw})
+        unset(found_framework CACHE)
+        find_library(found_framework ${fw})
+        target_link_libraries(${CurTargetName} ${found_framework})
+        unset(found_framework CACHE)
     endforeach()
 endmacro()
 
 #-------------------------------------------------------------------------------
 #   fips_osx_generate_plist_file(target)
 #
-#   FIXME: need a way to override the plist file from a fips target
-#   description.
+#   NOTE: the generated plist file can simply be overriden by adding
+#   a .plist file to the target file list (this will then be stored in
+#   FIPS_OSX_PLIST_PATH variable)
 #
 macro(fips_osx_generate_plist_file target)
     if (FIPS_IOS)
@@ -170,5 +186,18 @@ macro(fips_osx_add_target_properties target)
     endif()
 endmacro()
 
-
-
+#-------------------------------------------------------------------------------
+#   fips_android_postbuildstep
+#
+macro(fips_android_postbuildstep target)
+    if (FIPS_ANDROID)
+        add_custom_command(TARGET ${target} POST_BUILD
+            COMMAND ${PYTHON} ${FIPS_ROOT_DIR}/tools/android-create-apk.py
+            --path ${CMAKE_CURRENT_BINARY_DIR}
+            --name ${target}
+            --abi ${CMAKE_ANDROID_ARCH_ABI}
+            --version ${ANDROID_PLATFORM_LEVEL}
+            --package org.fips.${target}
+            --deploy ${FIPS_DEPLOY_DIR}/${FIPS_PROJECT_NAME}/${FIPS_CONFIG})
+    endif()
+endmacro()

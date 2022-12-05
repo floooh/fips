@@ -10,25 +10,15 @@
 macro(fips_reset target)
     set(CurDir)
     set(CurGroup "")
-    set(CurSources)
-    set(CurDependencies)
-    set(CurLinkLibs)
-    set(CurLinkLibsDebug)
-    set(CurLinkLibsRelease)
-    set(CurFrameworks)
-    set(CurAppType)
-    set(CurImgFiles)
-    set(CurCompileFlags "")
-    set(FipsAddFilesEnabled 1)
     set(CurTargetName ${target})
     set(FIPS_OSX_PLIST_PATH)
 endmacro()
 
 #-------------------------------------------------------------------------------
-#   fips_apply_target_group(target)
+#   fips_apply_target_ide_group(target)
 #   Apply IDE group name to target.
 #
-macro(fips_apply_target_group target)
+macro(fips_apply_target_ide_group target)
     if (NOT ${FIPS_TARGET_GROUP} STREQUAL "")
         set_target_properties(${target} PROPERTIES FOLDER ${FIPS_TARGET_GROUP})
     endif()
@@ -41,33 +31,6 @@ endmacro()
 macro(fips_setup_link_directories)
     if (EXISTS ${FIPS_PROJECT_DIR}/lib/${FIPS_PLATFORM_NAME})
         link_directories(${FIPS_PROJECT_DIR}/lib/${FIPS_PLATFORM_NAME})
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_resolve_dependencies(target)
-#   Add all required dependencies to a target
-#
-macro(fips_resolve_dependencies target)
-    if (CurDependencies)
-        target_link_libraries(${CurTargetName} ${CurDependencies})
-    endif()
-    if (CurLinkLibs)
-        target_link_libraries(${CurTargetName} ${CurLinkLibs})
-    endif()
-    foreach (lib_debug ${CurLinkLibsDebug})
-        target_link_libraries(${target} debug ${lib_debug})
-    endforeach()
-    foreach (lib_release ${CurLinkLibsRelease})
-        target_link_libraries(${target} optimized ${lib_release})
-    endforeach()
-    if (FIPS_OSX)
-        foreach (fw ${CurFrameworks})
-            unset(found_framework CACHE)
-            find_library(found_framework ${fw})
-            target_link_libraries(${target} ${found_framework})
-            unset(found_framework CACHE)
-        endforeach()
     endif()
 endmacro()
 
@@ -110,19 +73,19 @@ function(fips_config_output_directory target)
 endfunction()
 
 #-------------------------------------------------------------------------------
-#   fips_reset_targets_list()
+#   fips_init_targets_list()
 #   Clears a .yml file which keeps track of all targets.
 #
-function(fips_reset_targets_list)
+function(fips_init_targets_list)
     file(WRITE "${CMAKE_BINARY_DIR}/fips_targets.yml" "---\n")
 endfunction()
 
 #-------------------------------------------------------------------------------
-#   fips_addto_targets_list(target type)
+#   fips_add_to_targets_list(target type)
 #   Adds a new entry to the targets type list, this is called from
 #   the fips_end_xxx() functions.
 #
-function(fips_addto_targets_list target type)
+function(fips_add_to_targets_list target type)
     file(APPEND "${CMAKE_BINARY_DIR}/fips_targets.yml" "${target} : ${type}\n")
 endfunction()
 
@@ -137,19 +100,19 @@ macro(fips_choose_config)
     if (FIPS_HOST_WINDOWS)
         if (CMAKE_CL_64)
             if (${CMAKE_BUILD_TYPE} AND ${CMAKE_BUILD_TYPE} STREQUAL "Release")
-                set(FIPS_CONFIG "win64-vs2013-release")
+                set(FIPS_CONFIG "win64-vstudio-release")
             elseif (${CMAKE_BUILD_TYPE} AND ${CMAKE_BUILD_TYPE} STREQUAL "Profiling")
-                set (FIPS_CONFIG "win64-vs2013-profiling")
+                set (FIPS_CONFIG "win64-vstudio-profiling")
             else()
-                set (FIPS_CONFIG "win64-vs2013-debug")
+                set (FIPS_CONFIG "win64-vstudio-debug")
             endif()
         else()
             if (${CMAKE_BUILD_TYPE} AND ${CMAKE_BUILD_TYPE} STREQUAL "Release")
-                set (FIPS_CONFIG "win32-vs2013-release")
+                set (FIPS_CONFIG "win32-vstudio-release")
             elseif (${CMAKE_BUILD_TYPE} AND ${CMAKE_BUILD_TYPE} STREQUAL "Profiling")
-                set (FIPS_CONFIG "win32-vs2013-profiling")
+                set (FIPS_CONFIG "win32-vstudio-profiling")
             else()
-                set (FIPS_CONFIG "win32-vs2013-debug")
+                set (FIPS_CONFIG "win32-vstudio-debug")
             endif()
         endif()
     elseif (FIPS_HOST_OSX)
@@ -178,35 +141,28 @@ endmacro()
 #
 macro(fips_add_file new_file)
 
-    if (FipsAddFilesEnabled)
-        # handle subdirectory
-        if (CurDir)
-            set(cur_file "${CurDir}${new_file}")
-        else()
-            set(cur_file ${new_file})
-        endif()
-        # NOTE: this should be LAST_EXT, but that's only supported since cmake 3.14
-        get_filename_component(f_ext ${cur_file} EXT)
+    # handle subdirectory
+    if (CurDir)
+        set(cur_file "${CurDir}${new_file}")
+    else()
+        set(cur_file ${new_file})
+    endif()
+    # NOTE: this should be LAST_EXT, but that's only supported since cmake 3.14
+    get_filename_component(f_ext ${cur_file} EXT)
 
-        # determine source group name and
-        # add to current source group
-        source_group("${CurGroup}" FILES ${cur_file})
+    # determine source group name and
+    # add to current source group
+    source_group("${CurGroup}" FILES ${cur_file})
 
-        if (FIPS_OSX)
-            # handle plist files special
-            if ("${f_ext}" STREQUAL ".plist")
-                set(FIPS_OSX_PLIST_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${cur_file}")
-            endif()
-        endif()
-
-        # add to global tracker variables
-        list(APPEND CurSources ${cur_file})
-
-        # remove dups
-        if (CurSources)
-            list(REMOVE_DUPLICATES CurSources)
+    if (FIPS_OSX)
+        # handle plist files special
+        if ("${f_ext}" STREQUAL ".plist")
+            set(FIPS_OSX_PLIST_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${cur_file}")
         endif()
     endif()
+
+    # add to target sources
+    target_sources(${CurTargetName} PRIVATE ${cur_file})
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -246,20 +202,5 @@ macro(fips_add_target_dependency targets)
     endforeach()
     if (CurTargetDependencies)
         list(REMOVE_DUPLICATES CurTargetDependencies)
-    endif()
-endmacro()
-
-#-------------------------------------------------------------------------------
-#   fips_apply_executable_type_defines(target [cmdline|windowed])
-#   Adds the define FIPS_APP_CMDLINE or FIPS_APP_WINDOWED to the current
-#   executable target (and only this target). This can be used on
-#   Windows to decide whether the app should implement a main() or WinMai()
-#   entry function.
-#
-macro(fips_apply_executable_type_defines target type)
-    if (${CurAppType} STREQUAL "windowed")
-        target_compile_definitions(${target} PRIVATE FIPS_APP_WINDOWED=1)
-    else()
-        target_compile_definitions(${target} PRIVATE FIPS_APP_CMDLINE=1)
     endif()
 endmacro()

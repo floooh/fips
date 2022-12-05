@@ -22,7 +22,7 @@ fips projects:
 
 Projects can export modules defined with the fips\_begin\_module() and
 fips\_begin\_lib() commands in under the 'exports' section of the fips.yml
-file. 
+file.
 
 For instance, here are the exported modules of the Oryol 3D engine:
 
@@ -42,7 +42,7 @@ exports:
         Input :         code/Modules/Input
         Synth :         code/Modules/Synth
         NanoVG :        code/Modules/NanoVG
-        
+
         # ext libs
         ConvertUTF:         code/Ext/ConvertUTF
         android-native:     code/Ext/android_native
@@ -57,8 +57,10 @@ CMakeLists.txt file.
 
 ### Exporting Header Search Paths
 
-Projects can export a list of header search paths in their fips.yml file which 
-are then defined in  the toplevel CMakeLists.txt file of the importing project 
+> NOTE: header-dirs exports in fips.yml should be considered deprecated, Use cmake's target_include_directories() instead!
+
+Projects can export a list of header search paths in their fips.yml file which
+are then defined in  the toplevel CMakeLists.txt file of the importing project
 and are visible to the entire project:
 
 ```yaml
@@ -68,11 +70,6 @@ exports:
         - code/Modules
         - code/Ext
 ```
-
-Of course it is also possible to directly use 'fips\_include\_directories()'
-or 'include\_directories()' in imported CMakeLists.txt files, but be aware
-that these only propagate downwards in the CMakeLists.txt hierarchy, not
-upwards.
 
 ### Exporting Precompiled Static Libs
 
@@ -107,7 +104,7 @@ future (moving them into the fips.yml file)
 
 Projects can list C/C++ preprocessor defines as key/value pairs in the
 export section of the fips.yml file. These defines are visible in the
-entire CMakeLists.txt hierarchy of the importing project. Here's an 
+entire CMakeLists.txt hierarchy of the importing project. Here's an
 example from fips-glm to set the angle unit to radians:
 
 ```yaml
@@ -122,7 +119,7 @@ fips-include.cmake file (discussed below).
 
 ### The fips-include.cmake File
 
-Projects can place an optional fips-include.cmake file into their 
+Projects can place an optional fips-include.cmake file into their
 root directory with additional cmake statements. This file is both
 included when building the project directory, as well as in the
 toplevel CMakeLists.txt file of importing projects. Have a look
@@ -134,14 +131,14 @@ https://github.com/floooh/oryol/blob/master/fips-include.cmake
 
 Projects can have an optional directory 'fips-files/verbs' containing
 python scripts which add new subcommands (== verbs) to fips. The
-name of the python script (without the .py) is the name of the 
-command, and the script must define two special functions **help** 
+name of the python script (without the .py) is the name of the
+command, and the script must define two special functions **help**
 and **run**:
 
-* **help()**: this is called when 'fips help' is invoked, should print 
+* **help()**: this is called when 'fips help' is invoked, should print
 a help message formatted like the other builtin help messges
-* **run(fips\_dir, proj\_dir, args)**: contains the actual logic of the 
-command. The args fips\_dir and proj\_dir are the absolute paths 
+* **run(fips\_dir, proj\_dir, args)**: contains the actual logic of the
+command. The args fips\_dir and proj\_dir are the absolute paths
 to the fips directory and the project directory where the command
 is run from. Args is a string array of all arguments given to the
 command.
@@ -165,4 +162,3 @@ https://github.com/floooh/oryol/tree/master/fips-files/configs
 Projects can extend fips with code generation python scripts in the
 'fips-files/generators' subdirectory. The details are described on the
 [Code Generation Page](/fips/codegen.html).
-

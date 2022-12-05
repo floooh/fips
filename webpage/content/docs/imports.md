@@ -12,7 +12,7 @@ external projects. A project which uses external dependencies
 will look and feel the same as if all dependencies would reside locally in
 the main project.
 
-Importing external projects has a number of advantages (and one notable 
+Importing external projects has a number of advantages (and one notable
 disadvantage):
 
 - generic libraries live in their own github repositories and can easily be
@@ -31,9 +31,9 @@ too granular sub-projects.
 
 fips can only import projects that have at least a fips.yml in their
 project root, and thus has been 'fipsified'. The details and
-different ways of 'fipsification' are described on the **Exports** 
-documentation page, for now it is only important to know that the silly term 
-'fipsified project' means a project that has been made compatible with 
+different ways of 'fipsification' are described on the **Exports**
+documentation page, for now it is only important to know that the silly term
+'fipsified project' means a project that has been made compatible with
 fips.
 
 ### How to define imports
@@ -49,7 +49,7 @@ imports:
         git:    https://github.com/floooh/fips-hello-dep1.git
 ```
 
-This defines a single import _fips-hello-dep1_ from the github URL 
+This defines a single import _fips-hello-dep1_ from the github URL
 _https://github.com/floooh/fips-hello-dep1.git_.
 
 Dependencies can be recursive, for instance the _fips-hello-dep1_
@@ -81,14 +81,14 @@ imports:
         git: https://github.com/floooh/fips-libcurl.git
 ```
 
-In the future there will be more ways to define imports, 
+In the future there will be more ways to define imports,
 most likely support for more version control systems like Subversion
 or Mercurial.
 
 ### Importing specific versions
 
 It is possible to specify a git branch, tag name or revision when defining an import
-in fips.yml. This is usually a good idea for complex real-world projects 
+in fips.yml. This is usually a good idea for complex real-world projects
 since it prevents that a build suddenly breaks because an external dependency
 has had an update that breaks existing code:
 
@@ -175,9 +175,9 @@ project 'fips-hello-dep2' imports:
 ### Updating imports
 
 Imports can be updated with './fips update', updating means, a 'git pull' and
-'git submodule update --recursive' will be run on each import, but **only 
+'git submodule update --recursive' will be run on each import, but **only
 if the git repository has no local changes** (uncommitted or unpushed changes),
-otherwise the update for this repo will be skipped (this behaviour prevents 
+otherwise the update for this repo will be skipped (this behaviour prevents
 any unwanted merge commits that could happen in this case during the git pull).
 
 Imports with a pinned revision will work as expected. First the usual update
@@ -201,7 +201,7 @@ git status of 'fips-hello-dep2':
 ```
 
 './fips diag imports' catches uncommitted changes, changes which are
-committed but not pushed, and whether the remote repository is ahead of the 
+committed but not pushed, and whether the remote repository is ahead of the
 local repository:
 
 ```
@@ -241,17 +241,17 @@ Here's a quick list of what can be imported:
 
 * **fips modules and libs**: projects can define a list of modules and libs
 from their own CMakeLists.txt hierarchy to be imported in other projects,
-each module/lib directory will also automatically be added to the header 
+each module/lib directory will also automatically be added to the header
 search path
 * **header search paths**: projects can export additional header search paths,
 this is especially useful for simple header-only fips projects
 * **C preprocessor defines**: a fips file can list a number of key/value pairs
 that are handed to the compiler as preprocessor defines
 * **library search paths**: fips projects can export pre-compiled
-static link libraries 
+static link libraries
 * **any cmake statements**: for more complex use cases fips projects
 may contain an optional file called _fips-include.cmake_ in their root directory
-which is included in the top-level CMakeLists.txt file of the importing 
+which is included in the top-level CMakeLists.txt file of the importing
 project
 
 Detailed information of how these exports are defined can be found on the
@@ -261,7 +261,7 @@ Detailed information of how these exports are defined can be found on the
 
 By default, fips imports all modules of an imported project. Sometimes this
 is overkill when only a few modules from a project are needed. This automatic
-import of modules into a build project can be switched off in the importing 
+import of modules into a build project can be switched off in the importing
 project's fips.yml file using the 'no\_auto\_import' policy. Here is an example
 fips.yml file which imports a complex dependency and activates the
 no\_auto\_import policy:
@@ -282,8 +282,8 @@ where PROJECT is the project name, and MODULE is the module name that should be
 imported. Any '-' character in the module or project name must be replaced with
 an '\_' (underscore) character (cmake doesn't accept '-' in function names).
 
-Manually importing modules can be a lot of trial and error, because the 
-entire dependency chain must be manually imported, it's either all 
+Manually importing modules can be a lot of trial and error, because the
+entire dependency chain must be manually imported, it's either all
 or nothing with the 'no\_auto\_import' policy.
 
 Here's a segment from a project's root CMakeLists.txt file with 'no\_auto\_import'
@@ -314,8 +314,6 @@ fips_import_oryol_ConvertUTF()
 fips_import_fips_imgui_imgui()
 fips_import_fips_unittestpp_unittestpp()
 fips_ide_group("")
-
-fips_include_directories(.)
 ```
 
 ### Under the hood
@@ -326,7 +324,7 @@ To speed up importing, fetching doesn't clone the entire git repository,
 instead git is called like this:
 
 ```
-> git clone --recursive --branch xxx --single-branch --depth 10 
+> git clone --recursive --branch xxx --single-branch --depth 10
 ```
 
 It's recommended to use the https protocol to define git URLs so that
@@ -342,7 +340,7 @@ manually using the git SSH protocol (git@github.com/...).
 
 Fips stores all imported projects on the same directory level as the
 fips directory itself instead of inside the importing project. This
-makes it easier to share imported projects between multiple 
+makes it easier to share imported projects between multiple
 importing projects, and simplifies working with git.
 
 #### How importing works
@@ -350,9 +348,9 @@ importing projects, and simplifies working with git.
 Project imports are resolved during './fips gen' before
 running cmake ('./fips fetch' will only git-clone the projects).
 
-During './fips gen', a hidden file _.fips-imports.cmake_ will be 
+During './fips gen', a hidden file _.fips-imports.cmake_ will be
 created in the importing project's root directory which is included
-in the main CMakeLists.txt hierarchy and implements the actual cmake 
+in the main CMakeLists.txt hierarchy and implements the actual cmake
 import magic. For a simple project like _fips-hello-world_ the file
 looks like this (details may change in newer fips versions):
 
@@ -397,5 +395,3 @@ if (FIPS_AUTO_IMPORT)
     fips_ide_group("")
 endif()
 ```
-
-
