@@ -156,5 +156,5 @@ def write_presets(cfg, fips_dir, proj_dir, build_dir, local_build, toolchain_pat
 
     cmake_presets['configurePresets'].append(config_preset)
 
-    with open(f'{proj_dir}/CMakeUserPresets.json', 'w') as f:
+    with open('{}/CMakeUserPresets.json'.format(proj_dir), 'w') as f:
         f.write(json.dumps(cmake_presets, indent=2))
