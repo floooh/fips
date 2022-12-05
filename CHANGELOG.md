@@ -19,6 +19,9 @@
   - A new compiler identification warning: ```FIPS_APPLE_CLANG```, this is set
     in addiiton to ```FIPS_CLANG``` to identify Apple's Clang fork. Checking
     specifically for Apple's Clang is mainly useful for warning hygiene.
+  - On macOS and iOS, the frameworks Foundation and IOKit are no longer linked
+    by default. You may need to update your CMakeLists.txt files accordingly
+    if you are seeing linker errors.
 
   A number of fips macros have been deprecated in favour of 'modern cmake' functions
   or other existing fips macros:

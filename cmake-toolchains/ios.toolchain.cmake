@@ -19,9 +19,6 @@ set(CMAKE_XCODE_GENERATE_SCHEME 1)
 # define configurations
 set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
-# define standard frame works that are always linked
-set(FIPS_OSX_STANDARD_FRAMEWORKS Foundation UIKit)
-
 # globally silence the GLES deprecation warning
 add_definitions(-DGLES_SILENCE_DEPRECATION)
 
@@ -89,4 +86,3 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Compile Type" FORCE)
 endif()
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release)
-
