@@ -33,6 +33,8 @@
     - ```fips_vs_warning_level``` and ```fips_vs_disable_warning``` is deprecated,
       use ```target_compile_options``` instead
 
+  PR: https://github.com/floooh/fips/pull/291
+
 - **01-Dec-2022**: A general code cleanup, modernization and simplification session:
     - fips now uses the cmake-presets in cmake 3.21 and later for communicating
       build config arguments to cmake. Running './fips gen' will write
@@ -79,6 +81,8 @@
     - The httpserver.py source was removed, this wasn't used anymore for a long time.
     - General cleanup (mainly remove unused variables and imports) with the help
       of Pylance, and cleanup white space.
+
+  PR: https://github.com/floooh/fips/pull/290
 
 - **16-May-2022**: fips will now always call ```cmake --build``` instead of
   invoking the build tools ```make```, ```ninja``` or ```xcodebuild``` directly.
