@@ -12,7 +12,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://floooh.github.io/fips/docs/getstarted/</guid>
-      <description>Get Started You need:  python (2.7.x or 3.x should both work) cmake (any 3.x version should work) a working C/C++ development environment:  on OSX: Xcode + command line tools on Linux: make/gcc (or clang) on Windows: Visual Studio 2013 or better    Get fips fips will create additional directories on the same directory level as the fips directory itself, thus it is recommended to git-clone fips into a separate &amp;lsquo;workspace&amp;rsquo; directory:</description>
+      <description>Get Started You need: python (3.x strongly preferred, even though 2.x might still work) cmake (3.21.0 or newer) a working C/C++ development environment: on OSX: Xcode + command line tools on Linux: make/gcc (or clang) on Windows: VS2015 or better alternatively, VSCode with the C/C++ and CMakeTools extension is supported on all platforms Get fips fips will create additional directories on the same directory level as the fips directory itself, thus it is recommended to git-clone fips into a separate &amp;lsquo;workspace&amp;rsquo; directory:</description>
     </item>
     
     <item>
@@ -45,7 +45,7 @@
       
       <guid>http://floooh.github.io/fips/docs/crosscompiling/</guid>
       <description>Cross-Compiling Fips provides easy cross-compiling support to the following platforms:
- iOS Android emscripten  Cross-compilation to iOS is only supported on the OSX host platform. All other target platforms are supported on all 3 host platforms (OSX, Linux, Windows).
+iOS Android emscripten Cross-compilation to iOS is only supported on the OSX host platform. All other target platforms are supported on all 3 host platforms (OSX, Linux, Windows).
 Setting up the platform SDKs Fips provides simple commands to setup the SDKs for Android and emscripten:
 &amp;gt; ./fips setup emscripten &amp;gt; ./fips setup android This will download, unpack and setup the respective SDKs into a directory fips-sdks next to the fips directory.</description>
     </item>
@@ -69,7 +69,7 @@ fips_setup() Initializes the fips build system in a cmake file hierarchy. Must b
       <guid>http://floooh.github.io/fips/docs/imports/</guid>
       <description>Importing external dependencies fips implements a very simple &amp;lsquo;package manager&amp;rsquo; for external code modules. A fips project can list a number of &amp;lsquo;imports&amp;rsquo; in its fips.yml file to import external projects. A project which uses external dependencies will look and feel the same as if all dependencies would reside locally in the main project.
 Importing external projects has a number of advantages (and one notable disadvantage):
- generic libraries live in their own github repositories and can easily be shared by many projects ownership is clearly defined, the owner of an imported project is the owner of the git repository which contains the imported project if dependency trees become too complex, the result might be &amp;lsquo;dependency hell&amp;rsquo; where version conflicts occur when imported projects depend on different versions of another project  Care should be taken when working with external dependencies to keep the dependency tree reasonably shallow.</description>
+generic libraries live in their own github repositories and can easily be shared by many projects ownership is clearly defined, the owner of an imported project is the owner of the git repository which contains the imported project if dependency trees become too complex, the result might be &amp;lsquo;dependency hell&amp;rsquo; where version conflicts occur when imported projects depend on different versions of another project Care should be taken when working with external dependencies to keep the dependency tree reasonably shallow.</description>
     </item>
     
     <item>
@@ -79,7 +79,7 @@ Importing external projects has a number of advantages (and one notable disadvan
       
       <guid>http://floooh.github.io/fips/docs/exports/</guid>
       <description>Exporting from fips projects A fipsified project can provide different types of &amp;rsquo;exports&amp;rsquo; to other fips projects:
- code modules header search paths pre-compiled static libs C/C++ preprocessor defines a cmake include which is included in root CMakeLists.txt files of importing projects new fips commands build configs code generator scripts  Exporting Code Modules Projects can export modules defined with the fips_begin_module() and fips_begin_lib() commands in under the &amp;rsquo;exports&amp;rsquo; section of the fips.</description>
+code modules header search paths pre-compiled static libs C/C++ preprocessor defines a cmake include which is included in root CMakeLists.txt files of importing projects new fips commands build configs code generator scripts Exporting Code Modules Projects can export modules defined with the fips_begin_module() and fips_begin_lib() commands in under the &amp;rsquo;exports&amp;rsquo; section of the fips.</description>
     </item>
     
     <item>
@@ -89,7 +89,7 @@ Importing external projects has a number of advantages (and one notable disadvan
       
       <guid>http://floooh.github.io/fips/docs/codegen/</guid>
       <description>Code Generation Fips makes it easy to generate C/C++ source code by running Python scripts during the build process. Special care has been taken to make code generation flexible so that it is useful for many different scenarios. For instance here are a few examples how the Oryol 3D engine uses code generation:
- generate code for serializable message protocols (similar to Google protobuf) embed image files into header files and generate a sprite sheet library GLSL shader editing with IDE error integration (see this blog post and video)  Using Code Generation The fips_generate cmake macro is used to tell fips how to generate C/C++ source code:</description>
+generate code for serializable message protocols (similar to Google protobuf) embed image files into header files and generate a sprite sheet library GLSL shader editing with IDE error integration (see this blog post and video) Using Code Generation The fips_generate cmake macro is used to tell fips how to generate C/C++ source code:</description>
     </item>
     
     <item>

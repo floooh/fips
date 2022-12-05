@@ -275,7 +275,7 @@ file.</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">Input </span><span class="p">:</span><span class="w">         </span><span class="l">code/Modules/Input</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">Synth </span><span class="p">:</span><span class="w">         </span><span class="l">code/Modules/Synth</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">NanoVG </span><span class="p">:</span><span class="w">        </span><span class="l">code/Modules/NanoVG</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c"># ext libs</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">ConvertUTF</span><span class="p">:</span><span class="w">         </span><span class="l">code/Ext/ConvertUTF</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">android-native</span><span class="p">:</span><span class="w">     </span><span class="l">code/Ext/android_native</span><span class="w">
@@ -285,6 +285,9 @@ CMakeLists.txt file of the module lives, relative to the project root directory.
 <p>The &lsquo;key&rsquo; value must be identical with the name of the module defined in the
 CMakeLists.txt file.</p>
 <h3 id="exporting-header-search-paths">Exporting Header Search Paths</h3>
+<blockquote>
+<p>NOTE: header-dirs exports in fips.yml should be considered deprecated, Use cmake&rsquo;s target_include_directories() instead!</p>
+</blockquote>
 <p>Projects can export a list of header search paths in their fips.yml file which
 are then defined in  the toplevel CMakeLists.txt file of the importing project
 and are visible to the entire project:</p>
@@ -293,11 +296,7 @@ and are visible to the entire project:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="l">code</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="l">code/Modules</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="l">code/Ext</span><span class="w">
-</span></span></span></code></pre></div><p>Of course it is also possible to directly use &lsquo;fips_include_directories()&rsquo;
-or &lsquo;include_directories()&rsquo; in imported CMakeLists.txt files, but be aware
-that these only propagate downwards in the CMakeLists.txt hierarchy, not
-upwards.</p>
-<h3 id="exporting-precompiled-static-libs">Exporting Precompiled Static Libs</h3>
+</span></span></span></code></pre></div><h3 id="exporting-precompiled-static-libs">Exporting Precompiled Static Libs</h3>
 <p>Exporting precompiled static libs works a bit differently, they are not
 defined in the fips.yml file, instead fips checks if the imported project
 has a &rsquo;libs&rsquo; directory. If yes, library search paths are automatically

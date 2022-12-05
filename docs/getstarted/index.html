@@ -245,13 +245,14 @@ https://github.com/alex-shpak/hugo-book
 <article class="markdown"><h1 id="get-started">Get Started</h1>
 <h3 id="you-need">You need:</h3>
 <ul>
-<li>python (2.7.x or 3.x should both work)</li>
-<li>cmake (any 3.x version should work)</li>
+<li>python (3.x strongly preferred, even though 2.x might still work)</li>
+<li>cmake (3.21.0 or newer)</li>
 <li>a working C/C++ development environment:
 <ul>
 <li>on <strong>OSX</strong>: Xcode + command line tools</li>
 <li>on <strong>Linux</strong>: make/gcc (or clang)</li>
-<li>on <strong>Windows</strong>: Visual Studio 2013 or better</li>
+<li>on <strong>Windows</strong>: VS2015 or better</li>
+<li>alternatively, VSCode with the C/C++ and CMakeTools extension is supported on all platforms</li>
 </ul>
 </li>
 </ul>
@@ -309,7 +310,6 @@ your host platform.</p>
 </span></span><span class="line"><span class="cl">ccmake:	found
 </span></span><span class="line"><span class="cl">make:	found
 </span></span><span class="line"><span class="cl">ninja:	OPTIONAL, NOT FOUND (required for building &#39;*-ninja-*&#39; configs)
-</span></span><span class="line"><span class="cl">xcodebuild:	found
 </span></span><span class="line"><span class="cl">java:	found
 </span></span><span class="line"><span class="cl">ant:	found
 </span></span><span class="line"><span class="cl">python2:	found
@@ -324,10 +324,10 @@ build configurations</p>
 </span></span><span class="line"><span class="cl">    ┗━━ fips/
 </span></span><span class="line"><span class="cl">    ┃   ┗━━ ...
 </span></span><span class="line"><span class="cl">    ┗━━ project-1/
-</span></span><span class="line"><span class="cl">        ┣━━ fips.yml 
-</span></span><span class="line"><span class="cl">        ┣━━ fips 
-</span></span><span class="line"><span class="cl">        ┣━━ fips.cmd 
-</span></span><span class="line"><span class="cl">        ┣━━ CMakeLists.txt 
+</span></span><span class="line"><span class="cl">        ┣━━ fips.yml
+</span></span><span class="line"><span class="cl">        ┣━━ fips
+</span></span><span class="line"><span class="cl">        ┣━━ fips.cmd
+</span></span><span class="line"><span class="cl">        ┣━━ CMakeLists.txt
 </span></span><span class="line"><span class="cl">        ┗━━ .gitignore
 </span></span></code></pre></div><blockquote>
 <p>NOTE fips will look for the folder in the root of the fipsified project (in this case the fips-workspace created above) and not in the fips folder itself.</p>

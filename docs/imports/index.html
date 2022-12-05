@@ -477,13 +477,11 @@ enabled as an example:</p>
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_fips_imgui_imgui</span><span class="p">()</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_import_fips_unittestpp_unittestpp</span><span class="p">()</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_ide_group</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">fips_include_directories</span><span class="p">(</span><span class="s">.</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><h3 id="under-the-hood">Under the hood</h3>
 <h4 id="fetching">Fetching</h4>
 <p>To speed up importing, fetching doesn&rsquo;t clone the entire git repository,
 instead git is called like this:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; git clone --recursive --branch xxx --single-branch --depth 10 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; git clone --recursive --branch xxx --single-branch --depth 10
 </span></span></code></pre></div><p>It&rsquo;s recommended to use the https protocol to define git URLs so that
 projects can be imported without setting up an SSH key for github,
 this is especially useful when running automated builds:</p>
