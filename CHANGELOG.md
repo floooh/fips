@@ -1,15 +1,16 @@
 ## Fips Changelog
 
-- **05-Dec-2022**: Another code cleanup, mainly focusing on the cmake script files.
-  Since the last cleanup bumped the minimal cmake version to 3.21 it was possible
-  to make use of other 'modern cmake' features which had been added in the meantime.
-  Most importantly, that's the ability to create 'empty' build targets, and then add
-  sources files afterwards. Fips now creates build targets in the ```fips_begin_*()```
-  macros instead of ```fips_end_*()```. This allows to simplify the implementation:
-  target properties and sources no longer need to be stored until ```fips_end```,
-  but instead can be added directly to the target now. Also, it's now finally possible
-  to place cmake ```target_*``` commands inside the ```fips_begin/end``` block, instead
-  of after the ```fips_end_*()``` (which worked, but just didn't look right).
+- **05-Dec-2022**: Another code cleanup, mainly focusing on the cmake script
+  files.  Since the last cleanup bumped the minimal cmake version to 3.21 it was
+  possible to make use of other 'modern cmake' features which had been added in
+  the meantime, mainly the ability to create 'empty' build targets, and then add
+  sources files to the target afterwards. Fips now creates build targets in the
+  ```fips_begin_*()``` macros instead of ```fips_end_*()```. This allows to
+  simplify the implementation: target properties and sources no longer need to be
+  stored until ```fips_end```, but instead can be added directly to the target
+  now. Also, it's now finally possible to place cmake ```target_*``` commands
+  inside the ```fips_begin/end``` block, instead of after the ```fips_end_*()```
+  (which worked, but just didn't look right).
 
   The following other changes have been applied:
 
@@ -17,7 +18,7 @@
     ```target_compile_options``` inside an ```if (FIPS_MSVC)``` block to tweak
     warnings if necessary.
   - A new compiler identification warning: ```FIPS_APPLE_CLANG```, this is set
-    in addiiton to ```FIPS_CLANG``` to identify Apple's Clang fork. Checking
+    in addition to ```FIPS_CLANG``` to identify Apple's Clang fork. Checking
     specifically for Apple's Clang is mainly useful for warning hygiene.
   - On macOS and iOS, the frameworks Foundation, IOKit and UIKit are no longer linked
     by default. You may need to update your CMakeLists.txt files accordingly
