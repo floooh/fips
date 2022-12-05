@@ -9,7 +9,7 @@ weight: 1
 
 ### You need:
 
-* python (3.x preferred, even though 2.x might still work)
+* python (3.x strongly preferred, even though 2.x might still work)
 * cmake (3.21.0 or newer)
 * a working C/C++ development environment:
     * on **OSX**: Xcode + command line tools
