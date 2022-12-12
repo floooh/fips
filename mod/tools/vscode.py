@@ -62,7 +62,6 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings):
         'request': 'launch',
         'program': '${command:cmake.launchTargetPath}',
         'cwd': deploy_dir,
-        'stopAtEntry': False,
         'args': [],
 
     }
@@ -73,14 +72,20 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings):
         launch_config['type'] = 'cppdbg'
         launch_config['MIMode'] = 'gdb'
     else:
-        launch_config['type'] = 'cppdbg'
-        launch_config['MIMode'] = 'lldb'
+        # on macOS, use the CodeLLDB extension, since the MS C/C++ debugger
+        # integration seems all kinds of broken
+        #launch_config['type'] = 'cppdbg'
+        #launch_config['MIMode'] = 'lldb'
+        launch_config['type'] = 'lldb'
 
     launch_config['name'] = 'Debug Current Target'
     launch['configurations'].append(copy.deepcopy(launch_config))
 
     launch_config['name'] = 'Debug Current Target (Stop at Entry)'
-    launch_config['stopAtEntry'] = True
+    if launch_config['type'] == 'lldb':
+        launch_config['stopOnEntry'] = True
+    else:
+        launch_config['stopAtEntry'] = True
     launch['configurations'].append(copy.deepcopy(launch_config))
 
     # add a python code-generator debug config

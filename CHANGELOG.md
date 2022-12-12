@@ -1,5 +1,9 @@
 ## Fips Changelog
 
+- **12-Dec-2022**: vscode integration: on macOS, use CodeLLDB as debugging
+  extension, since the MS C/C++ debugger integration suffers from frequent
+  breakage.
+
 - **05-Dec-2022**: Another code cleanup, mainly focusing on the cmake script
   files.  Since the last cleanup bumped the minimal cmake version to 3.21 it was
   possible to make use of other 'modern cmake' features which had been added in
