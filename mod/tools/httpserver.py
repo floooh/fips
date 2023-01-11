@@ -34,20 +34,20 @@ def run(fips_dir, proj_dir, target_name, target_cwd):
     if util.get_host_platform() == 'osx' :
         try :
             subprocess.call(
-                'open http://localhost:8080/{} ; http-server -c-1 -g'.format(html_name),
+                'http-server -c-1 -g -o {}'.format(html_name),
                 cwd = target_cwd, shell=True)
         except KeyboardInterrupt :
             return
     elif util.get_host_platform() == 'win' :
         try :
-            cmd = 'cmd /c start http://localhost:8080/{} && http-server -c-1 -g'.format(html_name)
+            cmd = 'http-server -c-1 -g -o {}'.format(html_name)
             subprocess.call(cmd, cwd = target_cwd, shell=True)
         except KeyboardInterrupt :
             return
     elif util.get_host_platform() == 'linux' :
         try :
             subprocess.call(
-                'xdg-open http://localhost:8080/{}; http-server -c-1 -g'.format(html_name),
+                'http-server -c-1 -g -o {}'.format(html_name),
                 cwd = target_cwd, shell=True)
         except KeyboardInterrupt :
             return
