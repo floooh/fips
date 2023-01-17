@@ -144,6 +144,7 @@ def write_presets(cfg, fips_dir, proj_dir, build_dir, local_build, toolchain_pat
     if toolchain_path is not None:
         config_preset['toolchainFile'] = toolchain_path
     config_preset['cacheVariables'] = {
+        'CMAKE_EXPORT_COMPILE_COMMANDS': 'ON',
         'CMAKE_BUILD_TYPE': cfg['build_type'],  # ignored on multi-config generators
         'FIPS_CONFIG': cfg['name'],
         'FIPS_LOCAL_BUILD': 'ON' if local_build else 'OFF',
