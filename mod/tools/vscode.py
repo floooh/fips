@@ -153,7 +153,6 @@ def write_code_workspace_file(fips_dir, proj_dir, impex, cfg):
                 'ctest': { 'visibility': 'hidden' },
                 'testPreset': { 'visibility': 'hidden' },
                 'debug': { 'visibility': 'hidden' },
-                'workspace': { 'visibility': 'hidden' }
             },
             'cmake.debugConfig': { 'cwd': deploy_dir },
             'cmake.autoSelectActiveFolder': False,
