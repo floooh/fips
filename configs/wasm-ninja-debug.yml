@@ -1,8 +1,9 @@
 ---
-platform: emscripten 
-generator: Ninja 
+platform: emscripten
+generator: Ninja
 build_tool: ninja
 build_type: Debug
 cmake-toolchain: emscripten.toolchain.cmake
 defines:
     FIPS_EMSCRIPTEN_USE_WASM: ON
+    FIPS_EMSCRIPTEN_USE_WEBGL2: ON

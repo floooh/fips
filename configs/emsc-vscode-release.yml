@@ -4,3 +4,5 @@ generator: Ninja
 build_tool: vscode
 build_type: Release
 cmake-toolchain: emscripten.toolchain.cmake
+defines:
+    FIPS_EMSCRIPTEN_USE_WEBGL2: ON
