@@ -23,10 +23,7 @@ endmacro()
 #
 macro(fips_frameworks_osx frameworks)
     foreach (fw ${ARGV})
-        unset(found_framework CACHE)
-        find_library(found_framework ${fw})
-        target_link_libraries(${CurTargetName} ${found_framework})
-        unset(found_framework CACHE)
+        target_link_libraries(${CurTargetName} "-framework ${fw}")
     endforeach()
 endmacro()
 
