@@ -32,19 +32,22 @@ def check_exists_with_error():
         return False
 
 #-------------------------------------------------------------------------------
-def clone(url, branch, depth, name, cwd) :
+def clone(url, branch, depth, name, cwd, recursive=True) :
     """git clone a remote git repo
 
-    :param url:     the git url to clone from
-    :param branch:  branch name (can be None)
-    :param depth:   how deep to clone
-    :param name:    the directory name to clone into
-    :param cwd:     the directory where to run git
-    :returns:       True if git returns successful
+    :param url:         the git url to clone from
+    :param branch:      branch name (can be None)
+    :param depth:       how deep to clone
+    :param name:        the directory name to clone into
+    :param cwd:         the directory where to run git
+    :param recursive:   whether to clone with --recursive (default: True)
+    :returns:           True if git returns successful
     """
     check_exists_with_error()
-    cmd = 'git clone --recursive'
-    if branch :
+    cmd = 'git clone'
+    if recursive:
+        cmd += ' --recursive'
+    if branch:
         cmd += ' --branch {} --single-branch'.format(branch)
     if depth :
         cmd += ' --depth {}'.format(depth)
@@ -132,23 +135,29 @@ def has_local_changes(proj_dir):
         return True
 
 #-------------------------------------------------------------------------------
-def update_submodule(proj_dir):
-    """runs a 'git submodule sync --recursive' followed by a
-    git submodule update --recursive' on the provided git repo,
+def update_submodule(proj_dir, recursive=True):
+    """runs a 'git submodule sync [--recursive]' followed by a
+    git submodule update [--recursive]' on the provided git repo,
     unconditionally (it will *not* check for local changes)
 
     :param proj_dir:    a git repo dir
+    :param recursive:   whether to add --recursive (default: True)
     """
     check_exists_with_error()
+    sync_cmd = 'git submodule sync'
+    upd_cmd = 'git submodule update'
+    if recursive:
+        sync_cmd += ' --recursive'
+        upd_cmd += ' --recursive'
     try:
-        subprocess.call('git submodule sync --recursive', cwd=proj_dir, shell=True)
-        subprocess.call('git submodule update --recursive', cwd=proj_dir, shell=True)
+        subprocess.call(sync_cmd, cwd=proj_dir, shell=True)
+        subprocess.call(upd_cmd, cwd=proj_dir, shell=True)
     except subprocess.CalledProcessError:
         log.error("Failed to call 'git submodule sync/update'")
 
 #-------------------------------------------------------------------------------
 def update(proj_dir):
-    """runs a git pull && git submodule update --recursive on the
+    """runs a git pull && git submodule update [--recursive] on the
     provided git repo, but only if the repo has no local changes
 
     :param proj_dir:    a git repo dir
