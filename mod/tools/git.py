@@ -195,7 +195,7 @@ def get_branches(proj_dir) :
         for line in lines :
             tokens = line[2:].split()
             local_branch = tokens[0]
-            if re.compile("^\[.*(:|\])$").match(tokens[2]) :
+            if re.compile(r"^\[.*(:|\])$").match(tokens[2]) :
                 remote_branch = tokens[2][1:-1]
                 branches[local_branch] = remote_branch
     except subprocess.CalledProcessError :
