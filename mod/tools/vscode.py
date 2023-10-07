@@ -74,7 +74,6 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings):
         'program': '${command:cmake.launchTargetPath}',
         'cwd': deploy_dir,
         'args': [],
-
     }
     host_platform = util.get_host_platform()
     if host_platform == 'win':
@@ -83,11 +82,11 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings):
         launch_config['type'] = 'cppdbg'
         launch_config['MIMode'] = 'gdb'
     else:
-        # on macOS, use the CodeLLDB extension, since the MS C/C++ debugger
-        # integration seems all kinds of broken
-        #launch_config['type'] = 'cppdbg'
-        #launch_config['MIMode'] = 'lldb'
-        launch_config['type'] = 'lldb'
+        # NOTE: sometimes the MS C++ Extensions debugger is problematic on macOS,
+        # in that case, keep the codelldb extension around as fallback
+        #launch_config['type'] = 'lldb'
+        launch_config['type'] = 'cppdbg'
+        launch_config['MIMode'] = 'lldb'
 
     launch_config['name'] = 'Debug Current Target'
     launch['configurations'].append(copy.deepcopy(launch_config))
