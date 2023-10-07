@@ -1,5 +1,12 @@
 ## Fips Changelog
 
+- **07-Oct-2023**: VSCode integration updates:
+    - The VSCode integration now supports debugging Emscripten WASM targets.
+      This requires the new WASM DWARF debugging extension to be installed
+      (https://marketplace.visualstudio.com/items?itemName=ms-vscode.wasm-dwarf-debugging).
+    - On macOS the VSCode integration now uses the MS C/C++ Extension
+      again for debugging instead of CodeLLDB.
+
 - **12-Dec-2022**: vscode integration: on macOS, use CodeLLDB as debugging
   extension, since the MS C/C++ debugger integration suffers from frequent
   breakage.
