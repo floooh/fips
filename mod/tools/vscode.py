@@ -69,81 +69,49 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings):
     }
     proj_name = util.get_project_name_from_dir(proj_dir)
     deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg['name'])
-    launch_config = {
-        'request': 'launch',
-        'program': '${command:cmake.launchTargetPath}',
-        'cwd': deploy_dir,
-        'args': [],
-    }
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
     host_platform = util.get_host_platform()
-    if host_platform == 'win':
-        launch_config['type'] = 'cppvsdbg'
-    elif host_platform == 'linux':
-        launch_config['type'] = 'cppdbg'
-        launch_config['MIMode'] = 'gdb'
+
+    if cfg['platform'] == 'emscripten':
+        # Emscripten/WASM (assumes browser runtime environment, not WASI)
+        launch['configurations'].append({
+            'type': 'chrome',
+            'request': 'launch',
+            'name': 'Debug in Chrome',
+            'url': 'http://localhost:8080/${command:cmake.launchTargetFilename}',
+            'server': {
+                'program': f'{build_dir}/httpserver.js'
+            }
+        })
     else:
-        # NOTE: sometimes the MS C++ Extensions debugger is problematic on macOS,
-        # in that case, keep the codelldb extension around as fallback
-        #launch_config['type'] = 'lldb'
-        launch_config['type'] = 'cppdbg'
-        launch_config['MIMode'] = 'lldb'
+        # native platforms
+        launch_config = {
+            'request': 'launch',
+            'program': '${command:cmake.launchTargetPath}',
+            'cwd': deploy_dir,
+            'args': [],
+        }
+        if host_platform == 'win':
+            launch_config['type'] = 'cppvsdbg'
+        elif host_platform == 'linux':
+            launch_config['type'] = 'cppdbg'
+            launch_config['MIMode'] = 'gdb'
+        else:
+            # NOTE: sometimes the MS C++ Extensions debugger is problematic on macOS,
+            # in that case, keep the codelldb extension around as fallback
+            #launch_config['type'] = 'lldb'
+            launch_config['type'] = 'cppdbg'
+            launch_config['MIMode'] = 'lldb'
 
-    launch_config['name'] = 'Debug Current Target'
-    launch['configurations'].append(copy.deepcopy(launch_config))
+        launch_config['name'] = 'Debug Current Target'
+        launch['configurations'].append(copy.deepcopy(launch_config))
 
-    launch_config['name'] = 'Debug Current Target (Stop at Entry)'
-    if launch_config['type'] == 'lldb':
-        launch_config['stopOnEntry'] = True
-    else:
-        launch_config['stopAtEntry'] = True
-    launch['configurations'].append(copy.deepcopy(launch_config))
-
-    # add a python code-generator debug config
-    #
-    #   FIXME: this no longer works (e.g. pythonPath is not recognized)
-    #
-    #proj_name = util.get_project_name_from_dir(proj_dir)
-    #build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
-    #c = {
-    #    'name': 'fips codegen',
-    #    'type': 'python',
-    #    'request': 'launch',
-    #    'stopOnEntry': True,
-    #    'pythonPath': '${config:python.pythonPath}',
-    #    'program': build_dir + '/fips-gen.py',
-    #    'args': [ build_dir + '/fips_codegen.yml' ],
-    #    "cwd": proj_dir,
-    #    "debugOptions": [
-    #        "WaitOnAbnormalExit",
-    #        "WaitOnNormalExit",
-    #        "RedirectOutput"
-    #    ]
-    #}
-    #launch['configurations'].append(c)
-
-    # add a python debug config for each fips verb
-    #
-    #   FIXME: this no longer works (e.g. pythonPath is not recognized)
-    #
-    # for verb_name, verb_mod in verb.verbs.items() :
-    #     # ignore standard verbs
-    #     if fips_dir not in inspect.getfile(verb_mod):
-    #         c = {
-    #             'name': 'fips {}'.format(verb_name),
-    #             'type': 'python',
-    #             'request': 'launch',
-    #             'stopOnEntry': True,
-    #             'pythonPath': '${config:python.pythonPath}',
-    #             'program': proj_dir + '/fips',
-    #             'args': [ verb_name ],
-    #             'cwd': proj_dir,
-    #             "debugOptions": [
-    #                 "WaitOnAbnormalExit",
-    #                 "WaitOnNormalExit",
-    #                 "RedirectOutput"
-    #             ]
-    #         }
-    #         launch['configurations'].append(c)
+        launch_config['name'] = 'Debug Current Target (Stop at Entry)'
+        if launch_config['type'] == 'lldb':
+            launch_config['stopOnEntry'] = True
+        else:
+            launch_config['stopAtEntry'] = True
+        launch['configurations'].append(copy.deepcopy(launch_config))
 
     launch_path = vscode_dir + '/launch.json'
     log.info('  writing {}'.format(launch_path))
@@ -204,6 +172,26 @@ def remove_vscode_tasks_launch_files(fips_dir, proj_dir, impex, cfg):
             os.remove(launch_path)
 
 #-------------------------------------------------------------------------------
+def write_httpserver_helper(fips_dir, proj_dir, cfg):
+    '''writes a httpserver.js helper script to the build directory
+    which is used by the vscode launch.json for Emscripten targets
+    '''
+    proj_name = util.get_project_name_from_dir(proj_dir)
+    deploy_dir = util.get_deploy_dir(fips_dir, proj_name, cfg['name'])
+    build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
+    path = f"{build_dir}/httpserver.js"
+
+    src  =  "const { execSync } = require('child_process');\n"
+    src +=  "execSync('http-server -c-1 -g .', {\n"
+    src += f"  cwd: '{deploy_dir}',\n"
+    src +=  "  stdio: 'inherit',\n"
+    src +=  "  stderr: 'inherit',\n"
+    src +=  "});\n"
+    log.info(f"  writing {path}")
+    with open(path, 'w') as f:
+        f.write(src)
+
+#-------------------------------------------------------------------------------
 def write_workspace_settings(fips_dir, proj_dir, cfg, proj_settings):
     '''write the VSCode launch.json, tasks.json and
     c_cpp_properties.json files from cmake output files
@@ -219,6 +207,8 @@ def write_workspace_settings(fips_dir, proj_dir, cfg, proj_settings):
     remove_vscode_tasks_launch_files(fips_dir, proj_dir, impex, cfg)
     write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings)
     write_code_workspace_file(fips_dir, proj_dir, impex, cfg)
+    if (cfg['platform'] == 'emscripten'):
+        write_httpserver_helper(fips_dir, proj_dir, cfg)
 
 #-------------------------------------------------------------------------------
 def cleanup(fips_dir, proj_dir):
