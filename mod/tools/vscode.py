@@ -50,6 +50,17 @@ def run(proj_dir):
         log.error("Failed to run Visual Studio Code as '{}'".format(exe))
 
 #-------------------------------------------------------------------------------
+def has_extension(name):
+    try:
+        if platform.system() == 'Windows':
+            res = subprocess.check_output('code --list-extensions', shell=True).decode('utf-8')
+        else:
+            res = subprocess.check_output(['code', '--list-extensions']).decode('utf-8')
+        return name in res
+    except (OSError, subprocess.CalledProcessError):
+        return False
+
+#-------------------------------------------------------------------------------
 def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings):
     '''write the .vscode/launch.json file'''
     launch = {
