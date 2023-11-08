@@ -1,5 +1,9 @@
 ## Fips Changelog
 
+- **08-Nov-2023**: enabled the generation of `compile_commands.json` again which was removed
+  in this commit: https://github.com/floooh/fips/commit/9512fb6d0e99322a2e2366f4e7eb13a643ca0d07
+  See discussion at end of issue https://github.com/floooh/fips/issues/212
+
 - **07-Oct-2023**: VSCode integration updates:
     - The VSCode integration now supports debugging Emscripten WASM targets.
       This requires the new WASM DWARF debugging extension to be installed

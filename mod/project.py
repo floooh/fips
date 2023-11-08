@@ -63,6 +63,8 @@ def gen_project(fips_dir, proj_dir, cfg, force) :
     build_dir = util.get_build_dir(fips_dir, proj_name, cfg['name'])
     defines = {}
     defines['FIPS_AUTO_IMPORT'] = 'OFF' if dep.get_policy(proj_dir, 'no_auto_import') else 'ON'
+    if cfg['generator'] in ['Ninja', 'Unix Makefiles']:
+        defines['CMAKE_EXPORT_COMPILE_COMMANDS'] = 'ON'
     if cfg['platform'] == 'ios':
         defines['CMAKE_OSX_SYSROOT'] = xcrun.get_ios_sdk_sysroot()
         ios_team_id = settings.get(proj_dir, 'iosteam')
