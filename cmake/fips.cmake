@@ -230,7 +230,7 @@ macro(fips_begin_lib target)
     add_library(${target})
     fips_apply_target_ide_group(${target})
     fips_msvc_add_target_properties(${target})
-    fips_add_to_targets_list(${target} "app")
+    fips_add_to_targets_list(${target} "lib")
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -304,7 +304,7 @@ macro(fips_begin_sharedlib target)
     fips_apply_target_ide_group(${target})
     fips_msvc_add_target_properties(${target})
     fips_config_output_directory(${target})
-    fips_add_to_targets_list(${target} "app")
+    fips_add_to_targets_list(${target} "sharedlib")
 endmacro()
 
 #-------------------------------------------------------------------------------
