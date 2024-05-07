@@ -303,7 +303,10 @@ def get_cfg_target_list(fips_dir, proj_dir, cfg):
     if os.path.isfile(targets_path) :
         targets = []
         with open(targets_path) as f :
+            # NOTE: targets will be None if the file is empty
             targets = yaml.load(f)
+            if targets is None:
+                targets = []
         return True, targets
     else :
         return False, []

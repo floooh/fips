@@ -67,15 +67,18 @@ def list_targets(fips_dir, proj_dir, args) :
         # get the target list
         success, targets = project.get_target_list(fips_dir, proj_dir, cfg_name)
         if success :
-            # split targets by type
-            for type in ['lib', 'module', 'sharedlib', 'app'] :
-                type_targets = [tgt for tgt in targets if targets[tgt] == type]
-                if len(type_targets) > 0 :
-                    log.colored(log.BLUE, '  {}:'.format(type))
-                    for tgt in type_targets :
-                        log.info('    ' + tgt)
+            if targets:
+                # split targets by type
+                for type in ['lib', 'module', 'sharedlib', 'app'] :
+                    type_targets = [tgt for tgt in targets if targets[tgt] == type]
+                    if len(type_targets) > 0 :
+                        log.colored(log.BLUE, '  {}:'.format(type))
+                        for tgt in type_targets :
+                            log.info('    ' + tgt)
+            else:
+                log.info('    none')
         else :
-            log.info("  can't fetch project target list, please run 'fips gen' first!")
+            log.info("    can't fetch project target list, please run 'fips gen' first!")
     else :
         log.info('  currently not in a valid project directory')
 
