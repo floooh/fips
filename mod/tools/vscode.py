@@ -91,7 +91,9 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings):
             'cwd': deploy_dir,
             'args': [],
         }
-        if host_platform == 'win':
+        if host_platform == 'osx':
+            launch_config['type'] = 'lldb'
+        elif host_platform == 'win':
             launch_config['type'] = 'cppvsdbg'
         elif host_platform == 'linux':
             launch_config['type'] = 'cppdbg'
