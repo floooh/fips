@@ -117,7 +117,7 @@ def setup(fips_dir) :
     uncompress(fips_dir, tools_archive_path)
 
     # install the required SDK components through sdkmanager
-    install_package(fips_dir, '"platforms;android-28"')
+    install_package(fips_dir, '"platforms;android-30"')
     install_package(fips_dir, '"build-tools;29.0.3"')
     install_package(fips_dir, 'platform-tools')
     install_package(fips_dir, 'ndk-bundle')

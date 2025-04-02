@@ -442,18 +442,14 @@ set(ANDROID_RANLIB
 set(ANDROID_STRIP
   "${ANDROID_TOOLCHAIN_ROOT}/bin/llvm-strip${ANDROID_TOOLCHAIN_SUFFIX}")
 
-if(${CMAKE_VERSION} VERSION_LESS "3.10")
-    # With 3.6, CMake won't pass -target when running the compiler
-    # identification test, which causes the test to fail on flags like -mthumb.
-    # Later versions of CMake don't have this problem. I'm not sure when exactly
-    # it was fixed, but it's broken in 3.6 and works in 3.10, so for now just
-    # allow the built in detection of these values to happen on 3.10+. We can
-    # tune that down if we get more information, or remove this block if we stop
-    # supporting older versions some day.
+if(${CMAKE_VERSION} VERSION_LESS "3.19")
+    # Older CMake won't pass -target when running the compiler identification
+    # test, which causes the test to fail on flags like -mthumb.
+    # https://github.com/android/ndk/issues/1427
     message(WARNING "An old version of CMake is being used that cannot "
       "automatically detect compiler attributes. Compiler identification is "
       "being bypassed. Some values may be wrong or missing. Update to CMake "
-      "3.10 or newer to use CMake's built-in compiler identification.")
+      "3.19 or newer to use CMake's built-in compiler identification.")
     set(CMAKE_C_COMPILER_ID_RUN TRUE)
     set(CMAKE_CXX_COMPILER_ID_RUN TRUE)
     set(CMAKE_C_COMPILER_ID Clang)
