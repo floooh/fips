@@ -103,6 +103,11 @@ res_dir = apk_dir + 'res/'
 if not os.path.exists(res_dir):
     shutil.copytree(fips_dir + '/templates/android_assets/res', res_dir)
 
+# create empty assets dir if not exists
+assets_dir = apk_dir + 'assets/'
+if not os.path.exists(assets_dir):
+    os.makedirs(assets_dir)
+
 # generate AndroidManifest.xml
 with open(apk_dir + 'AndroidManifest.xml', 'w') as f:
     f.write('<manifest xmlns:android="http://schemas.android.com/apk/res/android"\n')
@@ -133,7 +138,9 @@ cmd = [
     AAPT,
     'package',
     '-v', '-f', '-m',
-    '-S', 'res', '-J', 'src',
+    '-S', 'res',
+    '-A', 'assets',
+    '-J', 'src',
     '-M', 'AndroidManifest.xml',
     '-I', SDK_HOME + 'platforms/android-' + args.version + '/android.jar'
 ]
@@ -165,6 +172,7 @@ cmd = [
     'package',
     '-v', '-f',
     '-S', 'res',
+    '-A', 'assets',
     '-M', 'AndroidManifest.xml',
     '-I', SDK_HOME + 'platforms/android-' + args.version + '/android.jar',
     '-F', args.path + args.name + '-unaligned.apk',
