@@ -22,6 +22,8 @@ def try_exists(exe_name):
 def exe_name():
     if try_exists('code'):
         return 'code'
+    elif try_exists('code-insiders'):
+        return 'code-insiders'
     else:
         # open source version on RaspberryPi
         return 'code-oss'
