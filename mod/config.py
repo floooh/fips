@@ -35,7 +35,7 @@ default_config = {
 def valid_build_tool(name) :
     """test if provided build tool name is valid
 
-    :param name: a build tool nake (make, ninja, ...)
+    :param name: a build tool name (make, ninja, ...)
     :returns: True if build tool name is valid
     """
     return name in build_tools

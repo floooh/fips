@@ -33,10 +33,14 @@ def check_exists(fips_dir) :
     """test if 'code' is in the path
     :returns:   True if code is in the path
     """
-    if exe_name() != 'code':
-        return try_exists('code-oss')
-    else:
+    if try_exists('code'):
         return True
+    elif try_exists('code-insiders'):
+        return True
+    elif try_exists('code-oss'):
+        return True
+    else:
+        return False
 
 #------------------------------------------------------------------------------
 def match(build_tool):
