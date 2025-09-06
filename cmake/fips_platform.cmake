@@ -4,7 +4,7 @@
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
-#   fips_vs_apply_options()
+#   fips_msvc_apply_options()
 #   Applies the module-specific options set between begin/end, plus
 #   any other MSVC specific target options.
 #
@@ -13,6 +13,23 @@
 macro(fips_msvc_add_target_properties target)
     if (FIPS_MSVC)
         set_target_properties(${target} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${FIPS_PROJECT_DEPLOY_DIR})
+    endif()
+endmacro()
+
+#-------------------------------------------------------------------------------
+#   fips_windows_copy_target_dlls()
+#   On Windows, copy any DLLs linked to the target into the target output
+#   directory.
+#
+#   See: https://discourse.cmake.org/t/how-to-copy-dlls-to-binary-directory/10154
+#-------------------------------------------------------------------------------
+macro(fips_windows_copy_target_dlls target)
+    if (FIPS_WINDOWS)
+        add_custom_command (
+            TARGET "${target}" POST_BUILD
+            COMMAND "${CMAKE_COMMAND}" -E copy -t "$<TARGET_FILE_DIR:${target}>"
+                    "$<TARGET_RUNTIME_DLLS:${target}>" USES_TERMINAL COMMAND_EXPAND_LISTS
+        )
     endif()
 endmacro()
 
