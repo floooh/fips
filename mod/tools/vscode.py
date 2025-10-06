@@ -96,6 +96,7 @@ def write_launch_json(fips_dir, proj_dir, vscode_dir, cfg, proj_settings):
             'program': '${command:cmake.launchTargetPath}',
             'cwd': deploy_dir,
             'args': [],
+            'env': { 'MTL_DEBUG_LAYER': '1' },
         }
         if host_platform == 'osx':
             launch_config['type'] = 'lldb'
