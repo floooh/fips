@@ -17,6 +17,7 @@ def get_imports(fips_dir, proj_dir) :
     proj_name = util.get_project_name_from_dir(proj_dir)
     imports = {}
     if util.is_valid_project_dir(proj_dir) :
+        # TODO: Load .fips.pinned_deps instead on `fips update --from-pinned-deps`.
         dic = util.load_fips_yml(proj_dir)
         if 'imports' in dic :
             imports = dic['imports']
@@ -525,7 +526,7 @@ def _rec_update_imports(fips_dir, proj_dir, handled) :
     """
     proj_name = util.get_project_name_from_dir(proj_dir)
     if proj_name not in handled :
-        handled.append(proj_name)
+        handled[proj_name] = None
         imports = get_imports(fips_dir, proj_dir)
         for dep in imports:
             dep_proj_name = dep
@@ -553,6 +554,7 @@ def _rec_update_imports(fips_dir, proj_dir, handled) :
                     log.warn("  '{}' does not exist, please run 'fips fetch'".format(dep_proj_dir))
                 # recurse
                 if dep_ok :
+                    handled[dep_proj_name] = [dep['git'], git.get_local_rev(dep_proj_dir, "HEAD")]
                     handled = _rec_update_imports(fips_dir, dep_proj_dir, handled)
     # done, return the new handled array
     return handled
@@ -565,4 +567,10 @@ def update_imports(fips_dir, proj_dir):
     :param proj_dir: absolute project directory
     :returns:   True if checks were valid
     """
-    _rec_update_imports(fips_dir, proj_dir, [])
+    handled = _rec_update_imports(fips_dir, proj_dir, OrderedDict())
+    # TODO: Write to a file, e.g., .fips.pinned_deps, instead of printing.
+    print 'imports:'
+    for dep, git_rev in reversed(handled.items()[1:]):
+        print '    ' + dep + ':'
+        print '        git: ' + git_rev[0]
+        print '        rev: ' + git_rev[1]
