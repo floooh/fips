@@ -46,6 +46,7 @@ Libs and engines:
 - **[imgui](https://github.com/ocornut/imgui)**: https://github.com/fungos/fips-imgui
 - **[libcurl (precompiled)](http://curl.haxx.se/libcurl/)**: https://github.com/floooh/fips-libcurl
 - **[libnoise](https://github.com/qknight/libnoise)**: https://github.com/mgerhardy/fips-libnoise
+- **[libYAML](https://gitlab.com/g-pechorin/libyaml/)**: https://gitlab.com/g-pechorin/libyaml/
 - **[nanovg](https://github.com/memononen/nanovg)**: https://github.com/fungos/fips-nanovg
 - **[nativefiledialog](https://github.com/mlabbe/nativefiledialog)**: https://github.com/fungos/fips-nfd
 - **[oryol](http://floooh.github.io/oryol/)**: https://github.com/floooh/oryol
