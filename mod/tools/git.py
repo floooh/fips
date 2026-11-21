@@ -47,6 +47,9 @@ def clone(url, branch, depth, name, cwd, recursive=True) :
     cmd = 'git clone'
     if recursive:
         cmd += ' --recursive'
+        if depth :
+            # apply shallow to submodules
+            cmd += ' --shallow-submodules'
     if branch:
         cmd += ' --branch {} --single-branch'.format(branch)
     if depth :
